@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Threat | INFRAUD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.jpg" alt="Logo">
+                    INFRAUD
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Dashboard
+                </a>
+                <a href="report.html" class="nav-item active">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    Report Threat
+                </a>
+                <a href="#" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    Scan History
+                </a>
+                <a href="#" class="nav-item" style="margin-top: auto;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h1 class="topbar-title">Report Threat</h1>
+                <div class="topbar-actions">
+                    <a href="login.html" class="btn btn-secondary">Sign In</a>
+                    <div class="user-profile">U</div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div style="max-width: 600px; margin: 0 auto;">
+                    
+                    <div class="card">
+                        <div class="card-header" style="border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-deep-navy);">Submit Intelligence</h2>
+                            <p style="color: var(--color-text-secondary); font-size: 0.9rem;">Help protect the community by adding to the database.</p>
+                        </div>
+
+                        <form id="report-form">
+                            <div class="form-group">
+                                <label class="form-label" for="scam-type">Type of Threat</label>
+                                <select id="scam-type" class="form-control" required style="appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill=%22none%22 stroke=%22%2364748B%22 stroke-width=%222%22 viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22M19 9l-7 7-7-7%22></path></svg>'); background-repeat: no-repeat; background-position: right 0.875rem center; background-size: 1rem;">
+                                    <option value="" disabled selected>Select category...</option>
+                                    <option value="url">Website URL</option>
+                                    <option value="phone">Phone Number</option>
+                                    <option value="email">Email Address</option>
+                                    <option value="upi">UPI ID</option>
+                                    <option value="message">Text Message</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="scam-content">Suspicious Content</label>
+                                <input type="text" id="scam-content" class="form-control" placeholder="e.g., https://fake-bank.com" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="scam-description">Context & Description</label>
+                                <textarea id="scam-description" class="form-control" rows="5" placeholder="Include any message content or context about how you received this..." required style="resize: vertical;"></textarea>
+                            </div>
+
+                            <div style="border-top: 1px solid var(--color-border); padding-top: 1.5rem; margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Submit Report</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
