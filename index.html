@@ -3,116 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | INFRAUD</title>
+    <title>INFRAUD | Threat Intelligence</title>
+    <meta name="description" content="Secure your digital presence with INFRAUD.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="index.html" class="brand">
-                    <img src="assets/logo.jpg" alt="Logo">
-                    INFRAUD
-                </a>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                INFRAUD
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#database" class="nav-link">Database</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
             </div>
-            <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item active">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    Dashboard
-                </a>
-                <a href="report.html" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    Report Threat
-                </a>
-                <a href="#" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                    Scan History
-                </a>
-                <a href="#" class="nav-item" style="margin-top: auto;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Settings
-                </a>
-            </nav>
-        </aside>
+            <div class="nav-actions">
+                <a href="login.html" class="nav-link">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="topbar">
-                <h1 class="topbar-title">Dashboard</h1>
-                <div class="topbar-actions">
-                    <a href="login.html" class="btn btn-secondary">Sign In</a>
-                    <div class="user-profile">U</div>
+    <!-- Hero Section -->
+    <main class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Professional Threat Intelligence</h1>
+            <p class="hero-subtitle">Instantly verify URLs, phone numbers, and UPI IDs against a verified database of reported frauds.</p>
+            
+            <div class="hero-actions">
+                <form action="result.html" method="GET" class="hero-scan-bar">
+                    <input type="text" name="query" class="hero-scan-input" placeholder="Enter URL, phone, or UPI ID..." required>
+                    <button type="submit" class="btn btn-primary">Scan Resource</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="grid-cols-3">
+                <div class="feature-card">
+                    <h3>Phishing Protection</h3>
+                    <p>Detect fraudulent websites designed to steal credentials instantly.</p>
                 </div>
-            </header>
-
-            <div class="page-content">
-                <div style="max-width: 850px; margin: 0 auto;">
-                    
-                    <!-- Search Widget -->
-                    <div class="mb-6" style="text-align: center; padding: 2rem 0 1rem 0;">
-                        <h2 style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--color-deep-navy); font-weight: 600; letter-spacing: -0.5px;">Verify a Resource</h2>
-                        <p style="color: var(--color-text-secondary); margin-bottom: 2rem; font-size: 1rem;">Scan URLs, phone numbers, or UPI IDs against our threat intelligence database.</p>
-                        
-                        <form action="result.html" method="GET" class="scan-bar">
-                            <svg style="margin-left: 1rem; color: var(--color-text-secondary); width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            <input type="text" name="query" class="scan-input" placeholder="Paste suspicious link or identifier..." required>
-                            <button type="submit" class="scan-btn">Analyze Risk</button>
-                        </form>
-                    </div>
-
-                    <!-- Metrics -->
-                    <div class="grid-cols-3 mb-6">
-                        <div class="card">
-                            <p style="color: var(--color-text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Total Scans Today</p>
-                            <div style="font-size: 2rem; font-weight: 600; color: var(--color-deep-navy); letter-spacing: -0.5px;">1,248</div>
-                        </div>
-                        <div class="card">
-                            <p style="color: var(--color-text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Threats Blocked</p>
-                            <div style="font-size: 2rem; font-weight: 600; color: var(--color-danger); letter-spacing: -0.5px;">342</div>
-                        </div>
-                        <div class="card">
-                            <p style="color: var(--color-text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500;">Database Uptime</p>
-                            <div style="font-size: 2rem; font-weight: 600; color: var(--color-success); letter-spacing: -0.5px;">99.9%</div>
-                        </div>
-                    </div>
-
-                    <!-- Live Feed -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Live Community Feed</h3>
-                            <a href="#" style="font-size: 0.875rem; color: var(--color-accent); font-weight: 500;">View all</a>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <div class="feed-item">
-                                <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <span class="badge badge-danger">Phishing</span>
-                                    <span style="font-weight: 500; font-family: monospace; color: var(--color-deep-navy); font-size: 0.95rem;">update-kyc-bank.com</span>
-                                </div>
-                                <span style="font-size: 0.85rem; color: var(--color-text-secondary);">2 mins ago</span>
-                            </div>
-                            <div class="feed-item">
-                                <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <span class="badge badge-danger">Fake UPI</span>
-                                    <span style="font-weight: 500; font-family: monospace; color: var(--color-deep-navy); font-size: 0.95rem;">support-refund@ybl</span>
-                                </div>
-                                <span style="font-size: 0.85rem; color: var(--color-text-secondary);">14 mins ago</span>
-                            </div>
-                            <div class="feed-item">
-                                <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <span class="badge badge-warning">Spam Call</span>
-                                    <span style="font-weight: 500; font-family: monospace; color: var(--color-deep-navy); font-size: 0.95rem;">+91 98765 43210</span>
-                                </div>
-                                <span style="font-size: 0.85rem; color: var(--color-text-secondary);">1 hour ago</span>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="feature-card">
+                    <h3>Call Verification</h3>
+                    <p>Identify known scammers before interacting with suspicious numbers.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>UPI Validation</h3>
+                    <p>Cross-reference financial IDs against reported fraud databases.</p>
                 </div>
             </div>
-        </main>
-    </div>
-    <script src="js/main.js"></script>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 INFRAUD. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
