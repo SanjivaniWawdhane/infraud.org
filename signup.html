@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Result | INFRAUD</title>
+    <title>Sign up | INFRAUD</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-header { padding: 160px 0 64px; text-align: center; position: relative; z-index: 5; }
+        .page-title { font-size: 3rem; margin-bottom: 16px; }
+        .page-subtitle { color: var(--text-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
+        
+        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px; position: relative; z-index: 5; }
+        .auth-card { background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; width: 100%; max-width: 440px; box-shadow: var(--shadow-lg); z-index: 10; }
+        .auth-card h2 { text-align: center; margin-bottom: 32px; font-size: 1.75rem; }
+        .form-group { margin-bottom: 24px; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+        .form-input { width: 100%; height: 48px; padding: 0 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; transition: all 0.2s; outline: none; }
+        .form-input:focus { border-color: var(--brand-secondary); box-shadow: 0 0 0 4px rgba(59,152,255,0.1); }
+        .auth-btn { width: 100%; height: 48px; font-size: 1rem; margin-top: 8px; }
+        .auth-links { text-align: center; margin-top: 24px; font-size: 0.875rem; color: var(--text-muted); }
+        .auth-links a { color: var(--brand-primary); font-weight: 600; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 32px; background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+        .data-table th, .data-table td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--border-light); }
+        .data-table th { background: var(--bg-element); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: var(--bg-body); }
+        .font-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 120px 0 64px; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-link { padding: 12px 16px; border-radius: var(--radius-md); font-weight: 500; color: var(--text-muted); transition: all 0.2s; }
+        .sidebar-link:hover, .sidebar-link.active { background: var(--bg-element); color: var(--text-main); }
+        
+        .result-card { background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; box-shadow: var(--shadow-md); margin-top: 32px; }
+        .result-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    </style>
 </head>
 <body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    
           <header class="nav-edge">
     <div class="container nav-edge-inner">
       
@@ -112,73 +147,57 @@
     </script>
   </header>
 
-    <main>
+    
+  <main>
+    <div class="auth-container">
+      <div class="auth-card" style="max-width: 440px;">
+        <h2 style="text-align: center; margin-bottom: 8px;">Create Account</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 32px;">Sign up to get started.</p>
+        <form id="signupForm">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="name" class="form-input" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Work Email</label>
+            <input type="email" id="email" class="form-input" placeholder="you@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary auth-btn" style="width: 100%;">Sign up</button>
+        </form>
+        <div style="text-align: center; margin-top: 24px; font-size: 0.9375rem; color: var(--ink-500);">
+          Already have an account? <a href="login.html" style="color: var(--ink-900); font-weight: 700; text-decoration: none;">Log in</a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Auth Logic -->
+  <script src="js/auth.js"></script>
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      const btn = this.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Signing up...';
+      btn.disabled = true;
+      
+      await window.authApp.signUpWithEmail(name, email, password);
+      
+      btn.textContent = originalText;
+      btn.disabled = false;
+    });
+  </script>
 
-        <section class="section" style="padding-top: var(--s-8);">
-            <div class="container">
-                <div class="flex justify-between items-end mb-6">
-                    <div>
-                        <div class="text-xs font-mono text-sec mb-2">Scan ID: INFR-8892-A • Oct 7, 2026 14:30 IST</div>
-                        <h2>Analysis Result</h2>
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="/check.html" class="btn btn-secondary">Scan Again</a>
-                        <button class="btn btn-ghost">Save Result</button>
-                        <a href="/reports.html" class="btn btn-ghost" style="color: var(--r-critical);">Report</a>
-                    </div>
-                </div>
-
-                <div class="card" style="padding: 0; overflow: hidden; display: flex;">
-                    <div style="padding: var(--s-8); background: #FEF2F2; width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-right: 1px solid var(--c-border);">
-                        <div style="font-size: 6rem; font-weight: 800; color: var(--r-critical); line-height: 1;">86<span style="font-size: 2rem; color: #FCA5A5;">/100</span></div>
-                        <div style="font-weight: 700; color: var(--r-critical); margin-top: var(--s-2); font-size: 1.5rem;">HIGH RISK</div>
-                        <p class="text-sm mt-4" style="color: #991B1B;">This target exhibits multiple critical threat signatures.</p>
-                    </div>
-                    <div style="padding: var(--s-8); flex: 1;">
-                        <h3 class="mb-6">Detected Signals</h3>
-                        
-                        <div class="mb-8 flex-col gap-4">
-                            <div class="flex justify-between items-start pb-4" style="border-bottom: 1px solid var(--c-border);">
-                                <div>
-                                    <div class="font-medium mb-1">Suspicious domain registration</div>
-                                    <div class="text-sm text-sec">Domain was registered extremely recently (2 hours ago) using a privacy proxy.</div>
-                                </div>
-                                <span class="badge risk-critical">High</span>
-                            </div>
-                            <div class="flex justify-between items-start pb-4" style="border-bottom: 1px solid var(--c-border);">
-                                <div>
-                                    <div class="font-medium mb-1">Urgency-based language</div>
-                                    <div class="text-sm text-sec">NLP model detected manipulation tactics urging immediate action.</div>
-                                </div>
-                                <span class="badge risk-suspicious">Medium</span>
-                            </div>
-                            <div class="flex justify-between items-start pb-4" style="border-bottom: 1px solid var(--c-border);">
-                                <div>
-                                    <div class="font-medium mb-1">Technical infrastructure</div>
-                                    <div class="text-sm text-sec">Hosted on an ASN frequently associated with phishing campaigns.</div>
-                                </div>
-                                <span class="badge risk-critical">High</span>
-                            </div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="font-medium mb-1">Community evidence</div>
-                                    <div class="text-sm text-sec">14 independent reports filed within the last hour.</div>
-                                </div>
-                                <span class="badge risk-suspicious">Medium</span>
-                            </div>
-                        </div>
-
-                        <div style="background: var(--c-bg); padding: var(--s-6); border-radius: var(--rad-md); border-left: 4px solid var(--r-critical);">
-                            <div class="font-semibold mb-2 text-red-700">Recommended Action:</div>
-                            <div class="text-lg font-medium text-navy">Do not click, pay or share sensitive information until independently verified.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-    </main>
-
+    
     <!-- ═══════════════════════════════════════════
          V5 ULTRA PREMIUM FOOTER (LIGHT THEME)
     ════════════════════════════════════════════ -->
@@ -330,6 +349,7 @@
         }
       </style>
     </footer>
+
     <script src="js/main.js"></script>
 </body>
 </html>

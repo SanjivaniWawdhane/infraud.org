@@ -176,6 +176,7 @@
 
       <!-- Actions -->
       <div class="nav-edge-actions">
+        <a href="login.html" style="margin-right: 15px; text-decoration: none; font-weight: 500; font-size: 0.9rem; color: #a1a1aa; transition: color 0.3s ease;" class="nav-edge-login">Login</a>
         <a href="/#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
           Get Started
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
@@ -227,7 +228,11 @@
       .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
       
       @media (max-width: 900px) {
-        .nav-edge-menu { display: none; }
+        .nav-edge-menu { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.98); padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); gap: 8px; transform: none; }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a { width: 100%; text-align: left; padding: 12px; border-radius: 8px; }
+        .nav-edge-menu a:hover, .nav-edge-menu a.active { background: rgba(37, 99, 235, 0.05); }
+        .nav-edge-menu a::after { display: none; }
         .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
         .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
       }
@@ -243,6 +248,15 @@
             }
         }
       }, { passive: true });
+
+      // Hamburger menu toggle
+      const hamburger = document.querySelector('.nav-edge-hamburger');
+      const navEdge = document.querySelector('.nav-edge');
+      if(hamburger && navEdge) {
+        hamburger.addEventListener('click', () => {
+          navEdge.classList.toggle('mobile-open');
+        });
+      }
     </script>
   </header>
 
@@ -302,54 +316,57 @@
   <script>
     async function loadBlogs() {
       const grid = document.getElementById('blog-grid');
+      let blogs = [];
       
+      const localBlogs = JSON.parse(localStorage.getItem('infraud_blogs') || '[]');
+      blogs = [...localBlogs];
+
       try {
-        if (!window.authApp || !window.authApp.supabase) {
-           throw new Error("Supabase not initialized");
+        if (window.authApp && window.authApp.supabase) {
+          const { data, error } = await window.authApp.supabase
+            .from('blogs')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data) {
+             data.forEach(sbBlog => {
+                 if(!blogs.some(b => b.title === sbBlog.title)) blogs.push(sbBlog);
+             });
+          }
         }
-        
-        const { data: blogs, error } = await window.authApp.supabase
-          .from('blogs')
-          .select('*')
-          .order('created_at', { ascending: false });
+      } catch(e) { }
 
-        if (error) throw error;
-        
-        if (blogs.length === 0) {
-          renderPlaceholderBlogs(grid);
-          return;
-        }
-
-        grid.innerHTML = ''; 
-
-        blogs.forEach(blog => {
-          const card = document.createElement('a');
-          card.href = '#'; 
-          card.className = 'blog-card';
-          
-          card.innerHTML = `
-            <div class="blog-img-wrap">
-              <img src="${blog.image_url || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80'}" alt="${blog.title}" onerror="this.src='assets/logo.jpg'" />
-            </div>
-            <div class="blog-content">
-              <div class="blog-meta">${blog.meta_keywords || 'Update'}</div>
-              <h2 class="blog-card-title">${blog.title}</h2>
-              <p class="blog-card-desc">${blog.description.substring(0, 110)}${blog.description.length > 110 ? '...' : ''}</p>
-              
-              <div class="blog-author">
-                 <img src="assets/logo.jpg" class="author-avatar" alt="INFRAUD Team" />
-                 <div class="author-info">
-                    <span class="author-name">INFRAUD Team</span>
-                    <span class="author-date">Just now</span>
-                 </div>
-              </div>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      } catch (err) {
+      if (blogs.length === 0) {
         renderPlaceholderBlogs(grid);
+        return;
       }
+
+      grid.innerHTML = ''; 
+      blogs.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+      blogs.forEach(blog => {
+        const card = document.createElement('a');
+        card.href = '#'; 
+        card.className = 'blog-card';
+        card.innerHTML = `
+          <div class="blog-img-wrap">
+            <img src="${blog.image_url || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80'}" alt="${blog.title}" onerror="this.src='assets/logo.jpg'" />
+          </div>
+          <div class="blog-content">
+            <div class="blog-meta">${blog.meta_keywords || 'Update'}</div>
+            <h2 class="blog-card-title">${blog.title}</h2>
+            <p class="blog-card-desc">${blog.description.substring(0, 110)}${blog.description.length > 110 ? '...' : ''}</p>
+            <div class="blog-author">
+               <img src="assets/logo.jpg" class="author-avatar" alt="INFRAUD Team" />
+               <div class="author-info">
+                  <span class="author-name">INFRAUD Team</span>
+                  <span class="author-date">Just now</span>
+               </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
     }
 
     function renderPlaceholderBlogs(grid) {
