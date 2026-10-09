@@ -1,0 +1,385 @@
+    <!-- ═══════════════════════════════════════════
+         FINAL CTA — LIGHT THEME REDESIGNED
+    ════════════════════════════════════════════ -->
+    <section class="final-cta-section">
+
+      <!-- Animated background grid -->
+      <div class="fcta-bg-grid"></div>
+
+      <!-- Glowing orbs -->
+      <div class="fcta-orb fcta-orb-1"></div>
+      <div class="fcta-orb fcta-orb-2"></div>
+      <div class="fcta-orb fcta-orb-3"></div>
+
+      <div class="container" style="position: relative; z-index: 2;">
+
+        <!-- Top eyebrow -->
+        <div class="fcta-eyebrow">
+          <span class="fcta-pulse-dot"></span>
+          Live Threat Detection Active
+        </div>
+
+        <!-- Main headline -->
+        <h2 class="fcta-headline">
+          <span class="fcta-line fcta-line-1">Before you <em>click.</em></span>
+          <span class="fcta-line fcta-line-2">Before you <em>pay.</em></span>
+          <span class="fcta-line fcta-line-3 fcta-accent">Check first.</span>
+        </h2>
+
+        <!-- Subtext -->
+        <p class="fcta-sub">
+          It takes under <strong>2 seconds</strong>. It could save you significantly more.
+        </p>
+
+        <!-- Inline Quick-Check Widget -->
+        <div class="fcta-widget">
+          <div class="fcta-widget-scan-bar">
+            <span class="fcta-scan-label">🛡️ Powered by INFRAUD Engine</span>
+            <span class="fcta-scan-live">LIVE</span>
+          </div>
+          <div class="fcta-widget-body">
+            <div class="fcta-widget-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <input
+              type="text"
+              id="fcta-input"
+              class="fcta-widget-input"
+              placeholder="Paste any URL, phone, UPI ID or message…"
+            />
+            <a href="check.html" class="fcta-widget-btn" onclick="if(document.getElementById('fcta-input').value){window.location='check.html?q='+encodeURIComponent(document.getElementById('fcta-input').value);}">
+              Analyze →
+            </a>
+          </div>
+          <div class="fcta-widget-tags">
+            <button class="fcta-tag fcta-tag-active" onclick="fctaTag(this,'Paste a suspicious URL…')">🌐 URL</button>
+            <button class="fcta-tag" onclick="fctaTag(this,'Enter a phone number…')">📱 Phone</button>
+            <button class="fcta-tag" onclick="fctaTag(this,'Enter a UPI ID…')">💳 UPI</button>
+            <button class="fcta-tag" onclick="fctaTag(this,'Paste a suspicious message…')">✉️ Message</button>
+          </div>
+        </div>
+
+        <!-- Trust proof row -->
+        <div class="fcta-trust">
+          <div class="fcta-trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Free forever
+          </div>
+          <div class="fcta-trust-sep"></div>
+          <div class="fcta-trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            No sign-up required
+          </div>
+          <div class="fcta-trust-sep"></div>
+          <div class="fcta-trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Privacy first
+          </div>
+          <div class="fcta-trust-sep"></div>
+          <div class="fcta-trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Results in &lt; 2 seconds
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <style>
+      /* ── Final CTA Section ─────────────────────────────────────── */
+      .final-cta-section {
+        position: relative;
+        background: linear-gradient(180deg, var(--page, #F7F8FC) 0%, var(--surface, #FFFFFF) 100%);
+        padding: 120px 0 100px;
+        overflow: hidden;
+        border-top: 1px solid var(--ink-100, #E8EBF3);
+      }
+
+      /* Animated dot grid */
+      .fcta-bg-grid {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle, var(--ink-100, rgba(0,0,0,0.06)) 1px, transparent 1px);
+        background-size: 32px 32px;
+        animation: fcta-grid-drift 20s linear infinite;
+      }
+      @keyframes fcta-grid-drift {
+        from { background-position: 0 0; }
+        to   { background-position: 32px 32px; }
+      }
+
+      /* Glowing orbs */
+      .fcta-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+      }
+      .fcta-orb-1 {
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+        top: -120px; left: -100px;
+        animation: fcta-float 8s ease-in-out infinite;
+      }
+      .fcta-orb-2 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%);
+        bottom: -80px; right: -80px;
+        animation: fcta-float 10s ease-in-out infinite reverse;
+      }
+      .fcta-orb-3 {
+        width: 280px; height: 280px;
+        background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+        top: 50%; right: 15%;
+        transform: translateY(-50%);
+        animation: fcta-float 12s ease-in-out infinite;
+      }
+      @keyframes fcta-float {
+        0%, 100% { transform: translateY(0) translateX(0); }
+        33%       { transform: translateY(-24px) translateX(12px); }
+        66%       { transform: translateY(12px) translateX(-16px); }
+      }
+
+      /* Eyebrow */
+      .fcta-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        background: var(--blue-100, #DBEAFE);
+        border: 1px solid rgba(37,99,235,0.15);
+        border-radius: 99px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--blue-600, #2563EB);
+        letter-spacing: 0.04em;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+      }
+      .fcta-pulse-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: var(--blue-600, #2563EB);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
+        animation: pulse 2s ease-in-out infinite;
+        flex-shrink: 0;
+      }
+
+      /* Headline */
+      .fcta-headline {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 24px;
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+        font-weight: 800;
+        font-size: clamp(2.8rem, 6vw, 5.5rem);
+        color: var(--ink-900, #0A0F1E);
+      }
+      .fcta-line {
+        display: block;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fcta-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      .fcta-line-1 { animation-delay: 0.1s; }
+      .fcta-line-2 { animation-delay: 0.25s; }
+      .fcta-line-3 { animation-delay: 0.4s; }
+      @keyframes fcta-rise {
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .fcta-headline em {
+        font-style: normal;
+        color: var(--ink-300, #9AA3B8);
+      }
+      .fcta-accent {
+        background: linear-gradient(120deg, var(--blue-600, #2563EB) 0%, #06B6D4 50%, #818CF8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Subtext */
+      .fcta-sub {
+        font-size: 1.125rem;
+        color: var(--ink-500, #4B5570);
+        margin-bottom: 48px;
+        line-height: 1.6;
+      }
+      .fcta-sub strong { color: var(--ink-700, #1E2742); font-weight: 700; }
+
+      /* Quick-Check Widget */
+      .fcta-widget {
+        max-width: 580px;
+        margin: 0 auto 40px;
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg, 0 16px 40px rgba(10,15,30,.10));
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+      .fcta-widget:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 24px 48px rgba(37,99,235,.15);
+      }
+      .fcta-widget-scan-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        background: var(--ink-50, #F4F5FA);
+        border-bottom: 1px solid var(--ink-100, #E8EBF3);
+        font-size: 0.75rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .fcta-widget-scan-bar::after {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0;
+        width: 60px;
+        background: linear-gradient(90deg, transparent, rgba(37,99,235,0.15), transparent);
+        animation: fcta-scan 2.5s ease-in-out infinite;
+      }
+      @keyframes fcta-scan {
+        from { left: -60px; }
+        to   { left: 100%; }
+      }
+      .fcta-scan-label {
+        font-weight: 600;
+        color: var(--ink-500, #4B5570);
+        font-size: 0.75rem;
+        letter-spacing: 0.02em;
+      }
+      .fcta-scan-live {
+        padding: 2px 8px;
+        background: var(--green-100, #D1FAE5);
+        border: 1px solid rgba(16,185,129,0.2);
+        border-radius: 99px;
+        font-size: 0.625rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        color: var(--green-500, #10B981);
+        animation: fcta-blink 1.6s ease-in-out infinite;
+      }
+      @keyframes fcta-blink {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.6; }
+      }
+      .fcta-widget-body {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 14px 10px;
+      }
+      .fcta-widget-icon {
+        color: var(--ink-300, #9AA3B8);
+        flex-shrink: 0;
+        padding: 0 4px;
+      }
+      .fcta-widget-input {
+        flex: 1;
+        height: 50px;
+        background: transparent;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 12px;
+        padding: 0 16px;
+        font-size: 0.9375rem;
+        color: var(--ink-900, #0A0F1E);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      }
+      .fcta-widget-input::placeholder { color: var(--ink-300, #9AA3B8); }
+      .fcta-widget-input:focus {
+        border-color: var(--blue-600, #2563EB);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        background: #fff;
+      }
+      .fcta-widget-btn {
+        height: 50px;
+        padding: 0 24px;
+        background: linear-gradient(135deg, var(--blue-600, #2563EB) 0%, #06B6D4 100%);
+        color: #fff;
+        font-size: 0.9375rem;
+        font-weight: 700;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        flex-shrink: 0;
+      }
+      .fcta-widget-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37,99,235,0.4);
+        filter: brightness(1.08);
+      }
+      .fcta-widget-btn:active { transform: translateY(0); }
+      .fcta-widget-tags {
+        display: flex;
+        gap: 6px;
+        padding: 0 14px 14px;
+      }
+      .fcta-tag {
+        padding: 5px 12px;
+        border-radius: 99px;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        background: var(--surface, #FFFFFF);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-500, #4B5570);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .fcta-tag:hover { background: var(--ink-50, #F4F5FA); color: var(--ink-700, #1E2742); }
+      .fcta-tag-active {
+        background: var(--blue-100, #DBEAFE) !important;
+        border-color: rgba(37,99,235,0.2) !important;
+        color: var(--blue-600, #2563EB) !important;
+      }
+
+      /* Trust row */
+      .fcta-trust {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .fcta-trust-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--ink-500, #4B5570);
+      }
+      .fcta-trust-item svg { color: var(--ink-300, #9AA3B8); }
+      .fcta-trust-sep {
+        width: 1px; height: 14px;
+        background: var(--ink-100, #E8EBF3);
+      }
+
+      @media (max-width: 640px) {
+        .final-cta-section { padding: 80px 0 72px; text-align: center; }
+        .fcta-widget-body { flex-direction: column; }
+        .fcta-widget-input { width: 100%; }
+        .fcta-widget-btn { width: 100%; justify-content: center; }
+        .fcta-trust { gap: 10px; }
+        .fcta-trust-sep { display: none; }
+      }
+    </style>
+    <script>
+      function fctaTag(el, placeholder) {
+        document.querySelectorAll('.fcta-tag').forEach(t => t.classList.remove('fcta-tag-active'));
+        el.classList.add('fcta-tag-active');
+        document.getElementById('fcta-input').placeholder = placeholder;
+      }
+    </script>

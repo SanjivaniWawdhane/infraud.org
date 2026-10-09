@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Checker | INFRAUD</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+        <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="/" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="/"  >Home</a>
+        <a href="check.html" class="active" >Check</a>
+        <a href="reports.html" >Reports</a>
+        <a href="blog.html" >Blog</a>
+        <a href="learn.html" >Learn</a>
+        <a href="about.html" >About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <a href="/#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 24px -8px rgba(10, 15, 30, 0.08); }
+      .nav-edge-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
+      
+      /* Logo */
+      .nav-edge-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 2; }
+      .nav-edge-logo img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--ink-900, #0A0F1E); }
+      
+      /* Menu (Centered on Desktop) */
+      .nav-edge-menu { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; }
+      .nav-edge-menu a { position: relative; text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-500, #4B5570); padding: 8px 16px; transition: color 0.2s; }
+      .nav-edge-menu a:hover, .nav-edge-menu a.active { color: var(--ink-900, #0A0F1E); }
+      .nav-edge-menu a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) scaleX(0); width: calc(100% - 32px); height: 2px; background: var(--blue-600, #2563EB); border-radius: 2px; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-menu a:hover::after, .nav-edge-menu a.active::after { transform: translateX(-50%) scaleX(1); }
+      
+      /* Actions */
+      .nav-edge-actions { display: flex; align-items: center; gap: 16px; z-index: 2; }
+      .nav-edge-login { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-700, #1E2742); padding: 8px; transition: color 0.2s; }
+      .nav-edge-login:hover { color: var(--blue-600, #2563EB); }
+      .nav-edge-signup { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-600, #2563EB); color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 700; padding: 10px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.2); transition: all 0.2s; }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover { background: var(--blue-700, #1D4ED8); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      /* Hamburger (Mobile) */
+      .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
+      
+      @media (max-width: 900px) {
+        .nav-edge-menu { display: none; }
+        .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+    <script>
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-edge');
+        if(nav) {
+            if(window.scrollY > 20) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+        }
+      }, { passive: true });
+    </script>
+  </header>
+
+  <main>
+    <!-- Hero Section (Matches about.html) -->
+    <section class="section" style="padding-top: 120px; padding-bottom: 60px; border-bottom: 1px solid var(--ink-100);">
+      <div class="container">
+        <div class="wrap-md" style="text-align: center;">
+          <div class="eyebrow">Universal Threat Checker</div>
+          <h1 class="t-display" style="margin-bottom: 24px;">Verify before you trust.</h1>
+          <p class="t-body" style="font-size: 1.25rem;">
+            Paste any suspicious link, message, or payment handle below for an instant, explainable risk verdict powered by our global intelligence graph.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Checker Split Section (Matches about.html grid-2 layout) -->
+    <section class="section" style="background: var(--surface);">
+      <div class="container">
+        <div class="grid-2 items-c gap-12">
+          
+          <!-- Left: Information -->
+          <div>
+            <h2 class="t-heading" style="margin-bottom: 20px;">Real-time analysis.</h2>
+            <p class="t-body" style="margin-bottom: 16px;">
+              Our engine evaluates hundreds of signals simultaneously. We analyze domain age, hosting infrastructure, linguistic manipulation, and community-driven reports in under two seconds.
+            </p>
+            <p class="t-body" style="margin-bottom: 24px;">
+              If a scam is actively spreading, you'll know instantly. We block over 18,000 new threats daily.
+            </p>
+            <div class="flex items-c gap-2 t-small" style="color: var(--green-600); font-weight: 600;">
+              <span class="status-dot" style="width: 8px; height: 8px; background: var(--green-500); border-radius: 50%; display: inline-block; box-shadow: 0 0 0 3px rgba(16,185,129,0.2);"></span>
+              Systems fully operational
+            </div>
+          </div>
+
+          <!-- Right: Checker Card -->
+          <div class="card" style="background: var(--page); border: 1px solid var(--ink-100); padding: 32px; box-shadow: var(--shadow-lg);">
+            
+            <style>
+              .checker-tabs-container {
+                display: flex; gap: 16px;
+                border-bottom: 1px solid var(--ink-100);
+                margin-bottom: 24px;
+                overflow-x: auto;
+                padding-bottom: 0;
+              }
+              .checker-tab {
+                color: var(--ink-500);
+                border: none; background: none;
+                border-bottom: 2px solid transparent;
+                padding-bottom: 12px; margin-bottom: -1px;
+                font-size: 0.9375rem; font-weight: 600;
+                cursor: pointer; white-space: nowrap;
+                transition: color 0.2s, border-color 0.2s;
+              }
+              .checker-tab:hover { color: var(--ink-900); }
+              .checker-tab.active {
+                color: var(--blue-600);
+                border-bottom-color: var(--blue-600);
+              }
+            </style>
+            
+            <!-- Tabs -->
+            <div class="checker-tabs-container">
+              <button class="t-title checker-tab active" onclick="setCheckerType('url', this)">Website</button>
+              <button class="t-title checker-tab" onclick="setCheckerType('phone', this)">Phone</button>
+              <button class="t-title checker-tab" onclick="setCheckerType('upi', this)">UPI ID</button>
+              <button class="t-title checker-tab" onclick="setCheckerType('message', this)">Message</button>
+            </div>
+
+            <!-- Input Area -->
+            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+              <div style="position: relative; flex: 1;">
+                <div style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--ink-300); display: flex; align-items: center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <input type="text" id="main-checker-input" class="input" placeholder="e.g. amazon-secure-login.in" style="width: 100%; height: 48px; padding-left: 44px; border-radius: 8px; border: 1px solid var(--ink-100); transition: border-color 0.2s, box-shadow 0.2s;" onfocus="this.style.borderColor='var(--blue-600)'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+              </div>
+              <button class="btn btn-primary" style="flex-shrink: 0; padding: 0 24px; border-radius: 8px; height: 48px;" onclick="window.location.href='reports.html'">Analyze</button>
+            </div>
+            
+            <script>
+              function setCheckerType(type, btn) {
+                document.querySelectorAll('.checker-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const input = document.getElementById('main-checker-input');
+                if(type === 'url') input.placeholder = 'e.g. amazon-secure-login.in';
+                if(type === 'phone') input.placeholder = 'e.g. +91 98765 43210';
+                if(type === 'upi') input.placeholder = 'e.g. username@okhdfcbank';
+                if(type === 'message') input.placeholder = 'Paste a suspicious message...';
+              }
+            </script>
+
+            <!-- Privacy Notice -->
+            <div class="t-small flex items-c gap-2" style="color: var(--ink-500); margin-bottom: 28px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 
+              In-memory processing. Payloads are instantly discarded.
+            </div>
+
+            <div class="divider" style="margin-bottom: 20px;"></div>
+            
+            <div class="flex justify-b items-c" style="margin-bottom: 12px;">
+              <span class="t-body" style="font-weight: 500;">Recent Checks</span>
+              <span class="badge badge-neutral">Live</span>
+            </div>
+            
+            <div class="flex flex-col gap-2">
+               <div class="flex justify-b items-c" style="padding: 8px 12px; background: var(--surface); border: 1px solid var(--ink-50); border-radius: 6px;">
+                 <span style="font-family: var(--mono); font-size: 0.8125rem;">amazon-support.in</span>
+                 <span class="badge badge-red" style="font-size: 0.6875rem;">Critical</span>
+               </div>
+               <div class="flex justify-b items-c" style="padding: 8px 12px; background: var(--surface); border: 1px solid var(--ink-50); border-radius: 6px;">
+                 <span style="font-family: var(--mono); font-size: 0.8125rem;">+91 98765 43210</span>
+                 <span class="badge badge-amber" style="font-size: 0.6875rem;">Suspicious</span>
+               </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Principles Section (Matches about.html grid-3) -->
+    <section class="section">
+      <div class="container">
+        <div class="wrap-md" style="text-align: center; margin-bottom: 64px;">
+          <h2 class="t-heading" style="margin-bottom: 16px;">Enterprise-grade intelligence</h2>
+          <p class="t-body">We bring the same threat detection capabilities used by major cybersecurity firms directly to everyday users, for free.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card card-hover">
+            <div class="feature-icon">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+            </div>
+            <h3 class="t-title" style="margin-bottom: 12px;">Multi-vector Support</h3>
+            <p class="t-body t-small">Check shortened URLs, raw domains, suspicious SMS messages, WhatsApp forwards, phone numbers, and UPI handles all in one place.</p>
+          </div>
+
+          <div class="card card-hover">
+            <div class="feature-icon" style="background: var(--amber-100); color: var(--amber-500);">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <h3 class="t-title" style="margin-bottom: 12px;">Zero Data Retention</h3>
+            <p class="t-body t-small">We respect your privacy. All queries are hashed and processed entirely in-memory. We never log or store the personal context of your checks.</p>
+          </div>
+
+          <div class="card card-hover">
+            <div class="feature-icon" style="background: var(--green-100); color: var(--green-500);">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </div>
+            <h3 class="t-title" style="margin-bottom: 12px;">Real-time Scoring</h3>
+            <p class="t-body t-small">Our algorithms assign a risk score from 0-100 in under 2 seconds, providing a clear verdict along with the specific signals that triggered the alert.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       V5 ULTRA PREMIUM FOOTER (LIGHT THEME)
+  ════════════════════════════════════════════ -->
+  <footer class="footer-premium">
+    <div class="footer-bg-glow"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      
+      <!-- Links Section -->
+      <div class="footer-grid">
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="check.html" class="footer-link"><span>Live Check</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="reports.html" class="footer-link"><span>Threat Reports</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="dashboard.html" class="footer-link"><span>Dashboard</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="api.html" class="footer-link"><span>Developer API</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="learn.html" class="footer-link"><span>Safety Academy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="learn.html" class="footer-link"><span>Blog</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="about.html" class="footer-link"><span>About Us</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Community</div>
+          <ul class="footer-links-list">
+            <li><a href="https://github.com/infraud" class="footer-link"><span>GitHub</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="#" class="footer-link"><span>Discord</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="report.html" class="footer-link"><span>Report a Scam</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="#" class="footer-link"><span>Privacy Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="#" class="footer-link"><span>Terms of Service</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-huge-mark">INFRAUD</div>
+
+      <!-- Bottom Section -->
+      <div class="footer-bottom">
+        <div class="footer-copyright">&copy; 2026 INFRAUD. All rights reserved.</div>
+        <div class="footer-status">
+          <span class="status-indicator"></span>
+          All systems operational
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .footer-premium {
+        position: relative;
+        background: linear-gradient(180deg, var(--page, #F7F8FC) 0%, #FFFFFF 100%);
+        border-top: 1px solid var(--ink-100, #E8EBF3);
+        padding: 80px 0 32px;
+        font-family: var(--font, 'Inter', sans-serif);
+        color: var(--ink-700, #1E2742);
+        overflow: hidden;
+      }
+
+      .footer-bg-glow {
+        position: absolute;
+        bottom: -150px; left: 50%;
+        transform: translateX(-50%);
+        width: 80vw; height: 300px;
+        background: radial-gradient(ellipse at center, rgba(37,99,235,0.06) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 1;
+      }
+      
+      .footer-grid {
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+        margin-bottom: 64px;
+      }
+      .footer-col-title { font-size: 0.8125rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+      .footer-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500;
+        transition: all 0.2s;
+      }
+      .footer-link svg { opacity: 0; transform: translateX(-4px); transition: all 0.2s; color: var(--blue-600, #2563EB); }
+      .footer-link:hover { color: var(--ink-900, #0A0F1E); }
+      .footer-link:hover svg { opacity: 1; transform: translateX(0); }
+
+      .footer-huge-mark {
+        font-size: clamp(4rem, 14vw, 15rem);
+        font-weight: 900;
+        line-height: 0.8;
+        text-align: center;
+        color: var(--ink-100, #E8EBF3);
+        opacity: 0.6;
+        letter-spacing: -0.05em;
+        user-select: none;
+        margin-bottom: -1vw;
+      }
+
+      .footer-bottom {
+        display: flex; justify-content: space-between; align-items: center;
+        padding-top: 32px; border-top: 1px solid var(--ink-100, #E8EBF3);
+        font-size: 0.875rem; color: var(--ink-500, #4B5570);
+        position: relative; z-index: 2;
+      }
+      .footer-status {
+        display: flex; align-items: center; gap: 10px;
+        padding: 6px 14px; background: #fff; border-radius: 100px;
+        font-weight: 600; font-size: 0.8125rem; border: 1px solid var(--ink-100, #E8EBF3);
+        box-shadow: 0 2px 8px rgba(10,15,30,.04);
+      }
+      .status-indicator {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--green-500, #10B981);
+        box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+        animation: statusPulse 2s infinite;
+      }
+      @keyframes statusPulse {
+        0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+        70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+      }
+
+      @media (max-width: 900px) {
+        .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 32px; }
+        .footer-huge-mark { display: none; }
+      }
+      @media (max-width: 600px) {
+        .footer-grid { grid-template-columns: 1fr; }
+        .footer-bottom { flex-direction: column; gap: 24px; text-align: center; }
+      }
+    </style>
+  </footer>
+</body>
+</html>

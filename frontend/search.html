@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search | INFRAUD</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+          <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="/" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="/"  >Home</a>
+        <a href="check.html" >Check</a>
+        <a href="reports.html" >Reports</a>
+        <a href="blog.html" >Blog</a>
+        <a href="learn.html" >Learn</a>
+        <a href="about.html" >About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <a href="/#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 24px -8px rgba(10, 15, 30, 0.08); }
+      .nav-edge-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
+      
+      /* Logo */
+      .nav-edge-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 2; }
+      .nav-edge-logo img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--ink-900, #0A0F1E); }
+      
+      /* Menu (Centered on Desktop) */
+      .nav-edge-menu { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; }
+      .nav-edge-menu a { position: relative; text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-500, #4B5570); padding: 8px 16px; transition: color 0.2s; }
+      .nav-edge-menu a:hover, .nav-edge-menu a.active { color: var(--ink-900, #0A0F1E); }
+      .nav-edge-menu a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) scaleX(0); width: calc(100% - 32px); height: 2px; background: var(--blue-600, #2563EB); border-radius: 2px; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-menu a:hover::after, .nav-edge-menu a.active::after { transform: translateX(-50%) scaleX(1); }
+      
+      /* Actions */
+      .nav-edge-actions { display: flex; align-items: center; gap: 16px; z-index: 2; }
+      .nav-edge-login { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-700, #1E2742); padding: 8px; transition: color 0.2s; }
+      .nav-edge-login:hover { color: var(--blue-600, #2563EB); }
+      .nav-edge-signup { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-600, #2563EB); color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 700; padding: 10px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.2); transition: all 0.2s; }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover { background: var(--blue-700, #1D4ED8); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      /* Hamburger (Mobile) */
+      .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
+      
+      @media (max-width: 900px) {
+        .nav-edge-menu { display: none; }
+        .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+    <script>
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-edge');
+        if(nav) {
+            if(window.scrollY > 20) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+        }
+      }, { passive: true });
+    </script>
+  </header>
+
+    <main>
+
+        <section class="section" style="padding-top: var(--s-16);">
+            <div class="container flex-col items-center">
+                <h2 class="mb-8 text-center">Global Search</h2>
+                <div class="card" style="max-width: 600px; width: 100%; margin: 0 auto; padding: var(--s-4);">
+                    <input type="text" class="input input-lg" placeholder="Search websites, numbers, reports, resources..." style="border: none; box-shadow: none; font-size: 1.125rem;" autofocus>
+                </div>
+                <div style="max-width: 600px; width: 100%; margin: var(--s-6) auto 0;">
+                    <div class="text-sm font-medium text-sec mb-4">Recent Searches</div>
+                    <div class="card" style="padding: 0;">
+                        <div style="padding: var(--s-4); border-bottom: 1px solid var(--c-border); font-family: monospace; font-size: 0.875rem; color: var(--c-blue); cursor: pointer;" class="hover-bg">amazon-support.in</div>
+                        <div style="padding: var(--s-4); font-family: monospace; font-size: 0.875rem; color: var(--c-blue); cursor: pointer;" class="hover-bg">+91 98765 43210</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- ═══════════════════════════════════════════
+         V5 ULTRA PREMIUM FOOTER (LIGHT THEME)
+    ════════════════════════════════════════════ -->
+    <footer class="footer-premium">
+      
+      <!-- Subtle Bottom Anchor Glow -->
+      <div class="footer-bg-glow"></div>
+
+      <div class="container" style="position: relative; z-index: 2;">
+        
+
+        <!-- Links Section -->
+        <div class="footer-grid">
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Product</div>
+            <ul class="footer-links-list">
+              <li><a href="check.html" class="footer-link"><span>Live Check</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="reports.html" class="footer-link"><span>Threat Reports</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="dashboard.html" class="footer-link"><span>Dashboard</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="api.html" class="footer-link"><span>Developer API</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Integrations</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Resources</div>
+            <ul class="footer-links-list">
+              <li><a href="learn.html" class="footer-link"><span>Safety Academy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="learn.html" class="footer-link"><span>Blog</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="about.html" class="footer-link"><span>About Us</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Help Center</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Community</div>
+            <ul class="footer-links-list">
+              <li><a href="https://github.com/infraud" class="footer-link"><span>GitHub</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Discord</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="report.html" class="footer-link"><span>Report a Scam</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Transparency Report</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Legal</div>
+            <ul class="footer-links-list">
+              <li><a href="#" class="footer-link"><span>Privacy Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Terms of Service</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Cookie Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-huge-mark">INFRAUD</div>
+
+        <!-- Bottom Section -->
+        <div class="footer-bottom">
+          <div class="footer-copyright">&copy; 2026 INFRAUD. All rights reserved.</div>
+          <div class="footer-status">
+            <span class="status-indicator"></span>
+            All systems operational
+          </div>
+        </div>
+
+      </div>
+
+      <style>
+        .footer-premium {
+          position: relative;
+          background: linear-gradient(180deg, var(--page, #F7F8FC) 0%, #FFFFFF 100%);
+          border-top: 1px solid var(--ink-100, #E8EBF3);
+          padding: 80px 0 32px;
+          font-family: var(--font, 'Inter', sans-serif);
+          color: var(--ink-700, #1E2742);
+          overflow: hidden;
+        }
+
+        .footer-bg-glow {
+          position: absolute;
+          bottom: -150px; left: 50%;
+          transform: translateX(-50%);
+          width: 80vw; height: 300px;
+          background: radial-gradient(ellipse at center, rgba(37,99,235,0.06) 0%, transparent 60%);
+          pointer-events: none;
+          z-index: 1;
+        }
+        
+        /* Grid */
+        .footer-grid {
+          display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+          margin-bottom: 64px;
+        }
+        .footer-col-title { font-size: 0.8125rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+        .footer-link {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500;
+          transition: all 0.2s;
+        }
+        .footer-link svg { opacity: 0; transform: translateX(-4px); transition: all 0.2s; color: var(--blue-600, #2563EB); }
+        .footer-link:hover { color: var(--ink-900, #0A0F1E); }
+        .footer-link:hover svg { opacity: 1; transform: translateX(0); }
+
+        /* Huge Mark */
+        .footer-huge-mark {
+          font-size: clamp(4rem, 14vw, 15rem);
+          font-weight: 900;
+          line-height: 0.8;
+          text-align: center;
+          color: var(--ink-100, #E8EBF3);
+          opacity: 0.6;
+          letter-spacing: -0.05em;
+          user-select: none;
+          margin-bottom: -1vw;
+        }
+
+        /* Bottom */
+        .footer-bottom {
+          display: flex; justify-content: space-between; align-items: center;
+          padding-top: 32px; border-top: 1px solid var(--ink-100, #E8EBF3);
+          font-size: 0.875rem; color: var(--ink-500, #4B5570);
+          position: relative; z-index: 2;
+        }
+        .footer-status {
+          display: flex; align-items: center; gap: 10px;
+          padding: 6px 14px; background: #fff; border-radius: 100px;
+          font-weight: 600; font-size: 0.8125rem; border: 1px solid var(--ink-100, #E8EBF3);
+          box-shadow: 0 2px 8px rgba(10,15,30,.04);
+        }
+        .status-indicator {
+          width: 8px; height: 8px; border-radius: 50%;
+          background: var(--green-500, #10B981);
+          box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+          animation: statusPulse 2s infinite;
+        }
+        @keyframes statusPulse {
+          0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+          70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+          100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+        }
+
+        @media (max-width: 900px) {
+
+          .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 32px; }
+          .footer-huge-mark { display: none; }
+        }
+        @media (max-width: 600px) {
+          .footer-grid { grid-template-columns: 1fr; }
+          .footer-bottom { flex-direction: column; gap: 24px; text-align: center; }
+
+        }
+      </style>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>
