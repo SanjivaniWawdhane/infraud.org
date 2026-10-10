@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="INFRAUD Blog — Latest updates, insights, and fraud prevention strategies." />
-  <title>Blog | INFRAUD</title>
+  <meta name="description" content="Read our latest article." />
+  <title>Article | INFRAUD</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/auth.js"></script>
@@ -260,22 +260,65 @@
     </script>
   </header>
 
-  <main>
-    <section class="blog-hero">
-      <div class="hero-badge">INFRAUD Updates</div>
-      <h1 class="blog-title">Insights for a safer digital world</h1>
-      <p class="blog-subtitle">Discover our latest deep-dives, scam alerts, and expert strategies to help you stay one step ahead of digital fraud.</p>
-    </section>
-
-    <section class="blog-container">
-      <div id="blog-grid" class="blog-grid">
-        <!-- JS will populate this -->
-      </div>
-    </section>
+  
+  <main style="padding: 120px 24px 60px; max-width: 800px; margin: 0 auto;">
+    <div id="post-container">
+       <h1 id="post-title" style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; color: var(--ink-900, #0A0F1E); margin-bottom: 24px; line-height: 1.1;">Loading...</h1>
+       <div id="post-meta" style="color: var(--ink-500, #4B5570); margin-bottom: 40px; font-weight: 500;">Please wait while we load the article.</div>
+       <img id="post-image" src="" style="width: 100%; border-radius: 16px; margin-bottom: 40px; display: none; box-shadow: 0 12px 32px rgba(0,0,0,0.1);" />
+       <div id="post-content" style="font-size: 1.125rem; line-height: 1.8; color: var(--ink-700, #1F2937); white-space: pre-wrap;">
+       </div>
+    </div>
   </main>
 
-  <!-- PREMIUM FOOTER -->
-  <footer class="footer-premium">
+  <script>
+    async function loadPost() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      if (!id) {
+        document.getElementById('post-title').innerText = 'Post not found';
+        document.getElementById('post-meta').innerHTML = 'No post ID provided. <br><br><a href="blog.html" style="color: var(--blue-600, #2563EB); text-decoration: none; font-weight: 600;">&larr; Back to Blogs</a>';
+        return;
+      }
+
+      try {
+        if (window.authApp && window.authApp.supabase) {
+          const { data, error } = await window.authApp.supabase
+            .from('blogs')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+          if (error || !data) {
+             document.getElementById('post-title').innerText = 'Post not found';
+             document.getElementById('post-meta').innerText = 'This post might have been removed.';
+             return;
+          }
+
+          document.getElementById('post-title').innerText = data.title || 'Untitled';
+          const date = new Date(data.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+          document.getElementById('post-meta').innerText = 'Published on ' + date + ' • ' + (data.meta_keywords || 'Update');
+          
+          if (data.image_url) {
+              const img = document.getElementById('post-image');
+              img.src = data.image_url;
+              img.style.display = 'block';
+          }
+          
+          document.getElementById('post-content').innerText = data.description || '';
+        } else {
+             document.getElementById('post-title').innerText = 'Connection Error';
+             document.getElementById('post-meta').innerText = 'Supabase client not loaded.';
+        }
+      } catch(e) {
+          console.error(e);
+          document.getElementById('post-title').innerText = 'Error loading post';
+      }
+    }
+    
+    window.addEventListener('load', loadPost);
+  </script>
+<footer class="footer-premium">
     <div class="container" style="position: relative; z-index: 2;">
       <div class="footer-grid">
         <div class="footer-nav-col">
@@ -315,189 +358,6 @@
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-          <script>
-    let allBlogs = [];
-
-    async function loadBlogs() {
-      const grid = document.getElementById('blog-grid');
-      const localBlogs = JSON.parse(localStorage.getItem('infraud_blogs') || '[]');
-      allBlogs = [...localBlogs];
-
-      try {
-        if (window.authApp && window.authApp.supabase) {
-          const { data, error } = await window.authApp.supabase
-            .from('blogs')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-          if (data && data.length > 0) {
-             data.forEach(sbBlog => {
-                 if(!allBlogs.some(b => b.title === sbBlog.title)) allBlogs.push(sbBlog);
-             });
-          }
-        }
-      } catch(e) {}
-
-      if (allBlogs.length === 0) {
-        renderPlaceholderBlogs(grid);
-        return;
-      }
-
-      grid.innerHTML = ''; 
-      allBlogs.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-
-      allBlogs.forEach(blog => {
-        const card = document.createElement('div');
-        card.className = 'blog-card';
-        card.style.cursor = 'pointer';
-        card.onclick = () => openBlogModal(blog.id);
-        const desc = blog.description || '';
-        const shortDesc = desc.length > 110 ? desc.substring(0, 110) + '...' : desc;
-        card.innerHTML = `
-          <div class="blog-img-wrap">
-            <img src="${blog.image_url || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80'}" alt="${blog.title || 'Blog'}" onerror="this.src='assets/logo.jpg'" />
-          </div>
-          <div class="blog-content" style="display: flex; flex-direction: column; flex: 1;">
-            <div class="blog-meta">${blog.meta_keywords || 'Update'}</div>
-            <h2 class="blog-card-title">${blog.title || 'Untitled Blog'}</h2>
-            <p class="blog-card-desc" style="flex: 1;">${shortDesc}</p>
-            <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between;">
-                <div class="blog-author" style="margin-top: 0;">
-                   <img src="assets/logo.jpg" class="author-avatar" alt="INFRAUD Team" />
-                   <div class="author-info">
-                      <span class="author-name">INFRAUD Team</span>
-                      <span class="author-date">Just now</span>
-                   </div>
-                </div>
-                <div style="color: var(--blue-600, #2563EB); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
-                    Read Article
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </div>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function openBlogModal(id) {
-        let blog = allBlogs.find(b => b.id === id) || allBlogs.find(b => b.title === id);
-        if (!blog) return;
-        
-        document.getElementById('modalTitle').innerText = blog.title || 'Untitled Blog';
-        document.getElementById('modalDesc').innerText = blog.description || blog.desc || '';
-        document.getElementById('modalMeta').innerText = blog.meta_keywords || blog.tag || 'Updates';
-        
-        const imgContainer = document.getElementById('modalImgContainer');
-        const img = document.getElementById('modalImg');
-        const imageUrl = blog.image_url || blog.img;
-        if (imageUrl) {
-            img.src = imageUrl;
-            imgContainer.style.display = 'block';
-        } else {
-            img.src = 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80';
-            imgContainer.style.display = 'block';
-        }
-
-        const modal = document.getElementById('blogModal');
-        const card = document.getElementById('blogModalCard');
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-        
-        // Force reflow
-        void modal.offsetWidth;
-        modal.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-    }
-
-    function closeBlogModal() {
-        const modal = document.getElementById('blogModal');
-        const card = document.getElementById('blogModalCard');
-        modal.style.opacity = '0';
-        card.style.transform = 'translateY(40px)';
-        document.body.style.overflow = '';
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 400);
-    }
-
-    function renderPlaceholderBlogs(grid) {
-      grid.innerHTML = '';
-      const placeholders = [
-        {
-          title: "INFRAUD V2 is officially live: What's new?",
-          desc: 'We are thrilled to announce the launch of INFRAUD V2, bringing faster checks and higher accuracy to all users. This update includes a completely redesigned dashboard, enhanced scanning speeds, and an upgraded machine learning model that catches 99.9% of modern phishing domains.',
-          tag: 'Updates',
-          img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'
-        }
-      ];
-      allBlogs = [...placeholders];
-      placeholders.forEach(blog => {
-        const card = document.createElement('div');
-        card.className = 'blog-card';
-        card.onclick = () => openBlogModal(blog.title);
-        card.innerHTML = `<div class="blog-img-wrap"><img src="${blog.img}" /></div>
-          <div class="blog-content" style="display:flex;flex-direction:column;flex:1;">
-            <div class="blog-meta">${blog.tag}</div>
-            <h2 class="blog-card-title">${blog.title}</h2>
-            <p class="blog-card-desc" style="flex:1;">${blog.desc.substring(0,100)}...</p>
-            <div style="margin-top:20px;display:flex;align-items:center;justify-content:space-between;">
-                <div style="color:var(--blue-600,#2563EB);font-weight:600;font-size:0.9rem;">Read Article</div>
-            </div>
-          </div>`;
-        grid.appendChild(card);
-      });
-    }
-
-    window.addEventListener('load', loadBlogs);
-  </script>
-
-  <!-- Full-Screen Premium Article Overlay -->
-  <div id="blogModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99999; background: #FFFFFF; overflow-y: auto; opacity: 0; transition: opacity 0.4s ease;">
-      
-      <!-- Sticky Navigation Bar -->
-      <div style="position: sticky; top: 0; width: 100%; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-100, #E8EBF3); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 10;">
-          <div style="font-weight: 800; color: var(--ink-900, #0A0F1E); font-size: 1.25rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px;">
-              <img src="assets/logo.jpg" style="height: 28px; width: 28px; border-radius: 6px;" />
-              INFRAUD
-          </div>
-          <button onclick="closeBlogModal()" style="background: var(--ink-50, #F4F5FA); border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); border-radius: 100px; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: background 0.2s;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-              Back to Blog
-          </button>
-      </div>
-
-      <!-- Article Content Wrapper -->
-      <div id="blogModalCard" style="width: 100%; position: relative; transform: translateY(40px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 120px;">
-          
-          <!-- Article Header -->
-          <div style="max-width: 760px; margin: 0 auto; padding: 60px 24px 32px;">
-              <div id="modalMeta" style="color: var(--blue-600, #2563EB); font-weight: 700; margin-bottom: 16px; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;"></div>
-              
-              <!-- Clean, properly capitalized title via CSS -->
-              <h2 id="modalTitle" style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; color: var(--ink-900, #0A0F1E); margin-bottom: 32px; line-height: 1.15; letter-spacing: -0.02em; text-transform: capitalize;"></h2>
-              
-              <!-- Author Info -->
-              <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 40px;">
-                   <img src="assets/logo.jpg" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--ink-100, #E8EBF3);" alt="INFRAUD Team" />
-                   <div>
-                      <div style="font-weight: 700; color: var(--ink-900, #0A0F1E); font-size: 1rem;">INFRAUD Team</div>
-                      <div style="color: var(--ink-500, #4B5570); font-size: 0.9rem; margin-top: 2px;">Oct 8, 2026 • 5 min read</div>
-                   </div>
-              </div>
-          </div>
-          
-          <!-- Hero Image -->
-          <div style="max-width: 900px; margin: 0 auto 48px; padding: 0 24px;">
-              <div id="modalImgContainer" style="width: 100%; display: none; border-radius: 16px; overflow: hidden; background: var(--ink-50, #F4F5FA); box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
-                  <img id="modalImg" src="" style="width: 100%; max-height: 500px; object-fit: cover; display: block;" />
-              </div>
-          </div>
-          
-          <!-- Article Body -->
-          <div style="max-width: 760px; margin: 0 auto; padding: 0 24px;">
-              <div id="modalDesc" style="font-size: 1.25rem; line-height: 1.8; color: #374151; white-space: pre-wrap; font-family: 'Inter', -apple-system, sans-serif;"></div>
-          </div>
-          
-      </div>
-  </div>
+  
+</body>
+</html>
