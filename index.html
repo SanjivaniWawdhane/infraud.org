@@ -460,7 +460,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </div>
               <input type="text" id="hero-search-input" onkeypress="if(event.key === 'Enter') performAnalysis()" placeholder="Paste a suspicious URL..." style="flex: 1; height: 56px; border-radius: var(--radius-md); border: 1px solid var(--ink-100); padding-left: 48px; font-size: 1rem; box-shadow: var(--shadow-sm); outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--blue-600)'" onblur="this.style.borderColor='var(--ink-100)'" />
-              <button class="btn btn-primary" onclick="performAnalysis()" style="height: 56px; padding: 0 32px; border-radius: var(--radius-md); font-weight: 600; font-size: 1rem; white-space: nowrap; cursor: pointer; transition: all 0.2s;">Analyze</button>
+              <button id="hero-analyze-btn" class="btn btn-primary" onclick="performAnalysis()" style="height: 56px; padding: 0 32px; border-radius: var(--radius-md); font-weight: 600; font-size: 1rem; white-space: nowrap; cursor: pointer; transition: all 0.2s;">Analyze</button>
             </div>
             
             <div style="display: flex; align-items: center; gap: 24px; margin-top: 24px; font-size: 0.875rem; color: var(--ink-300); font-weight: 500;">
@@ -556,6 +556,7 @@
       </style>
       <script>
         function setSearchType(type, btn) {
+          window.currentSearchType = type;
           document.querySelectorAll('.search-toggle').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           const input = document.getElementById('hero-search-input');
@@ -1930,7 +1931,7 @@
 <script>
   function performAnalysis() {
     const input = document.getElementById('hero-search-input');
-    const btn = document.querySelector('.btn-primary[onclick="performAnalysis()"]');
+    const btn = document.getElementById('hero-analyze-btn') || document.querySelector('.btn-primary[onclick="performAnalysis()"]');
     
     if (input && input.value.trim() !== '') {
       if (btn) {
@@ -1938,12 +1939,33 @@
         btn.style.opacity = '0.8';
       }
       setTimeout(() => {
-        window.location.href = 'result.html?query=' + encodeURIComponent(input.value.trim());
-      }, 600); // Small delay to simulate processing before redirecting to results
+        window.location.href = 'result.html?type=' + encodeURIComponent(window.currentSearchType || 'url') + '&query=' + encodeURIComponent(input.value.trim());
+        setTimeout(resetAnalyzeButton, 2000);
+      }, 400);
     } else {
       alert("Please enter a URL, phone number, UPI ID, or message to analyze.");
       if (input) input.focus();
     }
+  }
+
+  function resetAnalyzeButton() {
+    const btn = document.getElementById('hero-analyze-btn') || document.querySelector('.btn-primary[onclick="performAnalysis()"]');
+    if (btn) {
+      btn.innerText = 'Analyze';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+  }
+
+  // Ensure button resets when page is displayed or restored from back/forward cache
+  window.addEventListener('pageshow', resetAnalyzeButton);
+  window.addEventListener('load', resetAnalyzeButton);
+  document.addEventListener('DOMContentLoaded', resetAnalyzeButton);
+
+  // Also reset button as soon as user types or edits anything in input
+  const heroInp = document.getElementById('hero-search-input');
+  if (heroInp) {
+    heroInp.addEventListener('input', resetAnalyzeButton);
   }
 </script>
 </body>

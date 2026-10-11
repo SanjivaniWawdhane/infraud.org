@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Report Threat | INFRAUD</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -166,11 +169,11 @@
                         <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 1.1rem; color: var(--ink-900);">Step 1: Your Details</h3>
                         <div class="form-group">
                             <label class="form-label">Your Name</label>
-                            <input type="text" class="form-input" placeholder="e.g. John Doe">
+                            <input type="text" id="reporter-name" class="form-input" placeholder="e.g. John Doe">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email Address (Optional)</label>
-                            <input type="email" class="form-input" placeholder="e.g. john@example.com">
+                            <input type="email" id="reporter-email" class="form-input" placeholder="e.g. john@example.com">
                         </div>
                         <button type="button" class="btn btn-primary auth-btn" onclick="nextStep(2)">Next: Threat Details</button>
                     </div>
@@ -181,32 +184,41 @@
                         <div class="form-group">
                             <label class="form-label">Asset Type</label>
                             <select class="form-input" id="asset-type" onchange="updateTargetInput()">
-                                <option value="Website / URL">Website / URL</option>
-                                <option value="Phone Number">Phone Number</option>
-                                <option value="Email Address">Email Address</option>
-                                <option value="UPI Handle">UPI Handle</option>
+                                <option value="Website">Website / URL</option>
+                                <option value="Phone">Phone Number</option>
+                                <option value="Email">Email Address</option>
+                                <option value="UPI ID">UPI Handle / ID</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" id="target-label">Website URL</label>
-                            <input type="text" class="form-input" id="target-input" placeholder="e.g. https://suspicious-site.com">
+                            <input type="text" class="form-input" id="target-input" placeholder="e.g. https://suspicious-site.com" required>
+                            <div id="target-error" style="color: #DC2626; font-size: 0.8125rem; margin-top: 6px; display: none;">Please provide the suspicious URL, phone number, or handle.</div>
                         </div>
                         <div style="display: flex; gap: 12px;">
                             <button type="button" class="btn" style="flex:1; background: var(--ink-100); color: var(--ink-900); padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="nextStep(1)">Back</button>
-                            <button type="button" class="btn btn-primary auth-btn" style="flex:2; margin-top: 0;" onclick="nextStep(3)">Next: Context</button>
+                            <button type="button" class="btn btn-primary auth-btn" style="flex:2; margin-top: 0;" onclick="validateStep2()">Next: Context</button>
                         </div>
                     </div>
 
                     <!-- STEP 3 -->
                     <div id="step-3" class="form-step" style="display: none;">
-                        <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 1.1rem; color: var(--ink-900);">Step 3: Additional Information</h3>
+                        <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 1.1rem; color: var(--ink-900);">Step 3: Risk & Evidence</h3>
                         <div class="form-group">
-                            <label class="form-label">Description / Context (Optional)</label>
-                            <textarea class="form-input" style="height: 100px; padding: 12px 16px; resize: none;" placeholder="How did you encounter this threat?"></textarea>
+                            <label class="form-label">Risk Severity Assessment</label>
+                            <select class="form-input" id="threat-risk">
+                                <option value="Critical">Critical Risk (Active Phishing, Stealing Money / OTP)</option>
+                                <option value="High Risk" selected>High Risk (Suspicious Calls, Threatening Scams)</option>
+                                <option value="Low Risk">Low Risk (Unverified / Warning Only)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Evidence / Notes (Description)</label>
+                            <textarea id="threat-desc" class="form-input" style="height: 100px; padding: 12px 16px; resize: none;" placeholder="Provide details (e.g. Demanded OTP, FedEx courier scam, fake payment gateway)..."></textarea>
                         </div>
                         <div style="display: flex; gap: 12px;">
                             <button type="button" class="btn" style="flex:1; background: var(--ink-100); color: var(--ink-900); padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="nextStep(2)">Back</button>
-                            <a href="javascript:void(0)" onclick="submitForm()" class="btn btn-primary auth-btn" style="flex:2; text-align:center; text-decoration: none; display: flex; align-items: center; justify-content: center; margin-top: 0;">Submit Report</a>
+                            <button type="button" onclick="submitForm()" class="btn btn-primary auth-btn" id="submit-btn" style="flex:2; text-align:center; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0;">Submit Report</button>
                         </div>
                     </div>
                 </form>
@@ -214,7 +226,8 @@
                 <script>
                     function nextStep(step) {
                         document.querySelectorAll('.form-step').forEach(el => el.style.display = 'none');
-                        document.getElementById('step-' + step).style.display = 'block';
+                        const targetStep = document.getElementById('step-' + step);
+                        if (targetStep) targetStep.style.display = 'block';
                         
                         document.querySelectorAll('.progress-bar-step').forEach((el, index) => {
                             if(index < step) {
@@ -225,76 +238,129 @@
                         });
                     }
 
+                    function validateStep2() {
+                        const targetInput = document.getElementById('target-input');
+                        const errorMsg = document.getElementById('target-error');
+                        if (!targetInput.value.trim()) {
+                            errorMsg.style.display = 'block';
+                            targetInput.style.borderColor = '#DC2626';
+                            targetInput.focus();
+                            return;
+                        }
+                        errorMsg.style.display = 'none';
+                        targetInput.style.borderColor = '';
+                        nextStep(3);
+                    }
+
                     function updateTargetInput() {
                         const type = document.getElementById('asset-type').value;
                         const label = document.getElementById('target-label');
                         const input = document.getElementById('target-input');
 
-                        if (type === 'Website / URL') {
+                        if (type === 'Website') {
                             label.innerText = 'Website URL';
                             input.placeholder = 'e.g. https://suspicious-site.com';
-                        } else if (type === 'Phone Number') {
+                        } else if (type === 'Phone') {
                             label.innerText = 'Phone Number';
                             input.placeholder = 'e.g. +91 98765 43210';
-                        } else if (type === 'Email Address') {
+                        } else if (type === 'Email') {
                             label.innerText = 'Email Address';
                             input.placeholder = 'e.g. scammer@example.com';
-                        } else if (type === 'UPI Handle') {
+                        } else if (type === 'UPI ID') {
                             label.innerText = 'UPI ID';
                             input.placeholder = 'e.g. scammer@upi';
                         }
                     }
 
-                    // Ensure it runs once to set the initial state
-                    if (document.readyState === 'loading') {
-                        document.addEventListener('DOMContentLoaded', () => {
-                            updateTargetInput();
-                            checkAuthOnLoad();
-                        });
-                    } else {
+                    // Auto-fill logged in user info if available
+                    document.addEventListener('DOMContentLoaded', async () => {
                         updateTargetInput();
-                        checkAuthOnLoad();
-                    }
+                        try {
+                            if (window.authApp && window.authApp.checkUserSession) {
+                                const session = await window.authApp.checkUserSession();
+                                if (session && session.user) {
+                                    const emailInput = document.getElementById('reporter-email');
+                                    const nameInput = document.getElementById('reporter-name');
+                                    if (emailInput && !emailInput.value) emailInput.value = session.user.email || '';
+                                    if (nameInput && !nameInput.value && session.user.user_metadata?.full_name) {
+                                        nameInput.value = session.user.user_metadata.full_name;
+                                    }
+                                }
+                            }
+                        } catch(e) {}
+                    });
 
-                    async function checkAuthOnLoad() {
-                        // Removed immediate popup on load to allow user to fill form first
-                    }
+                    // 24-HOUR RETENTION STORAGE LOGIC
+                    const STORAGE_KEY = 'infraud_community_reports';
+                    const RETENTION_MS = 24 * 60 * 60 * 1000; // 24 hours
+
                     async function submitForm() {
-                        if (!window.authApp) {
-                            alert("Auth module is not loaded yet. Please refresh the page.");
+                        const targetInput = document.getElementById('target-input');
+                        const target = targetInput?.value?.trim();
+                        if (!target) {
+                            nextStep(2);
+                            validateStep2();
                             return;
                         }
-                        const session = await window.authApp.checkUserSession();
-                        if (!session || !session.user) {
-                            // Redirect to login page instead of showing popup
-                            localStorage.setItem('pendingReportSubmit', 'true');
-                            window.location.href = 'login.html?redirect=report.html';
-                            return;
+
+                        const submitBtn = document.getElementById('submit-btn');
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.textContent = 'Submitting...';
+                        }
+
+                        const name = document.getElementById('reporter-name')?.value?.trim() || 'Anonymous';
+                        const email = document.getElementById('reporter-email')?.value?.trim() || '';
+                        const type = document.getElementById('asset-type')?.value || 'Website';
+                        const risk = document.getElementById('threat-risk')?.value || 'High Risk';
+                        const desc = document.getElementById('threat-desc')?.value?.trim() || 'Reported threat by community user.';
+
+                        const newReport = {
+                            id: 'rep_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+                            identifier: target,
+                            type: type,
+                            risk: risk,
+                            evidence: desc,
+                            reporterName: name,
+                            reporterEmail: email,
+                            timestamp: Date.now(),
+                            status: 'pending' // Sent to Admin for review & approval
+                        };
+
+                        // 1. Send to server API so ALL browsers and users get it
+                        try {
+                            await fetch('/api/reports', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(newReport)
+                            });
+                        } catch (err) {
+                            console.warn('Server API unavailable, saving to local storage fallback', err);
+                        }
+
+                        // 2. Also save to localStorage as backup
+                        let reports = [];
+                        try {
+                            const stored = localStorage.getItem(STORAGE_KEY);
+                            if (stored) {
+                                reports = JSON.parse(stored);
+                            }
+                        } catch (e) {
+                            reports = [];
+                        }
+
+                        const now = Date.now();
+                        reports = reports.filter(r => r.status === 'pending' || (now - (r.approvedAt || r.timestamp || 0)) < RETENTION_MS);
+                        reports.unshift(newReport);
+                        try {
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+                        } catch (e) {
+                            console.error('Storage error:', e);
                         }
 
                         showSubmitSuccess();
                     }
 
-                    document.addEventListener('DOMContentLoaded', async () => {
-                        // Check if we returned from a login redirect
-                        if (localStorage.getItem('pendingReportSubmit') === 'true') {
-                            localStorage.removeItem('pendingReportSubmit');
-                            // Wait briefly for auth module if needed
-                            setTimeout(async () => {
-                                if (window.authApp) {
-                                    const session = await window.authApp.checkUserSession();
-                                    if (session && session.user) {
-                                        showSubmitSuccess();
-                                    }
-                                }
-                            }, 500);
-                        }
-                    });
-                </script>
-
-                <!-- The login popup has been removed as per user request to redirect to login.html instead -->
-
-                <script>
                     function showSubmitSuccess() {
                         const popup = document.getElementById('submit-popup');
                         const popupCard = document.getElementById('submit-popup-card');
@@ -304,22 +370,24 @@
                             popupCard.style.transform = 'scale(1)';
                         }, 10);
                         
+                        // Automatically redirect to reports.html with notification
                         setTimeout(() => {
-                            window.location.href = 'reports.html';
-                        }, 2500);
+                            window.location.href = 'reports.html?status=submitted';
+                        }, 2200);
                     }
                 </script>
 
                 <!-- Popup Modal -->
                 <div id="submit-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; align-items: center; justify-content: center; background: rgba(10, 15, 30, 0.4); backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease;">
                     <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);" id="submit-popup-card">
-                        <div style="width: 64px; height: 64px; background: var(--green-100); color: var(--green-500); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+                        <div style="width: 64px; height: 64px; background: rgba(16,185,129,0.1); color: #10B981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--ink-900); margin-bottom: 8px;">Report Submitted!</h3>
-                        <p style="color: var(--ink-500); font-size: 1rem; max-width: 250px; margin: 0 auto;">Thank you for helping protect the community.</p>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--ink-900); margin-bottom: 8px;">Report Submitted for Review!</h3>
+                        <p style="color: var(--ink-500); font-size: 1rem; max-width: 290px; margin: 0 auto 8px;">Thank you for helping protect the community! Your report has been sent to admin moderation and will appear live once approved.</p>
+                        <p style="color: var(--blue-600); font-size: 0.875rem; font-weight: 600;">Redirecting to Threat Reports...</p>
                     </div>
                 </div>
 

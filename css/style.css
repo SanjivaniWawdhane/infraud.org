@@ -597,3 +597,33 @@ ul { list-style: none; }
   .checker-row { flex-direction: column; }
   .checker-row .btn { width: 100%; }
 }
+
+@media (max-width: 900px) {
+  /* Catch-all for hardcoded inline grids */
+  [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Catch-all for hardcoded flex rows with large gaps (usually side-by-side sections) */
+  [style*="display: flex"][style*="gap: 64px"],
+  [style*="display: flex"][style*="gap: 48px"],
+  [style*="display: flex"][style*="gap: 32px"],
+  [style*="display: flex"][style*="gap: 24px"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* Core layout classes */
+  .hero-grid, .wtc-layout, .hiw-steps, .eco-grid, 
+  .result-grid, .dashboard-grid, .input-grid, .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  
+  .hero h1 { font-size: 2.5rem !important; }
+  .section { padding: 60px 0 !important; }
+  
+  /* Fix horizontal overflows */
+  body, html { overflow-x: hidden; }
+  .container { padding: 0 16px !important; }
+}

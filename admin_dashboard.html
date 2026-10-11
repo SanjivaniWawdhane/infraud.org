@@ -1,437 +1,2370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin: Publish Blog | INFRAUD</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .page-header { padding: 160px 0 64px; text-align: center; position: relative; z-index: 5; }
-        .page-title { font-size: 3rem; margin-bottom: 16px; }
-        .page-subtitle { color: var(--text-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
-        
-        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px; position: relative; z-index: 5; }
-        .auth-card { background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; width: 100%; max-width: 440px; box-shadow: var(--shadow-lg); z-index: 10; }
-        .auth-card h2 { text-align: center; margin-bottom: 32px; font-size: 1.75rem; }
-        .form-group { margin-bottom: 24px; }
-        .form-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
-        .form-input { width: 100%; height: 48px; padding: 0 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; transition: all 0.2s; outline: none; }
-        .form-input:focus { border-color: var(--brand-secondary); box-shadow: 0 0 0 4px rgba(59,152,255,0.1); }
-        .auth-btn { width: 100%; height: 48px; font-size: 1rem; margin-top: 8px; }
-        .auth-links { text-align: center; margin-top: 24px; font-size: 0.875rem; color: var(--text-muted); }
-        .auth-links a { color: var(--brand-primary); font-weight: 600; }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 32px; background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
-        .data-table th, .data-table td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--border-light); }
-        .data-table th { background: var(--bg-element); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
-        .data-table tr:last-child td { border-bottom: none; }
-        .data-table tr:hover td { background: var(--bg-body); }
-        .font-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; }
-        
-        .dashboard-grid { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 120px 0 64px; }
-        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
-        .sidebar-link { padding: 12px 16px; border-radius: var(--radius-md); font-weight: 500; color: var(--text-muted); transition: all 0.2s; }
-        .sidebar-link:hover, .sidebar-link.active { background: var(--bg-element); color: var(--text-main); }
-        
-        .result-card { background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; box-shadow: var(--shadow-md); margin-top: 32px; }
-        .result-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
-        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Admin Dashboard | INFRAUD</title>
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Core Dashboard Layout (Matching dashboard.html) ── */
+    body {
+      background: var(--page, #F7F8FC);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--ink-700, #1E2742);
+      font-family: var(--font, 'Inter', sans-serif);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Sticky Left Sidebar ── */
+    .sidebar {
+      width: 280px;
+      background: var(--surface, #FFFFFF);
+      border-right: 1px solid var(--ink-100, #E8EBF3);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 24px;
+      z-index: 100;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      margin-bottom: 40px;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      object-fit: cover;
+    }
+
+    .brand-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--ink-900, #0A0F1E);
+    }
+
+    .brand-admin-tag {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      background: var(--blue-100, #DBEAFE);
+      color: var(--blue-600, #2563EB);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    /* Sidebar Navigation Links */
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .nav-section-title {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--ink-400, #94A3B8);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 16px 0 6px 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md, 12px);
+      color: var(--ink-500, #4B5570);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover {
+      background: var(--ink-50, #F4F5FA);
+      color: var(--ink-900, #0A0F1E);
+    }
+
+    .nav-item.active {
+      background: var(--blue-100, #EFF6FF);
+      color: var(--blue-600, #2563EB);
+      font-weight: 700;
+    }
+
+    .sidebar-badge {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: #EF4444;
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+    }
+
+    /* Sidebar User Profile & Logout Box */
+    .sidebar-footer {
+      border-top: 1px solid var(--ink-100, #E8EBF3);
+      padding-top: 20px;
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-user-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--ink-50, #F4F5FA);
+    }
+
+    .user-avatar-sq {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--blue-600, #2563EB);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.875rem;
+    }
+
+    .user-info-text {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .user-info-name {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--ink-900, #0A0F1E);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .user-info-role {
+      font-size: 0.75rem;
+      color: var(--ink-400, #94A3B8);
+    }
+
+    .btn-sidebar-signout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.04);
+      color: #DC2626;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-sidebar-signout:hover {
+      background: #DC2626;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    /* ── Main Content Area ── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 36px 44px;
+      min-width: 0;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: static; padding: 20px; border-right: none; border-bottom: 1px solid var(--ink-100); }
+      .main-content { padding: 24px; }
+    }
+
+    /* Header Bar */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .welcome-text h1 {
+      font-size: 1.875rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--ink-900, #0A0F1E);
+      margin-bottom: 4px;
+    }
+
+    .welcome-text p {
+      color: var(--ink-500, #4B5570);
+      font-size: 0.9375rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: var(--surface, #FFFFFF);
+      border: 1px solid var(--ink-100, #E8EBF3);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill, 100px);
+      gap: 10px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-xs, 0 1px 3px rgba(0,0,0,0.04));
+      width: 280px;
+    }
+
+    .search-bar:focus-within {
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .search-bar input {
+      background: none;
+      border: none;
+      color: var(--ink-900, #0A0F1E);
+      font-size: 0.9375rem;
+      outline: none;
+      width: 100%;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--ink-300, #94A3B8);
+    }
+
+    .btn-header-sync {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 100px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      background: #FFFFFF;
+      color: var(--ink-700, #1E2742);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .btn-header-sync:hover {
+      border-color: var(--blue-600);
+      color: var(--blue-600);
+    }
+
+    /* ── Stats Grid (Exact 4 Cards from dashboard.html) ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+      background: var(--surface, #FFFFFF);
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: var(--radius-xl, 24px);
+      padding: 24px;
+      position: relative;
+      box-shadow: var(--shadow-xs, 0 1px 3px rgba(0,0,0,0.04));
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md, 0 8px 24px rgba(10,15,30,0.06));
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .icon-amber { background: var(--amber-100, #FEF3C7); color: var(--amber-500, #F59E0B); }
+    .icon-green { background: var(--green-100, #D1FAE5); color: var(--green-500, #10B981); }
+    .icon-red   { background: #FEE2E2; color: #EF4444; }
+    .icon-blue  { background: var(--blue-100, #DBEAFE); color: var(--blue-600, #2563EB); }
+
+    .stat-value {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+      color: var(--ink-900, #0A0F1E);
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: var(--ink-500, #4B5570);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .stat-trend {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill, 100px);
+    }
+
+    .trend-amber { background: var(--amber-100, #FEF3C7); color: #B45309; }
+    .trend-green { background: var(--green-100, #D1FAE5); color: #065F46; }
+    .trend-red   { background: #FEE2E2; color: #991B1B; }
+    .trend-blue  { background: var(--blue-100, #DBEAFE); color: #1E40AF; }
+
+    /* ── Main Content Panel (Matching dashboard.html .panel) ── */
+    .panel {
+      background: var(--surface, #FFFFFF);
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: var(--radius-xl, 24px);
+      padding: 32px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink-900, #0A0F1E);
+    }
+
+    /* Filter Chips Cluster */
+    .filter-chips-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn {
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      background: #FFFFFF;
+      color: var(--ink-500, #4B5570);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip-btn:hover {
+      border-color: var(--ink-300, #9AA3B8);
+      color: var(--ink-900, #0A0F1E);
+    }
+
+    .chip-btn.active {
+      background: var(--blue-600, #2563EB);
+      color: #FFFFFF;
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .type-select-dropdown {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 100px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      background: #FFFFFF;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--ink-700, #1E2742);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* ── Moderation Table ── */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 16px;
+    }
+
+    .reports-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .reports-table th {
+      background: var(--ink-50, #F4F5FA);
+      padding: 16px 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-500, #4B5570);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      white-space: nowrap;
+    }
+
+    .reports-table td {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      vertical-align: middle;
+      font-size: 0.875rem;
+      background: #FFFFFF;
+    }
+
+    .reports-table tr:hover td {
+      background: #FAFBFF;
+    }
+
+    .reports-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .td-identifier {
+      font-family: var(--mono, monospace);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink-900, #0A0F1E);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .type-bubble {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink-50, #F4F5FA);
+      color: var(--ink-500, #4B5570);
+      flex-shrink: 0;
+    }
+
+    .btn-copy-clip {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-300, #94A3B8);
+      padding: 2px 4px;
+      transition: color 0.15s;
+    }
+
+    .btn-copy-clip:hover {
+      color: var(--blue-600, #2563EB);
+    }
+
+    /* Risk Badges */
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .risk-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .risk-critical {
+      background: rgba(239, 68, 68, 0.1);
+      color: #DC2626;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .risk-critical::before {
+      background: #DC2626;
+      box-shadow: 0 0 8px #DC2626;
+    }
+
+    .risk-high {
+      background: rgba(245, 158, 11, 0.1);
+      color: #D97706;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .risk-high::before {
+      background: #D97706;
+    }
+
+    .risk-low {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .risk-low::before {
+      background: #059669;
+    }
+
+    /* Action Buttons */
+    .admin-actions-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: flex-end;
+      white-space: nowrap;
+    }
+
+    .btn-table-action {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-act-approve {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+    .btn-act-approve:hover {
+      background: #10B981;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-act-reject {
+      background: #FFFFFF;
+      color: #DC2626;
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+    .btn-act-reject:hover {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: #DC2626;
+    }
+
+    .btn-act-revoke {
+      background: #FFFFFF;
+      color: #D97706;
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+    .btn-act-revoke:hover {
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .btn-act-delete {
+      background: transparent;
+      color: var(--ink-300, #94A3B8);
+      padding: 6px 8px;
+    }
+    .btn-act-delete:hover {
+      color: #EF4444;
+      background: rgba(239, 68, 68, 0.06);
+    }
+
+    /* ── Blog Studio Redesign ── */
+    .blog-studio-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .blog-studio-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group-item {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--ink-700, #1E2742);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    /* Category Pill Selector */
+    .category-pills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .cat-pill {
+      padding: 7px 14px;
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      background: #FFFFFF;
+      color: var(--ink-600, #334155);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cat-pill:hover {
+      border-color: var(--blue-600, #2563EB);
+      color: var(--blue-600, #2563EB);
+      transform: translateY(-1px);
+    }
+
+    .cat-pill.active {
+      background: var(--blue-600, #2563EB);
+      color: #FFFFFF;
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+    }
+
+    /* Headline Input with Character Badge */
+    .headline-wrap {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .headline-input {
+      width: 100%;
+      height: 52px;
+      padding: 0 84px 0 18px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 14px;
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--ink-900, #0A0F1E);
+      outline: none;
+      background: #FFFFFF;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .headline-input:focus {
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .blog-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: var(--ink-900, #0A0F1E);
+      outline: none;
+      background: #FFFFFF;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .blog-input:focus {
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .char-counter-badge {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-400, #94A3B8);
+      background: var(--ink-50, #F4F5FA);
+      padding: 3px 8px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    /* Markdown Formatting Bar & Writing Canvas */
+    .editor-card {
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 16px;
+      background: #FFFFFF;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(10, 15, 30, 0.03);
+    }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--ink-50, #F8FAFC);
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toolbar-tools-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tb-btn {
+      padding: 5px 9px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink-600, #334155);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+    }
+
+    .tb-btn:hover {
+      background: #FFFFFF;
+      border-color: var(--ink-200, #CBD5E1);
+      color: var(--blue-600, #2563EB);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .tb-separator {
+      width: 1px;
+      height: 18px;
+      background: var(--ink-200, #CBD5E1);
+      margin: 0 4px;
+    }
+
+    .writing-metrics-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-500, #64748B);
+      background: #FFFFFF;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+    }
+
+    .blog-textarea-modern {
+      width: 100%;
+      min-height: 320px;
+      padding: 18px;
+      border: none;
+      font-size: 0.9375rem;
+      font-family: var(--font, 'Inter', sans-serif);
+      color: var(--ink-900, #0A0F1E);
+      outline: none;
+      resize: vertical;
+      line-height: 1.7;
+      background: #FFFFFF;
+      box-sizing: border-box;
+    }
+
+    .blog-textarea-modern:focus {
+      outline: none;
+    }
+
+    /* Live Preview Mirror Card (Matching blog.html) */
+    .preview-column-card {
+      background: #FFFFFF;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(10, 15, 30, 0.04);
+      margin-bottom: 24px;
+    }
+
+    .preview-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .preview-title-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-500, #64748B);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .preview-live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .preview-live-indicator::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10B981;
+      animation: pulseLive 2s infinite;
+    }
+
+    @keyframes pulseLive {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* 1:1 Blog Card Mirror */
+    .mirror-blog-card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(10, 15, 30, 0.04);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s;
+    }
+
+    .mirror-blog-img-wrap {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      position: relative;
+      background: var(--ink-50, #F4F5FA);
+    }
+
+    .mirror-blog-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+
+    .mirror-blog-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .mirror-blog-meta {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--blue-600, #2563EB);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .mirror-blog-title {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--ink-900, #0A0F1E);
+      line-height: 1.35;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .mirror-blog-desc {
+      font-size: 0.875rem;
+      color: var(--ink-500, #4B5570);
+      line-height: 1.55;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .mirror-blog-author {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--ink-100, #E8EBF3);
+    }
+
+    .mirror-author-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mirror-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .mirror-author-name {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--ink-900, #0A0F1E);
+    }
+
+    .mirror-author-date {
+      font-size: 0.75rem;
+      color: var(--ink-400, #94A3B8);
+    }
+
+    /* Preset Cover Gallery */
+    .preset-covers-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-500, #64748B);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 18px 0 8px;
+    }
+
+    .preset-covers-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .preset-thumb-btn {
+      height: 48px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      padding: 0;
+      background: #F1F5F9;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .preset-thumb-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preset-thumb-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--blue-600, #2563EB);
+    }
+
+    .preset-thumb-btn.active {
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+
+    /* SEO Mockup Box */
+    .seo-preview-wrap {
+      background: var(--ink-50, #F8FAFC);
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .seo-preview-link {
+      font-size: 0.75rem;
+      color: #1A0DAB;
+      margin-bottom: 2px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .seo-preview-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #1A0DAB;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .seo-preview-snippet {
+      font-size: 0.75rem;
+      color: #4D5156;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Published Advisories Archive Library */
+    .library-panel {
+      margin-top: 32px;
+    }
+
+    .library-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .library-table th {
+      background: var(--ink-50, #F4F5FA);
+      padding: 14px 18px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-500, #4B5570);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      white-space: nowrap;
+    }
+
+    .library-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      vertical-align: middle;
+      font-size: 0.875rem;
+      background: #FFFFFF;
+    }
+
+    .library-table tr:hover td {
+      background: #FAFBFF;
+    }
+
+    .lib-thumb {
+      width: 60px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #E2E8F0;
+    }
+
+    .lib-title-text {
+      font-weight: 700;
+      color: var(--ink-900, #0A0F1E);
+      font-size: 0.9375rem;
+      margin-bottom: 2px;
+    }
+
+    .lib-cat-tag {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      color: var(--blue-600, #2563EB);
+      background: var(--blue-100, #EFF6FF);
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .btn-publish-main {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+      color: #FFFFFF;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      flex: 1;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.28);
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-publish-main:hover {
+      background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.38);
+    }
+
+    /* ── Toast Notification ── */
+    #admin-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #FFFFFF;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      box-shadow: 0 12px 36px rgba(10, 15, 30, 0.12);
+      border-radius: 12px;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    #admin-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    
-          <header class="nav-edge">
-    <div class="container nav-edge-inner">
+
+  <!-- ── SIDEBAR (IDENTICAL TO dashboard.html ARCHITECTURE) ── -->
+  <aside class="sidebar">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.jpg" alt="INFRAUD logo" />
+      <span class="brand-text">INFRAUD</span>
+      <span class="brand-admin-tag">ADMIN</span>
+    </a>
+
+    <nav>
+      <div class="nav-section-title">Moderation & Studio</div>
       
-      <!-- Logo -->
-      <a href="/" class="nav-edge-logo">
-        <img src="assets/logo.jpg" alt="INFRAUD logo" />
-        <span>INFRAUD</span>
+      <!-- Tab 1: Threat Reports Moderation -->
+      <button class="nav-item active" id="sidebar-tab-reports" onclick="switchAdminTab('reports')">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Threat Moderation</span>
+        </div>
+        <span class="sidebar-badge" id="sidebar-pending-badge" style="display: none;">0</span>
+      </button>
+
+      <!-- Tab 2: Blog Publishing Studio -->
+      <button class="nav-item" id="sidebar-tab-blogs" onclick="switchAdminTab('blogs')">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span>Blog Publishing</span>
+        </div>
+      </button>
+
+      <div class="nav-section-title">External Links</div>
+
+      <a href="reports.html" target="_blank" class="nav-item">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Live Community Feed</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
       </a>
 
-      <!-- Menu -->
-      <nav class="nav-edge-menu">
-        <a href="/"  >Home</a>
-        <a href="check.html" >Check</a>
-        <a href="reports.html" >Reports</a>
-        <a href="blog.html" >Blog</a>
-        <a href="learn.html" >Learn</a>
-        <a href="about.html" >About</a>
-      </nav>
+      <a href="check.html" target="_blank" class="nav-item">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>Check Scanner</span>
+        </div>
+      </a>
 
-      <!-- Actions -->
-      <div class="nav-edge-actions">
-        <a href="#" onclick="if(window.authApp && window.authApp.signOut) { window.authApp.signOut(); } else { window.location.href='login.html'; }" class="nav-edge-signup" style="background: #EF4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);">
-          Sign Out
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-        </a>
-        
-        <button class="nav-edge-hamburger" aria-label="Menu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
+      <a href="index.html" class="nav-item">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Website Home</span>
+        </div>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer with User Details & Sign Out -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user-box">
+        <div class="user-avatar-sq">AD</div>
+        <div class="user-info-text">
+          <div class="user-info-name">Security Admin</div>
+          <div class="user-info-role">Operations Lead</div>
+        </div>
+      </div>
+      <button onclick="handleSignOut()" class="btn-sidebar-signout">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT (IDENTICAL TO dashboard.html ARCHITECTURE) ── -->
+  <main class="main-content">
+    
+    <!-- Top Header -->
+    <header class="header">
+      <div class="welcome-text">
+        <h1 id="page-heading-title">Threat Intelligence Moderation</h1>
+        <p id="page-heading-sub">Review community-submitted scam reports and approve alerts for the 24-hour live feed.</p>
+      </div>
+
+      <div class="header-actions">
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="header-search-input" placeholder="Search target, reporter, details..." />
+        </div>
+
+        <button onclick="loadAdminReports()" class="btn-header-sync" title="Synchronize with Central Database">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          Sync Feed
         </button>
+      </div>
+    </header>
+
+    <!-- ── STATS GRID 1: THREAT MODERATION (4 CARDS) ── -->
+    <div class="stats-grid" id="stats-grid-moderation">
+      
+      <!-- Pending Review -->
+      <div class="stat-card">
+        <div class="stat-icon icon-amber">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="stat-value" id="stat-pending">0</div>
+        <div class="stat-label">Pending Moderator Review</div>
+        <div class="stat-trend trend-amber">Needs Triage</div>
+      </div>
+
+      <!-- Approved & Live -->
+      <div class="stat-card">
+        <div class="stat-icon icon-green">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="stat-value" id="stat-approved">0</div>
+        <div class="stat-label">Approved & Streaming Live</div>
+        <div class="stat-trend trend-green">24h Retention</div>
+      </div>
+
+      <!-- Rejected / Filtered -->
+      <div class="stat-card">
+        <div class="stat-icon icon-red">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        </div>
+        <div class="stat-value" id="stat-rejected">0</div>
+        <div class="stat-label">Rejected / Flagged Spam</div>
+        <div class="stat-trend trend-red">Filtered</div>
+      </div>
+
+      <!-- Total Ingested -->
+      <div class="stat-card">
+        <div class="stat-icon icon-blue">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        </div>
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Ingested Reports</div>
+        <div class="stat-trend trend-blue">Central DB</div>
       </div>
 
     </div>
 
-    <style>
-      .nav-edge {
-        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
-        background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
-      }
-      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 24px -8px rgba(10, 15, 30, 0.08); }
-      .nav-edge-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
+    <!-- ── STATS GRID 2: BLOG PUBLISHING STUDIO (4 DEDICATED CARDS) ── -->
+    <div class="stats-grid" id="stats-grid-blogs" style="display: none;">
       
-      /* Logo */
-      .nav-edge-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 2; }
-      .nav-edge-logo img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
-      .nav-edge-logo span { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--ink-900, #0A0F1E); }
-      
-      /* Menu (Centered on Desktop) */
-      .nav-edge-menu { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; }
-      .nav-edge-menu a { position: relative; text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-500, #4B5570); padding: 8px 16px; transition: color 0.2s; }
-      .nav-edge-menu a:hover, .nav-edge-menu a.active { color: var(--ink-900, #0A0F1E); }
-      .nav-edge-menu a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) scaleX(0); width: calc(100% - 32px); height: 2px; background: var(--blue-600, #2563EB); border-radius: 2px; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-      .nav-edge-menu a:hover::after, .nav-edge-menu a.active::after { transform: translateX(-50%) scaleX(1); }
-      
-      /* Actions */
-      .nav-edge-actions { display: flex; align-items: center; gap: 16px; z-index: 2; }
-      .nav-edge-login { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-700, #1E2742); padding: 8px; transition: color 0.2s; }
-      .nav-edge-login:hover { color: var(--blue-600, #2563EB); }
-      .nav-edge-signup { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-600, #2563EB); color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 700; padding: 10px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.2); transition: all 0.2s; }
-      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
-      .nav-edge-signup:hover { background: var(--blue-700, #1D4ED8); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
-      .nav-edge-signup:hover svg { transform: translateX(2px); }
-      
-      /* Hamburger (Mobile) */
-      .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
-      
-      @media (max-width: 900px) {
-        .nav-edge-menu { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.98); padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); gap: 8px; transform: none; }
-        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
-        .nav-edge-menu a { width: 100%; text-align: left; padding: 12px; border-radius: 8px; }
-        .nav-edge-menu a:hover, .nav-edge-menu a.active { background: rgba(37, 99, 235, 0.05); }
-        .nav-edge-menu a::after { display: none; }
-        .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
-        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
-      }
-    </style>
-    <script>
-      window.addEventListener('scroll', () => {
-        const nav = document.querySelector('.nav-edge');
-        if(nav) {
-            if(window.scrollY > 20) {
-              nav.classList.add('scrolled');
-            } else {
-              nav.classList.remove('scrolled');
-            }
-        }
-      }, { passive: true });
+      <!-- Card 1: Total Published Advisories -->
+      <div class="stat-card">
+        <div class="stat-icon icon-blue">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div class="stat-value" id="stat-blog-total">0</div>
+        <div class="stat-label">Published Blog Advisories</div>
+        <div class="stat-trend trend-blue">Public Library</div>
+      </div>
 
-      // Hamburger menu toggle
-      const hamburger = document.querySelector('.nav-edge-hamburger');
-      const navEdge = document.querySelector('.nav-edge');
-      if(hamburger && navEdge) {
-        hamburger.addEventListener('click', () => {
-          navEdge.classList.toggle('mobile-open');
-        });
-      }
-    </script>
-  </header>
+      <!-- Card 2: Active Tag / Topic -->
+      <div class="stat-card">
+        <div class="stat-icon icon-amber">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </div>
+        <div class="stat-value" style="font-size: 1.25rem; font-weight: 800; line-height: 1.2; word-break: break-word;" id="stat-blog-top-cat">🚨 Critical Alert</div>
+        <div class="stat-label">Selected Intelligence Focus</div>
+        <div class="stat-trend trend-amber">Active Tag</div>
+      </div>
 
-    
-  <main style="position: relative; overflow: hidden; padding-bottom: 80px; background: var(--page, #F7F8FC);">
-    <!-- Ambient meshes matching the theme -->
-    <div class="login-mesh login-mesh-1"></div>
-    <div class="login-mesh login-mesh-2"></div>
+      <!-- Card 3: Live Writing Metrics -->
+      <div class="stat-card">
+        <div class="stat-icon icon-green">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="stat-value" style="font-size: 1.6rem;" id="stat-blog-words-kpi">0 Words</div>
+        <div class="stat-label" id="stat-blog-readtime-kpi">~0 min read estimate</div>
+        <div class="stat-trend trend-green">Draft Status</div>
+      </div>
 
-    <div class="container" style="position: relative; z-index: 10;">
-      <div style="max-width: 840px; margin: 60px auto 0; background: var(--surface, #FFFFFF); border: 1px solid var(--ink-100, #E8EBF3); border-radius: 24px; padding: 48px; box-shadow: 0 24px 80px -12px rgba(10, 15, 30, 0.08);">
+      <!-- Card 4: Broadcast Target -->
+      <div class="stat-card">
+        <div class="stat-icon icon-blue">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <div class="stat-value" style="font-size: 1.45rem; line-height: 1.2;">blog.html</div>
+        <div class="stat-label">Public Broadcast Feed</div>
+        <div class="stat-trend trend-green">Synced 🟢</div>
+      </div>
+
+    </div>
+
+    <!-- ── SECTION 1: THREAT MODERATION PANEL ── -->
+    <section id="section-reports">
+      <div class="panel">
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-            <div>
-                <h2 style="font-size: 2rem; font-weight: 800; color: var(--ink-900, #0A0F1E); letter-spacing: -0.04em; margin-bottom: 8px;">Publish Blog</h2>
-                <p style="color: var(--ink-500, #4B5570);">Draft and publish a new threat intelligence report to the public feed.</p>
-            </div>
-            <button class="btn btn-primary auth-btn" onclick="publishBlog()" style="padding: 12px 24px; font-size: 1rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                Publish to Feed
-            </button>
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Community Threat Queue</h3>
+            <p style="font-size: 0.875rem; color: var(--ink-500, #4B5570); margin-top: 2px;">Review details before approving reports to the public community feed.</p>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-chips-wrap">
+            <button class="chip-btn active" id="chip-all" onclick="setAdminFilterStatus('all')">All (<span id="count-all">0</span>)</button>
+            <button class="chip-btn" id="chip-pending" onclick="setAdminFilterStatus('pending')">Pending (<span id="count-pending">0</span>)</button>
+            <button class="chip-btn" id="chip-approved" onclick="setAdminFilterStatus('approved')">Approved Live (<span id="count-approved">0</span>)</button>
+            <button class="chip-btn" id="chip-rejected" onclick="setAdminFilterStatus('rejected')">Rejected (<span id="count-rejected">0</span>)</button>
+
+            <select class="type-select-dropdown" id="filter-type">
+              <option value="All">All Types</option>
+              <option value="Website">Website</option>
+              <option value="Phone">Phone</option>
+              <option value="UPI">UPI ID</option>
+              <option value="Email">Email</option>
+            </select>
+          </div>
         </div>
 
-        <form id="blogForm">
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label" style="font-size: 0.95rem; font-weight: 700; color: var(--ink-700);">Blog Title</label>
-                <input type="text" class="form-input" id="blogTitle" placeholder="e.g. How to spot a fake Amazon refund scam..." style="font-size: 1.25rem; height: 56px; font-weight: 600;" required>
+        <!-- Moderation Table Container -->
+        <div class="table-container">
+          <table class="reports-table">
+            <thead>
+              <tr>
+                <th>Target Identifier</th>
+                <th>Type</th>
+                <th>Threat Severity</th>
+                <th>Evidence / Forensic Notes</th>
+                <th>Submitted By</th>
+                <th>Stream Status</th>
+                <th style="text-align: right;">Moderation Actions</th>
+              </tr>
+            </thead>
+            <tbody id="reports-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SECTION 2: BLOG PUBLISHING STUDIO PANEL ── -->
+    <section id="section-blogs" style="display: none;">
+      
+      <!-- Studio Panel -->
+      <div class="panel">
+        
+        <div class="panel-header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h3 class="panel-title">Cyber Intelligence Publishing Studio</h3>
+              <span class="brand-admin-tag">EDITORIAL SUITE</span>
             </div>
+            <p style="font-size: 0.875rem; color: var(--ink-500, #4B5570); margin-top: 4px;">Draft, format with markdown tools, and broadcast verified scam alerts directly to the public INFRAUD blog.</p>
+          </div>
 
-            <div class="form-group" style="margin-bottom: 40px;">
-                <label class="form-label" style="font-size: 0.95rem; font-weight: 700; color: var(--ink-700);">Content Body (Markdown Supported)</label>
-                <textarea class="form-input" id="blogDesc" placeholder="Write your full blog post content here..." style="min-height: 300px; padding: 20px; font-size: 1rem; line-height: 1.6; resize: vertical;" required></textarea>
-            </div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button type="button" onclick="loadSampleBlogTemplate()" class="btn-table-action" style="background: var(--ink-50, #F4F5FA); color: var(--ink-700, #1E2742); border: 1px solid var(--ink-200, #CBD5E1);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              Load Sample Scam Advisory
+            </button>
+            <a href="blog.html" target="_blank" class="btn-table-action" style="background: #FFFFFF; color: var(--blue-600, #2563EB); border: 1px solid rgba(37, 99, 235, 0.25); text-decoration: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              View Public Blog Feed
+            </a>
+          </div>
+        </div>
 
-            <hr style="border: none; border-top: 1px solid var(--ink-100, #E8EBF3); margin: 0 0 40px 0;">
-
-            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--ink-900); margin-bottom: 24px;">SEO & Cover Image Settings</h3>
-
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label class="form-label" style="font-weight: 600;">Cover Image URL</label>
-                <input type="text" class="form-input" id="blogCover" placeholder="Paste Base64 URL or Cloudinary Link here..." required>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Meta Title</label>
-                    <input type="text" class="form-input" id="metaTitle" placeholder="SEO optimized title..." required>
+        <form id="blogForm" onsubmit="event.preventDefault(); publishBlog();">
+          
+          <div class="blog-studio-grid">
+            
+            <!-- ── Left Column: Editorial Canvas ── -->
+            <div>
+              
+              <!-- Category Pill Selector -->
+              <div class="form-group-item">
+                <label class="form-label" style="display: flex; justify-content: space-between;">
+                  <span>Select Intelligence Tag / Category</span>
+                  <span style="font-size: 0.75rem; color: var(--ink-400); text-transform: none; font-weight: 500;">Click pill to apply</span>
+                </label>
+                <div class="category-pills-wrap" id="categoryPillsWrap">
+                  <button type="button" class="cat-pill active" onclick="selectBlogCategory(this, '🚨 Critical Threat Alert')">🚨 Critical Alert</button>
+                  <button type="button" class="cat-pill" onclick="selectBlogCategory(this, '📦 Courier & Digital Arrest')">📦 Courier Scam</button>
+                  <button type="button" class="cat-pill" onclick="selectBlogCategory(this, '💳 Banking & UPI Fraud')">💳 Banking Fraud</button>
+                  <button type="button" class="cat-pill" onclick="selectBlogCategory(this, '🎣 Phishing Attack')">🎣 Phishing</button>
+                  <button type="button" class="cat-pill" onclick="selectBlogCategory(this, '🛡️ Security Guide')">🛡️ Safety Guide</button>
+                  <button type="button" class="cat-pill" onclick="selectBlogCategory(this, '💡 Platform Updates')">💡 Updates</button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Meta Description</label>
-                    <input type="text" class="form-input" id="metaDesc" placeholder="Short description for search engines..." required>
+                <input type="hidden" id="selectedBlogCategory" value="🚨 Critical Threat Alert" />
+              </div>
+
+              <!-- Article Headline Input -->
+              <div class="form-group-item">
+                <label class="form-label">Article Headline</label>
+                <div class="headline-wrap">
+                  <input type="text" class="headline-input" id="blogTitle" placeholder="e.g. Critical Advisory: Rise of Digital Arrest Scams via Fake FedEx Notices" maxlength="120" oninput="handleTitleInput(this.value)" required />
+                  <span class="char-counter-badge" id="titleCharCount">0/120</span>
                 </div>
+              </div>
+
+              <!-- Markdown Formatting & Writing Canvas -->
+              <div class="form-group-item">
+                <label class="form-label">Article Body (Markdown Supported)</label>
+                <div class="editor-card">
+                  
+                  <!-- Toolbar -->
+                  <div class="editor-toolbar">
+                    <div class="toolbar-tools-group">
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('**', '**', 'bold text')" title="Bold"><b>B</b></button>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('*', '*', 'italic text')" title="Italic"><i>I</i></button>
+                      <div class="tb-separator"></div>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('## ', '', 'Section Heading')" title="Heading 2">H2</button>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('### ', '', 'Subheading')" title="Heading 3">H3</button>
+                      <div class="tb-separator"></div>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('> ', '', 'Quoted text statement')" title="Quote">“ ”</button>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('> ⚠️ **Critical Security Warning:** ', '', 'Fraudsters use spoofed caller IDs and forged CBI arrest warrants.')" title="Alert Box">⚠️ Callout</button>
+                      <div class="tb-separator"></div>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('- ', '', 'Bullet item')" title="Bullet List">• List</button>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('1. ', '', 'Numbered step')" title="Numbered List">1. List</button>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('`', '`', 'malicious-domain.com')" title="Inline Code / IOC">`Code`</button>
+                      <button type="button" class="tb-btn" onclick="insertMarkdown('[', '](https://)', 'Link text')" title="Hyperlink">🔗 Link</button>
+                    </div>
+
+                    <div class="writing-metrics-badge">
+                      <span id="editorWordCount">0 words</span>
+                      <span>•</span>
+                      <span id="editorReadTime">~0 min read</span>
+                    </div>
+                  </div>
+
+                  <!-- Textarea -->
+                  <textarea class="blog-textarea-modern" id="blogDesc" placeholder="Write full advisory details, threat breakdown, red flags to identify, verified forensic IOCs, and preventive measures..." oninput="handleDescInput(this.value)" required></textarea>
+
+                </div>
+              </div>
+
+              <!-- Action Bar -->
+              <div style="display: flex; gap: 12px; align-items: center; margin-top: 14px;">
+                <button type="button" onclick="clearBlogDraft()" class="btn-table-action" style="padding: 12px 20px; border: 1px solid var(--ink-200); background: #FFFFFF; color: var(--ink-500); border-radius: 12px; font-weight: 600;">
+                  Clear Draft
+                </button>
+                <button type="submit" class="btn-publish-main" id="btn-publish-submit">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  Publish Advisory to Blog Feed
+                </button>
+              </div>
+
             </div>
+
+            <!-- ── Right Column: Live Mirror Card & Assets ── -->
+            <div>
+              
+              <!-- Live Mirror Card Box -->
+              <div class="preview-column-card">
+                <div class="preview-header-bar">
+                  <span class="preview-title-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Live Public Feed Card Mirror
+                  </span>
+                  <span class="preview-live-indicator">blog.html 1:1 Mirror</span>
+                </div>
+
+                <!-- Mirror Blog Card -->
+                <div class="mirror-blog-card">
+                  <div class="mirror-blog-img-wrap">
+                    <img id="mirrorCoverImg" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" alt="Cover Preview" onerror="this.src='assets/logo.jpg'" />
+                  </div>
+                  <div class="mirror-blog-content">
+                    <div class="mirror-blog-meta" id="mirrorCategory">🚨 Critical Threat Alert</div>
+                    <div class="mirror-blog-title" id="mirrorTitle">Advisory Title Preview will appear here...</div>
+                    <div class="mirror-blog-desc" id="mirrorExcerpt">Article excerpt summary will automatically render here as you type the advisory body text...</div>
+                    <div class="mirror-blog-author">
+                      <div class="mirror-author-left">
+                        <img src="assets/logo.jpg" class="mirror-avatar" alt="INFRAUD Team" />
+                        <div>
+                          <div class="mirror-author-name">INFRAUD Team</div>
+                          <div class="mirror-author-date" id="mirrorAuthorDate">Today • 1 min read</div>
+                        </div>
+                      </div>
+                      <span style="color: var(--blue-600, #2563EB); font-weight: 700; font-size: 0.8125rem; display: flex; align-items: center; gap: 4px;">
+                        Read Article →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Preset Cover Image Selector -->
+                <div class="preset-covers-title">1-Click Curated Cover Presets</div>
+                <div class="preset-covers-grid">
+                  <button type="button" class="preset-thumb-btn active" onclick="selectPresetCover(this, 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80')" title="Courier / Logistics Scam">
+                    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=160&q=60" alt="Courier" />
+                  </button>
+                  <button type="button" class="preset-thumb-btn" onclick="selectPresetCover(this, 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80')" title="Cyber Terminal">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=160&q=60" alt="Terminal" />
+                  </button>
+                  <button type="button" class="preset-thumb-btn" onclick="selectPresetCover(this, 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80')" title="Phishing Hook">
+                    <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=160&q=60" alt="Phishing" />
+                  </button>
+                  <button type="button" class="preset-thumb-btn" onclick="selectPresetCover(this, 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80')" title="Banking / UPI Fraud">
+                    <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=160&q=60" alt="Banking" />
+                  </button>
+                  <button type="button" class="preset-thumb-btn" onclick="selectPresetCover(this, 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80')" title="Cyber Shield">
+                    <img src="https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=160&q=60" alt="Shield" />
+                  </button>
+                </div>
+
+                <!-- Custom Cover URL input -->
+                <div class="form-group-item" style="margin-bottom: 14px;">
+                  <label class="form-label">Cover Image URL</label>
+                  <input type="url" class="blog-input" id="blogCover" value="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" placeholder="https://images.unsplash.com/..." oninput="handleCoverUrlChange(this.value)" required style="height: 42px; font-size: 0.875rem;" />
+                </div>
+
+                <!-- SEO Snippet & Tags -->
+                <div class="form-group-item" style="margin-bottom: 14px;">
+                  <label class="form-label">SEO Search Title & Meta Keywords</label>
+                  <input type="text" class="blog-input" id="metaTitle" placeholder="SEO Title for Google & OpenGraph..." oninput="handleSeoTitleChange(this.value)" required style="height: 42px; font-size: 0.875rem; margin-bottom: 8px;" />
+                  <input type="text" class="blog-input" id="metaDesc" placeholder="cybersecurity, phishing, courier scam, upi, arrest..." required style="height: 42px; font-size: 0.875rem;" />
+                </div>
+
+                <!-- Google Search Snippet Box -->
+                <div class="seo-preview-wrap">
+                  <span class="seo-preview-link">https://infraud.org › blog › <span id="seoSlugPreview">critical-advisory</span></span>
+                  <span class="seo-preview-title" id="seoTitlePreview">Critical Advisory | INFRAUD Intelligence</span>
+                  <span class="seo-preview-snippet" id="seoSnippetPreview">Read verified cyber threat advisories, live scam alerts, and technical threat prevention guidance from the INFRAUD Security Operations Lead.</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
         </form>
 
       </div>
-    </div>
 
-    <!-- Success Popup Overlay (Matching Theme) -->
-    <div id="successPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(10, 15, 30, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;">
-        <div style="background: var(--surface, #FFFFFF); border: 1px solid var(--ink-100, #E8EBF3); padding: 48px; border-radius: 24px; text-align: center; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 24px 80px -12px rgba(10, 15, 30, 0.15);" id="popupCard">
-            <div style="width: 72px; height: 72px; background: rgba(16, 185, 129, 0.1); color: #10B981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-            </div>
-            <h3 style="font-size: 1.75rem; font-weight: 800; color: var(--ink-900, #0A0F1E); margin-bottom: 12px; letter-spacing: -0.02em;">Blog Published!</h3>
-            <p style="color: var(--ink-500, #4B5570); font-size: 1.05rem;">Your article is now live on the public feed.</p>
-        </div>
-    </div>
-
-    <!-- Supabase & Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/auth.js"></script>
-    <script>
-        async function publishBlog() {
-            const form = document.getElementById('blogForm');
-            if(!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-
-            const title = document.getElementById('blogTitle').value;
-            const description = document.getElementById('blogDesc').value;
-            const image_url = document.getElementById('blogCover').value;
-            const metaTitle = document.getElementById('metaTitle').value; // if we want to store it, but blog table has meta_keywords
-            const meta_keywords = document.getElementById('metaDesc').value;
-
-            if (window.authApp && window.authApp.supabase) {
-                const btn = document.querySelector('button[onclick="publishBlog()"]');
-                const oldText = btn.textContent;
-                btn.textContent = 'Publishing...';
-                btn.disabled = true;
-
-                const { data, error } = await window.authApp.supabase.from('blogs').insert([
-                    {
-                        title,
-                        description,
-                        image_url,
-                        meta_keywords
-                    }
-                ]);
-
-                btn.textContent = oldText;
-                btn.disabled = false;
-
-                if (error) {
-                    alert('Error publishing blog: ' + error.message);
-                    return;
-                }
-            } else {
-                alert('Supabase not initialized');
-                return;
-            }
-
-            const popup = document.getElementById('successPopup');
-            const popupCard = document.getElementById('popupCard');
-            
-            popup.style.display = 'flex';
-            setTimeout(() => {
-                popup.style.opacity = '1';
-                popupCard.style.transform = 'scale(1)';
-            }, 10);
-            
-            setTimeout(() => {
-                popup.style.opacity = '0';
-                popupCard.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                    form.reset();
-                }, 300);
-            }, 2500);
-        }
-    </script>
-  </main>
-
-    
-    <!-- ═══════════════════════════════════════════
-         V5 ULTRA PREMIUM FOOTER (LIGHT THEME)
-    ════════════════════════════════════════════ -->
-    <footer class="footer-premium">
-      
-      <!-- Subtle Bottom Anchor Glow -->
-      <div class="footer-bg-glow"></div>
-
-      <div class="container" style="position: relative; z-index: 2;">
-        
-
-        <!-- Links Section -->
-        <div class="footer-grid">
-          <div class="footer-nav-col">
-            <div class="footer-col-title">Product</div>
-            <ul class="footer-links-list">
-              <li><a href="check.html" class="footer-link"><span>Live Check</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="reports.html" class="footer-link"><span>Threat Reports</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="dashboard.html" class="footer-link"><span>Dashboard</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="api.html" class="footer-link"><span>Developer API</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="#" class="footer-link"><span>Integrations</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-            </ul>
+      <!-- ── SECTION 3: PUBLISHED ADVISORIES ARCHIVE LIBRARY ── -->
+      <div class="panel library-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Published Advisories Archive (<span id="lib-count">0</span>)</h3>
+            <p style="font-size: 0.875rem; color: var(--ink-500, #4B5570); margin-top: 2px;">Manage live articles published to the public blog feed. You can review, copy direct links, or revoke articles.</p>
           </div>
-          <div class="footer-nav-col">
-            <div class="footer-col-title">Resources</div>
-            <ul class="footer-links-list">
-              <li><a href="learn.html" class="footer-link"><span>Safety Academy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="learn.html" class="footer-link"><span>Blog</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="about.html" class="footer-link"><span>About Us</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="#" class="footer-link"><span>Help Center</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-            </ul>
-          </div>
-          <div class="footer-nav-col">
-            <div class="footer-col-title">Community</div>
-            <ul class="footer-links-list">
-              <li><a href="https://github.com/infraud" class="footer-link"><span>GitHub</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="#" class="footer-link"><span>Discord</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="report.html" class="footer-link"><span>Report a Scam</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="#" class="footer-link"><span>Transparency Report</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-            </ul>
-          </div>
-          <div class="footer-nav-col">
-            <div class="footer-col-title">Legal</div>
-            <ul class="footer-links-list">
-              <li><a href="#" class="footer-link"><span>Privacy Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="#" class="footer-link"><span>Terms of Service</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-              <li><a href="#" class="footer-link"><span>Cookie Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
-            </ul>
-          </div>
+          <button type="button" onclick="loadPublishedBlogsLibrary()" class="btn-table-action" style="background: var(--ink-50, #F4F5FA); color: var(--ink-700, #1E2742); border: 1px solid var(--ink-200, #CBD5E1);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Refresh Library
+          </button>
         </div>
 
-        <div class="footer-huge-mark">INFRAUD</div>
-
-        <!-- Bottom Section -->
-        <div class="footer-bottom">
-          <div class="footer-copyright">&copy; 2026 INFRAUD. All rights reserved.</div>
-          <div class="footer-status">
-            <span class="status-indicator"></span>
-            All systems operational
-          </div>
+        <div class="table-container">
+          <table class="library-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Cover</th>
+                <th>Advisory Title</th>
+                <th>Intelligence Tag</th>
+                <th>Date Published</th>
+                <th>Word Count</th>
+                <th style="text-align: right;">Library Actions</th>
+              </tr>
+            </thead>
+            <tbody id="library-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
         </div>
-
       </div>
 
-      <style>
-        .footer-premium {
-          position: relative;
-          background: linear-gradient(180deg, var(--page, #F7F8FC) 0%, #FFFFFF 100%);
-          border-top: 1px solid var(--ink-100, #E8EBF3);
-          padding: 80px 0 32px;
-          font-family: var(--font, 'Inter', sans-serif);
-          color: var(--ink-700, #1E2742);
-          overflow: hidden;
+    </section>
+
+  </main>
+
+  <!-- ── Toast Notification ── -->
+  <div id="admin-toast">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="admin-toast-text">Action completed successfully.</span>
+  </div>
+
+  <!-- Supabase & Auth Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    const STORAGE_KEY = 'infraud_community_reports';
+    const RETENTION_MS = 24 * 60 * 60 * 1000;
+    let currentStatusFilter = 'all';
+    let cachedReports = [];
+
+    // ── Tab Switcher ──
+    function switchAdminTab(tab) {
+      const btnReports = document.getElementById('sidebar-tab-reports');
+      const btnBlogs = document.getElementById('sidebar-tab-blogs');
+      const secReports = document.getElementById('section-reports');
+      const secBlogs = document.getElementById('section-blogs');
+      const statsReports = document.getElementById('stats-grid-moderation');
+      const statsBlogs = document.getElementById('stats-grid-blogs');
+      const headingTitle = document.getElementById('page-heading-title');
+      const headingSub = document.getElementById('page-heading-sub');
+
+      if (tab === 'reports') {
+        btnReports.classList.add('active');
+        btnBlogs.classList.remove('active');
+        secReports.style.display = 'block';
+        secBlogs.style.display = 'none';
+        if (statsReports) statsReports.style.display = 'grid';
+        if (statsBlogs) statsBlogs.style.display = 'none';
+        headingTitle.textContent = 'Threat Intelligence Moderation';
+        headingSub.textContent = 'Review community-submitted scam reports and approve alerts for the 24-hour live feed.';
+        loadAdminReports();
+      } else {
+        btnBlogs.classList.add('active');
+        btnReports.classList.remove('active');
+        secBlogs.style.display = 'block';
+        secReports.style.display = 'none';
+        if (statsReports) statsReports.style.display = 'none';
+        if (statsBlogs) statsBlogs.style.display = 'grid';
+        headingTitle.textContent = 'Cyber Intelligence Publishing Studio';
+        headingSub.textContent = 'Draft, format, and broadcast official threat advisories to the public INFRAUD blog feed.';
+        loadPublishedBlogsLibrary();
+      }
+    }
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('admin-toast');
+      const toastText = document.getElementById('admin-toast-text');
+      if (!toast || !toastText) return;
+
+      toastText.textContent = msg;
+      toast.style.borderColor = isError ? 'rgba(239,68,68,0.5)' : 'rgba(16,185,129,0.5)';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ── Data Fetching via Central API with localStorage Fallback ──
+    async function getAllReports() {
+      try {
+        const res = await fetch('/api/reports/all');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.reports)) {
+            cachedReports = data.reports;
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedReports)); } catch(e){}
+            return cachedReports;
+          }
+        }
+      } catch(e) {
+        console.warn('API error, falling back to local storage', e);
+      }
+
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) cachedReports = JSON.parse(raw);
+      } catch(e) {}
+      return cachedReports;
+    }
+
+    function setAdminFilterStatus(status) {
+      currentStatusFilter = status;
+      document.querySelectorAll('.chip-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('chip-' + status);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderAdminReportsTable();
+    }
+
+    function formatTimeAgo(timestamp) {
+      if (!timestamp) return 'Just now';
+      const diff = Date.now() - timestamp;
+      if (diff < 60000) return 'Just now';
+      const mins = Math.floor(diff / 60000);
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      const days = Math.floor(hrs / 24);
+      return `${days}d ago`;
+    }
+
+    function getTypeIconHtml(type) {
+      const lower = (type || '').toLowerCase();
+      if (lower.includes('phone')) {
+        return '<div class="type-bubble" title="Phone Threat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>';
+      } else if (lower.includes('email')) {
+        return '<div class="type-bubble" title="Email Threat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>';
+      } else if (lower.includes('upi')) {
+        return '<div class="type-bubble" title="UPI Fraud"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>';
+      } else {
+        return '<div class="type-bubble" title="Website / Link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>';
+      }
+    }
+
+    function getRiskBadgeHtml(risk) {
+      const lower = (risk || '').toLowerCase();
+      if (lower.includes('critical')) return '<span class="risk-badge risk-critical">Critical</span>';
+      if (lower.includes('low') || lower.includes('safe')) return '<span class="risk-badge risk-low">Low Risk</span>';
+      return '<span class="risk-badge risk-high">High Risk</span>';
+    }
+
+    function copyIdentifier(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied to clipboard: ${text}`);
+      }).catch(() => {});
+    }
+
+    async function loadAdminReports() {
+      const reports = await getAllReports();
+      
+      const pending = reports.filter(r => r.status === 'pending').length;
+      const approved = reports.filter(r => r.status === 'approved').length;
+      const rejected = reports.filter(r => r.status === 'rejected').length;
+
+      document.getElementById('stat-pending').textContent = pending;
+      document.getElementById('stat-approved').textContent = approved;
+      document.getElementById('stat-rejected').textContent = rejected;
+      document.getElementById('stat-total').textContent = reports.length;
+
+      // Filter chips counts
+      document.getElementById('count-all').textContent = reports.length;
+      document.getElementById('count-pending').textContent = pending;
+      document.getElementById('count-approved').textContent = approved;
+      document.getElementById('count-rejected').textContent = rejected;
+
+      // Sidebar pending badge
+      const badge = document.getElementById('sidebar-pending-badge');
+      if (badge) {
+        badge.textContent = pending;
+        badge.style.display = pending > 0 ? 'inline-flex' : 'none';
+      }
+
+      renderAdminReportsTable();
+    }
+
+    function renderAdminReportsTable() {
+      const reports = cachedReports;
+      const search = (document.getElementById('header-search-input')?.value || '').toLowerCase().trim();
+      const typeFilter = document.getElementById('filter-type')?.value || 'All';
+      const tbody = document.getElementById('reports-tbody');
+      if (!tbody) return;
+
+      const filtered = reports.filter(r => {
+        if (currentStatusFilter !== 'all' && r.status !== currentStatusFilter) return false;
+        if (typeFilter !== 'All' && !(r.type || '').toLowerCase().includes(typeFilter.toLowerCase())) return false;
+        if (search) {
+          const matchesId = (r.identifier || '').toLowerCase().includes(search);
+          const matchesEvidence = (r.evidence || '').toLowerCase().includes(search);
+          const matchesName = (r.reporterName || '').toLowerCase().includes(search);
+          const matchesEmail = (r.reporterEmail || '').toLowerCase().includes(search);
+          if (!matchesId && !matchesEvidence && !matchesName && !matchesEmail) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 60px 24px; color: var(--ink-400, #94A3B8);">
+              <div style="font-size: 1.15rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 6px;">No reports found</div>
+              <div style="font-size: 0.875rem;">No items match your active filters or search query.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => {
+        const status = r.status || 'pending';
+        let statusBadge = '';
+        if (status === 'pending') {
+          statusBadge = '<span class="risk-badge" style="background: rgba(245,158,11,0.1); color: #D97706; border: 1px solid rgba(245,158,11,0.25);">🕒 Pending</span>';
+        } else if (status === 'approved') {
+          const liveTime = r.approvedAt || r.timestamp || Date.now();
+          const remainingHrs = Math.max(0, Math.ceil((RETENTION_MS - (Date.now() - liveTime)) / 3600000));
+          statusBadge = `<span class="risk-badge" style="background: rgba(16,185,129,0.1); color: #059669; border: 1px solid rgba(16,185,129,0.25);" title="Expires in ~${remainingHrs}h">🟢 Live (~${remainingHrs}h)</span>`;
+        } else {
+          statusBadge = '<span class="risk-badge" style="background: rgba(239,68,68,0.1); color: #DC2626; border: 1px solid rgba(239,68,68,0.25);">❌ Rejected</span>';
         }
 
-        .footer-bg-glow {
-          position: absolute;
-          bottom: -150px; left: 50%;
-          transform: translateX(-50%);
-          width: 80vw; height: 300px;
-          background: radial-gradient(ellipse at center, rgba(37,99,235,0.06) 0%, transparent 60%);
-          pointer-events: none;
-          z-index: 1;
-        }
-        
-        /* Grid */
-        .footer-grid {
-          display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
-          margin-bottom: 64px;
-        }
-        .footer-col-title { font-size: 0.8125rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
-        .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
-        .footer-link {
-          display: inline-flex; align-items: center; gap: 6px;
-          font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500;
-          transition: all 0.2s;
-        }
-        .footer-link svg { opacity: 0; transform: translateX(-4px); transition: all 0.2s; color: var(--blue-600, #2563EB); }
-        .footer-link:hover { color: var(--ink-900, #0A0F1E); }
-        .footer-link:hover svg { opacity: 1; transform: translateX(0); }
-
-        /* Huge Mark */
-        .footer-huge-mark {
-          font-size: clamp(4rem, 14vw, 15rem);
-          font-weight: 900;
-          line-height: 0.8;
-          text-align: center;
-          color: var(--ink-100, #E8EBF3);
-          opacity: 0.6;
-          letter-spacing: -0.05em;
-          user-select: none;
-          margin-bottom: -1vw;
+        let actionButtons = '';
+        if (status === 'pending') {
+          actionButtons = `
+            <div class="admin-actions-cell">
+              <button class="btn-table-action btn-act-approve" onclick="approveReport('${r.id}')" title="Approve and stream live for 24h">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve
+              </button>
+              <button class="btn-table-action btn-act-reject" onclick="rejectReport('${r.id}')" title="Reject this report">
+                Reject
+              </button>
+            </div>
+          `;
+        } else if (status === 'approved') {
+          actionButtons = `
+            <div class="admin-actions-cell">
+              <button class="btn-table-action btn-act-revoke" onclick="rejectReport('${r.id}')" title="Revoke and take down from live feed">
+                Revoke
+              </button>
+              <button class="btn-table-action btn-act-delete" onclick="deleteReport('${r.id}')" title="Permanently delete">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          `;
+        } else {
+          actionButtons = `
+            <div class="admin-actions-cell">
+              <button class="btn-table-action btn-act-approve" onclick="approveReport('${r.id}')" title="Re-approve to live feed">
+                Re-Approve
+              </button>
+              <button class="btn-table-action btn-act-delete" onclick="deleteReport('${r.id}')" title="Permanently delete">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          `;
         }
 
-        /* Bottom */
-        .footer-bottom {
-          display: flex; justify-content: space-between; align-items: center;
-          padding-top: 32px; border-top: 1px solid var(--ink-100, #E8EBF3);
-          font-size: 0.875rem; color: var(--ink-500, #4B5570);
-          position: relative; z-index: 2;
-        }
-        .footer-status {
-          display: flex; align-items: center; gap: 10px;
-          padding: 6px 14px; background: #fff; border-radius: 100px;
-          font-weight: 600; font-size: 0.8125rem; border: 1px solid var(--ink-100, #E8EBF3);
-          box-shadow: 0 2px 8px rgba(10,15,30,.04);
-        }
-        .status-indicator {
-          width: 8px; height: 8px; border-radius: 50%;
-          background: var(--green-500, #10B981);
-          box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
-          animation: statusPulse 2s infinite;
-        }
-        @keyframes statusPulse {
-          0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
-          70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
-          100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
-        }
+        const reporterName = r.reporterName || 'Anonymous Submitter';
+        const reporterEmail = r.reporterEmail ? `<span style="font-size:0.75rem; color:var(--ink-400); display:block;">${escapeHtml(r.reporterEmail)}</span>` : '';
+        const reportTime = formatTimeAgo(r.timestamp);
 
-        @media (max-width: 900px) {
+        return `
+          <tr>
+            <td>
+              <div class="td-identifier">
+                ${getTypeIconHtml(r.type)}
+                <div>
+                  <span>${escapeHtml(r.identifier || 'Unknown')}</span>
+                  <button class="btn-copy-clip" onclick="copyIdentifier('${escapeHtml(r.identifier)}', this)" title="Copy identifier">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td style="font-weight: 600; color: var(--ink-500, #4B5570); font-size: 0.875rem;">${escapeHtml(r.type || 'Website')}</td>
+            <td>${getRiskBadgeHtml(r.risk)}</td>
+            <td style="max-width: 280px; font-size: 0.875rem; color: var(--ink-500, #4B5570); line-height: 1.5;">${escapeHtml(r.evidence || 'No details provided.')}</td>
+            <td style="font-size: 0.875rem;">
+              <span style="font-weight: 600; color: var(--ink-900, #0A0F1E);">${escapeHtml(reporterName)}</span>
+              ${reporterEmail}
+              <span style="font-size: 0.75rem; color: var(--ink-400, #94A3B8);">${reportTime}</span>
+            </td>
+            <td>${statusBadge}</td>
+            <td style="text-align: right;">${actionButtons}</td>
+          </tr>
+        `;
+      }).join('');
+    }
 
-          .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 32px; }
-          .footer-huge-mark { display: none; }
+    async function approveReport(id) {
+      try {
+        await fetch('/api/reports/approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch(e) { console.error('API error:', e); }
+      await loadAdminReports();
+      showToast('Report approved! Now streaming live on public feed for 24h.');
+    }
+
+    async function rejectReport(id) {
+      try {
+        await fetch('/api/reports/reject', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch(e) { console.error('API error:', e); }
+      await loadAdminReports();
+      showToast('Report rejected and hidden from live feed.');
+    }
+
+    async function deleteReport(id) {
+      if (!confirm('Permanently delete this threat report?')) return;
+      try {
+        await fetch('/api/reports/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch(e) { console.error('API error:', e); }
+      await loadAdminReports();
+      showToast('Report permanently deleted.');
+    }
+
+    // ── Blog Studio Real-time Interactivity & Helpers ──
+    function selectBlogCategory(btn, cat) {
+      document.querySelectorAll('#categoryPillsWrap .cat-pill').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const hiddenInput = document.getElementById('selectedBlogCategory');
+      if (hiddenInput) hiddenInput.value = cat;
+      
+      const mirrorCat = document.getElementById('mirrorCategory');
+      if (mirrorCat) mirrorCat.textContent = cat;
+
+      const statCat = document.getElementById('stat-blog-top-cat');
+      if (statCat) statCat.textContent = cat;
+
+      const metaDesc = document.getElementById('metaDesc');
+      if (metaDesc && !metaDesc.value) {
+        metaDesc.value = cat.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim().split(' ').join(', ');
+      }
+    }
+
+    function handleTitleInput(val) {
+      const charBadge = document.getElementById('titleCharCount');
+      if (charBadge) charBadge.textContent = `${val.length}/120`;
+
+      const mirrorTitle = document.getElementById('mirrorTitle');
+      if (mirrorTitle) {
+        mirrorTitle.textContent = val.trim() || 'Advisory Title Preview will appear here...';
+      }
+
+      const seoTitle = document.getElementById('seoTitlePreview');
+      if (seoTitle) {
+        seoTitle.textContent = val.trim() ? `${val.trim()} | INFRAUD Intelligence` : 'Critical Advisory | INFRAUD Intelligence';
+      }
+
+      const seoSlug = document.getElementById('seoSlugPreview');
+      if (seoSlug) {
+        const slug = val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').substring(0, 36);
+        seoSlug.textContent = slug || 'critical-advisory';
+      }
+
+      const metaTitleInput = document.getElementById('metaTitle');
+      if (metaTitleInput && !metaTitleInput.dataset.touched) {
+        metaTitleInput.value = val;
+      }
+    }
+
+    function handleDescInput(val) {
+      const words = val.trim() ? val.trim().split(/\s+/).filter(Boolean).length : 0;
+      const readMins = Math.max(1, Math.ceil(words / 180));
+
+      const wordBadge = document.getElementById('editorWordCount');
+      if (wordBadge) wordBadge.textContent = `${words} words`;
+
+      const timeBadge = document.getElementById('editorReadTime');
+      if (timeBadge) timeBadge.textContent = `~${readMins} min read`;
+
+      const kpiWords = document.getElementById('stat-blog-words-kpi');
+      if (kpiWords) kpiWords.textContent = `${words} Words`;
+
+      const kpiReadTime = document.getElementById('stat-blog-readtime-kpi');
+      if (kpiReadTime) kpiReadTime.textContent = `~${readMins} min read estimate`;
+
+      const mirrorDate = document.getElementById('mirrorAuthorDate');
+      if (mirrorDate) mirrorDate.textContent = `Today • ${readMins} min read`;
+
+      const mirrorExcerpt = document.getElementById('mirrorExcerpt');
+      if (mirrorExcerpt) {
+        const clean = val.replace(/[#*`>_-]/g, '').trim();
+        mirrorExcerpt.textContent = clean.length > 120 ? clean.substring(0, 120) + '...' : (clean || 'Article excerpt summary will automatically render here as you type the advisory body text...');
+      }
+
+      const seoSnippet = document.getElementById('seoSnippetPreview');
+      if (seoSnippet) {
+        const clean = val.replace(/[#*`>_-]/g, '').trim();
+        if (clean.length > 20) {
+          seoSnippet.textContent = clean.length > 140 ? clean.substring(0, 140) + '...' : clean;
         }
-        @media (max-width: 600px) {
-          .footer-grid { grid-template-columns: 1fr; }
-          .footer-bottom { flex-direction: column; gap: 24px; text-align: center; }
+      }
+    }
 
+    function insertMarkdown(prefix, suffix, defaultText) {
+      const textarea = document.getElementById('blogDesc');
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selected = text.substring(start, end) || defaultText;
+
+      const replacement = prefix + selected + suffix;
+      textarea.value = text.substring(0, start) + replacement + text.substring(end);
+      
+      textarea.focus();
+      textarea.selectionStart = start + prefix.length;
+      textarea.selectionEnd = start + prefix.length + selected.length;
+      handleDescInput(textarea.value);
+    }
+
+    function selectPresetCover(btn, url) {
+      document.querySelectorAll('.preset-covers-grid .preset-thumb-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const coverInput = document.getElementById('blogCover');
+      if (coverInput) coverInput.value = url;
+
+      const mirrorImg = document.getElementById('mirrorCoverImg');
+      if (mirrorImg) mirrorImg.src = url;
+    }
+
+    function handleCoverUrlChange(url) {
+      const mirrorImg = document.getElementById('mirrorCoverImg');
+      if (mirrorImg && url && url.startsWith('http')) {
+        mirrorImg.src = url;
+      }
+    }
+
+    function handleSeoTitleChange(val) {
+      const input = document.getElementById('metaTitle');
+      if (input) input.dataset.touched = 'true';
+      const seoTitle = document.getElementById('seoTitlePreview');
+      if (seoTitle) {
+        seoTitle.textContent = val.trim() ? `${val.trim()} | INFRAUD Intelligence` : 'Critical Advisory | INFRAUD Intelligence';
+      }
+    }
+
+    function loadSampleBlogTemplate() {
+      const title = "Critical Advisory: Rise of Digital Arrest Scams via Fake FedEx & Police Notices";
+      const cat = "📦 Courier & Digital Arrest";
+      const cover = "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80";
+      const metaKeywords = "cybersecurity, digital arrest, fedex scam, upi fraud, cbi impersonation, courier extortion";
+      const body = `## Executive Threat Summary
+Over the past month, cybercrime cells across India have registered thousands of cases involving **"Digital Arrest" extortion**. Fraudsters impersonate courier logistics agents (FedEx, BlueDart) and law enforcement officials (CBI, Cyber Police) via Skype and WhatsApp video calls.
+
+> ⚠️ **Critical Security Warning:** Indian law enforcement, police departments, and customs agencies NEVER conduct investigations or arrests via video calls, nor do they demand fund transfers into "verification" or "bail" accounts.
+
+### How the Attack Operates
+1. **The Initial Robocall:** Victims receive an automated phone call claiming a parcel sent under their Aadhaar/Passport has been intercepted with illegal substances.
+2. **Transfer to "Police":** The call is patched to an accomplice wearing an official-looking uniform against a mock police station backdrop.
+3. **Digital Confinement:** The victim is coerced into staying on continuous video call under intimidation of an immediate Non-Bailable Arrest Warrant.
+4. **Financial Extortion:** Victims are pressured into transferring life savings into fraudulent "RBI security accounts" under the pretext of asset verification.
+
+### Verified Indicators of Compromise (IOCs)
+- **Spoofed Caller IDs:** Fraudulent virtual numbers often begin with \`+92\`, \`+44\`, or spoofed local police control room numbers.
+- **Forged Documents:** Fake digital arrest warrants bearing forged signatures of senior officials and unauthorized government logos.
+
+### Mandatory Defensive Protocols
+- Immediately disconnect any call claiming your Aadhaar or phone is implicated in international courier fraud.
+- Never transfer money under duress. Verify complaints directly at your local police station.
+- File an immediate complaint on the National Cybercrime Portal at **cybercrime.gov.in** or dial **1930**.`;
+
+      document.getElementById('blogTitle').value = title;
+      document.getElementById('blogDesc').value = body;
+      document.getElementById('blogCover').value = cover;
+      document.getElementById('metaTitle').value = title;
+      document.getElementById('metaDesc').value = metaKeywords;
+
+      // Select category pill
+      const pills = document.querySelectorAll('#categoryPillsWrap .cat-pill');
+      pills.forEach(p => {
+        if (p.textContent.includes('Courier')) {
+          selectBlogCategory(p, cat);
         }
-      </style>
-    </footer>
+      });
 
-    <script src="js/main.js"></script>
+      // Select first preset thumbnail
+      const thumbBtns = document.querySelectorAll('.preset-covers-grid .preset-thumb-btn');
+      if (thumbBtns.length > 0) selectPresetCover(thumbBtns[0], cover);
+
+      handleTitleInput(title);
+      handleDescInput(body);
+
+      showToast('⚡ Sample FedEx Digital Arrest Advisory loaded into canvas!');
+    }
+
+    function clearBlogDraft() {
+      if (!confirm('Clear all fields in the draft editor?')) return;
+      document.getElementById('blogForm').reset();
+      handleTitleInput('');
+      handleDescInput('');
+      const defaultCover = "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80";
+      document.getElementById('blogCover').value = defaultCover;
+      document.getElementById('mirrorCoverImg').src = defaultCover;
+      showToast('Draft canvas cleared.');
+    }
+
+    // ── Blog Publishing & Supabase Cloud Sync ──
+    async function publishBlog() {
+      const form = document.getElementById('blogForm');
+      const btn = document.getElementById('btn-publish-submit');
+      const oldHtml = btn.innerHTML;
+      btn.innerHTML = '<span style="display:inline-flex; align-items:center; gap:8px;">Broadcasting...</span>';
+      btn.disabled = true;
+
+      const title = document.getElementById('blogTitle').value.trim();
+      const description = document.getElementById('blogDesc').value.trim();
+      const image_url = document.getElementById('blogCover').value.trim();
+      const category = document.getElementById('selectedBlogCategory')?.value || '🚨 Critical Threat Alert';
+      const meta_keywords = category;
+
+      // Supabase insertion
+      if (window.authApp && window.authApp.supabase) {
+        try {
+          await window.authApp.supabase.from('blogs').insert([{
+            title,
+            description,
+            image_url,
+            meta_keywords
+          }]);
+        } catch(err) {
+          console.warn('Supabase fallback:', err);
+        }
+      }
+
+      // Local Cache Publish
+      try {
+        const localBlogs = JSON.parse(localStorage.getItem('infraud_blogs') || '[]');
+        localBlogs.unshift({
+          id: 'blog_' + Date.now(),
+          title,
+          description,
+          image_url,
+          meta_keywords,
+          created_at: new Date().toISOString()
+        });
+        localStorage.setItem('infraud_blogs', JSON.stringify(localBlogs));
+      } catch(e) {}
+
+      btn.innerHTML = oldHtml;
+      btn.disabled = false;
+      form.reset();
+      
+      handleTitleInput('');
+      handleDescInput('');
+      showToast('🎉 Advisory broadcasted successfully to public blog feed!');
+      await loadPublishedBlogsLibrary();
+    }
+
+    // ── Published Advisories Library Management ──
+    async function loadPublishedBlogsLibrary() {
+      let blogs = [];
+      try {
+        const raw = localStorage.getItem('infraud_blogs');
+        if (raw) blogs = JSON.parse(raw);
+      } catch(e) {}
+
+      // If Supabase is available, sync
+      if (window.authApp && window.authApp.supabase) {
+        try {
+          const { data, error } = await window.authApp.supabase
+            .from('blogs')
+            .select('*')
+            .order('created_at', { ascending: false });
+          if (data && data.length > 0) {
+            data.forEach(sbBlog => {
+              if (!blogs.some(b => b.title === sbBlog.title)) blogs.push(sbBlog);
+            });
+          }
+        } catch(e) {}
+      }
+
+      // If library is completely empty, seed with 2 realistic initial advisories
+      if (blogs.length === 0) {
+        blogs = [
+          {
+            id: 'blog_seed_1',
+            title: "Critical Advisory: FedEx Courier Digital Arrest Scams in India",
+            description: "Cybercrime cells across India have registered thousands of cases involving Digital Arrest extortion. Fraudsters impersonate courier logistics agents and police via video calls...",
+            image_url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
+            meta_keywords: "📦 Courier & Digital Arrest",
+            created_at: new Date(Date.now() - 3600000 * 4).toISOString()
+          },
+          {
+            id: 'blog_seed_2',
+            title: "New Phishing Campaign Impersonating Income Tax Department Refund Portal",
+            description: "Attackers are distributing malicious SMS containing fake APK links and spoofed refund approval portals targeting Indian banking credentials...",
+            image_url: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+            meta_keywords: "🎣 Phishing Attack",
+            created_at: new Date(Date.now() - 3600000 * 24).toISOString()
+          }
+        ];
+        try { localStorage.setItem('infraud_blogs', JSON.stringify(blogs)); } catch(e){}
+      }
+
+      // Update KPI
+      const kpiTotal = document.getElementById('stat-blog-total');
+      if (kpiTotal) kpiTotal.textContent = blogs.length;
+
+      const libCount = document.getElementById('lib-count');
+      if (libCount) libCount.textContent = blogs.length;
+
+      const tbody = document.getElementById('library-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = blogs.map(blog => {
+        const words = (blog.description || '').trim().split(/\s+/).filter(Boolean).length;
+        const readMins = Math.max(1, Math.ceil(words / 180));
+        const pubDate = blog.created_at ? new Date(blog.created_at).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
+        const cover = blog.image_url || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80';
+        const tag = blog.meta_keywords || '🚨 Critical Alert';
+
+        return `
+          <tr>
+            <td>
+              <img src="${cover}" class="lib-thumb" alt="Thumbnail" onerror="this.src='assets/logo.jpg'" />
+            </td>
+            <td style="max-width: 320px;">
+              <div class="lib-title-text">${escapeHtml(blog.title || 'Untitled Advisory')}</div>
+              <span style="font-size: 0.75rem; color: var(--ink-400);">INFRAUD Security Operations Lead</span>
+            </td>
+            <td>
+              <span class="lib-cat-tag">${escapeHtml(tag)}</span>
+            </td>
+            <td style="color: var(--ink-600); font-weight: 600; font-size: 0.8125rem;">
+              ${pubDate}
+            </td>
+            <td style="color: var(--ink-500); font-size: 0.8125rem;">
+              ${words} words (~${readMins}m read)
+            </td>
+            <td style="text-align: right;">
+              <div class="admin-actions-cell">
+                <a href="blog.html" target="_blank" class="btn-table-action btn-act-approve" style="text-decoration: none;" title="View on live blog">
+                  View
+                </a>
+                <button class="btn-table-action btn-act-delete" onclick="deletePublishedBlog('${blog.id}', '${escapeHtml(blog.title)}')" title="Revoke and delete this advisory">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function deletePublishedBlog(id, title) {
+      if (!confirm(`Delete advisory "${title}" from public blog feed?`)) return;
+
+      // Delete from local storage
+      try {
+        let localBlogs = JSON.parse(localStorage.getItem('infraud_blogs') || '[]');
+        localBlogs = localBlogs.filter(b => b.id !== id && b.title !== title);
+        localStorage.setItem('infraud_blogs', JSON.stringify(localBlogs));
+      } catch(e) {}
+
+      // Delete from Supabase if connected
+      if (window.authApp && window.authApp.supabase) {
+        try {
+          await window.authApp.supabase.from('blogs').delete().eq('title', title);
+        } catch(e) {}
+      }
+
+      await loadPublishedBlogsLibrary();
+      showToast('Advisory removed from public blog feed.');
+    }
+
+    function handleSignOut() {
+      if (window.authApp && window.authApp.signOut) {
+        window.authApp.signOut();
+      } else {
+        window.location.href = 'login.html';
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminReports();
+      loadPublishedBlogsLibrary();
+
+      document.getElementById('header-search-input')?.addEventListener('input', renderAdminReportsTable);
+      document.getElementById('filter-type')?.addEventListener('change', renderAdminReportsTable);
+
+      // Auto-refresh stream every 15s
+      setInterval(loadAdminReports, 15000);
+    });
+  </script>
 </body>
 </html>
