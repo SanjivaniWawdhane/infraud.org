@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="INFRAUD Threat Analysis Result — Real-time heuristic risk score, forensic indicators, and actionable security guidance.">
+    <title>Threat Analysis Result | INFRAUD</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      /* ── Redesigned Threat Result Page Styling ── */
+      body {
+        background: var(--page, #F7F8FC);
+        font-family: var(--font, 'Inter', sans-serif);
+        color: var(--ink-900, #0A0F1E);
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      .result-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 36px 24px 80px;
+      }
+
+      /* Breadcrumbs & Top Meta */
+      .result-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .breadcrumb-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.8125rem;
+        color: var(--ink-500, #4B5570);
+      }
+
+      .btn-back-scanner {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 700;
+        color: var(--blue-600, #2563EB);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        background: rgba(37, 99, 235, 0.08);
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .btn-back-scanner:hover {
+        background: rgba(37, 99, 235, 0.16);
+        transform: translateX(-2px);
+      }
+
+      .scan-meta-pill {
+        font-family: var(--mono, 'JetBrains Mono', monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-500, #64748B);
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        padding: 6px 16px;
+        border-radius: 100px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      }
+
+      .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10B981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        animation: pulseLive 2s infinite;
+      }
+
+      @keyframes pulseLive {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+
+      /* Hero Target Card */
+      .target-hero-card {
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 24px;
+        padding: 28px 32px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .target-info-wrap {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex: 1;
+        min-width: 280px;
+      }
+
+      .target-type-avatar {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        background: var(--blue-100, #EFF6FF);
+        color: var(--blue-600, #2563EB);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+      }
+
+      .target-name-block {
+        overflow: hidden;
+      }
+
+      .target-label-sub {
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-400, #94A3B8);
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .target-url-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--ink-900, #0A0F1E);
+        word-break: break-all;
+        margin: 0;
+        line-height: 1.25;
+      }
+
+      .target-actions-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn-action-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 16px;
+        border-radius: 100px;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        background: #FFFFFF;
+        color: var(--ink-700, #1E2742);
+      }
+
+      .btn-action-pill:hover {
+        border-color: var(--blue-600, #2563EB);
+        color: var(--blue-600, #2563EB);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(10, 15, 30, 0.06);
+      }
+
+      .btn-action-report {
+        color: #DC2626;
+        border-color: rgba(239, 68, 68, 0.25);
+        background: rgba(239, 68, 68, 0.04);
+      }
+
+      .btn-action-report:hover {
+        background: #DC2626;
+        color: #FFFFFF;
+        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28);
+      }
+
+      /* Main Grid: Score Gauge (Left) + Telemetry & Signals (Right) */
+      .result-main-grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 32px;
+        align-items: start;
+        margin-bottom: 32px;
+      }
+
+      @media (max-width: 992px) {
+        .result-main-grid { grid-template-columns: 1fr; }
+      }
+
+      /* Score Gauge Card */
+      .score-card {
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 24px;
+        padding: 36px 28px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: sticky;
+        top: 96px;
+        transition: all 0.3s ease;
+      }
+
+      .gauge-wrap {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 6px auto 20px;
+      }
+
+      .gauge-svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+      }
+
+      .gauge-bg-circle {
+        fill: none;
+        stroke: var(--ink-50, #F1F5F9);
+        stroke-width: 12;
+      }
+
+      .gauge-progress-circle {
+        fill: none;
+        stroke: #10B981;
+        stroke-width: 12;
+        stroke-linecap: round;
+        stroke-dasharray: 439.8;
+        stroke-dashoffset: 439.8;
+        transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+      }
+
+      .gauge-center-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .gauge-score-num {
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: #10B981;
+        transition: color 0.3s;
+      }
+
+      .gauge-score-denom {
+        font-size: 0.6875rem;
+        font-weight: 800;
+        color: var(--ink-400, #94A3B8);
+        margin-top: 4px;
+        letter-spacing: 0.08em;
+      }
+
+      .risk-verdict-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 7px 18px;
+        border-radius: 100px;
+        background: rgba(16, 185, 129, 0.1);
+        color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        margin-bottom: 12px;
+        transition: all 0.3s;
+      }
+
+      .risk-explanation-text {
+        font-size: 0.875rem;
+        color: var(--ink-500, #4B5570);
+        line-height: 1.55;
+        margin-bottom: 24px;
+        padding: 0 6px;
+        transition: color 0.3s;
+      }
+
+      /* 4-Stage Visual Risk Bar */
+      .risk-meter-container {
+        width: 100%;
+        padding-top: 14px;
+        border-top: 1px solid var(--ink-100, #E8EBF3);
+      }
+
+      .risk-meter-bar {
+        display: flex;
+        height: 8px;
+        border-radius: 100px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        gap: 3px;
+      }
+
+      .meter-seg {
+        flex: 1;
+        height: 100%;
+        border-radius: 2px;
+      }
+      .seg-low { background: #10B981; }
+      .seg-mod { background: #F59E0B; }
+      .seg-high { background: #EA580C; }
+      .seg-crit { background: #EF4444; }
+
+      .risk-meter-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        color: var(--ink-400, #94A3B8);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Telemetry 4 Tiles Grid (Right Column Top) */
+      .telemetry-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      @media (max-width: 600px) {
+        .telemetry-grid { grid-template-columns: 1fr; }
+      }
+
+      .telemetry-card {
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 18px;
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        box-shadow: 0 2px 10px rgba(10, 15, 30, 0.02);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .telemetry-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(10, 15, 30, 0.05);
+      }
+
+      .tile-icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: var(--ink-50, #F4F5FA);
+        color: var(--ink-700, #1E2742);
+      }
+
+      .tile-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-400, #94A3B8);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+
+      .tile-value {
+        font-size: 0.9375rem;
+        font-weight: 800;
+        color: var(--ink-900, #0A0F1E);
+        margin-bottom: 2px;
+        line-height: 1.3;
+      }
+
+      .tile-subtext {
+        font-size: 0.75rem;
+        color: var(--ink-500, #64748B);
+      }
+
+      /* Forensic Signals Container Card */
+      .signals-card {
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+        margin-bottom: 24px;
+      }
+
+      .signals-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .signals-card-title {
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: var(--ink-900, #0A0F1E);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .signals-count-pill {
+        font-size: 0.6875rem;
+        font-weight: 800;
+        padding: 2px 8px;
+        border-radius: 100px;
+        background: var(--ink-100, #E8EBF3);
+        color: var(--ink-700, #1E2742);
+      }
+
+      /* Signals Items */
+      .signal-item-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--ink-100, #E8EBF3);
+        transition: background 0.15s;
+      }
+
+      .signal-item-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .signal-item-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex: 1;
+      }
+
+      .signal-status-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .signal-status-clean { background: rgba(16, 185, 129, 0.1); color: #059669; }
+      .signal-status-warn  { background: rgba(245, 158, 11, 0.1); color: #D97706; }
+      .signal-status-crit  { background: rgba(239, 68, 68, 0.1); color: #DC2626; }
+
+      .signal-title-text {
+        font-weight: 700;
+        font-size: 0.9375rem;
+        color: var(--ink-900, #0A0F1E);
+        margin-bottom: 3px;
+      }
+
+      .signal-desc-text {
+        font-size: 0.8125rem;
+        color: var(--ink-500, #4B5570);
+        line-height: 1.5;
+      }
+
+      /* All Clear Green Certificate Banner */
+      .clean-certificate-box {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        color: #065F46;
+      }
+
+      .clean-cert-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.15);
+        color: #059669;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+      }
+
+      /* Recommendations / Incident Playbook Box */
+      .playbook-card {
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-left: 5px solid #10B981;
+        border-radius: 20px;
+        padding: 24px 28px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+        transition: border-color 0.3s ease;
+      }
+
+      .playbook-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--ink-900, #0A0F1E);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .playbook-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .playbook-list li {
+        font-size: 0.875rem;
+        color: var(--ink-700, #1E2742);
+        line-height: 1.5;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      /* Inline Quick Scanner Bar (Below main grid) */
+      .quick-scanner-bar {
+        background: var(--surface, #FFFFFF);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 24px;
+        padding: 28px 32px;
+        box-shadow: 0 4px 24px rgba(10, 15, 30, 0.04);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .quick-scan-input-group {
+        display: flex;
+        align-items: center;
+        background: var(--ink-50, #F4F5FA);
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 100px;
+        padding: 6px 8px 6px 18px;
+        flex: 1;
+        min-width: 280px;
+        transition: all 0.2s;
+      }
+
+      .quick-scan-input-group:focus-within {
+        background: #FFFFFF;
+        border-color: var(--blue-600, #2563EB);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      }
+
+      .quick-scan-input {
+        background: transparent;
+        border: none;
+        font-size: 0.9375rem;
+        color: var(--ink-900, #0A0F1E);
+        outline: none;
+        width: 100%;
+      }
+
+      .btn-quick-scan {
+        background: var(--blue-600, #2563EB);
+        color: #FFFFFF;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .btn-quick-scan:hover {
+        background: var(--blue-700, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      }
+
+      /* Copy Link Toast */
+      #result-toast {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        box-shadow: 0 12px 36px rgba(10, 15, 30, 0.12);
+        border-radius: 12px;
+        padding: 14px 22px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 2000;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        font-weight: 600;
+        font-size: 0.9375rem;
+      }
+
+      #result-toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR (EDGE GLASS ARCHITECTURE) ── -->
+  <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="index.html" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="index.html">Home</a>
+        <a href="check.html" class="active">Check</a>
+        <a href="reports.html">Reports</a>
+        <a href="blog.html">Blog</a>
+        <a href="learn.html">Learn</a>
+        <a href="about.html">About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <a href="login.html" class="nav-edge-login">Login</a>
+        <a href="check.html" class="nav-edge-signup">
+          Scan Target
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.98); box-shadow: 0 4px 24px -8px rgba(10, 15, 30, 0.08); }
+      .nav-edge-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
+      
+      .nav-edge-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 2; }
+      .nav-edge-logo img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--ink-900, #0A0F1E); }
+      
+      .nav-edge-menu { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; }
+      .nav-edge-menu a { position: relative; text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-500, #4B5570); padding: 8px 16px; transition: color 0.2s; }
+      .nav-edge-menu a:hover, .nav-edge-menu a.active { color: var(--ink-900, #0A0F1E); }
+      .nav-edge-menu a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) scaleX(0); width: calc(100% - 32px); height: 2px; background: var(--blue-600, #2563EB); border-radius: 2px; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-menu a:hover::after, .nav-edge-menu a.active::after { transform: translateX(-50%) scaleX(1); }
+      
+      .nav-edge-actions { display: flex; align-items: center; gap: 16px; z-index: 2; }
+      .nav-edge-login { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-700, #1E2742); padding: 8px; transition: color 0.2s; }
+      .nav-edge-login:hover { color: var(--blue-600, #2563EB); }
+      .nav-edge-signup { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-600, #2563EB); color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 700; padding: 10px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.2); transition: all 0.2s; }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover { background: var(--blue-700, #1D4ED8); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
+      
+      @media (max-width: 900px) {
+        .nav-edge-menu { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.98); padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); gap: 8px; transform: none; }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a { width: 100%; text-align: left; padding: 12px; border-radius: 8px; }
+        .nav-edge-menu a:hover, .nav-edge-menu a.active { background: rgba(37, 99, 235, 0.05); }
+        .nav-edge-menu a::after { display: none; }
+        .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+  </header>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main>
+    <div class="result-wrapper">
+      
+      <!-- Breadcrumb & Top Bar -->
+      <div class="result-header-bar">
+        <div class="breadcrumb-group">
+          <a href="check.html" class="btn-back-scanner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Check Scanner
+          </a>
+          <span>/</span>
+          <span>Security Heuristic Audit</span>
+        </div>
+
+        <div class="scan-meta-pill" id="scan-meta">
+          <span class="pulse-dot"></span>
+          Scan ID: INFR-8892-A • Oct 11, 2026, 05:15 PM IST
+        </div>
+      </div>
+
+      <!-- Target Hero Card -->
+      <div class="target-hero-card">
+        <div class="target-info-wrap">
+          <div class="target-type-avatar" id="target-type-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <div class="target-name-block">
+            <div class="target-label-sub">
+              <span id="target-category-tag">Target Identifier</span>
+              <span>•</span>
+              <span id="target-protocol-tag" style="color: var(--blue-600, #2563EB);">HTTPS Encrypted</span>
+            </div>
+            <h1 class="target-url-title" id="target-display">Analyzing target...</h1>
+          </div>
+        </div>
+
+        <div class="target-actions-wrap">
+          <button class="btn-action-pill" onclick="rescanTarget()" title="Rescan target heuristics">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Rescan
+          </button>
+          <button class="btn-action-pill" onclick="copyResultLink()" title="Copy shareable link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Share Audit
+          </button>
+          <a href="reports.html" class="btn-action-pill btn-action-report" id="btn-report-target" title="File scam report with moderators">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Report Threat
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Grid: Score Gauge (Left) + Telemetry & Signals (Right) -->
+      <div class="result-main-grid">
+        
+        <!-- Left Column: Threat Verdict Card -->
+        <div class="score-card" id="score-sidebar">
+          <div class="gauge-wrap">
+            <svg class="gauge-svg" viewBox="0 0 160 160">
+              <circle class="gauge-bg-circle" cx="80" cy="80" r="70"></circle>
+              <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="gauge-center-content">
+              <div class="gauge-score-num" id="score-display">--</div>
+              <div class="gauge-score-denom">THREAT SCORE</div>
+            </div>
+          </div>
+
+          <div class="risk-verdict-pill" id="risk-badge">
+            EVALUATING RISK
+          </div>
+
+          <p class="risk-explanation-text" id="risk-summary">
+            Analyzing target URL structure and checking for heuristic deception vectors...
+          </p>
+
+          <div class="risk-meter-container">
+            <div class="risk-meter-bar">
+              <div class="meter-seg seg-low" title="0-25: Safe"></div>
+              <div class="meter-seg seg-mod" title="26-50: Moderate"></div>
+              <div class="meter-seg seg-high" title="51-75: High"></div>
+              <div class="meter-seg seg-crit" title="76-100: Critical"></div>
+            </div>
+            <div class="risk-meter-labels">
+              <span>Safe</span>
+              <span>Moderate</span>
+              <span>High</span>
+              <span>Critical</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Telemetry Tiles + Signals + Recommendations -->
+        <div>
+          
+          <!-- 4 Telemetry Tiles -->
+          <div class="telemetry-grid">
+            
+            <!-- Tile 1: Transport & Encryption -->
+            <div class="telemetry-card">
+              <div class="tile-icon-box" id="tile-icon-protocol">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+              <div>
+                <div class="tile-label">Transport Protocol</div>
+                <div class="tile-value" id="tile-val-protocol">TLS / HTTPS Encrypted</div>
+                <div class="tile-subtext" id="tile-sub-protocol">Secure communications channel</div>
+              </div>
+            </div>
+
+            <!-- Tile 2: Domain & TLD -->
+            <div class="telemetry-card">
+              <div class="tile-icon-box" id="tile-icon-tld">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+              </div>
+              <div>
+                <div class="tile-label">Top-Level Domain (TLD)</div>
+                <div class="tile-value" id="tile-val-tld">Standard Namespace</div>
+                <div class="tile-subtext" id="tile-sub-tld">Established domain extension</div>
+              </div>
+            </div>
+
+            <!-- Tile 3: Brand & Homoglyphs -->
+            <div class="telemetry-card">
+              <div class="tile-icon-box" id="tile-icon-brand">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <div>
+                <div class="tile-label">Impersonation Analysis</div>
+                <div class="tile-value" id="tile-val-brand">Clean / No Spoofing</div>
+                <div class="tile-subtext" id="tile-sub-brand">Homoglyphs and brand checks passed</div>
+              </div>
+            </div>
+
+            <!-- Tile 4: Community Threat DB -->
+            <div class="telemetry-card">
+              <div class="tile-icon-box" id="tile-icon-db">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </div>
+              <div>
+                <div class="tile-label">Community Intel Status</div>
+                <div class="tile-value" id="tile-val-db">No Active Flags</div>
+                <div class="tile-subtext" id="tile-sub-db">Checked against live fraud reports</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Forensic Signals Card -->
+          <div class="signals-card">
+            <div class="signals-card-header">
+              <h3 class="signals-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                Detected Signals & Heuristic Indicators
+                <span class="signals-count-pill" id="signals-count-pill">0</span>
+              </h3>
+            </div>
+
+            <div id="signals-container">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Incident Playbook / Recommendation Box -->
+          <div class="playbook-card" id="recommendation-box">
+            <div class="playbook-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Security Recommendations & Advisory Guidance
+            </div>
+            <ul class="playbook-list" id="recommendation-text">
+              <li>Evaluating contextual safety recommendations...</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Inline Quick Scanner Bar -->
+      <div class="quick-scanner-bar">
+        <div>
+          <div style="font-size: 1.05rem; font-weight: 800; color: var(--ink-900, #0A0F1E); margin-bottom: 2px;">
+            Verify Another Target
+          </div>
+          <div style="font-size: 0.8125rem; color: var(--ink-500, #4B5570);">
+            Analyze suspicious websites, payment links, phone numbers, or UPI IDs instantly.
+          </div>
+        </div>
+
+        <form id="inline-scan-form" onsubmit="event.preventDefault(); submitInlineScan();" style="display: flex; gap: 10px; flex: 1; max-width: 580px;">
+          <div class="quick-scan-input-group">
+            <input type="text" class="quick-scan-input" id="inline-scan-input" placeholder="e.g. sbi-secure-portal.com, 9876543210, merchant@upi..." required />
+          </div>
+          <button type="submit" class="btn-quick-scan">
+            <span>Scan Now</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="result-toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="result-toast-text">Action completed successfully.</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       V5 ULTRA PREMIUM FOOTER (LIGHT THEME)
+  ════════════════════════════════════════════ -->
+  <footer class="footer-premium">
+    
+    <div class="footer-bg-glow"></div>
+
+    <div class="container" style="position: relative; z-index: 2;">
+      
+      <div class="footer-grid">
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="check.html" class="footer-link"><span>Live Check</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="reports.html" class="footer-link"><span>Threat Reports</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="dashboard.html" class="footer-link"><span>Dashboard</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="admin_dashboard.html" class="footer-link"><span>Admin Moderation</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="learn.html" class="footer-link"><span>Safety Academy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="blog.html" class="footer-link"><span>Blog</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="about.html" class="footer-link"><span>About Us</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Community</div>
+          <ul class="footer-links-list">
+            <li><a href="https://github.com/infraud" class="footer-link"><span>GitHub</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="report.html" class="footer-link"><span>Report a Scam</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="#" class="footer-link"><span>Privacy Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            <li><a href="#" class="footer-link"><span>Terms of Service</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-huge-mark">INFRAUD</div>
+
+      <div class="footer-bottom">
+        <div class="footer-copyright">&copy; 2026 INFRAUD. All rights reserved.</div>
+        <div class="footer-status">
+          <span class="status-indicator"></span>
+          All systems operational
+        </div>
+      </div>
+
+    </div>
+
+    <style>
+      .footer-premium {
+        position: relative;
+        background: linear-gradient(180deg, var(--page, #F7F8FC) 0%, #FFFFFF 100%);
+        border-top: 1px solid var(--ink-100, #E8EBF3);
+        padding: 80px 0 32px;
+        font-family: var(--font, 'Inter', sans-serif);
+        color: var(--ink-700, #1E2742);
+        overflow: hidden;
+      }
+
+      .footer-bg-glow {
+        position: absolute;
+        bottom: -150px; left: 50%;
+        transform: translateX(-50%);
+        width: 80vw; height: 300px;
+        background: radial-gradient(ellipse at center, rgba(37,99,235,0.06) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 1;
+      }
+      
+      .footer-grid {
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+        margin-bottom: 64px;
+      }
+      .footer-col-title { font-size: 0.8125rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+      .footer-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500;
+        transition: all 0.2s;
+      }
+      .footer-link svg { opacity: 0; transform: translateX(-4px); transition: all 0.2s; color: var(--blue-600, #2563EB); }
+      .footer-link:hover { color: var(--ink-900, #0A0F1E); }
+      .footer-link:hover svg { opacity: 1; transform: translateX(0); }
+
+      .footer-huge-mark {
+        font-size: clamp(4rem, 14vw, 15rem);
+        font-weight: 900;
+        line-height: 0.8;
+        text-align: center;
+        color: var(--ink-100, #E8EBF3);
+        opacity: 0.6;
+        letter-spacing: -0.05em;
+        user-select: none;
+        margin-bottom: -1vw;
+      }
+
+      .footer-bottom {
+        display: flex; justify-content: space-between; align-items: center;
+        padding-top: 32px; border-top: 1px solid var(--ink-100, #E8EBF3);
+        font-size: 0.875rem; color: var(--ink-500, #4B5570);
+        position: relative; z-index: 2;
+      }
+      .footer-status {
+        display: flex; align-items: center; gap: 10px;
+        padding: 6px 14px; background: #fff; border-radius: 100px;
+        font-weight: 600; font-size: 0.8125rem; border: 1px solid var(--ink-100, #E8EBF3);
+        box-shadow: 0 2px 8px rgba(10,15,30,.04);
+      }
+      .status-indicator {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--green-500, #10B981);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        animation: statusPulse 2s infinite;
+      }
+      @keyframes statusPulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+
+      @media (max-width: 900px) {
+        .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 32px; }
+        .footer-huge-mark { display: none; }
+      }
+      @media (max-width: 600px) {
+        .footer-grid { grid-template-columns: 1fr; }
+        .footer-bottom { flex-direction: column; gap: 24px; text-align: center; }
+      }
+    </style>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/analyzer.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "infraud",
+  "version": "1.0.0",
+  "description": "INFRAUD.org - Check Before You Trust",
+  "scripts": {
+    "start": "npx -y http-server frontend -p 8080 -c-1",
+    "dev": "npx -y http-server frontend -p 8080 -c-1",
+    "serve": "npx -y http-server frontend -p 8080 -c-1"
+  },
+  "keywords": [
+    "infraud",
+    "fraud-prevention",
+    "security"
+  ],
+  "author": "",
+  "license": "MIT"
+}

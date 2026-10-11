@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="INFRAUD Threat Reports — Live database of reported digital threats." />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Threat Reports | INFRAUD</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
@@ -227,6 +230,19 @@
       font-weight: 500;
       white-space: nowrap;
     }
+    .pulse-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
   </style>
 </head>
 <body>
@@ -252,6 +268,7 @@
 
       <!-- Actions -->
       <div class="nav-edge-actions">
+        <a href="login.html" style="margin-right: 15px; text-decoration: none; font-weight: 500; font-size: 0.9rem; color: #a1a1aa; transition: color 0.3s ease;" class="nav-edge-login">Login</a>
         <a href="/#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
           Get Started
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
@@ -303,7 +320,11 @@
       .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
       
       @media (max-width: 900px) {
-        .nav-edge-menu { display: none; }
+        .nav-edge-menu { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.98); padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); gap: 8px; transform: none; }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a { width: 100%; text-align: left; padding: 12px; border-radius: 8px; }
+        .nav-edge-menu a:hover, .nav-edge-menu a.active { background: rgba(37, 99, 235, 0.05); }
+        .nav-edge-menu a::after { display: none; }
         .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
         .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
       }
@@ -319,6 +340,15 @@
             }
         }
       }, { passive: true });
+
+      // Hamburger menu toggle
+      const hamburger = document.querySelector('.nav-edge-hamburger');
+      const navEdge = document.querySelector('.nav-edge');
+      if(hamburger && navEdge) {
+        hamburger.addEventListener('click', () => {
+          navEdge.classList.toggle('mobile-open');
+        });
+      }
     </script>
   </header>
 
@@ -335,23 +365,52 @@
 
     <section class="reports-container">
       
+      <!-- Submitted notification banner -->
+      <div id="pending-alert-banner" style="display: none; margin-bottom: 20px; padding: 16px 20px; border-radius: 12px; background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.2); color: var(--ink-800, #0A0F1E); font-size: 0.9375rem; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.35rem;">⏳</span>
+          <div>
+            <strong>Report Submitted for Moderation!</strong>
+            <div style="font-size: 0.8125rem; color: var(--ink-500, #4B5570); margin-top: 2px;">Your threat report has been sent to Admin review. Once approved, it will be published live to this feed for 24 hours.</div>
+          </div>
+        </div>
+        <a href="admin_dashboard.html" style="font-size: 0.8125rem; font-weight: 700; color: #2563EB; text-decoration: none; padding: 8px 16px; background: #fff; border-radius: 8px; border: 1px solid rgba(37,99,235,0.25); box-shadow: 0 2px 6px rgba(37,99,235,0.08); white-space: nowrap;">
+          Admin: Review & Approve &rarr;
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 600; color: var(--ink-500, #4B5570); background: #FFFFFF; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--ink-100, #E8EBF3);">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.2);"></span>
+          <span>Live Community Stream &bull; Reports stay active for <strong>24 hours</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <a id="admin-pending-link" href="admin_dashboard.html" style="display: none; align-items: center; gap: 6px; font-size: 0.8125rem; font-weight: 700; color: #D97706; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); padding: 6px 14px; border-radius: 100px; text-decoration: none; transition: transform 0.2s;">
+            <span>⏳</span> <span id="pending-count-text">0 Pending Review</span> &bull; <u>Admin Review</u>
+          </a>
+          <div id="reports-count-pill" style="font-size: 0.8125rem; font-weight: 700; color: var(--blue-600, #2563EB); background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.15); padding: 6px 14px; border-radius: 100px;">
+            5 active reports
+          </div>
+        </div>
+      </div>
+
       <div class="controls-bar">
         <div class="search-input-wrap">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="reports-search" placeholder="Search URLs, phone numbers, UPI IDs..." />
+          <input type="text" id="reports-search" class="reports-search" placeholder="Search URLs, phone numbers, UPI IDs, evidence..." />
         </div>
-        <select class="filter-select">
-          <option>All Types</option>
-          <option>Website / URL</option>
-          <option>Phone Number</option>
-          <option>UPI ID</option>
-          <option>Email</option>
+        <select class="filter-select" id="filter-type">
+          <option value="All">All Types</option>
+          <option value="Website">Website</option>
+          <option value="Phone">Phone Number</option>
+          <option value="UPI ID">UPI ID</option>
+          <option value="Email">Email</option>
         </select>
-        <select class="filter-select">
-          <option>All Risk Levels</option>
-          <option>Critical Risk</option>
-          <option>Suspicious</option>
-          <option>Safe</option>
+        <select class="filter-select" id="filter-risk">
+          <option value="All">All Risk Levels</option>
+          <option value="Critical">Critical</option>
+          <option value="High Risk">High Risk</option>
+          <option value="Low Risk">Safe / Low Risk</option>
         </select>
       </div>
 
@@ -366,68 +425,258 @@
               <th>Reported</th>
             </tr>
           </thead>
-          <tbody>
-            
-            <tr>
-              <td class="td-identifier">
-                <div class="type-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
-                amazon-support-india.in
-              </td>
-              <td class="td-type">Website</td>
-              <td><span class="risk-badge risk-critical">Critical</span></td>
-              <td class="td-evidence">Impersonates Amazon. Asks for OTP and card details. Multiple reports.</td>
-              <td class="td-date">Just now</td>
-            </tr>
-
-            <tr>
-              <td class="td-identifier">
-                <div class="type-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-                +91 98765 43210
-              </td>
-              <td class="td-type">Phone</td>
-              <td><span class="risk-badge risk-high">High Risk</span></td>
-              <td class="td-evidence">FedEx parcel scam call. Threatens legal action.</td>
-              <td class="td-date">12 mins ago</td>
-            </tr>
-
-            <tr>
-              <td class="td-identifier">
-                <div class="type-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-                paytm-kyc-verify@gmail.com
-              </td>
-              <td class="td-type">Email</td>
-              <td><span class="risk-badge risk-critical">Critical</span></td>
-              <td class="td-evidence">Fake KYC notice. Uses generic gmail address instead of official domain.</td>
-              <td class="td-date">1 hr ago</td>
-            </tr>
-
-            <tr>
-              <td class="td-identifier">
-                <div class="type-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                johndoe@ybl
-              </td>
-              <td class="td-type">UPI ID</td>
-              <td><span class="risk-badge risk-low">Low Risk</span></td>
-              <td class="td-evidence">Verified merchant account. No suspicious activity found in recent transactions.</td>
-              <td class="td-date">3 hrs ago</td>
-            </tr>
-            
-            <tr>
-              <td class="td-identifier">
-                <div class="type-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
-                flipkart-big-billion-offers.link
-              </td>
-              <td class="td-type">Website</td>
-              <td><span class="risk-badge risk-high">High Risk</span></td>
-              <td class="td-evidence">Non-standard TLD. Cloned interface of e-commerce site.</td>
-              <td class="td-date">5 hrs ago</td>
-            </tr>
-
+          <tbody id="reports-tbody">
+            <!-- Dynamically populated from localStorage & automatically pruned after 24 hours -->
           </tbody>
         </table>
       </div>
 
     </section>
+
+    <script>
+      // 24-HOUR RETENTION COMMUNITY REPORT SYSTEM
+      const STORAGE_KEY = 'infraud_community_reports';
+      const RETENTION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+      // Seed reports preserved from original demo UI (timestamps relative to now)
+      const SEED_REPORTS = [
+        {
+          id: 'seed-1',
+          identifier: 'amazon-support-india.in',
+          type: 'Website',
+          risk: 'Critical',
+          evidence: 'Impersonates Amazon. Asks for OTP and card details. Multiple reports.',
+          timestamp: Date.now() - (2 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (2 * 60 * 1000)
+        },
+        {
+          id: 'seed-2',
+          identifier: '+91 98765 43210',
+          type: 'Phone',
+          risk: 'High Risk',
+          evidence: 'FedEx parcel scam call. Threatens legal action.',
+          timestamp: Date.now() - (12 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (12 * 60 * 1000)
+        },
+        {
+          id: 'seed-3',
+          identifier: 'paytm-kyc-verify@gmail.com',
+          type: 'Email',
+          risk: 'Critical',
+          evidence: 'Fake KYC notice. Uses generic gmail address instead of official domain.',
+          timestamp: Date.now() - (60 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (60 * 60 * 1000)
+        },
+        {
+          id: 'seed-4',
+          identifier: 'johndoe@ybl',
+          type: 'UPI ID',
+          risk: 'Low Risk',
+          evidence: 'Verified merchant account. No suspicious activity found in recent transactions.',
+          timestamp: Date.now() - (3 * 60 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (3 * 60 * 60 * 1000)
+        },
+        {
+          id: 'seed-5',
+          identifier: 'flipkart-big-billion-offers.link',
+          type: 'Website',
+          risk: 'High Risk',
+          evidence: 'Non-standard TLD. Cloned interface of e-commerce site.',
+          timestamp: Date.now() - (5 * 60 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (5 * 60 * 60 * 1000)
+        }
+      ];
+
+      function updatePendingBadge(pendingCount) {
+        const pendingLink = document.getElementById('admin-pending-link');
+        const pendingText = document.getElementById('pending-count-text');
+        if (pendingLink && pendingText) {
+          if (pendingCount > 0) {
+            pendingText.textContent = `${pendingCount} Pending Review`;
+            pendingLink.style.display = 'inline-flex';
+          } else {
+            pendingLink.style.display = 'none';
+          }
+        }
+      }
+
+      async function getActiveReports() {
+        // 1. Try central server API first
+        try {
+          const res = await fetch('/api/reports');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.reports)) {
+              updatePendingBadge(data.pendingCount || 0);
+              // Sync to localStorage as offline cache
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data.reports)); } catch(e){}
+              return data.reports;
+            }
+          }
+        } catch (e) {
+          console.warn('API fetch failed, falling back to local storage', e);
+        }
+
+        // 2. Fallback to localStorage if server API is unavailable
+        let reports = [];
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            reports = JSON.parse(raw);
+          } else {
+            reports = [...SEED_REPORTS];
+          }
+        } catch (e) {
+          reports = [...SEED_REPORTS];
+        }
+
+        const now = Date.now();
+        const pendingCount = reports.filter(r => r.status === 'pending').length;
+        updatePendingBadge(pendingCount);
+
+        const approvedOnly = reports.filter(r => {
+          if (r.status !== 'approved') return false;
+          const liveTime = r.approvedAt || r.timestamp || 0;
+          return (now - liveTime) < RETENTION_MS;
+        });
+
+        return approvedOnly;
+      }
+
+      function formatRelativeTime(timestamp) {
+        const diff = Date.now() - timestamp;
+        if (diff < 60000) return 'Just now';
+        const mins = Math.floor(diff / 60000);
+        if (mins < 60) return `${mins} min${mins === 1 ? '' : 's'} ago`;
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return `${hours} hr${hours === 1 ? '' : 's'} ago`;
+        return 'Expired';
+      }
+
+      function getTypeIcon(type) {
+        const lower = (type || '').toLowerCase();
+        if (lower.includes('phone')) {
+          return '<div class="type-icon" title="Phone Threat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>';
+        } else if (lower.includes('email')) {
+          return '<div class="type-icon" title="Email Threat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>';
+        } else if (lower.includes('upi')) {
+          return '<div class="type-icon" title="UPI Fraud"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>';
+        } else {
+          return '<div class="type-icon" title="Website / Link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>';
+        }
+      }
+
+      function getRiskBadge(risk) {
+        const lower = (risk || '').toLowerCase();
+        if (lower.includes('critical')) {
+          return '<span class="risk-badge risk-critical">Critical</span>';
+        } else if (lower.includes('low') || lower.includes('safe')) {
+          return '<span class="risk-badge risk-low">Low Risk</span>';
+        } else {
+          return '<span class="risk-badge risk-high">High Risk</span>';
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      async function renderReports() {
+        const active = await getActiveReports();
+        const search = (document.getElementById('reports-search')?.value || '').toLowerCase().trim();
+        const typeFilter = document.getElementById('filter-type')?.value || 'All';
+        const riskFilter = document.getElementById('filter-risk')?.value || 'All';
+        const tbody = document.getElementById('reports-tbody');
+        const countPill = document.getElementById('reports-count-pill');
+
+        if (countPill) {
+          countPill.textContent = `${active.length} active report${active.length === 1 ? '' : 's'}`;
+        }
+
+        const filtered = active.filter(r => {
+          // Search matching identifier or evidence or type
+          const matchesSearch = !search ||
+            (r.identifier && r.identifier.toLowerCase().includes(search)) ||
+            (r.evidence && r.evidence.toLowerCase().includes(search)) ||
+            (r.type && r.type.toLowerCase().includes(search));
+
+          // Type filter
+          const matchesType = typeFilter === 'All' || (r.type && r.type.toLowerCase().includes(typeFilter.toLowerCase()));
+
+          // Risk filter
+          const matchesRisk = riskFilter === 'All' || (r.risk && r.risk.toLowerCase().includes(riskFilter.toLowerCase()));
+
+          return matchesSearch && matchesType && matchesRisk;
+        });
+
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 48px 24px; color: var(--ink-400, #94A3B8);">
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 6px;">No reports found</div>
+                <div style="font-size: 0.875rem;">No active reports in the last 24 hours match your filters.</div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(r => {
+          const liveTime = r.approvedAt || r.timestamp || Date.now();
+          const timeAgo = formatRelativeTime(liveTime);
+          const remainingHours = Math.max(0, Math.ceil((RETENTION_MS - (Date.now() - liveTime)) / 3600000));
+          return `
+            <tr>
+              <td class="td-identifier">
+                ${getTypeIcon(r.type)}
+                <span>${escapeHtml(r.identifier || 'Unknown')}</span>
+              </td>
+              <td class="td-type">${escapeHtml(r.type || 'Website')}</td>
+              <td>${getRiskBadge(r.risk)}</td>
+              <td class="td-evidence">${escapeHtml(r.evidence || 'No details provided.')}</td>
+              <td class="td-date" title="Stays active for ~${remainingHours}h more (${timeAgo})">${timeAgo}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Check for submission redirect alert
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'submitted') {
+          const banner = document.getElementById('pending-alert-banner');
+          if (banner) banner.style.display = 'flex';
+        }
+
+        renderReports();
+
+        document.getElementById('reports-search')?.addEventListener('input', renderReports);
+        document.getElementById('filter-type')?.addEventListener('change', renderReports);
+        document.getElementById('filter-risk')?.addEventListener('change', renderReports);
+
+        // Auto-refresh periodically to update relative times and auto-prune expired reports
+        setInterval(renderReports, 30000);
+
+        // Cross-tab real-time sync when a report is submitted
+        window.addEventListener('storage', (e) => {
+          if (e.key === STORAGE_KEY) {
+            renderReports();
+          }
+        });
+      });
+    </script>
   </main>
 
   <!-- PREMIUM FOOTER -->

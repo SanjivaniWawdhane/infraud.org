@@ -33,6 +33,13 @@ yarn-error.log*
 *.sln
 *.sw?
 
+# Scratch and temporary scripts
+scratch_*
+rebuild_*
+fix_*
+test_*
+*.tmp
+
 # OS generated files
 .DS_Store
 .DS_Store?
