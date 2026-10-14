@@ -17,6 +17,22 @@ try {
   console.warn('[Analyzer] Warning loading backend urlAnalyzer:', e.message);
 }
 
+let phoneAnalyzerService;
+try {
+  phoneAnalyzerService = require('../backend/src/services/phoneAnalyzer');
+  console.log('[Analyzer] Successfully loaded backend phoneAnalyzer service');
+} catch (e) {
+  console.warn('[Analyzer] Warning loading backend phoneAnalyzer:', e.message);
+}
+
+let upiAnalyzerService;
+try {
+  upiAnalyzerService = require('../backend/src/services/upiAnalyzer');
+  console.log('[Analyzer] Successfully loaded backend upiAnalyzer service');
+} catch (e) {
+  console.warn('[Analyzer] Warning loading backend upiAnalyzer:', e.message);
+}
+
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -253,29 +269,14 @@ async function handleRequest(req, res) {
     });
   }
 
-  // POST /api/analyze/url (Direct Heuristic Analyzer)
-  if (pathname === '/api/analyze/url' && method === 'POST') {
-    try {
-      const data = await parseRequestBody(req);
-      const urlToScan = data.url || data.query || '';
-      if (!urlAnalyzerService) {
-        try { urlAnalyzerService = require('../backend/src/services/urlAnalyzer'); } catch(e){}
-      }
-      if (urlAnalyzerService && typeof urlAnalyzerService.analyzeUrl === 'function') {
-        const result = urlAnalyzerService.analyzeUrl(urlToScan);
-        return sendJson(res, 200, result);
-      }
-      return sendJson(res, 500, { success: false, error: 'Analyzer service not initialized' });
-    } catch (err) {
-      return sendJson(res, 500, { success: false, error: err.message });
-    }
-  }
-
-  // POST /api/analyze/url (Direct heuristic URL scanner)
+  // POST /api/analyze/url (Direct Heuristic URL Scanner)
   if (pathname === '/api/analyze/url' && method === 'POST') {
     try {
       const data = await parseRequestBody(req);
       const targetUrl = data.url || data.query || '';
+      if (!urlAnalyzerService) {
+        try { urlAnalyzerService = require('../backend/src/services/urlAnalyzer'); } catch (e) {}
+      }
       if (!urlAnalyzerService) {
         return sendJson(res, 500, { success: false, message: 'URL Analyzer service not loaded' });
       }
@@ -284,6 +285,48 @@ async function handleRequest(req, res) {
         return sendJson(res, validation.statusCode || 400, { success: false, message: validation.error });
       }
       const result = urlAnalyzerService.analyzeUrl(targetUrl);
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 500, { success: false, message: err.message });
+    }
+  }
+
+  // POST /api/analyze/phone (Direct Telecom Heuristic Phone Scanner)
+  if (pathname === '/api/analyze/phone' && method === 'POST') {
+    try {
+      const data = await parseRequestBody(req);
+      const targetPhone = data.phone !== undefined ? data.phone : (data.number !== undefined ? data.number : data.query);
+      if (!phoneAnalyzerService) {
+        try { phoneAnalyzerService = require('../backend/src/services/phoneAnalyzer'); } catch (e) {}
+      }
+      if (!phoneAnalyzerService) {
+        return sendJson(res, 500, { success: false, message: 'Phone Analyzer service not loaded' });
+      }
+      const result = phoneAnalyzerService.analyzePhoneNumber(targetPhone, data.country || 'IN');
+      if (!result.success) {
+        return sendJson(res, result.statusCode || 400, { success: false, message: result.error });
+      }
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 500, { success: false, message: err.message });
+    }
+  }
+
+  // POST /api/analyze/upi (Direct NPCI Heuristic UPI Scanner)
+  if (pathname === '/api/analyze/upi' && method === 'POST') {
+    try {
+      const data = await parseRequestBody(req);
+      const upiId = data.upiId !== undefined ? data.upiId : (data.upi !== undefined ? data.upi : (data.handle !== undefined ? data.handle : data.query));
+      if (!upiAnalyzerService) {
+        try { upiAnalyzerService = require('../backend/src/services/upiAnalyzer'); } catch (e) {}
+      }
+      if (!upiAnalyzerService) {
+        return sendJson(res, 500, { success: false, message: 'UPI Analyzer service not loaded' });
+      }
+      const result = upiAnalyzerService.analyzeUpi(upiId);
+      if (!result.success) {
+        return sendJson(res, result.statusCode || 400, { success: false, message: result.error });
+      }
       return sendJson(res, 200, result);
     } catch (err) {
       return sendJson(res, 500, { success: false, message: err.message });

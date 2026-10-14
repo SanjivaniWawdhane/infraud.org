@@ -103,8 +103,64 @@ async function initAnalysis() {
         // Fallback: If backend is completely offline, generate accurate client-side heuristic evaluation
         resultData = evaluateUrlLocally(targetUrl);
       }
+    } else if (type === 'upi') {
+      const upiTarget = query.trim();
+      updateTargetTypeVisuals(upiTarget, 'upi');
+
+      // Try local frontend server endpoint first (/api/analyze/upi), fallback to port 5000 if needed
+      const endpoints = ['/api/analyze/upi', 'http://localhost:5000/api/analyze/upi'];
+      let lastErr = null;
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ upiId: upiTarget })
+          });
+          if (response.ok) {
+            resultData = await response.json();
+            break;
+          }
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      if (!resultData) {
+        // Fallback: If backend is offline, generate client-side heuristic evaluation
+        resultData = evaluateUpiLocally(upiTarget);
+      }
+    } else if (type === 'phone') {
+      const phoneTarget = query.trim();
+      updateTargetTypeVisuals(phoneTarget, 'phone');
+
+      // Try local frontend server endpoint first (/api/analyze/phone), fallback to port 5000 if needed
+      const endpoints = ['/api/analyze/phone', 'http://localhost:5000/api/analyze/phone'];
+      let lastErr = null;
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: phoneTarget })
+          });
+          if (response.ok) {
+            resultData = await response.json();
+            break;
+          }
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      if (!resultData) {
+        // Fallback: If backend is completely offline, generate accurate client-side phone evaluation
+        resultData = evaluatePhoneLocally(phoneTarget);
+      }
     } else {
-      // Non-URL targets: Phone number or UPI ID
+      // General non-URL targets (e.g. raw message)
       resultData = await evaluateNonUrlTarget(query, type);
     }
 
@@ -422,11 +478,42 @@ function populateTelemetryTiles(data, target) {
   const isHttps = /^https:\/\//i.test(target);
 
   if (currentTargetType === 'phone') {
-    if (valProto) valProto.textContent = 'Telecom Network';
-    if (subProto) subProto.textContent = 'GSM / SMS / Voice channel';
+    const lineType = (data.lineType || 'CELLULAR').toUpperCase();
+    if (valProto) {
+      if (lineType === 'TOLL_FREE') {
+        valProto.textContent = 'Toll-Free Helpline';
+        valProto.style.color = '#38BDF8';
+      } else if (lineType === 'PREMIUM_RATE') {
+        valProto.textContent = 'Premium Rate Line';
+        valProto.style.color = '#EF4444';
+      } else if (lineType === 'VOIP') {
+        valProto.textContent = 'VoIP Virtual Line';
+        valProto.style.color = '#F59E0B';
+      } else if (lineType === 'FIXED_LINE') {
+        valProto.textContent = 'Fixed-Line (Landline)';
+        valProto.style.color = 'var(--ink-900, #0A0F1E)';
+      } else {
+        valProto.textContent = 'Cellular Mobile';
+        valProto.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+    }
+    if (subProto) subProto.textContent = `Telecom Carrier Channel: ${lineType}`;
+    if (iconProto) {
+      iconProto.style.background = lineType === 'PREMIUM_RATE' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(37, 99, 235, 0.1)';
+      iconProto.style.color = lineType === 'PREMIUM_RATE' ? '#EF4444' : '#2563EB';
+    }
   } else if (currentTargetType === 'upi') {
-    if (valProto) valProto.textContent = 'NPCI Virtual Address';
-    if (subProto) subProto.textContent = 'Unified Payments Interface standard';
+    if (valProto) {
+      valProto.textContent = 'NPCI UPI VPA';
+      valProto.style.color = 'var(--ink-900, #0A0F1E)';
+    }
+    if (subProto) {
+      subProto.textContent = data.handleDetails ? `Handle: @${data.handleDetails.psp}` : 'Unified Payments Interface standard';
+    }
+    if (iconProto) {
+      iconProto.style.background = 'rgba(37, 99, 235, 0.1)';
+      iconProto.style.color = '#2563EB';
+    }
   } else {
     if (isHttp) {
       if (valProto) {
@@ -451,7 +538,7 @@ function populateTelemetryTiles(data, target) {
     }
   }
 
-  // 2. TLD Tile
+  // 2. TLD / PSP Tile
   const valTld = document.getElementById('tile-val-tld');
   const subTld = document.getElementById('tile-sub-tld');
   const iconTld = document.getElementById('tile-icon-tld');
@@ -479,8 +566,29 @@ function populateTelemetryTiles(data, target) {
       iconTld.style.color = '#EF4444';
     }
   } else if (currentTargetType === 'phone') {
-    if (valTld) valTld.textContent = 'Indian Country Code (+91)';
-    if (subTld) subTld.textContent = 'National numbering plan format';
+    const countryName = data.normalized ? data.normalized.countryName : 'India';
+    const callingCode = data.normalized ? data.normalized.callingCode : '+91';
+    const isDomestic = !data.normalized || data.normalized.countryCode === 'IN';
+    if (valTld) {
+      valTld.textContent = `${countryName} (${callingCode})`;
+      valTld.style.color = isDomestic ? 'var(--ink-900, #0A0F1E)' : '#D97706';
+    }
+    if (subTld) {
+      subTld.textContent = isDomestic ? 'Domestic Indian numbering plan' : 'International dialing origin';
+    }
+    if (iconTld) {
+      iconTld.style.background = isDomestic ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+      iconTld.style.color = isDomestic ? '#059669' : '#D97706';
+    }
+  } else if (currentTargetType === 'upi') {
+    const isRec = data.handleDetails && data.handleDetails.isRecognizedPsp;
+    if (valTld) {
+      valTld.textContent = data.handleDetails ? `@${data.handleDetails.psp.toUpperCase()}` : 'VPA Banking Extension';
+      valTld.style.color = isRec ? 'var(--ink-900, #0A0F1E)' : '#F59E0B';
+    }
+    if (subTld) {
+      subTld.textContent = isRec ? 'Recognized NPCI Banking PSP handle' : 'Custom or cooperative banking handle';
+    }
   } else {
     if (valTld) valTld.textContent = 'VPA Banking Extension';
     if (subTld) subTld.textContent = 'Standardized PSP routing handle';
@@ -491,14 +599,53 @@ function populateTelemetryTiles(data, target) {
   const subBrand = document.getElementById('tile-sub-brand');
   const iconBrand = document.getElementById('tile-icon-brand');
 
-  const brandSignal = (data.signals || []).find(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'HOMOGLYPH_ATTACK');
+  const brandSignal = (data.signals || []).find(s => 
+    s.id === 'BRAND_IMPERSONATION' || 
+    s.id === 'BRAND_IMPERSONATION_HANDLE' || 
+    s.id === 'HOMOGLYPH_ATTACK' || 
+    s.id === 'SOCIAL_ENGINEERING_HANDLE'
+  );
 
-  if (brandSignal) {
+  if (currentTargetType === 'phone') {
+    const isTrai140 = (data.signals || []).some(s => s.id === 'TRAI_140_TELEMARKETING');
+    const isTrai160 = (data.signals || []).some(s => s.id === 'TRAI_160_TRANSACTIONAL');
+    const status = data.validationStatus || 'VALID';
+
     if (valBrand) {
-      valBrand.textContent = 'Impersonation Suspected';
+      if (isTrai140) {
+        valBrand.textContent = 'TRAI 140 Series';
+        valBrand.style.color = '#F59E0B';
+      } else if (isTrai160) {
+        valBrand.textContent = 'TRAI 160 Series';
+        valBrand.style.color = '#2563EB';
+      } else if (status === 'VALID') {
+        valBrand.textContent = 'E.164 Validated Plan';
+        valBrand.style.color = '#059669';
+      } else if (status === 'POSSIBLE') {
+        valBrand.textContent = 'Unassigned Block';
+        valBrand.style.color = '#F59E0B';
+      } else {
+        valBrand.textContent = 'Malformed Format';
+        valBrand.style.color = '#EF4444';
+      }
+    }
+    if (subBrand) {
+      if (isTrai140) subBrand.textContent = 'Commercial promotional telemarketing prefix';
+      else if (isTrai160) subBrand.textContent = 'Official financial entity service call';
+      else if (status === 'VALID') subBrand.textContent = 'Standard national telecom allocation';
+      else subBrand.textContent = 'Does not match standard operator numbering plan';
+    }
+    if (iconBrand) {
+      const isNegative = isTrai140 || status === 'MALFORMED';
+      iconBrand.style.background = isNegative ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)';
+      iconBrand.style.color = isNegative ? '#EF4444' : '#059669';
+    }
+  } else if (brandSignal) {
+    if (valBrand) {
+      valBrand.textContent = brandSignal.id === 'SOCIAL_ENGINEERING_HANDLE' ? 'Scam Keywords' : 'Impersonation Suspected';
       valBrand.style.color = '#EF4444';
     }
-    if (subBrand) subBrand.textContent = brandSignal.title || 'Brand mimicry identified';
+    if (subBrand) subBrand.textContent = brandSignal.title || 'Brand or refund mimicry identified';
     if (iconBrand) {
       iconBrand.style.background = 'rgba(239, 68, 68, 0.1)';
       iconBrand.style.color = '#EF4444';
@@ -508,7 +655,7 @@ function populateTelemetryTiles(data, target) {
       valBrand.textContent = 'Clean / No Spoofing';
       valBrand.style.color = 'var(--ink-900, #0A0F1E)';
     }
-    if (subBrand) subBrand.textContent = 'Zero brand spoofing or homoglyphs';
+    if (subBrand) subBrand.textContent = 'Zero brand spoofing or deceptive keywords';
     if (iconBrand) {
       iconBrand.style.background = 'rgba(16, 185, 129, 0.1)';
       iconBrand.style.color = '#059669';
@@ -693,51 +840,218 @@ function evaluateUrlLocally(rawUrl) {
 }
 
 /**
- * Handles Phone and UPI targets
+ * Fallback client-side heuristic evaluator for Phone numbers when backend is offline
+ */
+function evaluatePhoneLocally(query) {
+  const trimmed = (query || '').trim();
+  const digits = trimmed.replace(/\D/g, '');
+  const hasLetters = /[a-zA-Z]/.test(trimmed);
+  const signals = [];
+  let score = 15;
+
+  if (hasLetters || digits.length < 4) {
+    return {
+      riskScore: 65,
+      riskLevel: 'high',
+      validationStatus: 'MALFORMED',
+      assessmentStatus: 'heuristic_signals_detected',
+      signals: [{
+        id: 'MALFORMED_INPUT_SYNTAX',
+        title: 'Malformed Phone Number Syntax',
+        description: 'Input contains non-numeric characters or too few digits to represent a telephone numbering plan.',
+        severity: 'high'
+      }],
+      recommendations: [
+        'Verify digits and country code before placing calls or replying to SMS.',
+        'Never return calls to garbled or automated international caller IDs.'
+      ],
+      target: query,
+      disclaimer: 'This evaluation verifies telephone numbering plan syntax only. It does not verify subscriber identity.'
+    };
+  }
+
+  // Check for TRAI 140 commercial telemarketing
+  if (/^(\+?91)?140\d{7}$/.test(digits)) {
+    signals.push({
+      id: 'TRAI_140_TELEMARKETING',
+      title: 'TRAI 140 Series (Commercial Telemarketing)',
+      description: 'Reserved strictly for commercial telemarketing and promotional calls under DoT/TRAI regulations.',
+      severity: 'medium'
+    });
+    score += 25;
+  }
+
+  // Check for Toll-Free 1800
+  const isTollFree = /^(\+?91)?1800\d{6,7}$/.test(digits);
+  if (isTollFree) {
+    signals.push({
+      id: 'TOLL_FREE_NUMBER',
+      title: 'Toll-Free Telecommunications Line',
+      description: 'Standard toll-free helpline number. Scammers often post fake support numbers online.',
+      severity: 'low'
+    });
+  }
+
+  // Standard Indian 10-digit mobile
+  const isIndianMobile = /^(\+?91|0)?[6-9]\d{9}$/.test(digits);
+  if (isIndianMobile) {
+    if (signals.length === 0) {
+      signals.push({
+        id: 'VALID_TELECOM_PLAN',
+        title: 'Standard Telecom Numbering Plan',
+        description: 'Complies with Indian National Numbering Plan (DoT). Assigned to mobile cellular block.',
+        severity: 'low'
+      });
+    }
+  }
+
+  const riskScore = Math.min(100, score);
+  const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore >= 20 ? 'medium' : 'low'));
+  const assessmentStatus = signals.length > 0 && signals[0].id !== 'VALID_TELECOM_PLAN' ? 'heuristic_signals_detected' : 'insufficient_evidence';
+
+  return {
+    riskScore,
+    riskLevel,
+    lineType: isTollFree ? 'TOLL_FREE' : (isIndianMobile ? 'MOBILE' : 'CELLULAR'),
+    validationStatus: (isIndianMobile || isTollFree) ? 'VALID' : 'POSSIBLE',
+    assessmentStatus,
+    signalsCount: signals.length,
+    signals,
+    normalized: {
+      e164: digits.length === 10 ? `+91${digits}` : `+${digits}`,
+      countryCode: 'IN',
+      countryName: 'India',
+      callingCode: '+91'
+    },
+    recommendations: [
+      'Never share OTPs, UPI PINs, or banking credentials with any caller.',
+      'Government and banking officials will never call demanding immediate funds transfers.'
+    ],
+    target: query,
+    disclaimer: 'Format and numbering-plan validation verifies telecommunications syntax only. It does not verify live subscriber identity or safety.'
+  };
+}
+
+/**
+ * Handles legacy non-URL targets
  */
 async function evaluateNonUrlTarget(query, type) {
-  let score = 0;
-  const signals = [];
-  const recommendations = [];
-
   if (type === 'phone') {
-    const cleanNum = query.replace(/[^\d+]/g, '');
-    const isIndianMobile = /^(\+91|91)?[6-9]\d{9}$/.test(cleanNum);
-
-    if (!isIndianMobile && cleanNum.length < 8) {
-      score = 30;
-      signals.push({
-        id: 'INVALID_PHONE_SYNTAX',
-        title: 'Non-Standard Phone Format',
-        description: 'Number does not conform to standardized mobile or landline numbering plans.',
-        severity: 'medium'
-      });
-    }
-
-    recommendations.push('Never share OTPs, UPI PINs, or banking SMS codes with unknown callers.');
-    recommendations.push('Government and banking officials will never call demanding immediate payment transfers.');
-
+    return evaluatePhoneLocally(query);
   } else if (type === 'upi') {
-    const isVpaValid = /^[\w.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(query);
-    if (!isVpaValid) {
-      score = 25;
-      signals.push({
-        id: 'UNUSUAL_VPA_SYNTAX',
-        title: 'Irregular UPI Handle Syntax',
-        description: 'VPA does not match standard Banking PSP format (user@bank).',
-        severity: 'medium'
-      });
-    }
-
-    recommendations.push('Remember: Entering your UPI PIN always sends money, it NEVER receives money.');
-    recommendations.push('Double check the beneficiary account name shown on the UPI app before confirming.');
+    return evaluateUpiLocally(query);
   }
 
   return {
-    riskScore: score,
-    riskLevel: score >= 50 ? 'high' : (score > 0 ? 'medium' : 'low'),
+    riskScore: 20,
+    riskLevel: 'low',
+    signals: [],
+    recommendations: ['Exercise caution with unfamiliar messages or communications.'],
+    target: query
+  };
+}
+
+/**
+ * Fallback client-side heuristic evaluator for UPI handles
+ */
+function evaluateUpiLocally(query) {
+  const trimmed = (query || '').trim().toLowerCase();
+  const signals = [];
+  let score = 0;
+
+  const atCount = (trimmed.match(/@/g) || []).length;
+  if (atCount !== 1) {
+    return {
+      riskScore: 30,
+      riskLevel: 'medium',
+      assessmentStatus: 'invalid_syntax',
+      signals: [{
+        id: 'INVALID_VPA_FORMAT',
+        title: 'Malformed UPI Handle Syntax',
+        description: 'UPI IDs must contain exactly one "@" separator between username and bank provider.',
+        severity: 'medium'
+      }],
+      recommendations: [
+        'Check that the UPI ID is formatted as username@bank (e.g. name@okhdfcbank).'
+      ],
+      target: query
+    };
+  }
+
+  const parts = trimmed.split('@');
+  const username = parts[0];
+  const psp = parts[1];
+
+  const knownPsps = new Set([
+    'okhdfcbank', 'okaxis', 'oksbi', 'okicici', 'paytm', 'ybl', 'ibl', 'axl', 'apl',
+    'fbl', 'barodampay', 'upi', 'idfcbank', 'freecharge', 'airtel', 'postbank', 'indus',
+    'kotak', 'dbs', 'citi', 'unionbank', 'federal', 'canarabank', 'centralbank', 'pnb'
+  ]);
+
+  const socialKeywords = [
+    'refund', 'cashback', 'lottery', 'reward', 'bonus', 'kyc', 'support',
+    'helpline', 'customercare', 'cbi', 'police', 'customs', 'fedex', 'arrest'
+  ];
+  const detectedKws = socialKeywords.filter(kw => username.includes(kw));
+  if (detectedKws.length > 0) {
+    signals.push({
+      id: 'SOCIAL_ENGINEERING_HANDLE',
+      title: 'High-Risk Deceptive Keywords in Handle',
+      description: `Handle contains keywords frequently associated with fraud: ${detectedKws.join(', ')}. Scammers often impersonate refund desks or official support.`,
+      severity: 'high'
+    });
+    score += 40;
+  }
+
+  const brands = ['sbi', 'hdfc', 'icici', 'axis', 'phonepe', 'paytm', 'googlepay', 'amazon', 'flipkart'];
+  const detectedBrands = brands.filter(b => username.includes(b));
+  if (detectedBrands.length > 0 && (detectedKws.length > 0 || !psp.includes(detectedBrands[0]))) {
+    signals.push({
+      id: 'BRAND_IMPERSONATION_HANDLE',
+      title: 'Suspected Brand Impersonation',
+      description: `Handle prefixes institution name '${detectedBrands[0]}' on third-party provider '@${psp}'. Legitimate businesses rarely receive customer funds on personal handles.`,
+      severity: 'high'
+    });
+    score += 35;
+  }
+
+  const isRecognizedPsp = knownPsps.has(psp);
+  if (!isRecognizedPsp) {
+    signals.push({
+      id: 'UNRECOGNIZED_PSP_HANDLE',
+      title: 'Uncommon or Non-Standard Bank PSP',
+      description: `Provider '@${psp}' is not in the common registry of high-volume NPCI banking handles.`,
+      severity: 'low'
+    });
+    score += 15;
+  }
+
+  const riskScore = Math.min(100, score);
+  const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore >= 20 ? 'medium' : 'low'));
+  const assessmentStatus = signals.length > 0 ? 'heuristic_signals_detected' : 'insufficient_evidence';
+
+  const recommendations = [
+    'Remember: Entering your UPI PIN always DEDUCTS money from your account. You NEVER need to enter a PIN to receive a refund or payment.',
+    'Always verify the registered account beneficiary name displayed in your banking app before confirming any transfer.'
+  ];
+
+  if (signals.length > 0) {
+    recommendations.push('Do NOT send money to unverified customer care or refund handles found on Google or social media.');
+  }
+
+  return {
+    riskScore,
+    riskLevel,
+    assessmentStatus,
+    signalsCount: signals.length,
     signals,
+    handleDetails: {
+      username,
+      psp,
+      isRecognizedPsp
+    },
     recommendations,
+    disclaimer: 'This evaluation is strictly based on transparent format heuristics and available reports. A low score does not guarantee that the recipient is trustworthy, nor does it confirm their identity.',
     target: query
   };
 }

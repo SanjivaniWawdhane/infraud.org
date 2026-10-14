@@ -489,6 +489,23 @@
                   if (input) input.focus();
                 }
               }
+
+              // Auto-activate tab from URL query parameter (e.g. check.html?type=upi)
+              document.addEventListener('DOMContentLoaded', () => {
+                const params = new URLSearchParams(window.location.search);
+                const typeParam = params.get('type');
+                if (typeParam) {
+                  const targetBtn = Array.from(document.querySelectorAll('.checker-tab')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${typeParam}'`));
+                  if (targetBtn) {
+                    setCheckerType(typeParam, targetBtn);
+                  }
+                }
+                const queryParam = params.get('query');
+                if (queryParam) {
+                  const input = document.getElementById('main-checker-input');
+                  if (input) input.value = queryParam;
+                }
+              });
             </script>
 
             <!-- Privacy Notice -->
