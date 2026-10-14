@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const ALT_PORT = 8080;
 const DATA_DIR = path.join(__dirname, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'reports.json');
 const RETENTION_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -209,7 +210,7 @@ function sendJson(res, statusCode, data) {
   res.end(JSON.stringify(data));
 }
 
-const server = http.createServer(async (req, res) => {
+async function handleRequest(req, res) {
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
   const method = req.method;
@@ -423,12 +424,25 @@ const server = http.createServer(async (req, res) => {
     const readStream = fs.createReadStream(filePath);
     readStream.pipe(res);
   });
-});
+}
+
+const server = http.createServer(handleRequest);
 
 server.listen(PORT, () => {
   console.log(`\n======================================================`);
-  console.log(`  INFRAUD SERVER RUNNING AT: http://localhost:${PORT}`);
+  console.log(`  🛡️ INFRAUD SERVER RUNNING AT: http://localhost:${PORT}`);
   console.log(`  Threat Reports API: http://localhost:${PORT}/api/reports`);
   console.log(`  Central Storage: ${DATA_FILE}`);
   console.log(`======================================================\n`);
 });
+
+if (!process.env.PORT && PORT !== ALT_PORT) {
+  try {
+    const altServer = http.createServer(handleRequest);
+    altServer.listen(ALT_PORT, () => {
+      console.log(`  🔗 Also accessible on fallback port: http://localhost:${ALT_PORT}\n`);
+    }).on('error', () => {
+      // Secondary port already in use or unavailable
+    });
+  } catch (e) {}
+}

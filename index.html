@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="INFRAUD — Verify suspicious websites, phone numbers, UPI IDs and messages instantly. Check before you trust." />
   <title>INFRAUD — Check Before You Trust</title>
+  <script>
+    // If arriving from Supabase password recovery or invite, immediately forward to reset-password
+    (function() {
+      try {
+        var h = window.location.hash || '';
+        if (h && (h.includes('type=recovery') || (h.includes('access_token=') && !h.includes('type=signup')))) {
+          window.location.replace('/reset-password' + h);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="css/style.css" />
   <style>
     /* ── Hero v2: Split Layout ─────────────────────── */
