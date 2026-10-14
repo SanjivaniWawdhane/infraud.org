@@ -4,6 +4,7 @@ const { analyzeUrl } = require('../services/urlAnalyzer');
 
 const { analyzePhoneNumber } = require('../services/phoneAnalyzer');
 const { analyzeUpi } = require('../services/upiAnalyzer');
+const { analyzeMessage } = require('../services/messageAnalyzer');
 
 /**
  * POST /api/analyze/url
@@ -122,6 +123,50 @@ router.post('/upi', (req, res, next) => {
     }
 
     const result = analyzeUpi(input);
+
+    if (!result.success) {
+      return res.status(result.statusCode || 400).json({
+        success: false,
+        error: 'Validation Error',
+        message: result.error
+      });
+    }
+
+    return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/analyze/message
+ * Analyzes an SMS, WhatsApp forward, or text message using rule-based heuristics.
+ * 
+ * Expected Request Body:
+ * { "message": "Your account is suspended..." } or { "query": "..." } or { "text": "..." }
+ */
+router.post('/message', (req, res, next) => {
+  try {
+    const body = req.body || {};
+    const input = body.message !== undefined ? body.message : (body.text !== undefined ? body.text : body.query);
+
+    if (input === undefined || input === null) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation Error',
+        message: 'Missing "message" property in request body. Expected: { "message": "Your text here" }'
+      });
+    }
+
+    if (typeof input !== 'string' || !input.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation Error',
+        message: 'A valid, non-empty message string is required in the request body.'
+      });
+    }
+
+    const result = analyzeMessage(input);
 
     if (!result.success) {
       return res.status(result.statusCode || 400).json({

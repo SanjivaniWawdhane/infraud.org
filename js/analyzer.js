@@ -159,8 +159,36 @@ async function initAnalysis() {
         // Fallback: If backend is completely offline, generate accurate client-side phone evaluation
         resultData = evaluatePhoneLocally(phoneTarget);
       }
+    } else if (type === 'message') {
+      const messageTarget = query.trim();
+      updateTargetTypeVisuals(messageTarget, 'message');
+
+      // Try local frontend server endpoint first (/api/analyze/message), fallback to port 5000 if needed
+      const endpoints = ['/api/analyze/message', 'http://localhost:5000/api/analyze/message'];
+      let lastErr = null;
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: messageTarget })
+          });
+          if (response.ok) {
+            resultData = await response.json();
+            break;
+          }
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      if (!resultData) {
+        // Fallback: If backend is completely offline, generate accurate client-side message evaluation
+        resultData = evaluateMessageLocally(messageTarget);
+      }
     } else {
-      // General non-URL targets (e.g. raw message)
+      // General non-URL targets (e.g. raw text)
       resultData = await evaluateNonUrlTarget(query, type);
     }
 
@@ -208,6 +236,19 @@ function updateTargetTypeVisuals(query, type) {
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="2" y="4" width="20" height="16" rx="2"></rect>
           <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+      `;
+    }
+  } else if (type === 'message') {
+    if (catTag) catTag.textContent = 'SMS / Chat Message';
+    if (protocolTag) {
+      protocolTag.textContent = 'Text Communication';
+      protocolTag.style.color = 'var(--blue-600, #2563EB)';
+    }
+    if (iconBox) {
+      iconBox.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       `;
     }
@@ -514,6 +555,20 @@ function populateTelemetryTiles(data, target) {
       iconProto.style.background = 'rgba(37, 99, 235, 0.1)';
       iconProto.style.color = '#2563EB';
     }
+  } else if (currentTargetType === 'message') {
+    if (valProto) {
+      valProto.textContent = 'SMS / Text Body';
+      valProto.style.color = 'var(--ink-900, #0A0F1E)';
+    }
+    if (subProto) {
+      const charLen = (data.metadata && data.metadata.charCount) || target.length;
+      const wordLen = (data.metadata && data.metadata.wordCount) || target.trim().split(/\s+/).filter(Boolean).length;
+      subProto.textContent = `Payload size: ${charLen} chars (${wordLen} words)`;
+    }
+    if (iconProto) {
+      iconProto.style.background = 'rgba(37, 99, 235, 0.1)';
+      iconProto.style.color = '#2563EB';
+    }
   } else {
     if (isHttp) {
       if (valProto) {
@@ -589,6 +644,39 @@ function populateTelemetryTiles(data, target) {
     if (subTld) {
       subTld.textContent = isRec ? 'Recognized NPCI Banking PSP handle' : 'Custom or cooperative banking handle';
     }
+  } else if (currentTargetType === 'message') {
+    const embeddedUrls = data.embeddedUrls || [];
+    const embeddedPhones = data.embeddedPhones || [];
+    const embeddedUpis = data.embeddedUpis || [];
+    const totalEmbedded = embeddedUrls.length + embeddedPhones.length + embeddedUpis.length;
+
+    if (totalEmbedded > 0) {
+      if (valTld) {
+        valTld.textContent = `${totalEmbedded} Extraction Vector${totalEmbedded > 1 ? 's' : ''}`;
+        valTld.style.color = embeddedUrls.length > 0 ? '#EF4444' : '#F59E0B';
+      }
+      if (subTld) {
+        const details = [];
+        if (embeddedUrls.length) details.push(`${embeddedUrls.length} link(s)`);
+        if (embeddedPhones.length) details.push(`${embeddedPhones.length} phone(s)`);
+        if (embeddedUpis.length) details.push(`${embeddedUpis.length} UPI(s)`);
+        subTld.textContent = `Extracted: ${details.join(', ')}`;
+      }
+      if (iconTld) {
+        iconTld.style.background = embeddedUrls.length > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+        iconTld.style.color = embeddedUrls.length > 0 ? '#EF4444' : '#F59E0B';
+      }
+    } else {
+      if (valTld) {
+        valTld.textContent = 'Zero Embedded Links';
+        valTld.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subTld) subTld.textContent = 'No external hyperlinks, call numbers, or UPI handles';
+      if (iconTld) {
+        iconTld.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconTld.style.color = '#059669';
+      }
+    }
   } else {
     if (valTld) valTld.textContent = 'VPA Banking Extension';
     if (subTld) subTld.textContent = 'Standardized PSP routing handle';
@@ -639,6 +727,39 @@ function populateTelemetryTiles(data, target) {
       const isNegative = isTrai140 || status === 'MALFORMED';
       iconBrand.style.background = isNegative ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)';
       iconBrand.style.color = isNegative ? '#EF4444' : '#059669';
+    }
+  } else if (currentTargetType === 'message') {
+    const signals = data.signals || [];
+    const otpSig = signals.find(s => s.id === 'OTP_CREDENTIAL_HARVESTING');
+    const apkSig = signals.find(s => s.id === 'UNVERIFIED_APK_DOWNLOAD');
+    const kycSig = signals.find(s => s.id === 'KYC_PAN_UPDATE_PHISHING');
+    const discSig = signals.find(s => s.id === 'DISCONNECTION_THREAT');
+    const jobSig = signals.find(s => s.id === 'FAKE_JOB_PART_TIME_OFFER');
+    const lotterySig = signals.find(s => s.id === 'LOTTERY_PRIZE_SCAM');
+    const urgencySig = signals.find(s => s.id === 'URGENCY_COERCION');
+
+    const topHazard = otpSig || apkSig || kycSig || discSig || jobSig || lotterySig || urgencySig;
+
+    if (topHazard) {
+      if (valBrand) {
+        valBrand.textContent = topHazard.title || 'Threat Vector Flagged';
+        valBrand.style.color = (topHazard.severity === 'critical') ? '#EF4444' : '#EA580C';
+      }
+      if (subBrand) subBrand.textContent = topHazard.description || 'Deceptive coercion pattern detected';
+      if (iconBrand) {
+        iconBrand.style.background = (topHazard.severity === 'critical') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(234, 88, 12, 0.1)';
+        iconBrand.style.color = (topHazard.severity === 'critical') ? '#EF4444' : '#EA580C';
+      }
+    } else {
+      if (valBrand) {
+        valBrand.textContent = 'Low Pressure Tone';
+        valBrand.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subBrand) subBrand.textContent = 'Zero coercive threats, OTP demands, or fake prizes';
+      if (iconBrand) {
+        iconBrand.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconBrand.style.color = '#059669';
+      }
     }
   } else if (brandSignal) {
     if (valBrand) {
@@ -940,6 +1061,8 @@ async function evaluateNonUrlTarget(query, type) {
     return evaluatePhoneLocally(query);
   } else if (type === 'upi') {
     return evaluateUpiLocally(query);
+  } else if (type === 'message') {
+    return evaluateMessageLocally(query);
   }
 
   return {
@@ -1057,6 +1180,194 @@ function evaluateUpiLocally(query) {
 }
 
 /**
+ * Fallback client-side heuristic evaluator for SMS/Chat messages if server is offline
+ */
+function evaluateMessageLocally(rawMessage) {
+  const text = (rawMessage || '').trim();
+  if (!text) {
+    return {
+      success: false,
+      riskScore: 0,
+      riskLevel: 'low',
+      assessmentStatus: 'insufficient_evidence',
+      signals: [],
+      recommendations: ['Please enter a message to analyze.'],
+      target: rawMessage
+    };
+  }
+
+  const signals = [];
+  let score = 0;
+
+  // 1. Extract embedded URLs
+  const urlRegex = /(?:https?:\/\/|www\.)[^\s<>"'{}|\\^`]+|[a-zA-Z0-9][-a-zA-Z0-9]{1,62}\.(?:com|org|net|in|co|xyz|top|link|live|app|download|online|site|club|vip|buzz|icu|shop|info|biz|me|cc|to|ly|io|gd)(?:\/[^\s<>"'{}|\\^`]*)?/gi;
+  const embeddedUrls = [];
+  let urlMatch;
+  while ((urlMatch = urlRegex.exec(text)) !== null) {
+    embeddedUrls.push(urlMatch[0]);
+  }
+
+  // 2. Extract embedded Phone numbers
+  const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?\d{3}[\s-]?\d{3,4}\b/g;
+  const embeddedPhones = (text.match(phoneRegex) || []).map(p => p.trim());
+
+  // 3. Extract UPI VPAs
+  const upiRegex = /[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}/g;
+  const embeddedUpis = (text.match(upiRegex) || []).map(u => u.trim());
+
+  // Threat Category 1: Credential / OTP Harvesting
+  const otpRegex = /(?:share|send|enter|give|provide|forward|verify).{0,35}(?:otp|one\s*time\s*password|pin|upi\s*pin|mpin|cvv|password|secret\s*code)/i;
+  if (otpRegex.test(text)) {
+    score += 45;
+    signals.push({
+      id: 'OTP_CREDENTIAL_HARVESTING',
+      title: 'Credential / OTP Harvesting Attempt',
+      description: 'Demands or asks to share one-time password (OTP), UPI PIN, or banking security credentials.',
+      severity: 'critical'
+    });
+  }
+
+  // Threat Category 2: Disconnection Threat (Electricity/Power)
+  const powerRegex = /(?:electricity|power|bijli|mseb|bses|dhbvn|tneb).{0,35}(?:disconnect|cut|suspend)/i;
+  if (powerRegex.test(text)) {
+    score += 40;
+    signals.push({
+      id: 'DISCONNECTION_THREAT',
+      title: 'Utility Disconnection Threat',
+      description: 'Threatens immediate disconnection of electricity/utility services to induce panic and extortion.',
+      severity: 'critical'
+    });
+  }
+
+  // Threat Category 3: Urgency & Coercion
+  const urgencyRegex = /(?:within\s*\d+\s*(?:mins?|minutes?|hours?)|immediate(?:ly)?|account\s*blocked|last\s*warning|final\s*notice|act\s*now)/i;
+  if (urgencyRegex.test(text)) {
+    score += 25;
+    signals.push({
+      id: 'URGENCY_COERCION',
+      title: 'Artificial Urgency & Coercion',
+      description: 'Applies psychological pressure with short deadlines or account closure threats.',
+      severity: 'high'
+    });
+  }
+
+  // Threat Category 4: KYC / PAN Phishing
+  const kycRegex = /(?:kyc|pan\s*card|aadhaar|bank\s*account).{0,30}(?:blocked|suspended|expire|update|verify)/i;
+  if (kycRegex.test(text)) {
+    score += 35;
+    signals.push({
+      id: 'KYC_PAN_UPDATE_PHISHING',
+      title: 'Fake KYC / Account Suspension Warning',
+      description: 'Falsely claims bank account or KYC document expiration to harvest identity details.',
+      severity: 'critical'
+    });
+  }
+
+  // Threat Category 5: Lottery / Prize Scams
+  const prizeRegex = /(?:kbc|lottery|winner|won\s*(?:rs|inr|cash|prize|\$|crore|lakh))/i;
+  if (prizeRegex.test(text)) {
+    score += 35;
+    signals.push({
+      id: 'LOTTERY_PRIZE_SCAM',
+      title: 'Unsolicited Lottery / Prize Claim',
+      description: 'Promises unexpected monetary rewards or lottery prizes to extract advance fees.',
+      severity: 'high'
+    });
+  }
+
+  // Threat Category 6: Unverified APK Download
+  const apkRegex = /\bhttps?:\/\/[^\s]+\.apk\b/i;
+  if (apkRegex.test(text)) {
+    score += 45;
+    signals.push({
+      id: 'UNVERIFIED_APK_DOWNLOAD',
+      title: 'Unverified APK Application Download',
+      description: 'Prompts installation of external Android APK sideloading package, which can install malware or remote access Trojans.',
+      severity: 'critical'
+    });
+  }
+
+  // Threat Category 7: Fake Job / Task Scam
+  const jobRegex = /(?:part\s*time\s*job|work\s*from\s*home|daily\s*income|earn\s*(?:rs|inr|\$)\s*\d+).{0,40}(?:telegram|whatsapp|like\s*videos)/i;
+  if (jobRegex.test(text)) {
+    score += 35;
+    signals.push({
+      id: 'FAKE_JOB_PART_TIME_OFFER',
+      title: 'Fake Job / Daily Earning Scheme',
+      description: 'Promises unrealistic daily income for simple tasks (YouTube likes, reviews) redirecting to Telegram/WhatsApp.',
+      severity: 'high'
+    });
+  }
+
+  // Threat Category 8: Shortener or Suspicious Domain embedded
+  const shortenerRegex = /\b(?:bit\.ly|tinyurl\.com|t\.co|goo\.gl|is\.gd|cutt\.ly|rb\.gy)\b/i;
+  if (shortenerRegex.test(text)) {
+    score += 25;
+    signals.push({
+      id: 'URL_SHORTENER_OBFUSCATION',
+      title: 'URL Shortener Obfuscation',
+      description: 'Hides true destination behind link shortening service.',
+      severity: 'medium'
+    });
+  }
+
+  if (embeddedUrls.length > 0 && !signals.some(s => s.id === 'URL_SHORTENER_OBFUSCATION')) {
+    score += 15;
+    signals.push({
+      id: 'CONTAINS_EMBEDDED_LINKS',
+      title: 'Contains External Hyperlinks',
+      description: `Contains ${embeddedUrls.length} embedded web destination(s).`,
+      severity: 'low'
+    });
+  }
+
+  const riskScore = Math.min(100, Math.max(0, score));
+  let riskLevel = 'low';
+  if (riskScore >= 75) riskLevel = 'critical';
+  else if (riskScore >= 50) riskLevel = 'high';
+  else if (riskScore >= 25) riskLevel = 'medium';
+
+  const assessmentStatus = signals.length > 0 && riskScore > 15 ? 'heuristic_signals_detected' : 'insufficient_evidence';
+
+  const recommendations = [];
+  if (signals.some(s => s.id === 'OTP_CREDENTIAL_HARVESTING')) {
+    recommendations.push('Never forward, share, or type your OTP or banking PIN into any link or chat.');
+  }
+  if (signals.some(s => s.id === 'DISCONNECTION_THREAT')) {
+    recommendations.push('Electricity boards never send SMS messages demanding urgent bill payments to personal numbers.');
+  }
+  if (signals.some(s => s.id === 'UNVERIFIED_APK_DOWNLOAD')) {
+    recommendations.push('Never download or install .apk files received via SMS or WhatsApp.');
+  }
+  if (signals.some(s => s.id === 'KYC_PAN_UPDATE_PHISHING')) {
+    recommendations.push('Banks never ask users to update KYC or PAN via SMS links. Visit your official bank branch or portal.');
+  }
+  if (recommendations.length === 0) {
+    recommendations.push('Exercise caution with unsolicited messages from unknown senders.');
+    recommendations.push('Verify communications through official apps or customer care helplines.');
+  }
+
+  return {
+    success: true,
+    riskScore,
+    riskLevel,
+    assessmentStatus,
+    signalsCount: signals.length,
+    signals,
+    embeddedUrls,
+    embeddedPhones,
+    embeddedUpis,
+    metadata: {
+      charCount: text.length,
+      wordCount: text.split(/\s+/).filter(Boolean).length
+    },
+    recommendations,
+    disclaimer: 'Message analysis is based on transparent linguistic and threat heuristics. It does not replace professional investigation.',
+    target: rawMessage
+  };
+}
+
+/**
  * Smooth counter animation for numerical display
  */
 function animateCountUp(element, targetNum) {
@@ -1123,6 +1434,8 @@ window.submitInlineScan = function() {
     type = 'upi';
   } else if (/^\+?\d[\d\s-]{8,}$/.test(val)) {
     type = 'phone';
+  } else if (val.length > 80 || /\b(?:dear|urgent|otp|click|http|won|bill|electricity|kyc)\b/i.test(val)) {
+    type = 'message';
   }
 
   window.location.href = `result.html?type=${encodeURIComponent(type)}&query=${encodeURIComponent(val)}`;

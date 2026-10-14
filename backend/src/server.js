@@ -116,6 +116,7 @@ if (frontendDir) {
           analyzeUrl: 'POST /api/analyze/url',
           analyzePhone: 'POST /api/analyze/phone',
           analyzeUpi: 'POST /api/analyze/upi',
+          analyzeMessage: 'POST /api/analyze/message',
           reports: 'GET /api/reports'
         }
       });
@@ -155,6 +156,7 @@ if (frontendDir) {
             <div class="ep"><span class="method">POST</span> <span>/api/analyze/url</span></div>
             <div class="ep"><span class="method">POST</span> <span>/api/analyze/phone</span></div>
             <div class="ep"><span class="method">POST</span> <span>/api/analyze/upi</span></div>
+            <div class="ep"><span class="method">POST</span> <span>/api/analyze/message</span></div>
             <div class="ep"><span class="method">GET</span> <a href="/api/reports">/api/reports</a></div>
             <div class="ep"><span class="method">GET</span> <a href="/api/reports/all">/api/reports/all</a></div>
           </div>

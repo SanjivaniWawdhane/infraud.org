@@ -33,6 +33,14 @@ try {
   console.warn('[Analyzer] Warning loading backend upiAnalyzer:', e.message);
 }
 
+let messageAnalyzerService;
+try {
+  messageAnalyzerService = require('../backend/src/services/messageAnalyzer');
+  console.log('[Analyzer] Successfully loaded backend messageAnalyzer service');
+} catch (e) {
+  console.warn('[Analyzer] Warning loading backend messageAnalyzer:', e.message);
+}
+
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -324,6 +332,27 @@ async function handleRequest(req, res) {
         return sendJson(res, 500, { success: false, message: 'UPI Analyzer service not loaded' });
       }
       const result = upiAnalyzerService.analyzeUpi(upiId);
+      if (!result.success) {
+        return sendJson(res, result.statusCode || 400, { success: false, message: result.error });
+      }
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 500, { success: false, message: err.message });
+    }
+  }
+
+  // POST /api/analyze/message (Direct Heuristic SMS/Message Scanner)
+  if (pathname === '/api/analyze/message' && method === 'POST') {
+    try {
+      const data = await parseRequestBody(req);
+      const targetMessage = data.message !== undefined ? data.message : (data.text !== undefined ? data.text : data.query);
+      if (!messageAnalyzerService) {
+        try { messageAnalyzerService = require('../backend/src/services/messageAnalyzer'); } catch (e) {}
+      }
+      if (!messageAnalyzerService) {
+        return sendJson(res, 500, { success: false, message: 'Message Analyzer service not loaded' });
+      }
+      const result = messageAnalyzerService.analyzeMessage(targetMessage);
       if (!result.success) {
         return sendJson(res, result.statusCode || 400, { success: false, message: result.error });
       }
