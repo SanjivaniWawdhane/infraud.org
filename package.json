@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "INFRAUD.org - Check Before You Trust",
   "scripts": {
-    "start": "npx -y http-server frontend -p 8080 -c-1",
-    "dev": "npx -y http-server frontend -p 8080 -c-1",
-    "serve": "npx -y http-server frontend -p 8080 -c-1"
+    "start": "node frontend/server.js",
+    "dev": "node frontend/server.js",
+    "serve": "node frontend/server.js",
+    "static": "npx -y http-server frontend -p 8080 -c-1"
   },
   "keywords": [
     "infraud",

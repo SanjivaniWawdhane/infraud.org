@@ -6,27 +6,47 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>https://infraud.org/check.html</loc>
+    <loc>https://infraud.org/check</loc>
     <priority>0.9</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>https://infraud.org/reports.html</loc>
+    <loc>https://infraud.org/reports</loc>
     <priority>0.8</priority>
     <changefreq>hourly</changefreq>
   </url>
   <url>
-    <loc>https://infraud.org/about.html</loc>
+    <loc>https://infraud.org/report</loc>
+    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://infraud.org/tools</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://infraud.org/learn</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://infraud.org/blog</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://infraud.org/about</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://infraud.org/login.html</loc>
+    <loc>https://infraud.org/login</loc>
     <priority>0.5</priority>
     <changefreq>yearly</changefreq>
   </url>
   <url>
-    <loc>https://infraud.org/signup.html</loc>
+    <loc>https://infraud.org/signup</loc>
     <priority>0.5</priority>
     <changefreq>yearly</changefreq>
   </url>

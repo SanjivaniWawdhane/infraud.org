@@ -373,18 +373,41 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // ── STATIC FILE SERVING ──
+  // ── CLEAN URLS & STATIC FILE SERVING ──
+  // Strip trailing slashes (e.g. /about/ -> /about)
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    const cleanUrl = pathname.slice(0, -1) + (parsedUrl.search || '');
+    res.writeHead(301, { 'Location': cleanUrl });
+    return res.end();
+  }
+
+  // Redirect legacy *.html requests to clean URLs (e.g. /about.html -> /about, /index.html -> /)
+  if (pathname.endsWith('.html')) {
+    const cleanPath = pathname === '/index.html' ? '/' : pathname.slice(0, -5);
+    const destination = cleanPath + (parsedUrl.search || '');
+    res.writeHead(301, { 'Location': destination });
+    return res.end();
+  }
+
   let safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
-  if (safePath === '/' || safePath === '\\') {
+  if (safePath === '/' || safePath === '\\' || safePath === '') {
     safePath = '/index.html';
   }
 
-  const filePath = path.join(__dirname, safePath);
+  let filePath = path.join(__dirname, safePath);
+
+  // If path doesn't have an extension, try resolving clean URL to .html file
+  if (!path.extname(filePath)) {
+    const htmlCandidate = filePath + '.html';
+    if (fs.existsSync(htmlCandidate) && fs.statSync(htmlCandidate).isFile()) {
+      filePath = htmlCandidate;
+    }
+  }
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      return res.end('404 Not Found');
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      return res.end(`<!DOCTYPE html><html><head><title>404 Not Found</title></head><body style="font-family: sans-serif; text-align: center; padding: 60px;"><h1>404 - Page Not Found</h1><p>The page <code>${pathname}</code> could not be found.</p><a href="/" style="color: #2563EB; font-weight: 600;">Return to Homepage &rarr;</a></body></html>`);
     }
 
     const ext = path.extname(filePath).toLowerCase();

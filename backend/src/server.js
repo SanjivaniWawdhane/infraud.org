@@ -40,7 +40,10 @@ app.get('/api/health', (req, res) => {
 // 3. API Routes
 // ==========================================
 const analyzeRoutes = require('./routes/analyzeRoutes');
+const reportsRoutes = require('./routes/reportsRoutes');
+
 app.use('/api/analyze', analyzeRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // ==========================================
 // 4. 404 Handler for Unknown Routes

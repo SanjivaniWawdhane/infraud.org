@@ -11,14 +11,14 @@ const navTemplate = `  <!-- ═════════════════�
     <div class="container nav-edge-inner">
       
       <!-- Logo -->
-      <a href="/" class="nav-edge-logo">
+      <a href="index.html" class="nav-edge-logo">
         <img src="assets/logo.jpg" alt="INFRAUD logo" />
         <span>INFRAUD</span>
       </a>
 
       <!-- Menu -->
       <nav class="nav-edge-menu">
-        <a href="/" data-nav="index">Home</a>
+        <a href="index.html" data-nav="index">Home</a>
         <a href="check.html" data-nav="check">Check</a>
         <a href="reports.html" data-nav="reports">Reports</a>
         <a href="blog.html" data-nav="blog">Blog</a>

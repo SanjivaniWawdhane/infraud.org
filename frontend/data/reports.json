@@ -1,41 +1,5 @@
 [
   {
-    "id": "rep_1791709375180_m0xkg",
-    "identifier": "telegram-scam-channel.biz",
-    "type": "Website",
-    "risk": "Critical",
-    "evidence": "Fake investment group asking for deposit",
-    "reporterName": "Anonymous",
-    "reporterEmail": "",
-    "timestamp": 1791709375180,
-    "status": "approved",
-    "approvedAt": 1791712653558
-  },
-  {
-    "id": "rep_1791709177645_1urw6",
-    "identifier": "test-scam.xyz",
-    "type": "Website",
-    "risk": "Critical",
-    "evidence": "Test scam submission",
-    "reporterName": "Anonymous",
-    "reporterEmail": "",
-    "timestamp": 1791709177645,
-    "status": "approved",
-    "approvedAt": 1791709177874
-  },
-  {
-    "id": "seed-1",
-    "identifier": "google.com",
-    "type": "Website",
-    "risk": "High Risk",
-    "evidence": "this is the test for the report submit",
-    "reporterName": "Community User",
-    "reporterEmail": "",
-    "timestamp": 1791709057152,
-    "status": "approved",
-    "approvedAt": 1791709057152
-  },
-  {
     "id": "seed-2",
     "identifier": "fake-sbi-secure-portal.xyz",
     "type": "Website",
@@ -43,9 +7,9 @@
     "evidence": "Phishing clone of bank portal requesting OTP and netbanking credentials.",
     "reporterName": "Rajesh",
     "reporterEmail": "rajesh@example.com",
-    "timestamp": 1791709057152,
+    "timestamp": 1791883562834,
     "status": "approved",
-    "approvedAt": 1791709057152
+    "approvedAt": 1791883562834
   },
   {
     "id": "seed-3",
@@ -55,9 +19,9 @@
     "evidence": "Impersonates Amazon. Asks for OTP and card details. Multiple reports.",
     "reporterName": "Cyber Cell",
     "reporterEmail": "",
-    "timestamp": 1791709057152,
+    "timestamp": 1791883562834,
     "status": "approved",
-    "approvedAt": 1791712657229
+    "approvedAt": 1791883562834
   },
   {
     "id": "seed-4",
@@ -67,9 +31,9 @@
     "evidence": "FedEx parcel scam call. Threatens legal action.",
     "reporterName": "Amit Sharma",
     "reporterEmail": "",
-    "timestamp": 1791709057152,
+    "timestamp": 1791883562834,
     "status": "approved",
-    "approvedAt": 1791709057152
+    "approvedAt": 1791883562834
   },
   {
     "id": "seed-5",
@@ -79,9 +43,9 @@
     "evidence": "Fake KYC notice. Uses generic gmail address instead of official domain.",
     "reporterName": "Sneha",
     "reporterEmail": "",
-    "timestamp": 1791709057152,
+    "timestamp": 1791883562834,
     "status": "approved",
-    "approvedAt": 1791709057152
+    "approvedAt": 1791883562834
   },
   {
     "id": "seed-6",
@@ -91,9 +55,9 @@
     "evidence": "Verified merchant account. No suspicious activity found in recent transactions.",
     "reporterName": "Verification Bot",
     "reporterEmail": "",
-    "timestamp": 1791709057152,
+    "timestamp": 1791883562834,
     "status": "approved",
-    "approvedAt": 1791709057152
+    "approvedAt": 1791883562834
   },
   {
     "id": "seed-7",
@@ -103,8 +67,8 @@
     "evidence": "Non-standard TLD. Cloned interface of e-commerce site.",
     "reporterName": "Community User",
     "reporterEmail": "",
-    "timestamp": 1791709057152,
+    "timestamp": 1791883562834,
     "status": "approved",
-    "approvedAt": 1791709057152
+    "approvedAt": 1791883562834
   }
 ]
