@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | INFRAUD</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        /* Dashboard Layout */
+        body {
+            background: var(--page);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--ink-700);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--ink-100);
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px;
+            z-index: 10;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 48px;
+        }
+        
+        .brand img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .brand-text {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--ink-900);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--ink-500);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
+            margin-bottom: 6px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--blue-100);
+            color: var(--blue-600);
+        }
+
+        .nav-item svg { width: 18px; height: 18px; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 48px;
+            min-width: 0;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            animation: fadeDown 0.6s ease forwards;
+        }
+
+        .welcome-text h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--ink-900);
+            margin-bottom: 4px;
+        }
+        .welcome-text p {
+            color: var(--ink-500);
+            font-size: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--ink-100);
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-xs);
+        }
+        .search-bar:focus-within { 
+            border-color: var(--blue-600); 
+            box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+        }
+        .search-bar input {
+            background: none; border: none; color: var(--ink-900); font-size: 0.9375rem; outline: none; width: 220px;
+        }
+        .search-bar input::placeholder { color: var(--ink-300); }
+        .search-bar svg { color: var(--ink-300); width: 18px; height: 18px; }
+
+        .profile-btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--blue-100);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 700; color: var(--blue-600); cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid var(--surface);
+            box-shadow: var(--shadow-sm);
+        }
+        .profile-btn:hover { transform: scale(1.05); }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--ink-100);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            position: relative;
+            box-shadow: var(--shadow-xs);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--blue-100);
+        }
+
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 20px;
+        }
+        .icon-blue { background: var(--blue-100); color: var(--blue-600); }
+        .icon-amber { background: var(--amber-100); color: var(--amber-500); }
+        .icon-green { background: var(--green-100); color: var(--green-500); }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+            color: var(--ink-900);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--ink-500);
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+
+        .stat-trend {
+            position: absolute;
+            top: 28px; right: 28px;
+            display: flex; align-items: center; gap: 4px;
+            font-size: 0.8125rem; font-weight: 600;
+            background: var(--green-100); color: var(--green-500);
+            padding: 4px 10px; border-radius: var(--radius-pill);
+        }
+        .trend-down { background: var(--red-100); color: var(--red-500); }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--ink-100);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            box-shadow: var(--shadow-xs);
+            animation: fadeUp 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--ink-900);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--ink-50);
+        }
+        .activity-item:last-child { border: none; padding-bottom: 0; }
+
+        .activity-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .activity-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: var(--ink-50);
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--ink-100);
+        }
+
+        .activity-text h4 { font-weight: 600; font-size: 0.9375rem; color: var(--ink-900); margin-bottom: 2px; }
+        .activity-text p { font-size: 0.8125rem; color: var(--ink-500); }
+
+        /* Chart Placeholder (SVG) */
+        .chart-container {
+            width: 100%;
+            height: 250px;
+            position: relative;
+        }
+
+        /* Animations */
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeDown { 
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        
+        @media (max-width: 1024px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; padding: 20px; border-right: none; border-bottom: 1px solid var(--ink-100); flex-direction: row; justify-content: space-between; align-items: center; }
+            .sidebar nav { display: none; }
+            .brand { margin-bottom: 0; }
+            .main-content { padding: 24px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; align-items: flex-start; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="brand">
+            <img src="assets/logo.jpg" alt="INFRAUD logo" />
+            <span class="brand-text">INFRAUD</span>
+        </a>
+
+        <nav>
+            <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Overview
+            </a>
+            <a href="check.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                Run Scan
+            </a>
+            <a href="reports.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Threat Reports
+            </a>
+            <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                Integrations
+            </a>
+            <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                My Profile
+            </a>
+            <a href="#" class="nav-item" style="margin-top: 40px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Settings
+            </a>
+            <a href="login.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Sign Out
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Section -->
+    <main class="main-content">
+        
+        <header class="header">
+            <div class="welcome-text">
+                <h1>Dashboard Overview</h1>
+                <p>Welcome back, <span id="user-name-display">User</span>. Here's what's happening today.</p>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search logs, IPs, or domains..." />
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                    <span id="nav-user-name" style="font-weight: 600; font-size: 0.9375rem; color: var(--ink-900);">User</span>
+                    <div class="profile-btn" id="profile-avatar">U</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon icon-blue">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <div class="stat-value">24,592</div>
+                <div class="stat-label">Total Checks Performed</div>
+                <div class="stat-trend">+12.5%</div>
+            </div>
+            
+            <div class="stat-card delay-1">
+                <div class="stat-icon icon-amber">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <div class="stat-value">1,204</div>
+                <div class="stat-label">Active Threats Blocked</div>
+                <div class="stat-trend">+4.2%</div>
+            </div>
+
+            <div class="stat-card delay-2">
+                <div class="stat-icon icon-green">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <div class="stat-value">99.9%</div>
+                <div class="stat-label">System Security Score</div>
+                <div class="stat-trend trend-down">-0.1%</div>
+            </div>
+        </div>
+
+        <!-- Charts & Activity -->
+        <div class="content-grid">
+            
+            <!-- Chart Panel -->
+            <div class="panel delay-3">
+                <div class="panel-header">
+                    <h3 class="panel-title">Threat Intelligence Overview</h3>
+                </div>
+                <div class="chart-container">
+                    <!-- Faux SVG Chart -->
+                    <svg viewBox="0 0 800 250" preserveAspectRatio="none" style="width:100%; height:100%;">
+                        <!-- Grid -->
+                        <line x1="0" y1="50" x2="800" y2="50" stroke="var(--ink-50)" stroke-width="1" />
+                        <line x1="0" y1="100" x2="800" y2="100" stroke="var(--ink-50)" stroke-width="1" />
+                        <line x1="0" y1="150" x2="800" y2="150" stroke="var(--ink-50)" stroke-width="1" />
+                        <line x1="0" y1="200" x2="800" y2="200" stroke="var(--ink-50)" stroke-width="1" />
+                        
+                        <!-- Gradient Fill -->
+                        <defs>
+                            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="rgba(37,99,235,0.2)" />
+                                <stop offset="100%" stop-color="rgba(37,99,235,0)" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Data Path -->
+                        <path d="M 0 200 C 50 150, 100 180, 150 120 S 250 160, 300 90 S 400 130, 450 70 S 550 110, 600 40 S 700 80, 800 20 L 800 250 L 0 250 Z" fill="url(#chartGradient)" />
+                        <path d="M 0 200 C 50 150, 100 180, 150 120 S 250 160, 300 90 S 400 130, 450 70 S 550 110, 600 40 S 700 80, 800 20" fill="none" stroke="var(--blue-600)" stroke-width="3" />
+                        
+                        <!-- Dots -->
+                        <circle cx="300" cy="90" r="5" fill="var(--surface)" stroke="var(--blue-600)" stroke-width="3" />
+                        <circle cx="600" cy="40" r="5" fill="var(--surface)" stroke="var(--blue-600)" stroke-width="3" />
+                        <circle cx="800" cy="20" r="5" fill="var(--surface)" stroke="var(--blue-600)" stroke-width="3" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Activity Panel -->
+            <div class="panel delay-3">
+                <div class="panel-header">
+                    <h3 class="panel-title">Recent Detections</h3>
+                </div>
+                
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon" style="color: var(--red-500);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                            <div class="activity-text">
+                                <h4>Phishing Domain</h4>
+                                <p>amazon-secure-update.net</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-red">Blocked</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon" style="color: var(--green-500);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                            <div class="activity-text">
+                                <h4>Safe Transaction</h4>
+                                <p>IP: 192.168.1.104</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-green">Verified</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon" style="color: var(--red-500);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                            <div class="activity-text">
+                                <h4>Malware Signature</h4>
+                                <p>Payload dropped from bit.ly/x9sA</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-red">Blocked</span>
+                    </div>
+                    
+                     <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon" style="color: var(--green-500);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                            <div class="activity-text">
+                                <h4>Safe Transaction</h4>
+                                <p>IP: 204.11.23.11</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-green">Verified</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Auth Logic -->
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Default fallback
+            let userName = 'Akash'; 
+            
+            // Fetch real user from Supabase session if available
+            if (window.authApp) {
+                const session = await window.authApp.checkUserSession();
+                if (session && session.user) {
+                    const fullName = session.user.user_metadata?.full_name;
+                    if (fullName) {
+                        userName = fullName;
+                    } else if (session.user.email) {
+                        userName = session.user.email.split('@')[0];
+                    }
+                }
+            }
+
+            // Update the welcome text
+            const nameDisplay = document.getElementById('user-name-display');
+            if (nameDisplay) {
+                nameDisplay.textContent = userName;
+            }
+
+            // Update the nav text near the avatar
+            const navNameDisplay = document.getElementById('nav-user-name');
+            if (navNameDisplay) {
+                navNameDisplay.textContent = userName;
+            }
+
+            // Update the profile avatar with the first letter
+            const avatar = document.getElementById('profile-avatar');
+            if (avatar && userName.length > 0) {
+                avatar.textContent = userName.charAt(0).toUpperCase();
+            }
+        });
+    </script>
+</body>
+</html>
