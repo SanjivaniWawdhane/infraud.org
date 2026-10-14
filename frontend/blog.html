@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="INFRAUD Blog — Latest updates, insights, and fraud prevention strategies." />
+  <title>Blog | INFRAUD</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <style>
+    /* ── Global Styles ── */
+    body { background: var(--page, #F7F8FC); }
+
+    /* ── Clean Hero ── */
+    .blog-hero {
+      padding: 120px 24px 60px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--blue-600, #2563EB);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+    }
+    .blog-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--ink-900, #0A0F1E);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .blog-subtitle {
+      font-size: 1.125rem;
+      color: var(--ink-500, #4B5570);
+      line-height: 1.6;
+    }
+
+    /* ── Blog Grid & Cards ── */
+    .blog-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 32px;
+    }
+    
+    .blog-card {
+      background: var(--surface, #FFFFFF);
+      border-radius: 20px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(10,15,30,0.04);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    .blog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 32px rgba(10,15,30,0.08);
+      border-color: rgba(37,99,235,0.2);
+    }
+    
+    .blog-img-wrap {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background: var(--ink-50, #F4F5FA);
+    }
+    .blog-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .blog-card:hover .blog-img-wrap img {
+      transform: scale(1.05);
+    }
+    
+    .blog-content {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .blog-meta {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--blue-600, #2563EB);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .blog-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink-900, #0A0F1E);
+      line-height: 1.4;
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+    .blog-card:hover .blog-card-title {
+      color: var(--blue-600, #2563EB);
+    }
+    .blog-card-desc {
+      font-size: 0.9375rem;
+      color: var(--ink-500, #4B5570);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+    
+    .blog-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--ink-100, #E8EBF3);
+    }
+    .author-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--ink-100, #E8EBF3);
+    }
+    .author-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .author-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink-900, #0A0F1E);
+    }
+    .author-date {
+      font-size: 0.8125rem;
+      color: var(--ink-500, #4B5570);
+    }
+  </style>
+</head>
+<body>
+
+                <!-- ═══════════════════════════════════════════
+       PREMIUM EDGE-TO-EDGE NAV V3
+  ════════════════════════════════════════════ -->
+  <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="index.html" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="index.html" >Home</a>
+        <a href="check.html" >Check</a>
+        <a href="reports.html" >Reports</a>
+        <a href="blog.html"  class="active">Blog</a>
+        <a href="learn.html" >Learn</a>
+        <a href="about.html" >About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <!-- Live GitHub Star Badge -->
+        <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="nav-edge-github" title="Star on GitHub">
+          <svg class="nav-gh-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="nav-gh-divider"></span>
+          <span class="nav-gh-star-icon">★</span>
+          <span class="nav-gh-count" id="nav-gh-count">2</span>
+        </a>
+
+        <a href="login.html" class="nav-edge-login">Login</a>
+        <a href="index.html#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Toggle Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.96); box-shadow: 0 4px 20px -6px rgba(10, 15, 30, 0.08); }
+      
+      .nav-edge .container {
+        max-width: 1320px;
+        width: 100%;
+        padding: 0 24px;
+      }
+
+      .nav-edge-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        gap: 16px;
+      }
+      
+      /* Logo */
+      .nav-edge-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .nav-edge-logo img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--ink-900, #0A0F1E);
+      }
+      
+      /* Menu - Flex center, NO absolute overlap bug! */
+      .nav-edge-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex: 1;
+        margin: 0 16px;
+      }
+      .nav-edge-menu a {
+        position: relative;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--ink-500, #4B5570);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-menu a:hover {
+        color: var(--ink-900, #0A0F1E);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-menu a.active {
+        color: var(--blue-600, #2563EB);
+        font-weight: 600;
+      }
+      .nav-edge-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        height: 2px;
+        background: var(--blue-600, #2563EB);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-menu a:hover::after,
+      .nav-edge-menu a.active::after {
+        transform: scaleX(1);
+      }
+      
+      /* Actions */
+      .nav-edge-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      /* GitHub Star Pill Badge */
+      .nav-edge-github {
+        display: inline-flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 12px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        text-decoration: none;
+        color: #334155;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .nav-edge-github:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+      .nav-gh-icon {
+        width: 16px;
+        height: 16px;
+        fill: #334155;
+        display: block;
+        transition: transform 0.2s, fill 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-icon {
+        transform: scale(1.08);
+        fill: #0f172a;
+      }
+      .nav-gh-divider {
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background: #cbd5e1;
+        margin: 0 8px;
+      }
+      .nav-gh-star-icon {
+        color: #334155;
+        font-size: 0.875rem;
+        margin-right: 4px;
+        transition: color 0.2s, transform 0.2s;
+        display: inline-block;
+        line-height: 1;
+      }
+      .nav-edge-github:hover .nav-gh-star-icon {
+        color: #f59e0b;
+        transform: scale(1.18);
+      }
+      .nav-gh-count {
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #334155;
+        transition: color 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-count {
+        color: #0f172a;
+      }
+
+      .nav-edge-login {
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--ink-700, #1E2742);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-login:hover {
+        color: var(--blue-600, #2563EB);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-signup {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--blue-600, #2563EB);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 8px 18px;
+        height: 36px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover {
+        background: var(--blue-700, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+      }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      /* Hamburger (Mobile) */
+      .nav-edge-hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--ink-900, #0A0F1E);
+        padding: 4px;
+        border-radius: 6px;
+      }
+      
+      @media (max-width: 992px) {
+        .nav-edge-menu {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 72px;
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          padding: 16px;
+          box-shadow: 0 12px 32px rgba(10, 15, 30, 0.1);
+          border-bottom: 1px solid rgba(10, 15, 30, 0.08);
+          gap: 6px;
+          margin: 0;
+        }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a {
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 0.9375rem;
+        }
+        .nav-edge-menu a::after { display: none; }
+        .nav-edge-actions .nav-edge-login,
+        .nav-edge-actions .nav-edge-signup {
+          display: none;
+        }
+        .nav-edge-github { height: 32px; padding: 0 10px; font-size: 0.75rem; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+    <script>
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-edge');
+        if(nav) {
+            if(window.scrollY > 20) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+        }
+      }, { passive: true });
+
+      // Mobile Hamburger Toggle
+      const hambBtn = document.querySelector('.nav-edge-hamburger');
+      if (hambBtn) {
+        hambBtn.addEventListener('click', () => {
+          const nav = document.querySelector('.nav-edge');
+          if (nav) nav.classList.toggle('mobile-open');
+        });
+      }
+
+      // Real-time Live GitHub Stars Fetcher (Instant & Always Live)
+      (function() {
+        const countEl = document.getElementById('nav-gh-count');
+        if (!countEl) return;
+
+        function formatStars(n) {
+          const num = Number(n);
+          if (isNaN(num)) return n;
+          if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return num.toString();
+        }
+
+        // Apply cached count instantly if available
+        const cached = localStorage.getItem('gh_stars_infraud');
+        if (cached !== null) {
+          countEl.textContent = formatStars(cached);
+        }
+
+        function fetchLiveStars() {
+          fetch('https://api.github.com/repos/SanjivaniWawdhane/infraud.org?_t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+            cache: 'no-store'
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (data && typeof data.stargazers_count === 'number') {
+              const freshCount = formatStars(data.stargazers_count);
+              if (countEl.textContent !== freshCount) {
+                countEl.textContent = freshCount;
+                countEl.style.transition = 'transform 0.3s ease, color 0.3s ease';
+                countEl.style.transform = 'scale(1.25)';
+                countEl.style.color = '#f59e0b';
+                setTimeout(() => {
+                  countEl.style.transform = 'scale(1)';
+                  countEl.style.color = '';
+                }, 350);
+              }
+              localStorage.setItem('gh_stars_infraud', data.stargazers_count.toString());
+            }
+          })
+          .catch(err => {
+            console.debug('[GitHub Stars Notice]:', err.message);
+          });
+        }
+
+        // 1. Fetch immediately on every page visit/refresh
+        fetchLiveStars();
+
+        // 2. Automatically re-fetch whenever user switches back to this tab
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            fetchLiveStars();
+          }
+        });
+      })();
+    </script>
+  </header>
+
+  <main>
+    <section class="blog-hero">
+      <div class="hero-badge">INFRAUD Updates</div>
+      <h1 class="blog-title">Insights for a safer digital world</h1>
+      <p class="blog-subtitle">Discover our latest deep-dives, scam alerts, and expert strategies to help you stay one step ahead of digital fraud.</p>
+    </section>
+
+    <section class="blog-container">
+      <div id="blog-grid" class="blog-grid">
+        <!-- JS will populate this -->
+      </div>
+    </section>
+  </main>
+
+  <!-- PREMIUM FOOTER -->
+  <footer class="footer-premium">
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="footer-grid">
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="check.html" class="footer-link">Live Check</a></li>
+            <li><a href="reports.html" class="footer-link">Threat Reports</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html" class="footer-link" style="color:var(--blue-600)">Blog</a></li>
+            <li><a href="learn.html" class="footer-link">Safety Academy</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Community</div>
+          <ul class="footer-links-list">
+            <li><a href="https://github.com/infraud" class="footer-link">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-huge-mark">INFRAUD</div>
+    </div>
+    <style>
+      .footer-premium { background: #FFFFFF; border-top: 1px solid var(--ink-100, #E8EBF3); padding: 80px 0 0; color: var(--ink-900, #0A0F1E); overflow: hidden; }
+      .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 40px; }
+      .footer-col-title { font-size: 0.8125rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+      .footer-link { font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+      .footer-link:hover { color: var(--blue-600, #2563EB); }
+      .footer-huge-mark { font-size: clamp(4rem, 14vw, 15rem); font-weight: 900; line-height: 0.8; text-align: center; color: var(--ink-50, #F4F5FA); letter-spacing: -0.05em; margin-bottom: -1vw; }
+      @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } }
+    </style>
+  </footer>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+          <script>
+    let allBlogs = [];
+
+    async function loadBlogs() {
+      const grid = document.getElementById('blog-grid');
+      let localBlogs = JSON.parse(localStorage.getItem('infraud_blogs') || '[]');
+      let deletedList = [];
+      try {
+        deletedList = JSON.parse(localStorage.getItem('infraud_deleted_blogs') || '[]');
+      } catch(e) {}
+
+      // Filter out deleted blogs
+      localBlogs = localBlogs.filter(b => !deletedList.includes(b.id) && !deletedList.includes(b.title));
+      allBlogs = [...localBlogs];
+
+      try {
+        if (window.authApp && window.authApp.supabase) {
+          const { data, error } = await window.authApp.supabase
+            .from('blogs')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (data && data.length > 0) {
+             data.forEach(sbBlog => {
+                 const isDeleted = deletedList.includes(sbBlog.id) || deletedList.includes(sbBlog.title);
+                 if(!isDeleted && !allBlogs.some(b => b.title === sbBlog.title || (b.id && b.id === sbBlog.id))) {
+                   allBlogs.push(sbBlog);
+                 }
+             });
+          }
+        }
+      } catch(e) {}
+
+      if (allBlogs.length === 0) {
+        renderPlaceholderBlogs(grid);
+        return;
+      }
+
+      grid.innerHTML = ''; 
+      allBlogs.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+      allBlogs.forEach(blog => {
+        const card = document.createElement('div');
+        card.className = 'blog-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => openBlogModal(blog.id);
+        const desc = blog.description || '';
+        const shortDesc = desc.length > 110 ? desc.substring(0, 110) + '...' : desc;
+        card.innerHTML = `
+          <div class="blog-img-wrap">
+            <img src="${blog.image_url || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80'}" alt="${blog.title || 'Blog'}" onerror="this.src='assets/logo.jpg'" />
+          </div>
+          <div class="blog-content" style="display: flex; flex-direction: column; flex: 1;">
+            <div class="blog-meta">${blog.meta_keywords || 'Update'}</div>
+            <h2 class="blog-card-title">${blog.title || 'Untitled Blog'}</h2>
+            <p class="blog-card-desc" style="flex: 1;">${shortDesc}</p>
+            <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between;">
+                <div class="blog-author" style="margin-top: 0;">
+                   <img src="assets/logo.jpg" class="author-avatar" alt="INFRAUD Team" />
+                   <div class="author-info">
+                      <span class="author-name">INFRAUD Team</span>
+                      <span class="author-date">Just now</span>
+                   </div>
+                </div>
+                <div style="color: var(--blue-600, #2563EB); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
+                    Read Article
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function openBlogModal(id) {
+        let blog = allBlogs.find(b => b.id === id) || allBlogs.find(b => b.title === id);
+        if (!blog) return;
+        
+        document.getElementById('modalTitle').innerText = blog.title || 'Untitled Blog';
+        document.getElementById('modalDesc').innerText = blog.description || blog.desc || '';
+        document.getElementById('modalMeta').innerText = blog.meta_keywords || blog.tag || 'Updates';
+        
+        const imgContainer = document.getElementById('modalImgContainer');
+        const img = document.getElementById('modalImg');
+        const imageUrl = blog.image_url || blog.img;
+        if (imageUrl) {
+            img.src = imageUrl;
+            imgContainer.style.display = 'block';
+        } else {
+            img.src = 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80';
+            imgContainer.style.display = 'block';
+        }
+
+        const modal = document.getElementById('blogModal');
+        const card = document.getElementById('blogModalCard');
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        
+        // Force reflow
+        void modal.offsetWidth;
+        modal.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+    }
+
+    function closeBlogModal() {
+        const modal = document.getElementById('blogModal');
+        const card = document.getElementById('blogModalCard');
+        modal.style.opacity = '0';
+        card.style.transform = 'translateY(40px)';
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 400);
+    }
+
+    function renderPlaceholderBlogs(grid) {
+      grid.innerHTML = '';
+      const placeholders = [
+        {
+          title: "INFRAUD V2 is officially live: What's new?",
+          desc: 'We are thrilled to announce the launch of INFRAUD V2, bringing faster checks and higher accuracy to all users. This update includes a completely redesigned dashboard, enhanced scanning speeds, and an upgraded machine learning model that catches 99.9% of modern phishing domains.',
+          tag: 'Updates',
+          img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'
+        }
+      ];
+      allBlogs = [...placeholders];
+      placeholders.forEach(blog => {
+        const card = document.createElement('div');
+        card.className = 'blog-card';
+        card.onclick = () => openBlogModal(blog.title);
+        card.innerHTML = `<div class="blog-img-wrap"><img src="${blog.img}" /></div>
+          <div class="blog-content" style="display:flex;flex-direction:column;flex:1;">
+            <div class="blog-meta">${blog.tag}</div>
+            <h2 class="blog-card-title">${blog.title}</h2>
+            <p class="blog-card-desc" style="flex:1;">${blog.desc.substring(0,100)}...</p>
+            <div style="margin-top:20px;display:flex;align-items:center;justify-content:space-between;">
+                <div style="color:var(--blue-600,#2563EB);font-weight:600;font-size:0.9rem;">Read Article</div>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    window.addEventListener('load', loadBlogs);
+  </script>
+
+  <!-- Full-Screen Premium Article Overlay -->
+  <div id="blogModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99999; background: #FFFFFF; overflow-y: auto; opacity: 0; transition: opacity 0.4s ease;">
+      
+      <!-- Sticky Navigation Bar -->
+      <div style="position: sticky; top: 0; width: 100%; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-100, #E8EBF3); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 10;">
+          <div style="font-weight: 800; color: var(--ink-900, #0A0F1E); font-size: 1.25rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px;">
+              <img src="assets/logo.jpg" style="height: 28px; width: 28px; border-radius: 6px;" />
+              INFRAUD
+          </div>
+          <button onclick="closeBlogModal()" style="background: var(--ink-50, #F4F5FA); border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); border-radius: 100px; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: background 0.2s;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              Back to Blog
+          </button>
+      </div>
+
+      <!-- Article Content Wrapper -->
+      <div id="blogModalCard" style="width: 100%; position: relative; transform: translateY(40px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 120px;">
+          
+          <!-- Article Header -->
+          <div style="max-width: 760px; margin: 0 auto; padding: 60px 24px 32px;">
+              <div id="modalMeta" style="color: var(--blue-600, #2563EB); font-weight: 700; margin-bottom: 16px; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;"></div>
+              
+              <!-- Clean, properly capitalized title via CSS -->
+              <h2 id="modalTitle" style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; color: var(--ink-900, #0A0F1E); margin-bottom: 32px; line-height: 1.15; letter-spacing: -0.02em; text-transform: capitalize;"></h2>
+              
+              <!-- Author Info -->
+              <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 40px;">
+                   <img src="assets/logo.jpg" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--ink-100, #E8EBF3);" alt="INFRAUD Team" />
+                   <div>
+                      <div style="font-weight: 700; color: var(--ink-900, #0A0F1E); font-size: 1rem;">INFRAUD Team</div>
+                      <div style="color: var(--ink-500, #4B5570); font-size: 0.9rem; margin-top: 2px;">Oct 8, 2026 • 5 min read</div>
+                   </div>
+              </div>
+          </div>
+          
+          <!-- Hero Image -->
+          <div style="max-width: 900px; margin: 0 auto 48px; padding: 0 24px;">
+              <div id="modalImgContainer" style="width: 100%; display: none; border-radius: 16px; overflow: hidden; background: var(--ink-50, #F4F5FA); box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
+                  <img id="modalImg" src="" style="width: 100%; max-height: 500px; object-fit: cover; display: block;" />
+              </div>
+          </div>
+          
+          <!-- Article Body -->
+          <div style="max-width: 760px; margin: 0 auto; padding: 0 24px;">
+              <div id="modalDesc" style="font-size: 1.25rem; line-height: 1.8; color: #374151; white-space: pre-wrap; font-family: 'Inter', -apple-system, sans-serif;"></div>
+          </div>
+          
+      </div>
+  </div>

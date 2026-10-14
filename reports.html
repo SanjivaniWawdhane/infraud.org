@@ -247,20 +247,23 @@
 </head>
 <body>
 
+          <!-- ═══════════════════════════════════════════
+       PREMIUM EDGE-TO-EDGE NAV V3
+  ════════════════════════════════════════════ -->
   <header class="nav-edge">
     <div class="container nav-edge-inner">
       
       <!-- Logo -->
-      <a href="/" class="nav-edge-logo">
+      <a href="index.html" class="nav-edge-logo">
         <img src="assets/logo.jpg" alt="INFRAUD logo" />
         <span>INFRAUD</span>
       </a>
 
       <!-- Menu -->
       <nav class="nav-edge-menu">
-        <a href="/"  >Home</a>
+        <a href="index.html" >Home</a>
         <a href="check.html" >Check</a>
-        <a href="reports.html" class="active" >Reports</a>
+        <a href="reports.html"  class="active">Reports</a>
         <a href="blog.html" >Blog</a>
         <a href="learn.html" >Learn</a>
         <a href="about.html" >About</a>
@@ -268,13 +271,23 @@
 
       <!-- Actions -->
       <div class="nav-edge-actions">
-        <a href="login.html" style="margin-right: 15px; text-decoration: none; font-weight: 500; font-size: 0.9rem; color: #a1a1aa; transition: color 0.3s ease;" class="nav-edge-login">Login</a>
-        <a href="/#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+        <!-- Live GitHub Star Badge -->
+        <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="nav-edge-github" title="Star on GitHub">
+          <svg class="nav-gh-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="nav-gh-divider"></span>
+          <span class="nav-gh-star-icon">★</span>
+          <span class="nav-gh-count" id="nav-gh-count">2</span>
+        </a>
+
+        <a href="login.html" class="nav-edge-login">Login</a>
+        <a href="index.html#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
           Get Started
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
         
-        <button class="nav-edge-hamburger" aria-label="Menu">
+        <button class="nav-edge-hamburger" aria-label="Toggle Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="12" x2="21" y2="12" />
             <line x1="3" y1="6" x2="21" y2="6" />
@@ -288,44 +301,245 @@
     <style>
       .nav-edge {
         position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
-        background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
         border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
       }
-      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 24px -8px rgba(10, 15, 30, 0.08); }
-      .nav-edge-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.96); box-shadow: 0 4px 20px -6px rgba(10, 15, 30, 0.08); }
+      
+      .nav-edge .container {
+        max-width: 1320px;
+        width: 100%;
+        padding: 0 24px;
+      }
+
+      .nav-edge-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        gap: 16px;
+      }
       
       /* Logo */
-      .nav-edge-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 2; }
-      .nav-edge-logo img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+      .nav-edge-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .nav-edge-logo img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
       .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
-      .nav-edge-logo span { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--ink-900, #0A0F1E); }
+      .nav-edge-logo span {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--ink-900, #0A0F1E);
+      }
       
-      /* Menu (Centered on Desktop) */
-      .nav-edge-menu { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; }
-      .nav-edge-menu a { position: relative; text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-500, #4B5570); padding: 8px 16px; transition: color 0.2s; }
-      .nav-edge-menu a:hover, .nav-edge-menu a.active { color: var(--ink-900, #0A0F1E); }
-      .nav-edge-menu a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) scaleX(0); width: calc(100% - 32px); height: 2px; background: var(--blue-600, #2563EB); border-radius: 2px; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-      .nav-edge-menu a:hover::after, .nav-edge-menu a.active::after { transform: translateX(-50%) scaleX(1); }
+      /* Menu - Flex center, NO absolute overlap bug! */
+      .nav-edge-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex: 1;
+        margin: 0 16px;
+      }
+      .nav-edge-menu a {
+        position: relative;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--ink-500, #4B5570);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-menu a:hover {
+        color: var(--ink-900, #0A0F1E);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-menu a.active {
+        color: var(--blue-600, #2563EB);
+        font-weight: 600;
+      }
+      .nav-edge-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        height: 2px;
+        background: var(--blue-600, #2563EB);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-menu a:hover::after,
+      .nav-edge-menu a.active::after {
+        transform: scaleX(1);
+      }
       
       /* Actions */
-      .nav-edge-actions { display: flex; align-items: center; gap: 16px; z-index: 2; }
-      .nav-edge-login { text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--ink-700, #1E2742); padding: 8px; transition: color 0.2s; }
-      .nav-edge-login:hover { color: var(--blue-600, #2563EB); }
-      .nav-edge-signup { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-600, #2563EB); color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 700; padding: 10px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.2); transition: all 0.2s; }
+      .nav-edge-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      /* GitHub Star Pill Badge */
+      .nav-edge-github {
+        display: inline-flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 12px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        text-decoration: none;
+        color: #334155;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .nav-edge-github:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+      .nav-gh-icon {
+        width: 16px;
+        height: 16px;
+        fill: #334155;
+        display: block;
+        transition: transform 0.2s, fill 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-icon {
+        transform: scale(1.08);
+        fill: #0f172a;
+      }
+      .nav-gh-divider {
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background: #cbd5e1;
+        margin: 0 8px;
+      }
+      .nav-gh-star-icon {
+        color: #334155;
+        font-size: 0.875rem;
+        margin-right: 4px;
+        transition: color 0.2s, transform 0.2s;
+        display: inline-block;
+        line-height: 1;
+      }
+      .nav-edge-github:hover .nav-gh-star-icon {
+        color: #f59e0b;
+        transform: scale(1.18);
+      }
+      .nav-gh-count {
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #334155;
+        transition: color 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-count {
+        color: #0f172a;
+      }
+
+      .nav-edge-login {
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--ink-700, #1E2742);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-login:hover {
+        color: var(--blue-600, #2563EB);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-signup {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--blue-600, #2563EB);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 8px 18px;
+        height: 36px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
       .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
-      .nav-edge-signup:hover { background: var(--blue-700, #1D4ED8); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
+      .nav-edge-signup:hover {
+        background: var(--blue-700, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+      }
       .nav-edge-signup:hover svg { transform: translateX(2px); }
       
       /* Hamburger (Mobile) */
-      .nav-edge-hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--ink-900, #0A0F1E); padding: 4px; }
+      .nav-edge-hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--ink-900, #0A0F1E);
+        padding: 4px;
+        border-radius: 6px;
+      }
       
-      @media (max-width: 900px) {
-        .nav-edge-menu { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.98); padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); gap: 8px; transform: none; }
+      @media (max-width: 992px) {
+        .nav-edge-menu {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 72px;
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          padding: 16px;
+          box-shadow: 0 12px 32px rgba(10, 15, 30, 0.1);
+          border-bottom: 1px solid rgba(10, 15, 30, 0.08);
+          gap: 6px;
+          margin: 0;
+        }
         .nav-edge.mobile-open .nav-edge-menu { display: flex; }
-        .nav-edge-menu a { width: 100%; text-align: left; padding: 12px; border-radius: 8px; }
-        .nav-edge-menu a:hover, .nav-edge-menu a.active { background: rgba(37, 99, 235, 0.05); }
+        .nav-edge-menu a {
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 0.9375rem;
+        }
         .nav-edge-menu a::after { display: none; }
-        .nav-edge-actions .nav-edge-login, .nav-edge-actions .nav-edge-signup { display: none; }
+        .nav-edge-actions .nav-edge-login,
+        .nav-edge-actions .nav-edge-signup {
+          display: none;
+        }
+        .nav-edge-github { height: 32px; padding: 0 10px; font-size: 0.75rem; }
         .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
       }
     </style>
@@ -341,14 +555,74 @@
         }
       }, { passive: true });
 
-      // Hamburger menu toggle
-      const hamburger = document.querySelector('.nav-edge-hamburger');
-      const navEdge = document.querySelector('.nav-edge');
-      if(hamburger && navEdge) {
-        hamburger.addEventListener('click', () => {
-          navEdge.classList.toggle('mobile-open');
+      // Mobile Hamburger Toggle
+      const hambBtn = document.querySelector('.nav-edge-hamburger');
+      if (hambBtn) {
+        hambBtn.addEventListener('click', () => {
+          const nav = document.querySelector('.nav-edge');
+          if (nav) nav.classList.toggle('mobile-open');
         });
       }
+
+      // Real-time Live GitHub Stars Fetcher (Instant & Always Live)
+      (function() {
+        const countEl = document.getElementById('nav-gh-count');
+        if (!countEl) return;
+
+        function formatStars(n) {
+          const num = Number(n);
+          if (isNaN(num)) return n;
+          if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return num.toString();
+        }
+
+        // Apply cached count instantly if available
+        const cached = localStorage.getItem('gh_stars_infraud');
+        if (cached !== null) {
+          countEl.textContent = formatStars(cached);
+        }
+
+        function fetchLiveStars() {
+          fetch('https://api.github.com/repos/SanjivaniWawdhane/infraud.org?_t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+            cache: 'no-store'
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (data && typeof data.stargazers_count === 'number') {
+              const freshCount = formatStars(data.stargazers_count);
+              if (countEl.textContent !== freshCount) {
+                countEl.textContent = freshCount;
+                countEl.style.transition = 'transform 0.3s ease, color 0.3s ease';
+                countEl.style.transform = 'scale(1.25)';
+                countEl.style.color = '#f59e0b';
+                setTimeout(() => {
+                  countEl.style.transform = 'scale(1)';
+                  countEl.style.color = '';
+                }, 350);
+              }
+              localStorage.setItem('gh_stars_infraud', data.stargazers_count.toString());
+            }
+          })
+          .catch(err => {
+            console.debug('[GitHub Stars Notice]:', err.message);
+          });
+        }
+
+        // 1. Fetch immediately on every page visit/refresh
+        fetchLiveStars();
+
+        // 2. Automatically re-fetch whenever user switches back to this tab
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            fetchLiveStars();
+          }
+        });
+      })();
     </script>
   </header>
 

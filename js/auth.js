@@ -162,6 +162,44 @@ async function signOut() {
     }
 }
 
+// 6. Request Password Reset Link (Forgot Password)
+async function resetPasswordForEmail(email) {
+    try {
+        const origin = window.location.origin;
+        const redirectTo = `${origin}/reset-password`;
+        const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: redirectTo
+        });
+
+        if (error) throw error;
+
+        showMessage('Password reset email sent! Check your inbox.');
+        return data;
+    } catch (error) {
+        showMessage(error.message, true);
+        throw error;
+    }
+}
+
+// 7. Update Password (Reset Password Callback)
+async function updateUserPassword(newPassword) {
+    try {
+        const { data, error } = await supabaseClient.auth.updateUser({
+            password: newPassword
+        });
+
+        if (error) throw error;
+
+        showMessage('Password updated successfully! Redirecting...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        window.location.href = 'login.html';
+        return data;
+    } catch (error) {
+        showMessage(error.message, true);
+        throw error;
+    }
+}
+
 // Expose functions to global window object so HTML buttons can use them
 window.authApp = {
     signUpWithEmail,
@@ -169,5 +207,8 @@ window.authApp = {
     signInWithProvider,
     checkUserSession,
     signOut,
+    resetPasswordForEmail,
+    updateUserPassword,
     supabase: supabaseClient
 };
+

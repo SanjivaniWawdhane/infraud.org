@@ -305,13 +305,42 @@
       font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       box-shadow: var(--shadow-xs);
+      user-select: none;
     }
 
     .btn-header-sync:hover {
       border-color: var(--blue-600);
       color: var(--blue-600);
+      background: rgba(37, 99, 235, 0.04);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+
+    .btn-header-sync:active {
+      transform: translateY(0);
+    }
+
+    .btn-header-sync svg {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-header-sync.syncing {
+      pointer-events: none;
+      opacity: 0.9;
+      border-color: var(--blue-600);
+      color: var(--blue-600);
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    .btn-header-sync.syncing svg {
+      animation: syncSpin 0.75s linear infinite;
+    }
+
+    @keyframes syncSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     /* ── Stats Grid (Exact 4 Cards from dashboard.html) ── */
@@ -608,6 +637,16 @@
       align-items: center;
       gap: 6px;
       transition: all 0.2s;
+    }
+    .btn-table-action.refreshing {
+      pointer-events: none;
+      opacity: 0.85;
+      color: var(--blue-600) !important;
+      border-color: var(--blue-600) !important;
+      background: rgba(37, 99, 235, 0.08) !important;
+    }
+    .btn-table-action.refreshing svg {
+      animation: syncSpin 0.75s linear infinite;
     }
 
     .btn-act-approve {
@@ -1297,9 +1336,9 @@
           <input type="text" id="header-search-input" placeholder="Search target, reporter, details..." />
         </div>
 
-        <button onclick="loadAdminReports()" class="btn-header-sync" title="Synchronize with Central Database">
+        <button id="btn-sync-feed" onclick="handleSyncFeed(this)" class="btn-header-sync" title="Synchronize with Central Database">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-          Sync Feed
+          <span id="btn-sync-feed-text">Sync Feed</span>
         </button>
       </div>
     </header>
@@ -1647,9 +1686,9 @@
             <h3 class="panel-title">Published Advisories Archive (<span id="lib-count">0</span>)</h3>
             <p style="font-size: 0.875rem; color: var(--ink-500, #4B5570); margin-top: 2px;">Manage live articles published to the public blog feed. You can review, copy direct links, or revoke articles.</p>
           </div>
-          <button type="button" onclick="loadPublishedBlogsLibrary()" class="btn-table-action" style="background: var(--ink-50, #F4F5FA); color: var(--ink-700, #1E2742); border: 1px solid var(--ink-200, #CBD5E1);">
+          <button type="button" id="btn-refresh-library" onclick="handleRefreshLibrary(this)" class="btn-table-action" style="background: var(--ink-50, #F4F5FA); color: var(--ink-700, #1E2742); border: 1px solid var(--ink-200, #CBD5E1);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-            Refresh Library
+            <span id="btn-refresh-library-text">Refresh Library</span>
           </button>
         </div>
 
@@ -1804,6 +1843,56 @@
       navigator.clipboard.writeText(text).then(() => {
         showToast(`Copied to clipboard: ${text}`);
       }).catch(() => {});
+    }
+
+    async function handleSyncFeed(btn) {
+      if (!btn) btn = document.getElementById('btn-sync-feed');
+      const textEl = document.getElementById('btn-sync-feed-text');
+      const originalText = textEl ? textEl.textContent : 'Sync Feed';
+
+      if (btn) btn.classList.add('syncing');
+      if (textEl) textEl.textContent = 'Syncing...';
+
+      const startTime = Date.now();
+
+      try {
+        // 1. Force fresh fetch from backend API / database (bypassing browser cache)
+        const res = await fetch('/api/reports/all?_t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.reports)) {
+            cachedReports = data.reports;
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedReports)); } catch(e){}
+          }
+        }
+      } catch (err) {
+        console.warn('[Sync Feed] Network notice, using local cache:', err.message);
+      }
+
+      // 2. Reload & Re-render current admin view
+      await loadAdminReports();
+
+      // If blog tab is active, refresh blogs library too
+      if (typeof loadPublishedBlogsLibrary === 'function') {
+        try { loadPublishedBlogsLibrary(); } catch(e){}
+      }
+
+      // Minimum 450ms animation so the user visibly sees the satisfying spin
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 450) {
+        await new Promise(r => setTimeout(r, 450 - elapsed));
+      }
+
+      // 3. Reset button state & show positive feedback
+      if (btn) btn.classList.remove('syncing');
+      if (textEl) textEl.textContent = 'Synced!';
+      
+      const count = cachedReports ? cachedReports.length : 0;
+      showToast('✓ Threat feed synchronized! (' + count + ' reports live)');
+
+      setTimeout(() => {
+        if (textEl) textEl.textContent = originalText;
+      }, 1500);
     }
 
     async function loadAdminReports() {
@@ -2031,7 +2120,7 @@
     }
 
     function handleDescInput(val) {
-      const words = val.trim() ? val.trim().split(/\s+/).filter(Boolean).length : 0;
+      const words = val.trim() ? val.trim().split(/s+/).filter(Boolean).length : 0;
       const readMins = Math.max(1, Math.ceil(words / 180));
 
       const wordBadge = document.getElementById('editorWordCount');
@@ -2126,7 +2215,7 @@ Over the past month, cybercrime cells across India have registered thousands of 
 4. **Financial Extortion:** Victims are pressured into transferring life savings into fraudulent "RBI security accounts" under the pretext of asset verification.
 
 ### Verified Indicators of Compromise (IOCs)
-- **Spoofed Caller IDs:** Fraudulent virtual numbers often begin with \`+92\`, \`+44\`, or spoofed local police control room numbers.
+- **Spoofed Caller IDs:** Fraudulent virtual numbers often begin with `+92`, `+44`, or spoofed local police control room numbers.
 - **Forged Documents:** Fake digital arrest warrants bearing forged signatures of senior officials and unauthorized government logos.
 
 ### Mandatory Defensive Protocols
@@ -2222,14 +2311,52 @@ Over the past month, cybercrime cells across India have registered thousands of 
     }
 
     // ── Published Advisories Library Management ──
+    async function handleRefreshLibrary(btn) {
+      if (!btn) btn = document.getElementById('btn-refresh-library');
+      const textEl = document.getElementById('btn-refresh-library-text');
+      const originalText = textEl ? textEl.textContent : 'Refresh Library';
+
+      if (btn) btn.classList.add('refreshing');
+      if (textEl) textEl.textContent = 'Refreshing...';
+
+      const startTime = Date.now();
+
+      await loadPublishedBlogsLibrary();
+
+      // Ensure minimum 450ms animation so the spin is visibly satisfying
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 450) {
+        await new Promise(r => setTimeout(r, 450 - elapsed));
+      }
+
+      if (btn) btn.classList.remove('refreshing');
+      if (textEl) textEl.textContent = 'Refreshed!';
+
+      const libCount = document.getElementById('lib-count');
+      const count = libCount ? libCount.textContent : '0';
+      showToast('✓ Blog library refreshed! (' + count + ' advisories loaded)');
+
+      setTimeout(() => {
+        if (textEl) textEl.textContent = originalText;
+      }, 1500);
+    }
+
     async function loadPublishedBlogsLibrary() {
       let blogs = [];
+      let deletedList = [];
+      try {
+        deletedList = JSON.parse(localStorage.getItem('infraud_deleted_blogs') || '[]');
+      } catch(e) {}
+
       try {
         const raw = localStorage.getItem('infraud_blogs');
         if (raw) blogs = JSON.parse(raw);
       } catch(e) {}
 
-      // If Supabase is available, sync
+      // Filter out any deleted blogs from local list
+      blogs = blogs.filter(b => !deletedList.includes(b.id) && !deletedList.includes(b.title));
+
+      // If Supabase is available, sync remote blogs
       if (window.authApp && window.authApp.supabase) {
         try {
           const { data, error } = await window.authApp.supabase
@@ -2238,14 +2365,17 @@ Over the past month, cybercrime cells across India have registered thousands of 
             .order('created_at', { ascending: false });
           if (data && data.length > 0) {
             data.forEach(sbBlog => {
-              if (!blogs.some(b => b.title === sbBlog.title)) blogs.push(sbBlog);
+              const isDeleted = deletedList.includes(sbBlog.id) || deletedList.includes(sbBlog.title);
+              if (!isDeleted && !blogs.some(b => (b.id && b.id === sbBlog.id) || b.title === sbBlog.title)) {
+                blogs.push(sbBlog);
+              }
             });
           }
         } catch(e) {}
       }
 
-      // If library is completely empty, seed with 2 realistic initial advisories
-      if (blogs.length === 0) {
+      // If library is completely empty and no blogs were explicitly deleted, seed initial 2 advisories
+      if (blogs.length === 0 && deletedList.length === 0) {
         blogs = [
           {
             id: 'blog_seed_1',
@@ -2277,20 +2407,34 @@ Over the past month, cybercrime cells across India have registered thousands of 
       const tbody = document.getElementById('library-tbody');
       if (!tbody) return;
 
+      if (blogs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 48px 24px; color: var(--ink-400, #94A3B8);">
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 4px;">No published advisories</div>
+              <div style="font-size: 0.875rem;">Your published archive is currently empty. Use the editor above to publish new advisories.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
       tbody.innerHTML = blogs.map(blog => {
-        const words = (blog.description || '').trim().split(/\s+/).filter(Boolean).length;
+        const words = (blog.description || '').trim().split(/s+/).filter(Boolean).length;
         const readMins = Math.max(1, Math.ceil(words / 180));
         const pubDate = blog.created_at ? new Date(blog.created_at).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
         const cover = blog.image_url || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?auto=format&fit=crop&w=800&q=80';
         const tag = blog.meta_keywords || '🚨 Critical Alert';
+        const blogTitle = blog.title || 'Untitled Advisory';
+        const blogId = blog.id || ('blog_' + Math.random().toString(36).substring(2, 9));
 
         return `
-          <tr>
+          <tr id="row-${blogId}">
             <td>
               <img src="${cover}" class="lib-thumb" alt="Thumbnail" onerror="this.src='assets/logo.jpg'" />
             </td>
             <td style="max-width: 320px;">
-              <div class="lib-title-text">${escapeHtml(blog.title || 'Untitled Advisory')}</div>
+              <div class="lib-title-text">${escapeHtml(blogTitle)}</div>
               <span style="font-size: 0.75rem; color: var(--ink-400);">INFRAUD Security Operations Lead</span>
             </td>
             <td>
@@ -2307,7 +2451,7 @@ Over the past month, cybercrime cells across India have registered thousands of 
                 <a href="blog.html" target="_blank" class="btn-table-action btn-act-approve" style="text-decoration: none;" title="View on live blog">
                   View
                 </a>
-                <button class="btn-table-action btn-act-delete" onclick="deletePublishedBlog('${blog.id}', '${escapeHtml(blog.title)}')" title="Revoke and delete this advisory">
+                <button type="button" class="btn-table-action btn-act-delete" data-id="${blogId}" data-title="${encodeURIComponent(blogTitle)}" onclick="handleDeleteBlogClick(this)" title="Revoke and delete this advisory">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                 </button>
               </div>
@@ -2317,25 +2461,55 @@ Over the past month, cybercrime cells across India have registered thousands of 
       }).join('');
     }
 
-    async function deletePublishedBlog(id, title) {
-      if (!confirm(`Delete advisory "${title}" from public blog feed?`)) return;
+    async function handleDeleteBlogClick(btn) {
+      if (!btn) return;
+      const id = btn.getAttribute('data-id') || '';
+      const title = decodeURIComponent(btn.getAttribute('data-title') || '');
 
-      // Delete from local storage
+      if (!confirm(`Are you sure you want to delete the advisory "${title}" from the public feed?`)) {
+        return;
+      }
+
+      const tr = btn.closest('tr');
+      if (tr) {
+        tr.style.transition = 'all 0.3s ease';
+        tr.style.opacity = '0.3';
+        tr.style.pointerEvents = 'none';
+      }
+
+      btn.disabled = true;
+      await deletePublishedBlog(id, title);
+    }
+
+    async function deletePublishedBlog(id, title) {
+      // 1. Record in persistent deleted list so Supabase sync never brings it back
+      try {
+        let deletedList = JSON.parse(localStorage.getItem('infraud_deleted_blogs') || '[]');
+        if (id && !deletedList.includes(id)) deletedList.push(id);
+        if (title && !deletedList.includes(title)) deletedList.push(title);
+        localStorage.setItem('infraud_deleted_blogs', JSON.stringify(deletedList));
+      } catch(e) {}
+
+      // 2. Remove from local storage infraud_blogs
       try {
         let localBlogs = JSON.parse(localStorage.getItem('infraud_blogs') || '[]');
         localBlogs = localBlogs.filter(b => b.id !== id && b.title !== title);
         localStorage.setItem('infraud_blogs', JSON.stringify(localBlogs));
       } catch(e) {}
 
-      // Delete from Supabase if connected
+      // 3. Delete from Supabase if connected
       if (window.authApp && window.authApp.supabase) {
         try {
-          await window.authApp.supabase.from('blogs').delete().eq('title', title);
-        } catch(e) {}
+          if (id) await window.authApp.supabase.from('blogs').delete().eq('id', id);
+          if (title) await window.authApp.supabase.from('blogs').delete().eq('title', title);
+        } catch(e) {
+          console.warn('[Supabase delete error]:', e);
+        }
       }
 
+      // 4. Reload UI and show toast
       await loadPublishedBlogsLibrary();
-      showToast('Advisory removed from public blog feed.');
+      showToast(`✓ Advisory "${title}" deleted successfully.`);
     }
 
     function handleSignOut() {

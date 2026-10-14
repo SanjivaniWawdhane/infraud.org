@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="INFRAUD Threat Reports — Live database of reported digital threats." />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Threat Reports | INFRAUD</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Global Tweaks ── */
+    body { background: var(--page, #F7F8FC); }
+
+    /* ── Premium Hero ── */
+    .reports-hero {
+      padding: 120px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .reports-hero::before {
+      content: '';
+      position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--blue-600, #2563EB);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+    }
+    .reports-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--ink-900, #0A0F1E);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .reports-subtitle {
+      font-size: 1.125rem;
+      color: var(--ink-500, #4B5570);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .btn-report {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ink-900, #0A0F1E);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 8px 24px rgba(10,15,30,0.15);
+    }
+    .btn-report:hover {
+      background: var(--ink-700, #1E2742);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(10,15,30,0.25);
+    }
+
+    /* ── Controls & Filters ── */
+    .reports-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+    .controls-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+    .search-input-wrap svg {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--ink-300, #94A3B8);
+    }
+    .reports-search {
+      width: 100%;
+      height: 52px;
+      padding-left: 48px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 16px;
+      font-size: 0.9375rem;
+      background: var(--surface, #FFFFFF);
+      outline: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(10,15,30,0.02);
+    }
+    .reports-search:focus {
+      border-color: var(--blue-600, #2563EB);
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+    }
+    .filter-select {
+      height: 52px;
+      padding: 0 20px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      border-radius: 16px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--ink-700, #1E2742);
+      background: var(--surface, #FFFFFF);
+      outline: none;
+      cursor: pointer;
+      min-width: 160px;
+      box-shadow: 0 4px 12px rgba(10,15,30,0.02);
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234B5570' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 48px;
+    }
+
+    /* ── Beautiful Data Table ── */
+    .table-card {
+      background: var(--surface, #FFFFFF);
+      border-radius: 24px;
+      border: 1px solid var(--ink-100, #E8EBF3);
+      box-shadow: 0 8px 32px rgba(10,15,30,0.04);
+      overflow: hidden;
+      overflow-x: auto;
+    }
+    .reports-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .reports-table th {
+      background: var(--ink-50, #F4F5FA);
+      padding: 20px 24px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-500, #4B5570);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      white-space: nowrap;
+    }
+    .reports-table td {
+      padding: 24px;
+      border-bottom: 1px solid var(--ink-100, #E8EBF3);
+      vertical-align: middle;
+    }
+    .reports-table tr:last-child td { border-bottom: none; }
+    .reports-table tr {
+      transition: background 0.2s;
+    }
+    .reports-table tr:hover {
+      background: #FAFBFF;
+    }
+    
+    /* Table Cells */
+    .td-identifier {
+      font-family: var(--mono, monospace);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--ink-900, #0A0F1E);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .type-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--ink-50, #F4F5FA);
+      color: var(--ink-500, #4B5570);
+    }
+    
+    .td-type {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink-500, #4B5570);
+    }
+    
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .risk-badge::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .risk-critical { background: rgba(239,68,68,0.1); color: #DC2626; border: 1px solid rgba(239,68,68,0.2); }
+    .risk-critical::before { background: #DC2626; box-shadow: 0 0 8px #DC2626; }
+    
+    .risk-high { background: rgba(245,158,11,0.1); color: #D97706; border: 1px solid rgba(245,158,11,0.2); }
+    .risk-high::before { background: #D97706; }
+    
+    .risk-low { background: rgba(16,185,129,0.1); color: #059669; border: 1px solid rgba(16,185,129,0.2); }
+    .risk-low::before { background: #059669; }
+
+    .td-evidence {
+      font-size: 0.875rem;
+      color: var(--ink-500, #4B5570);
+      max-width: 300px;
+      line-height: 1.5;
+    }
+    .td-date {
+      font-size: 0.875rem;
+      color: var(--ink-300, #94A3B8);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .pulse-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+  </style>
+</head>
+<body>
+
+          <!-- ═══════════════════════════════════════════
+       PREMIUM EDGE-TO-EDGE NAV V3
+  ════════════════════════════════════════════ -->
+  <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="index.html" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="index.html" >Home</a>
+        <a href="check.html" >Check</a>
+        <a href="reports.html"  class="active">Reports</a>
+        <a href="blog.html" >Blog</a>
+        <a href="learn.html" >Learn</a>
+        <a href="about.html" >About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <!-- Live GitHub Star Badge -->
+        <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="nav-edge-github" title="Star on GitHub">
+          <svg class="nav-gh-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="nav-gh-divider"></span>
+          <span class="nav-gh-star-icon">★</span>
+          <span class="nav-gh-count" id="nav-gh-count">2</span>
+        </a>
+
+        <a href="login.html" class="nav-edge-login">Login</a>
+        <a href="index.html#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Toggle Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.96); box-shadow: 0 4px 20px -6px rgba(10, 15, 30, 0.08); }
+      
+      .nav-edge .container {
+        max-width: 1320px;
+        width: 100%;
+        padding: 0 24px;
+      }
+
+      .nav-edge-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        gap: 16px;
+      }
+      
+      /* Logo */
+      .nav-edge-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .nav-edge-logo img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--ink-900, #0A0F1E);
+      }
+      
+      /* Menu - Flex center, NO absolute overlap bug! */
+      .nav-edge-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex: 1;
+        margin: 0 16px;
+      }
+      .nav-edge-menu a {
+        position: relative;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--ink-500, #4B5570);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-menu a:hover {
+        color: var(--ink-900, #0A0F1E);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-menu a.active {
+        color: var(--blue-600, #2563EB);
+        font-weight: 600;
+      }
+      .nav-edge-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        height: 2px;
+        background: var(--blue-600, #2563EB);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-menu a:hover::after,
+      .nav-edge-menu a.active::after {
+        transform: scaleX(1);
+      }
+      
+      /* Actions */
+      .nav-edge-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      /* GitHub Star Pill Badge */
+      .nav-edge-github {
+        display: inline-flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 12px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        text-decoration: none;
+        color: #334155;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .nav-edge-github:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+      .nav-gh-icon {
+        width: 16px;
+        height: 16px;
+        fill: #334155;
+        display: block;
+        transition: transform 0.2s, fill 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-icon {
+        transform: scale(1.08);
+        fill: #0f172a;
+      }
+      .nav-gh-divider {
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background: #cbd5e1;
+        margin: 0 8px;
+      }
+      .nav-gh-star-icon {
+        color: #334155;
+        font-size: 0.875rem;
+        margin-right: 4px;
+        transition: color 0.2s, transform 0.2s;
+        display: inline-block;
+        line-height: 1;
+      }
+      .nav-edge-github:hover .nav-gh-star-icon {
+        color: #f59e0b;
+        transform: scale(1.18);
+      }
+      .nav-gh-count {
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #334155;
+        transition: color 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-count {
+        color: #0f172a;
+      }
+
+      .nav-edge-login {
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--ink-700, #1E2742);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-login:hover {
+        color: var(--blue-600, #2563EB);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-signup {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--blue-600, #2563EB);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 8px 18px;
+        height: 36px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover {
+        background: var(--blue-700, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+      }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      /* Hamburger (Mobile) */
+      .nav-edge-hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--ink-900, #0A0F1E);
+        padding: 4px;
+        border-radius: 6px;
+      }
+      
+      @media (max-width: 992px) {
+        .nav-edge-menu {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 72px;
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          padding: 16px;
+          box-shadow: 0 12px 32px rgba(10, 15, 30, 0.1);
+          border-bottom: 1px solid rgba(10, 15, 30, 0.08);
+          gap: 6px;
+          margin: 0;
+        }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a {
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 0.9375rem;
+        }
+        .nav-edge-menu a::after { display: none; }
+        .nav-edge-actions .nav-edge-login,
+        .nav-edge-actions .nav-edge-signup {
+          display: none;
+        }
+        .nav-edge-github { height: 32px; padding: 0 10px; font-size: 0.75rem; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+    <script>
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-edge');
+        if(nav) {
+            if(window.scrollY > 20) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+        }
+      }, { passive: true });
+
+      // Mobile Hamburger Toggle
+      const hambBtn = document.querySelector('.nav-edge-hamburger');
+      if (hambBtn) {
+        hambBtn.addEventListener('click', () => {
+          const nav = document.querySelector('.nav-edge');
+          if (nav) nav.classList.toggle('mobile-open');
+        });
+      }
+
+      // Real-time Live GitHub Stars Fetcher (Instant & Always Live)
+      (function() {
+        const countEl = document.getElementById('nav-gh-count');
+        if (!countEl) return;
+
+        function formatStars(n) {
+          const num = Number(n);
+          if (isNaN(num)) return n;
+          if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return num.toString();
+        }
+
+        // Apply cached count instantly if available
+        const cached = localStorage.getItem('gh_stars_infraud');
+        if (cached !== null) {
+          countEl.textContent = formatStars(cached);
+        }
+
+        function fetchLiveStars() {
+          fetch('https://api.github.com/repos/SanjivaniWawdhane/infraud.org?_t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+            cache: 'no-store'
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (data && typeof data.stargazers_count === 'number') {
+              const freshCount = formatStars(data.stargazers_count);
+              if (countEl.textContent !== freshCount) {
+                countEl.textContent = freshCount;
+                countEl.style.transition = 'transform 0.3s ease, color 0.3s ease';
+                countEl.style.transform = 'scale(1.25)';
+                countEl.style.color = '#f59e0b';
+                setTimeout(() => {
+                  countEl.style.transform = 'scale(1)';
+                  countEl.style.color = '';
+                }, 350);
+              }
+              localStorage.setItem('gh_stars_infraud', data.stargazers_count.toString());
+            }
+          })
+          .catch(err => {
+            console.debug('[GitHub Stars Notice]:', err.message);
+          });
+        }
+
+        // 1. Fetch immediately on every page visit/refresh
+        fetchLiveStars();
+
+        // 2. Automatically re-fetch whenever user switches back to this tab
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            fetchLiveStars();
+          }
+        });
+      })();
+    </script>
+  </header>
+
+  <main>
+    <section class="reports-hero">
+      <div class="hero-badge">Live Intelligence</div>
+      <h1 class="reports-title">Community Threat Reports</h1>
+      <p class="reports-subtitle">Search the live database of reported digital threats. Help protect the community by submitting suspicious links, numbers, or messages.</p>
+      <a href="report.html" class="btn-report">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Submit a Report
+      </a>
+    </section>
+
+    <section class="reports-container">
+      
+      <!-- Submitted notification banner -->
+      <div id="pending-alert-banner" style="display: none; margin-bottom: 20px; padding: 16px 20px; border-radius: 12px; background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.2); color: var(--ink-800, #0A0F1E); font-size: 0.9375rem; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.35rem;">⏳</span>
+          <div>
+            <strong>Report Submitted for Moderation!</strong>
+            <div style="font-size: 0.8125rem; color: var(--ink-500, #4B5570); margin-top: 2px;">Your threat report has been sent to Admin review. Once approved, it will be published live to this feed for 24 hours.</div>
+          </div>
+        </div>
+        <a href="admin_dashboard.html" style="font-size: 0.8125rem; font-weight: 700; color: #2563EB; text-decoration: none; padding: 8px 16px; background: #fff; border-radius: 8px; border: 1px solid rgba(37,99,235,0.25); box-shadow: 0 2px 6px rgba(37,99,235,0.08); white-space: nowrap;">
+          Admin: Review & Approve &rarr;
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 600; color: var(--ink-500, #4B5570); background: #FFFFFF; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--ink-100, #E8EBF3);">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.2);"></span>
+          <span>Live Community Stream &bull; Reports stay active for <strong>24 hours</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <a id="admin-pending-link" href="admin_dashboard.html" style="display: none; align-items: center; gap: 6px; font-size: 0.8125rem; font-weight: 700; color: #D97706; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); padding: 6px 14px; border-radius: 100px; text-decoration: none; transition: transform 0.2s;">
+            <span>⏳</span> <span id="pending-count-text">0 Pending Review</span> &bull; <u>Admin Review</u>
+          </a>
+          <div id="reports-count-pill" style="font-size: 0.8125rem; font-weight: 700; color: var(--blue-600, #2563EB); background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.15); padding: 6px 14px; border-radius: 100px;">
+            5 active reports
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="search-input-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="reports-search" class="reports-search" placeholder="Search URLs, phone numbers, UPI IDs, evidence..." />
+        </div>
+        <select class="filter-select" id="filter-type">
+          <option value="All">All Types</option>
+          <option value="Website">Website</option>
+          <option value="Phone">Phone Number</option>
+          <option value="UPI ID">UPI ID</option>
+          <option value="Email">Email</option>
+        </select>
+        <select class="filter-select" id="filter-risk">
+          <option value="All">All Risk Levels</option>
+          <option value="Critical">Critical</option>
+          <option value="High Risk">High Risk</option>
+          <option value="Low Risk">Safe / Low Risk</option>
+        </select>
+      </div>
+
+      <div class="table-card">
+        <table class="reports-table">
+          <thead>
+            <tr>
+              <th>Identifier</th>
+              <th>Type</th>
+              <th>Risk Score</th>
+              <th>Evidence / Notes</th>
+              <th>Reported</th>
+            </tr>
+          </thead>
+          <tbody id="reports-tbody">
+            <!-- Dynamically populated from localStorage & automatically pruned after 24 hours -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <script>
+      // 24-HOUR RETENTION COMMUNITY REPORT SYSTEM
+      const STORAGE_KEY = 'infraud_community_reports';
+      const RETENTION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+      // Seed reports preserved from original demo UI (timestamps relative to now)
+      const SEED_REPORTS = [
+        {
+          id: 'seed-1',
+          identifier: 'amazon-support-india.in',
+          type: 'Website',
+          risk: 'Critical',
+          evidence: 'Impersonates Amazon. Asks for OTP and card details. Multiple reports.',
+          timestamp: Date.now() - (2 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (2 * 60 * 1000)
+        },
+        {
+          id: 'seed-2',
+          identifier: '+91 98765 43210',
+          type: 'Phone',
+          risk: 'High Risk',
+          evidence: 'FedEx parcel scam call. Threatens legal action.',
+          timestamp: Date.now() - (12 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (12 * 60 * 1000)
+        },
+        {
+          id: 'seed-3',
+          identifier: 'paytm-kyc-verify@gmail.com',
+          type: 'Email',
+          risk: 'Critical',
+          evidence: 'Fake KYC notice. Uses generic gmail address instead of official domain.',
+          timestamp: Date.now() - (60 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (60 * 60 * 1000)
+        },
+        {
+          id: 'seed-4',
+          identifier: 'johndoe@ybl',
+          type: 'UPI ID',
+          risk: 'Low Risk',
+          evidence: 'Verified merchant account. No suspicious activity found in recent transactions.',
+          timestamp: Date.now() - (3 * 60 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (3 * 60 * 60 * 1000)
+        },
+        {
+          id: 'seed-5',
+          identifier: 'flipkart-big-billion-offers.link',
+          type: 'Website',
+          risk: 'High Risk',
+          evidence: 'Non-standard TLD. Cloned interface of e-commerce site.',
+          timestamp: Date.now() - (5 * 60 * 60 * 1000),
+          status: 'approved',
+          approvedAt: Date.now() - (5 * 60 * 60 * 1000)
+        }
+      ];
+
+      function updatePendingBadge(pendingCount) {
+        const pendingLink = document.getElementById('admin-pending-link');
+        const pendingText = document.getElementById('pending-count-text');
+        if (pendingLink && pendingText) {
+          if (pendingCount > 0) {
+            pendingText.textContent = `${pendingCount} Pending Review`;
+            pendingLink.style.display = 'inline-flex';
+          } else {
+            pendingLink.style.display = 'none';
+          }
+        }
+      }
+
+      async function getActiveReports() {
+        // 1. Try central server API first
+        try {
+          const res = await fetch('/api/reports');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.reports)) {
+              updatePendingBadge(data.pendingCount || 0);
+              // Sync to localStorage as offline cache
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data.reports)); } catch(e){}
+              return data.reports;
+            }
+          }
+        } catch (e) {
+          console.warn('API fetch failed, falling back to local storage', e);
+        }
+
+        // 2. Fallback to localStorage if server API is unavailable
+        let reports = [];
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            reports = JSON.parse(raw);
+          } else {
+            reports = [...SEED_REPORTS];
+          }
+        } catch (e) {
+          reports = [...SEED_REPORTS];
+        }
+
+        const now = Date.now();
+        const pendingCount = reports.filter(r => r.status === 'pending').length;
+        updatePendingBadge(pendingCount);
+
+        const approvedOnly = reports.filter(r => {
+          if (r.status !== 'approved') return false;
+          const liveTime = r.approvedAt || r.timestamp || 0;
+          return (now - liveTime) < RETENTION_MS;
+        });
+
+        return approvedOnly;
+      }
+
+      function formatRelativeTime(timestamp) {
+        const diff = Date.now() - timestamp;
+        if (diff < 60000) return 'Just now';
+        const mins = Math.floor(diff / 60000);
+        if (mins < 60) return `${mins} min${mins === 1 ? '' : 's'} ago`;
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return `${hours} hr${hours === 1 ? '' : 's'} ago`;
+        return 'Expired';
+      }
+
+      function getTypeIcon(type) {
+        const lower = (type || '').toLowerCase();
+        if (lower.includes('phone')) {
+          return '<div class="type-icon" title="Phone Threat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>';
+        } else if (lower.includes('email')) {
+          return '<div class="type-icon" title="Email Threat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>';
+        } else if (lower.includes('upi')) {
+          return '<div class="type-icon" title="UPI Fraud"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>';
+        } else {
+          return '<div class="type-icon" title="Website / Link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>';
+        }
+      }
+
+      function getRiskBadge(risk) {
+        const lower = (risk || '').toLowerCase();
+        if (lower.includes('critical')) {
+          return '<span class="risk-badge risk-critical">Critical</span>';
+        } else if (lower.includes('low') || lower.includes('safe')) {
+          return '<span class="risk-badge risk-low">Low Risk</span>';
+        } else {
+          return '<span class="risk-badge risk-high">High Risk</span>';
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      async function renderReports() {
+        const active = await getActiveReports();
+        const search = (document.getElementById('reports-search')?.value || '').toLowerCase().trim();
+        const typeFilter = document.getElementById('filter-type')?.value || 'All';
+        const riskFilter = document.getElementById('filter-risk')?.value || 'All';
+        const tbody = document.getElementById('reports-tbody');
+        const countPill = document.getElementById('reports-count-pill');
+
+        if (countPill) {
+          countPill.textContent = `${active.length} active report${active.length === 1 ? '' : 's'}`;
+        }
+
+        const filtered = active.filter(r => {
+          // Search matching identifier or evidence or type
+          const matchesSearch = !search ||
+            (r.identifier && r.identifier.toLowerCase().includes(search)) ||
+            (r.evidence && r.evidence.toLowerCase().includes(search)) ||
+            (r.type && r.type.toLowerCase().includes(search));
+
+          // Type filter
+          const matchesType = typeFilter === 'All' || (r.type && r.type.toLowerCase().includes(typeFilter.toLowerCase()));
+
+          // Risk filter
+          const matchesRisk = riskFilter === 'All' || (r.risk && r.risk.toLowerCase().includes(riskFilter.toLowerCase()));
+
+          return matchesSearch && matchesType && matchesRisk;
+        });
+
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 48px 24px; color: var(--ink-400, #94A3B8);">
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 6px;">No reports found</div>
+                <div style="font-size: 0.875rem;">No active reports in the last 24 hours match your filters.</div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(r => {
+          const liveTime = r.approvedAt || r.timestamp || Date.now();
+          const timeAgo = formatRelativeTime(liveTime);
+          const remainingHours = Math.max(0, Math.ceil((RETENTION_MS - (Date.now() - liveTime)) / 3600000));
+          return `
+            <tr>
+              <td class="td-identifier">
+                ${getTypeIcon(r.type)}
+                <span>${escapeHtml(r.identifier || 'Unknown')}</span>
+              </td>
+              <td class="td-type">${escapeHtml(r.type || 'Website')}</td>
+              <td>${getRiskBadge(r.risk)}</td>
+              <td class="td-evidence">${escapeHtml(r.evidence || 'No details provided.')}</td>
+              <td class="td-date" title="Stays active for ~${remainingHours}h more (${timeAgo})">${timeAgo}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Check for submission redirect alert
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'submitted') {
+          const banner = document.getElementById('pending-alert-banner');
+          if (banner) banner.style.display = 'flex';
+        }
+
+        renderReports();
+
+        document.getElementById('reports-search')?.addEventListener('input', renderReports);
+        document.getElementById('filter-type')?.addEventListener('change', renderReports);
+        document.getElementById('filter-risk')?.addEventListener('change', renderReports);
+
+        // Auto-refresh periodically to update relative times and auto-prune expired reports
+        setInterval(renderReports, 30000);
+
+        // Cross-tab real-time sync when a report is submitted
+        window.addEventListener('storage', (e) => {
+          if (e.key === STORAGE_KEY) {
+            renderReports();
+          }
+        });
+      });
+    </script>
+  </main>
+
+  <!-- PREMIUM FOOTER -->
+  <footer class="footer-premium">
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="footer-grid">
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="check.html" class="footer-link">Live Check</a></li>
+            <li><a href="reports.html" class="footer-link" style="color:var(--blue-600)">Threat Reports</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html" class="footer-link">Blog</a></li>
+            <li><a href="learn.html" class="footer-link">Safety Academy</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-col">
+          <div class="footer-col-title">Community</div>
+          <ul class="footer-links-list">
+            <li><a href="https://github.com/infraud" class="footer-link">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-huge-mark">INFRAUD</div>
+    </div>
+    <style>
+      .footer-premium { background: #FFFFFF; border-top: 1px solid var(--ink-100, #E8EBF3); padding: 80px 0 0; color: var(--ink-900, #0A0F1E); overflow: hidden; }
+      .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 40px; }
+      .footer-col-title { font-size: 0.8125rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+      .footer-link { font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+      .footer-link:hover { color: var(--blue-600, #2563EB); }
+      .footer-huge-mark { font-size: clamp(4rem, 14vw, 15rem); font-weight: 900; line-height: 0.8; text-align: center; color: var(--ink-50, #F4F5FA); letter-spacing: -0.05em; margin-bottom: -1vw; }
+      @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } }
+    </style>
+  </footer>
+</body>
+</html>

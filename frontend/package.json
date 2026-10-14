@@ -1,0 +1,18 @@
+{
+  "name": "infraud-frontend",
+  "version": "1.0.0",
+  "description": "INFRAUD.org - Check Before You Trust",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "node server.js"
+  },
+  "keywords": [
+    "infraud",
+    "fraud-prevention",
+    "security"
+  ],
+  "author": "",
+  "license": "MIT"
+}

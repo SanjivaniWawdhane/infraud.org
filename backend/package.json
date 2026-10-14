@@ -1,0 +1,22 @@
+{
+  "name": "infraud-backend",
+  "version": "1.0.0",
+  "description": "INFRAUD.org Backend API Service",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "infraud",
+    "security",
+    "api",
+    "fraud-prevention"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

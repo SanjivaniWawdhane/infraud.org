@@ -1,0 +1,74 @@
+[
+  {
+    "id": "seed-2",
+    "identifier": "fake-sbi-secure-portal.xyz",
+    "type": "Website",
+    "risk": "Critical",
+    "evidence": "Phishing clone of bank portal requesting OTP and netbanking credentials.",
+    "reporterName": "Rajesh",
+    "reporterEmail": "rajesh@example.com",
+    "timestamp": 1791883562834,
+    "status": "approved",
+    "approvedAt": 1791883562834
+  },
+  {
+    "id": "seed-3",
+    "identifier": "amazon-support-india.in",
+    "type": "Website",
+    "risk": "Critical",
+    "evidence": "Impersonates Amazon. Asks for OTP and card details. Multiple reports.",
+    "reporterName": "Cyber Cell",
+    "reporterEmail": "",
+    "timestamp": 1791883562834,
+    "status": "approved",
+    "approvedAt": 1791883562834
+  },
+  {
+    "id": "seed-4",
+    "identifier": "+91 98765 43210",
+    "type": "Phone",
+    "risk": "High Risk",
+    "evidence": "FedEx parcel scam call. Threatens legal action.",
+    "reporterName": "Amit Sharma",
+    "reporterEmail": "",
+    "timestamp": 1791883562834,
+    "status": "approved",
+    "approvedAt": 1791883562834
+  },
+  {
+    "id": "seed-5",
+    "identifier": "paytm-kyc-verify@gmail.com",
+    "type": "Email",
+    "risk": "Critical",
+    "evidence": "Fake KYC notice. Uses generic gmail address instead of official domain.",
+    "reporterName": "Sneha",
+    "reporterEmail": "",
+    "timestamp": 1791883562834,
+    "status": "approved",
+    "approvedAt": 1791883562834
+  },
+  {
+    "id": "seed-6",
+    "identifier": "johndoe@ybl",
+    "type": "UPI ID",
+    "risk": "Low Risk",
+    "evidence": "Verified merchant account. No suspicious activity found in recent transactions.",
+    "reporterName": "Verification Bot",
+    "reporterEmail": "",
+    "timestamp": 1791883562834,
+    "status": "approved",
+    "approvedAt": 1791883562834
+  },
+  {
+    "id": "seed-7",
+    "identifier": "flipkart-big-billion-offers.link",
+    "type": "Website",
+    "risk": "High Risk",
+    "evidence": "Non-standard TLD. Cloned interface of e-commerce site.",
+    "reporterName": "Community User",
+    "reporterEmail": "",
+    "timestamp": 1791883562834,
+    "status": "approved",
+    "approvedAt": 1791883562834
+  }
+]

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Report Threat | INFRAUD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-header { padding: 160px 0 64px; text-align: center; position: relative; z-index: 5; }
+        .page-title { font-size: 3rem; margin-bottom: 16px; }
+        .page-subtitle { color: var(--text-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
+        
+        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px; position: relative; z-index: 5; }
+        .auth-card { background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; width: 100%; max-width: 440px; box-shadow: var(--shadow-lg); z-index: 10; }
+        .auth-card h2 { text-align: center; margin-bottom: 32px; font-size: 1.75rem; }
+        .form-group { margin-bottom: 24px; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+        .form-input { width: 100%; height: 48px; padding: 0 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; transition: all 0.2s; outline: none; }
+        .form-input:focus { border-color: var(--brand-secondary); box-shadow: 0 0 0 4px rgba(59,152,255,0.1); }
+        .auth-btn { width: 100%; height: 48px; font-size: 1rem; margin-top: 8px; }
+        .auth-links { text-align: center; margin-top: 24px; font-size: 0.875rem; color: var(--text-muted); }
+        .auth-links a { color: var(--brand-primary); font-weight: 600; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 32px; background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+        .data-table th, .data-table td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--border-light); }
+        .data-table th { background: var(--bg-element); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: var(--bg-body); }
+        .font-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 120px 0 64px; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-link { padding: 12px 16px; border-radius: var(--radius-md); font-weight: 500; color: var(--text-muted); transition: all 0.2s; }
+        .sidebar-link:hover, .sidebar-link.active { background: var(--bg-element); color: var(--text-main); }
+        
+        .result-card { background: #FFF; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; box-shadow: var(--shadow-md); margin-top: 32px; }
+        .result-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    
+                  <!-- ═══════════════════════════════════════════
+       PREMIUM EDGE-TO-EDGE NAV V3
+  ════════════════════════════════════════════ -->
+  <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="index.html" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="index.html" >Home</a>
+        <a href="check.html" >Check</a>
+        <a href="reports.html" >Reports</a>
+        <a href="blog.html" >Blog</a>
+        <a href="learn.html" >Learn</a>
+        <a href="about.html" >About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <!-- Live GitHub Star Badge -->
+        <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="nav-edge-github" title="Star on GitHub">
+          <svg class="nav-gh-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="nav-gh-divider"></span>
+          <span class="nav-gh-star-icon">★</span>
+          <span class="nav-gh-count" id="nav-gh-count">2</span>
+        </a>
+
+        <a href="login.html" class="nav-edge-login">Login</a>
+        <a href="index.html#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Toggle Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.96); box-shadow: 0 4px 20px -6px rgba(10, 15, 30, 0.08); }
+      
+      .nav-edge .container {
+        max-width: 1320px;
+        width: 100%;
+        padding: 0 24px;
+      }
+
+      .nav-edge-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        gap: 16px;
+      }
+      
+      /* Logo */
+      .nav-edge-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .nav-edge-logo img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--ink-900, #0A0F1E);
+      }
+      
+      /* Menu - Flex center, NO absolute overlap bug! */
+      .nav-edge-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex: 1;
+        margin: 0 16px;
+      }
+      .nav-edge-menu a {
+        position: relative;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--ink-500, #4B5570);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-menu a:hover {
+        color: var(--ink-900, #0A0F1E);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-menu a.active {
+        color: var(--blue-600, #2563EB);
+        font-weight: 600;
+      }
+      .nav-edge-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        height: 2px;
+        background: var(--blue-600, #2563EB);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-menu a:hover::after,
+      .nav-edge-menu a.active::after {
+        transform: scaleX(1);
+      }
+      
+      /* Actions */
+      .nav-edge-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      /* GitHub Star Pill Badge */
+      .nav-edge-github {
+        display: inline-flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 12px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        text-decoration: none;
+        color: #334155;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .nav-edge-github:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+      .nav-gh-icon {
+        width: 16px;
+        height: 16px;
+        fill: #334155;
+        display: block;
+        transition: transform 0.2s, fill 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-icon {
+        transform: scale(1.08);
+        fill: #0f172a;
+      }
+      .nav-gh-divider {
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background: #cbd5e1;
+        margin: 0 8px;
+      }
+      .nav-gh-star-icon {
+        color: #334155;
+        font-size: 0.875rem;
+        margin-right: 4px;
+        transition: color 0.2s, transform 0.2s;
+        display: inline-block;
+        line-height: 1;
+      }
+      .nav-edge-github:hover .nav-gh-star-icon {
+        color: #f59e0b;
+        transform: scale(1.18);
+      }
+      .nav-gh-count {
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #334155;
+        transition: color 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-count {
+        color: #0f172a;
+      }
+
+      .nav-edge-login {
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--ink-700, #1E2742);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-login:hover {
+        color: var(--blue-600, #2563EB);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-signup {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--blue-600, #2563EB);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 8px 18px;
+        height: 36px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover {
+        background: var(--blue-700, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+      }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      /* Hamburger (Mobile) */
+      .nav-edge-hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--ink-900, #0A0F1E);
+        padding: 4px;
+        border-radius: 6px;
+      }
+      
+      @media (max-width: 992px) {
+        .nav-edge-menu {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 72px;
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          padding: 16px;
+          box-shadow: 0 12px 32px rgba(10, 15, 30, 0.1);
+          border-bottom: 1px solid rgba(10, 15, 30, 0.08);
+          gap: 6px;
+          margin: 0;
+        }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a {
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 0.9375rem;
+        }
+        .nav-edge-menu a::after { display: none; }
+        .nav-edge-actions .nav-edge-login,
+        .nav-edge-actions .nav-edge-signup {
+          display: none;
+        }
+        .nav-edge-github { height: 32px; padding: 0 10px; font-size: 0.75rem; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+    <script>
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-edge');
+        if(nav) {
+            if(window.scrollY > 20) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+        }
+      }, { passive: true });
+
+      // Mobile Hamburger Toggle
+      const hambBtn = document.querySelector('.nav-edge-hamburger');
+      if (hambBtn) {
+        hambBtn.addEventListener('click', () => {
+          const nav = document.querySelector('.nav-edge');
+          if (nav) nav.classList.toggle('mobile-open');
+        });
+      }
+
+      // Real-time Live GitHub Stars Fetcher (Instant & Always Live)
+      (function() {
+        const countEl = document.getElementById('nav-gh-count');
+        if (!countEl) return;
+
+        function formatStars(n) {
+          const num = Number(n);
+          if (isNaN(num)) return n;
+          if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return num.toString();
+        }
+
+        // Apply cached count instantly if available
+        const cached = localStorage.getItem('gh_stars_infraud');
+        if (cached !== null) {
+          countEl.textContent = formatStars(cached);
+        }
+
+        function fetchLiveStars() {
+          fetch('https://api.github.com/repos/SanjivaniWawdhane/infraud.org?_t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+            cache: 'no-store'
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (data && typeof data.stargazers_count === 'number') {
+              const freshCount = formatStars(data.stargazers_count);
+              if (countEl.textContent !== freshCount) {
+                countEl.textContent = freshCount;
+                countEl.style.transition = 'transform 0.3s ease, color 0.3s ease';
+                countEl.style.transform = 'scale(1.25)';
+                countEl.style.color = '#f59e0b';
+                setTimeout(() => {
+                  countEl.style.transform = 'scale(1)';
+                  countEl.style.color = '';
+                }, 350);
+              }
+              localStorage.setItem('gh_stars_infraud', data.stargazers_count.toString());
+            }
+          })
+          .catch(err => {
+            console.debug('[GitHub Stars Notice]:', err.message);
+          });
+        }
+
+        // 1. Fetch immediately on every page visit/refresh
+        fetchLiveStars();
+
+        // 2. Automatically re-fetch whenever user switches back to this tab
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            fetchLiveStars();
+          }
+        });
+      })();
+    </script>
+  </header>
+
+    <main>
+        
+        <div class="auth-container">
+            <div class="auth-card" style="max-width: 600px;">
+                <h2>Report a Threat</h2>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 32px;">Help the community by submitting a suspicious asset.</p>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 32px;">
+                    <div class="progress-bar-step" id="pb-1" style="flex: 1; height: 4px; background: var(--blue-600); border-radius: 2px; transition: 0.3s;"></div>
+                    <div class="progress-bar-step" id="pb-2" style="flex: 1; height: 4px; background: var(--ink-100); border-radius: 2px; transition: 0.3s;"></div>
+                    <div class="progress-bar-step" id="pb-3" style="flex: 1; height: 4px; background: var(--ink-100); border-radius: 2px; transition: 0.3s;"></div>
+                </div>
+
+                <form id="multi-step-form">
+                    <!-- STEP 1 -->
+                    <div id="step-1" class="form-step">
+                        <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 1.1rem; color: var(--ink-900);">Step 1: Your Details</h3>
+                        <div class="form-group">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" id="reporter-name" class="form-input" placeholder="e.g. John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address (Optional)</label>
+                            <input type="email" id="reporter-email" class="form-input" placeholder="e.g. john@example.com">
+                        </div>
+                        <button type="button" class="btn btn-primary auth-btn" onclick="nextStep(2)">Next: Threat Details</button>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div id="step-2" class="form-step" style="display: none;">
+                        <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 1.1rem; color: var(--ink-900);">Step 2: Threat Details</h3>
+                        <div class="form-group">
+                            <label class="form-label">Asset Type</label>
+                            <select class="form-input" id="asset-type" onchange="updateTargetInput()">
+                                <option value="Website">Website / URL</option>
+                                <option value="Phone">Phone Number</option>
+                                <option value="Email">Email Address</option>
+                                <option value="UPI ID">UPI Handle / ID</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" id="target-label">Website URL</label>
+                            <input type="text" class="form-input" id="target-input" placeholder="e.g. https://suspicious-site.com" required>
+                            <div id="target-error" style="color: #DC2626; font-size: 0.8125rem; margin-top: 6px; display: none;">Please provide the suspicious URL, phone number, or handle.</div>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button type="button" class="btn" style="flex:1; background: var(--ink-100); color: var(--ink-900); padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="nextStep(1)">Back</button>
+                            <button type="button" class="btn btn-primary auth-btn" style="flex:2; margin-top: 0;" onclick="validateStep2()">Next: Context</button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div id="step-3" class="form-step" style="display: none;">
+                        <h3 style="margin-bottom: 24px; font-weight: 600; font-size: 1.1rem; color: var(--ink-900);">Step 3: Risk & Evidence</h3>
+                        <div class="form-group">
+                            <label class="form-label">Risk Severity Assessment</label>
+                            <select class="form-input" id="threat-risk">
+                                <option value="Critical">Critical Risk (Active Phishing, Stealing Money / OTP)</option>
+                                <option value="High Risk" selected>High Risk (Suspicious Calls, Threatening Scams)</option>
+                                <option value="Low Risk">Low Risk (Unverified / Warning Only)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Evidence / Notes (Description)</label>
+                            <textarea id="threat-desc" class="form-input" style="height: 100px; padding: 12px 16px; resize: none;" placeholder="Provide details (e.g. Demanded OTP, FedEx courier scam, fake payment gateway)..."></textarea>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button type="button" class="btn" style="flex:1; background: var(--ink-100); color: var(--ink-900); padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="nextStep(2)">Back</button>
+                            <button type="button" onclick="submitForm()" class="btn btn-primary auth-btn" id="submit-btn" style="flex:2; text-align:center; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0;">Submit Report</button>
+                        </div>
+                    </div>
+                </form>
+
+                <script>
+                    function nextStep(step) {
+                        document.querySelectorAll('.form-step').forEach(el => el.style.display = 'none');
+                        const targetStep = document.getElementById('step-' + step);
+                        if (targetStep) targetStep.style.display = 'block';
+                        
+                        document.querySelectorAll('.progress-bar-step').forEach((el, index) => {
+                            if(index < step) {
+                                el.style.background = 'var(--blue-600)';
+                            } else {
+                                el.style.background = 'var(--ink-100)';
+                            }
+                        });
+                    }
+
+                    function validateStep2() {
+                        const targetInput = document.getElementById('target-input');
+                        const errorMsg = document.getElementById('target-error');
+                        if (!targetInput.value.trim()) {
+                            errorMsg.style.display = 'block';
+                            targetInput.style.borderColor = '#DC2626';
+                            targetInput.focus();
+                            return;
+                        }
+                        errorMsg.style.display = 'none';
+                        targetInput.style.borderColor = '';
+                        nextStep(3);
+                    }
+
+                    function updateTargetInput() {
+                        const type = document.getElementById('asset-type').value;
+                        const label = document.getElementById('target-label');
+                        const input = document.getElementById('target-input');
+
+                        if (type === 'Website') {
+                            label.innerText = 'Website URL';
+                            input.placeholder = 'e.g. https://suspicious-site.com';
+                        } else if (type === 'Phone') {
+                            label.innerText = 'Phone Number';
+                            input.placeholder = 'e.g. +91 98765 43210';
+                        } else if (type === 'Email') {
+                            label.innerText = 'Email Address';
+                            input.placeholder = 'e.g. scammer@example.com';
+                        } else if (type === 'UPI ID') {
+                            label.innerText = 'UPI ID';
+                            input.placeholder = 'e.g. scammer@upi';
+                        }
+                    }
+
+                    // Auto-fill logged in user info if available
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        updateTargetInput();
+                        try {
+                            if (window.authApp && window.authApp.checkUserSession) {
+                                const session = await window.authApp.checkUserSession();
+                                if (session && session.user) {
+                                    const emailInput = document.getElementById('reporter-email');
+                                    const nameInput = document.getElementById('reporter-name');
+                                    if (emailInput && !emailInput.value) emailInput.value = session.user.email || '';
+                                    if (nameInput && !nameInput.value && session.user.user_metadata?.full_name) {
+                                        nameInput.value = session.user.user_metadata.full_name;
+                                    }
+                                }
+                            }
+                        } catch(e) {}
+                    });
+
+                    // 24-HOUR RETENTION STORAGE LOGIC
+                    const STORAGE_KEY = 'infraud_community_reports';
+                    const RETENTION_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+                    async function submitForm() {
+                        const targetInput = document.getElementById('target-input');
+                        const target = targetInput?.value?.trim();
+                        if (!target) {
+                            nextStep(2);
+                            validateStep2();
+                            return;
+                        }
+
+                        const submitBtn = document.getElementById('submit-btn');
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.textContent = 'Submitting...';
+                        }
+
+                        const name = document.getElementById('reporter-name')?.value?.trim() || 'Anonymous';
+                        const email = document.getElementById('reporter-email')?.value?.trim() || '';
+                        const type = document.getElementById('asset-type')?.value || 'Website';
+                        const risk = document.getElementById('threat-risk')?.value || 'High Risk';
+                        const desc = document.getElementById('threat-desc')?.value?.trim() || 'Reported threat by community user.';
+
+                        const newReport = {
+                            id: 'rep_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+                            identifier: target,
+                            type: type,
+                            risk: risk,
+                            evidence: desc,
+                            reporterName: name,
+                            reporterEmail: email,
+                            timestamp: Date.now(),
+                            status: 'pending' // Sent to Admin for review & approval
+                        };
+
+                        // 1. Send to server API so ALL browsers and users get it
+                        try {
+                            await fetch('/api/reports', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(newReport)
+                            });
+                        } catch (err) {
+                            console.warn('Server API unavailable, saving to local storage fallback', err);
+                        }
+
+                        // 2. Also save to localStorage as backup
+                        let reports = [];
+                        try {
+                            const stored = localStorage.getItem(STORAGE_KEY);
+                            if (stored) {
+                                reports = JSON.parse(stored);
+                            }
+                        } catch (e) {
+                            reports = [];
+                        }
+
+                        const now = Date.now();
+                        reports = reports.filter(r => r.status === 'pending' || (now - (r.approvedAt || r.timestamp || 0)) < RETENTION_MS);
+                        reports.unshift(newReport);
+                        try {
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+                        } catch (e) {
+                            console.error('Storage error:', e);
+                        }
+
+                        showSubmitSuccess();
+                    }
+
+                    function showSubmitSuccess() {
+                        const popup = document.getElementById('submit-popup');
+                        const popupCard = document.getElementById('submit-popup-card');
+                        popup.style.display = 'flex';
+                        setTimeout(() => {
+                            popup.style.opacity = '1';
+                            popupCard.style.transform = 'scale(1)';
+                        }, 10);
+                        
+                        // Automatically redirect to reports.html with notification
+                        setTimeout(() => {
+                            window.location.href = 'reports.html?status=submitted';
+                        }, 2200);
+                    }
+                </script>
+
+                <!-- Popup Modal -->
+                <div id="submit-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; align-items: center; justify-content: center; background: rgba(10, 15, 30, 0.4); backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease;">
+                    <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);" id="submit-popup-card">
+                        <div style="width: 64px; height: 64px; background: rgba(16,185,129,0.1); color: #10B981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--ink-900); margin-bottom: 8px;">Report Submitted for Review!</h3>
+                        <p style="color: var(--ink-500); font-size: 1rem; max-width: 290px; margin: 0 auto 8px;">Thank you for helping protect the community! Your report has been sent to admin moderation and will appear live once approved.</p>
+                        <p style="color: var(--blue-600); font-size: 0.875rem; font-weight: 600;">Redirecting to Threat Reports...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    
+    </main>
+    
+    <!-- ═══════════════════════════════════════════
+         V5 ULTRA PREMIUM FOOTER (LIGHT THEME)
+    ════════════════════════════════════════════ -->
+    <footer class="footer-premium">
+      
+      <!-- Subtle Bottom Anchor Glow -->
+      <div class="footer-bg-glow"></div>
+
+      <div class="container" style="position: relative; z-index: 2;">
+        
+
+        <!-- Links Section -->
+        <div class="footer-grid">
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Product</div>
+            <ul class="footer-links-list">
+              <li><a href="check.html" class="footer-link"><span>Live Check</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="reports.html" class="footer-link"><span>Threat Reports</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="dashboard.html" class="footer-link"><span>Dashboard</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="tools.html" class="footer-link"><span>Developer API</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Integrations</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Resources</div>
+            <ul class="footer-links-list">
+              <li><a href="learn.html" class="footer-link"><span>Safety Academy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="blog.html" class="footer-link"><span>Blog</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="about.html" class="footer-link"><span>About Us</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Help Center</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Community</div>
+            <ul class="footer-links-list">
+              <li><a href="https://github.com/infraud" class="footer-link"><span>GitHub</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Discord</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="report.html" class="footer-link"><span>Report a Scam</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Transparency Report</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <div class="footer-col-title">Legal</div>
+            <ul class="footer-links-list">
+              <li><a href="#" class="footer-link"><span>Privacy Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Terms of Service</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+              <li><a href="#" class="footer-link"><span>Cookie Policy</span> <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-huge-mark">INFRAUD</div>
+
+        <!-- Bottom Section -->
+        <div class="footer-bottom">
+          <div class="footer-copyright">&copy; 2026 INFRAUD. All rights reserved.</div>
+          <div class="footer-status">
+            <span class="status-indicator"></span>
+            All systems operational
+          </div>
+        </div>
+
+      </div>
+
+      <style>
+        .footer-premium {
+          position: relative;
+          background: linear-gradient(180deg, var(--page, #F7F8FC) 0%, #FFFFFF 100%);
+          border-top: 1px solid var(--ink-100, #E8EBF3);
+          padding: 80px 0 32px;
+          font-family: var(--font, 'Inter', sans-serif);
+          color: var(--ink-700, #1E2742);
+          overflow: hidden;
+        }
+
+        .footer-bg-glow {
+          position: absolute;
+          bottom: -150px; left: 50%;
+          transform: translateX(-50%);
+          width: 80vw; height: 300px;
+          background: radial-gradient(ellipse at center, rgba(37,99,235,0.06) 0%, transparent 60%);
+          pointer-events: none;
+          z-index: 1;
+        }
+        
+        /* Grid */
+        .footer-grid {
+          display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+          margin-bottom: 64px;
+        }
+        .footer-col-title { font-size: 0.8125rem; font-weight: 700; color: var(--ink-900, #0A0F1E); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .footer-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+        .footer-link {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-size: 0.9375rem; color: var(--ink-500, #4B5570); text-decoration: none; font-weight: 500;
+          transition: all 0.2s;
+        }
+        .footer-link svg { opacity: 0; transform: translateX(-4px); transition: all 0.2s; color: var(--blue-600, #2563EB); }
+        .footer-link:hover { color: var(--ink-900, #0A0F1E); }
+        .footer-link:hover svg { opacity: 1; transform: translateX(0); }
+
+        /* Huge Mark */
+        .footer-huge-mark {
+          font-size: clamp(4rem, 14vw, 15rem);
+          font-weight: 900;
+          line-height: 0.8;
+          text-align: center;
+          color: var(--ink-100, #E8EBF3);
+          opacity: 0.6;
+          letter-spacing: -0.05em;
+          user-select: none;
+          margin-bottom: -1vw;
+        }
+
+        /* Bottom */
+        .footer-bottom {
+          display: flex; justify-content: space-between; align-items: center;
+          padding-top: 32px; border-top: 1px solid var(--ink-100, #E8EBF3);
+          font-size: 0.875rem; color: var(--ink-500, #4B5570);
+          position: relative; z-index: 2;
+        }
+        .footer-status {
+          display: flex; align-items: center; gap: 10px;
+          padding: 6px 14px; background: #fff; border-radius: 100px;
+          font-weight: 600; font-size: 0.8125rem; border: 1px solid var(--ink-100, #E8EBF3);
+          box-shadow: 0 2px 8px rgba(10,15,30,.04);
+        }
+        .status-indicator {
+          width: 8px; height: 8px; border-radius: 50%;
+          background: var(--green-500, #10B981);
+          box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+          animation: statusPulse 2s infinite;
+        }
+        @keyframes statusPulse {
+          0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+          70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+          100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+        }
+
+        @media (max-width: 900px) {
+
+          .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 32px; }
+          .footer-huge-mark { display: none; }
+        }
+        @media (max-width: 600px) {
+          .footer-grid { grid-template-columns: 1fr; }
+          .footer-bottom { flex-direction: column; gap: 24px; text-align: center; }
+
+        }
+      </style>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
