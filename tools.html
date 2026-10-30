@@ -386,40 +386,503 @@
     </script>
   </header>
 
-    <main>
+    <main style="background: var(--page, #F7F8FC); min-height: 80vh; padding-bottom: 80px;">
 
-        <section class="section">
-            <div class="container text-center">
-                <h2 class="mb-12">Security Tools</h2>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); text-align: left;">
-                    <a href="check.html" class="card" style="display: block;">
-                        <h3 class="mb-2">URL Checker</h3>
-                        <p class="text-sm">Deep inspection of domains and links.</p>
-                    </a>
-                    <a href="check.html" class="card" style="display: block;">
-                        <h3 class="mb-2">Message Analyzer</h3>
-                        <p class="text-sm">Extract threats from SMS and emails.</p>
-                    </a>
-                    <a href="check.html" class="card" style="display: block;">
-                        <h3 class="mb-2">Phone Checker</h3>
-                        <p class="text-sm">Verify numbers against global spam DBs.</p>
-                    </a>
-                    <a href="check.html?type=upi" class="card" style="display: block;">
-                        <h3 class="mb-2">UPI Checker</h3>
-                        <p class="text-sm">Validate payment handles before transfer.</p>
-                    </a>
-                    <a href="check.html" class="card" style="display: block;">
-                        <h3 class="mb-2">Email Checker</h3>
-                        <p class="text-sm">Analyze sender headers and metadata.</p>
-                    </a>
-                    <a href="check.html" class="card" style="display: block;">
-                        <h3 class="mb-2">Screenshot Analyzer</h3>
-                        <p class="text-sm">Extract text from images using OCR.</p>
-                    </a>
+      <!-- ═══════════════════════════════════════════
+           HERO: SPECIALIZED SECURITY TOOLS SUITE
+      ════════════════════════════════════════════ -->
+      <section class="section" style="padding-top: 100px; padding-bottom: 50px; border-bottom: 1px solid var(--ink-100); background: var(--surface);">
+        <div class="container text-center">
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(37,99,235,0.08); color: #2563EB; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 20px; border: 1px solid rgba(37,99,235,0.15);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Specialized Forensic Defense Suite
+          </div>
+          <h1 style="font-size: clamp(2.2rem, 3.8vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink-900); margin-bottom: 18px; line-height: 1.15;">
+            Every tool tailored for its attack vector.
+          </h1>
+          <p style="font-size: 1.15rem; color: var(--ink-500); max-width: 720px; margin: 0 auto 36px; line-height: 1.6;">
+            Phishing links, fake courier calls, mule UPI handles, and coercive SMS require fundamentally different forensic techniques. Each tool below features dedicated telemetry and a tailored UI.
+          </p>
+
+          <!-- Category Filters -->
+          <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+            <button class="tool-filter-btn active" onclick="filterTools('all', this)">All Tools (6)</button>
+            <button class="tool-filter-btn" onclick="filterTools('web', this)">Web & Links</button>
+            <button class="tool-filter-btn" onclick="filterTools('telecom', this)">Telecom & Calls</button>
+            <button class="tool-filter-btn" onclick="filterTools('payment', this)">UPI & Payments</button>
+            <button class="tool-filter-btn" onclick="filterTools('nlp', this)">SMS & Messages</button>
+            <button class="tool-filter-btn" onclick="filterTools('vision', this)">Visual & OCR</button>
+          </div>
+        </div>
+      </section>
+
+      <style>
+        .tool-filter-btn {
+          background: var(--surface);
+          border: 1px solid var(--ink-100);
+          color: var(--ink-600);
+          padding: 8px 18px;
+          border-radius: 100px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .tool-filter-btn:hover {
+          color: var(--ink-900);
+          border-color: var(--ink-300);
+          background: var(--ink-50);
+        }
+        .tool-filter-btn.active {
+          background: var(--ink-900);
+          color: #fff;
+          border-color: var(--ink-900);
+          box-shadow: 0 2px 8px rgba(10, 15, 30, 0.15);
+        }
+
+        /* Responsive 6-Tool Grid */
+        .tools-showcase-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          margin-top: 48px;
+        }
+        @media (max-width: 1024px) {
+          .tools-showcase-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 680px) {
+          .tools-showcase-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Bespoke Tool Card System */
+        .bespoke-tool-card {
+          background: var(--surface);
+          border: 1px solid var(--ink-100);
+          border-radius: 20px;
+          padding: 28px;
+          box-shadow: 0 4px 18px rgba(10, 15, 30, 0.04);
+          transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+        }
+        .bespoke-tool-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 16px 36px rgba(10, 15, 30, 0.08);
+        }
+
+        /* Top Accent Bars */
+        .tool-top-stripe {
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 4px;
+        }
+        .stripe-url { background: linear-gradient(90deg, #2563EB, #60A5FA); }
+        .stripe-phone { background: linear-gradient(90deg, #059669, #34D399); }
+        .stripe-upi { background: linear-gradient(90deg, #7C3AED, #A78BFA); }
+        .stripe-message { background: linear-gradient(90deg, #D97706, #FBBF24); }
+        .stripe-email { background: linear-gradient(90deg, #0284C7, #38BDF8); }
+        .stripe-ocr { background: linear-gradient(90deg, #E11D48, #FB7185); }
+
+        .tool-header-row {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+        .tool-avatar-icon {
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .avatar-url { background: #EFF6FF; color: #2563EB; }
+        .avatar-phone { background: #ECFDF5; color: #059669; }
+        .avatar-upi { background: #F5F3FF; color: #7C3AED; }
+        .avatar-message { background: #FFFBEB; color: #D97706; }
+        .avatar-email { background: #F0F9FF; color: #0284C7; }
+        .avatar-ocr { background: #FFF1F2; color: #E11D48; }
+
+        .tool-category-badge {
+          font-size: 0.6875rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          padding: 4px 10px;
+          border-radius: 100px;
+        }
+        .badge-url { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+        .badge-phone { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+        .badge-upi { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+        .badge-message { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+        .badge-email { background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; }
+        .badge-ocr { background: #FFF1F2; color: #BE123C; border: 1px solid #FECDD3; }
+
+        .tool-card-title {
+          font-size: 1.25rem;
+          font-weight: 800;
+          color: var(--ink-900);
+          margin-bottom: 8px;
+        }
+        .tool-card-desc {
+          font-size: 0.875rem;
+          color: var(--ink-500);
+          line-height: 1.5;
+          margin-bottom: 20px;
+        }
+
+        /* Distinct In-Card Interactive Widget Preview */
+        .tool-interactive-preview {
+          background: var(--page);
+          border: 1px solid var(--ink-100);
+          border-radius: 12px;
+          padding: 16px;
+          margin-bottom: 20px;
+        }
+
+        .tool-feature-checklist {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 24px 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .tool-feature-checklist li {
+          font-size: 0.8125rem;
+          color: var(--ink-700);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 500;
+        }
+        .tool-feature-checklist svg {
+          flex-shrink: 0;
+        }
+
+        .btn-launch-tool {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          height: 44px;
+          border-radius: 10px;
+          font-size: 0.875rem;
+          font-weight: 700;
+          text-decoration: none;
+          transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+          margin-top: auto;
+        }
+        .btn-launch-url { background: #2563EB; color: #fff; box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2); }
+        .btn-launch-url:hover { background: #1D4ED8; transform: translateY(-1px); }
+
+        .btn-launch-phone { background: #059669; color: #fff; box-shadow: 0 3px 10px rgba(5, 150, 105, 0.2); }
+        .btn-launch-phone:hover { background: #047857; transform: translateY(-1px); }
+
+        .btn-launch-upi { background: #7C3AED; color: #fff; box-shadow: 0 3px 10px rgba(124, 58, 237, 0.2); }
+        .btn-launch-upi:hover { background: #6D28D9; transform: translateY(-1px); }
+
+        .btn-launch-message { background: #D97706; color: #fff; box-shadow: 0 3px 10px rgba(217, 119, 6, 0.2); }
+        .btn-launch-message:hover { background: #B45309; transform: translateY(-1px); }
+
+        .btn-launch-email { background: #0284C7; color: #fff; box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2); }
+        .btn-launch-email:hover { background: #0369A1; transform: translateY(-1px); }
+
+        .btn-launch-ocr { background: #E11D48; color: #fff; box-shadow: 0 3px 10px rgba(225, 29, 72, 0.2); }
+        .btn-launch-ocr:hover { background: #BE123C; transform: translateY(-1px); }
+      </style>
+
+      <section class="section" style="padding-top: 20px;">
+        <div class="container">
+          
+          <div class="tools-showcase-grid">
+
+            <!-- ═══════════════════════════════════════════
+                 1. URL CHECKER
+            ════════════════════════════════════════════ -->
+            <div class="bespoke-tool-card" data-category="web">
+              <div class="tool-top-stripe stripe-url"></div>
+              
+              <div class="tool-header-row">
+                <div class="tool-avatar-icon avatar-url">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
+                <span class="tool-category-badge badge-url">Web Forensics</span>
+              </div>
+
+              <h2 class="tool-card-title">URL & Domain Inspector</h2>
+              <p class="tool-card-desc">Deep telemetry on brand typosquatting, freshly registered domains, certificate validity, and hidden redirect chains.</p>
+
+              <!-- Distinct Browser UI Widget -->
+              <div class="tool-interactive-preview">
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--ink-100); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px;">
+                  <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.6875rem; font-weight: 700; color: #16A34A; background: #DCFCE7; padding: 2px 6px; border-radius: 4px;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    https://
+                  </span>
+                  <span style="font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-800); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">fake-sbi-portal.xyz</span>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="font-size: 0.6875rem; background: #FEE2E2; color: #DC2626; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Age: 2 days</span>
+                  <span style="font-size: 0.6875rem; background: #FEF3C7; color: #D97706; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Non-bank TLD (.xyz)</span>
+                </div>
+              </div>
+
+              <ul class="tool-feature-checklist">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Homoglyph & visual character mimic detection</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Real-time WHOIS registration date audit</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Automated multi-hop HTTP redirect tracer</li>
+              </ul>
+
+              <a href="check.html?type=url&query=fake-sbi-secure-portal.xyz" class="btn-launch-tool btn-launch-url">
+                <span>Launch URL Scanner</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
             </div>
-        </section>
-        
+
+            <!-- ═══════════════════════════════════════════
+                 2. PHONE CHECKER
+            ════════════════════════════════════════════ -->
+            <div class="bespoke-tool-card" data-category="telecom">
+              <div class="tool-top-stripe stripe-phone"></div>
+
+              <div class="tool-header-row">
+                <div class="tool-avatar-icon avatar-phone">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <span class="tool-category-badge badge-phone">Telecom Intelligence</span>
+              </div>
+
+              <h2 class="tool-card-title">Phone & Caller Verifier</h2>
+              <p class="tool-card-desc">Audit incoming numbers against global scam databases, telemarketer series, VoIP spoofing patterns, and TRAI DND registers.</p>
+
+              <!-- Distinct Telecom UI Widget -->
+              <div class="tool-interactive-preview">
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--ink-100); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px;">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #047857; background: #D1FAE5; padding: 2px 6px; border-radius: 4px;">🇮🇳 +91</span>
+                  <span style="font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-800); font-weight: 600;">98765 43210</span>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="font-size: 0.6875rem; background: #FEE2E2; color: #DC2626; padding: 2px 8px; border-radius: 4px; font-weight: 700;">FedEx Parcel Scam Alert</span>
+                  <span style="font-size: 0.6875rem; background: #ECFDF5; color: #047857; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Caller ID Mismatch</span>
+                </div>
+              </div>
+
+              <ul class="tool-feature-checklist">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Automated carrier & circle geolocation resolution</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Digital arrest & courier scam threat tagging</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> High-risk series detection (140, virtual numbers)</li>
+              </ul>
+
+              <a href="check.html?type=phone&query=%2B919876543210" class="btn-launch-tool btn-launch-phone">
+                <span>Verify Phone Number</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 3. UPI CHECKER
+            ════════════════════════════════════════════ -->
+            <div class="bespoke-tool-card" data-category="payment">
+              <div class="tool-top-stripe stripe-upi"></div>
+
+              <div class="tool-header-row">
+                <div class="tool-avatar-icon avatar-upi">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>
+                </div>
+                <span class="tool-category-badge badge-upi">Payment Radar</span>
+              </div>
+
+              <h2 class="tool-card-title">UPI & VPA Payment Radar</h2>
+              <p class="tool-card-desc">Verify merchant VPAs and payment handles before transferring money. Evaluates bank PSPs, mule risk patterns, and complaint velocity.</p>
+
+              <!-- Distinct Payment Handle UI Widget -->
+              <div class="tool-interactive-preview">
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--ink-100); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px;">
+                  <span style="font-weight: 800; font-size: 0.9375rem; color: #7C3AED;">₹</span>
+                  <span style="font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-800); font-weight: 600;">sbi-refund-portal@ybl</span>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="font-size: 0.6875rem; background: #EDE9FE; color: #6D28D9; padding: 2px 8px; border-radius: 4px; font-weight: 700;">PSP: YES Bank</span>
+                  <span style="font-size: 0.6875rem; background: #FEE2E2; color: #DC2626; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Fake Bank Impersonation</span>
+                </div>
+              </div>
+
+              <ul class="tool-feature-checklist">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> NPCI standard handle format validation</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Mule account velocity & complaint frequency check</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Instant suffix assistance for Google Pay, Paytm, PhonePe</li>
+              </ul>
+
+              <a href="check.html?type=upi&query=sbi-refund-claim%40ybl" class="btn-launch-tool btn-launch-upi">
+                <span>Audit Payment Handle</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 4. MESSAGE ANALYZER
+            ════════════════════════════════════════════ -->
+            <div class="bespoke-tool-card" data-category="nlp">
+              <div class="tool-top-stripe stripe-message"></div>
+
+              <div class="tool-header-row">
+                <div class="tool-avatar-icon avatar-message">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <span class="tool-category-badge badge-message">NLP Forensic</span>
+              </div>
+
+              <h2 class="tool-card-title">SMS & Phishing Analyzer</h2>
+              <p class="tool-card-desc">Linguistic scanning of SMS, WhatsApp alerts, and panic emails to detect artificial urgency, fake lottery claims, and coercive extortion patterns.</p>
+
+              <!-- Distinct SMS Bubble UI Widget -->
+              <div class="tool-interactive-preview" style="background: #FFFBEB; border-color: #FDE68A;">
+                <div style="font-size: 0.78125rem; color: #78350F; line-height: 1.4; margin-bottom: 8px; font-style: italic;">
+                  "Dear consumer, your electricity will be <span style="background: #FEE2E2; color: #DC2626; font-weight: 700; padding: 1px 4px; border-radius: 2px;">DISCONNECTED</span> tonight. Call officer <span style="background: #FEE2E2; color: #DC2626; font-weight: 700; padding: 1px 4px; border-radius: 2px;">IMMEDIATELY</span>."
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="font-size: 0.6875rem; background: #FEE2E2; color: #DC2626; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Urgency Score: 96%</span>
+                  <span style="font-size: 0.6875rem; background: #FEF3C7; color: #92400E; padding: 2px 8px; border-radius: 4px; font-weight: 700;">Panic Coercion</span>
+                </div>
+              </div>
+
+              <ul class="tool-feature-checklist">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Coercion & time-pressure psychological triggers</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Automated embedded link & APK download extraction</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 4 preloaded real-world scam scenario templates</li>
+              </ul>
+
+              <a href="check.html?type=message" class="btn-launch-tool btn-launch-message">
+                <span>Analyze Message Body</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 5. EMAIL CHECKER
+            ════════════════════════════════════════════ -->
+            <div class="bespoke-tool-card" data-category="web">
+              <div class="tool-top-stripe stripe-email"></div>
+
+              <div class="tool-header-row">
+                <div class="tool-avatar-icon avatar-email">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <span class="tool-category-badge badge-email">Header Forensics</span>
+              </div>
+
+              <h2 class="tool-card-title">Email Header & Spoof Inspector</h2>
+              <p class="tool-card-desc">Inspect sender authenticity by verifying SPF, DKIM cryptographic signatures, and DMARC enforcement to detect display-name spoofing.</p>
+
+              <!-- Distinct Email UI Widget -->
+              <div class="tool-interactive-preview">
+                <div style="font-size: 0.75rem; color: var(--ink-700); margin-bottom: 6px;">
+                  <strong>From:</strong> "PayPal Security" &lt;<span style="color: #DC2626; font-family: var(--mono);">scam@random-host.xyz</span>&gt;
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="font-size: 0.6875rem; background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-weight: 700;">SPF: Fail</span>
+                  <span style="font-size: 0.6875rem; background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-weight: 700;">DKIM: Missing</span>
+                  <span style="font-size: 0.6875rem; background: #E0F2FE; color: #0369A1; padding: 2px 6px; border-radius: 4px; font-weight: 700;">Display Name Spoof</span>
+                </div>
+              </div>
+
+              <ul class="tool-feature-checklist">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Lookalike domain & cousin domain identification</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Free webmail impersonation detection (Gmail/Hotmail abuse)</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Return-Path envelope routing verification</li>
+              </ul>
+
+              <a href="check.html?type=url&query=service-amazon-security-alert.xyz" class="btn-launch-tool btn-launch-email">
+                <span>Inspect Email Headers</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 6. SCREENSHOT OCR ANALYZER
+            ════════════════════════════════════════════ -->
+            <div class="bespoke-tool-card" data-category="vision">
+              <div class="tool-top-stripe stripe-ocr"></div>
+
+              <div class="tool-header-row">
+                <div class="tool-avatar-icon avatar-ocr">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+                <span class="tool-category-badge badge-ocr">Vision OCR</span>
+              </div>
+
+              <h2 class="tool-card-title">Screenshot & OCR Scanner</h2>
+              <p class="tool-card-desc">Optical character recognition for payment receipts, WhatsApp chats, and fraudulent banking portals. Automatically parses text and QR codes.</p>
+
+              <!-- Distinct Dropzone OCR UI Widget -->
+              <div class="tool-interactive-preview" style="border: 2px dashed #FDA4AF; background: #FFF1F2; text-align: center; padding: 14px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" style="margin: 0 auto 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #9F1239;">Drop payment receipt or chat capture</div>
+                <div style="font-size: 0.6875rem; color: #BE123C; margin-top: 2px;">Auto-extracts UPI IDs, URLs, and phone lines</div>
+              </div>
+
+              <ul class="tool-feature-checklist">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> High-accuracy neural optical character recognition</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cloned payment gateway & fake receipt heuristic filter</li>
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> One-click parsing into the Universal Analysis engine</li>
+              </ul>
+
+              <a href="check.html?type=message" class="btn-launch-tool btn-launch-ocr">
+                <span>Upload & Scan Image</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- ═══════════════════════════════════════════
+               ENTERPRISE API CALLOUT
+          ════════════════════════════════════════════ -->
+          <div style="margin-top: 60px; background: var(--surface); border: 1px solid var(--ink-100); border-radius: 20px; padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+            <div style="max-width: 600px;">
+              <span style="font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #2563EB; background: rgba(37,99,235,0.08); padding: 4px 12px; border-radius: 100px; display: inline-block; margin-bottom: 12px;">Developer REST API</span>
+              <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--ink-900); margin-bottom: 8px;">Integrate all 6 engines into your stack</h3>
+              <p style="font-size: 0.9375rem; color: var(--ink-500); line-height: 1.5;">
+                Every tool above is powered by our open, lightning-fast REST endpoints with sub-100ms response times. Ideal for fintech apps, e-commerce checkouts, and customer messaging platforms.
+              </p>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <a href="check.html" class="btn btn-primary" style="padding: 12px 24px; font-weight: 700; border-radius: 10px;">Try Universal Checker</a>
+              <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="btn btn-neutral" style="padding: 12px 24px; font-weight: 700; border-radius: 10px;">View GitHub API Specs</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <script>
+        function filterTools(category, btn) {
+          document.querySelectorAll('.tool-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const cards = document.querySelectorAll('.bespoke-tool-card');
+          cards.forEach(card => {
+            if (category === 'all') {
+              card.style.display = 'flex';
+            } else {
+              const cardCat = card.getAttribute('data-category');
+              if (cardCat === category) {
+                card.style.display = 'flex';
+              } else {
+                card.style.display = 'none';
+              }
+            }
+          });
+        }
+      </script>
+
     </main>
 
     <!-- ═══════════════════════════════════════════

@@ -211,51 +211,83 @@ function updateTargetTypeVisuals(query, type) {
   const iconBox = document.getElementById('target-type-icon');
   const catTag = document.getElementById('target-category-tag');
   const protocolTag = document.getElementById('target-protocol-tag');
+  const breadcrumbTag = document.getElementById('audit-breadcrumb-tag');
+  const targetDisplay = document.getElementById('target-display');
 
   if (type === 'phone') {
-    if (catTag) catTag.textContent = 'Phone Number Target';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'Telecom & Caller Intelligence';
+    if (catTag) catTag.textContent = 'PHONE NUMBER TARGET';
     if (protocolTag) {
-      protocolTag.textContent = 'Cellular / Telecom';
-      protocolTag.style.color = 'var(--ink-500, #4B5570)';
+      protocolTag.textContent = 'CELLULAR / TELECOM CHANNEL';
+      protocolTag.style.color = '#059669';
     }
     if (iconBox) {
+      iconBox.style.background = '#ECFDF5';
+      iconBox.style.color = '#059669';
+      iconBox.style.boxShadow = '0 4px 14px rgba(5, 150, 105, 0.2)';
       iconBox.innerHTML = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
         </svg>
       `;
     }
+    if (targetDisplay) {
+      const cleanNum = query.replace(/[^\d+]/g, '');
+      if (cleanNum.startsWith('+91') || (/^\d{10}$/.test(cleanNum) && !cleanNum.startsWith('+'))) {
+        const d = cleanNum.replace(/^\+91/, '');
+        targetDisplay.innerHTML = `<span style="font-size: 1.25rem; margin-right: 6px;">🇮🇳</span> <span style="font-family: var(--mono);">${cleanNum.startsWith('+') ? cleanNum : '+91 ' + d}</span>`;
+      } else {
+        targetDisplay.innerHTML = `<span style="font-family: var(--mono);">${escapeHtml(query)}</span>`;
+      }
+    }
   } else if (type === 'upi') {
-    if (catTag) catTag.textContent = 'UPI VPA Handle';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'NPCI Payment Safety Radar';
+    if (catTag) catTag.textContent = 'UPI VPA HANDLE';
     if (protocolTag) {
-      protocolTag.textContent = 'NPCI Payment Rail';
-      protocolTag.style.color = 'var(--blue-600, #2563EB)';
+      protocolTag.textContent = 'NPCI PAYMENT RAIL';
+      protocolTag.style.color = '#7C3AED';
     }
     if (iconBox) {
+      iconBox.style.background = '#F5F3FF';
+      iconBox.style.color = '#7C3AED';
+      iconBox.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.2)';
       iconBox.innerHTML = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <rect x="2" y="5" width="20" height="14" rx="2"></rect>
           <line x1="2" y1="10" x2="22" y2="10"></line>
+          <line x1="6" y1="15" x2="10" y2="15"></line>
         </svg>
       `;
     }
+    if (targetDisplay) {
+      targetDisplay.innerHTML = `<span style="color: #7C3AED; margin-right: 4px; font-weight: 800;">₹</span> <span style="font-family: var(--mono);">${escapeHtml(query)}</span>`;
+    }
   } else if (type === 'message') {
-    if (catTag) catTag.textContent = 'SMS / Chat Message';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'Linguistic NLP Threat Audit';
+    if (catTag) catTag.textContent = 'SUSPICIOUS MESSAGE TARGET';
     if (protocolTag) {
-      protocolTag.textContent = 'Text Communication';
-      protocolTag.style.color = 'var(--blue-600, #2563EB)';
+      protocolTag.textContent = 'NLP THREAT PARSER';
+      protocolTag.style.color = '#D97706';
     }
     if (iconBox) {
+      iconBox.style.background = '#FFFBEB';
+      iconBox.style.color = '#D97706';
+      iconBox.style.boxShadow = '0 4px 14px rgba(217, 119, 6, 0.2)';
       iconBox.innerHTML = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       `;
     }
+    if (targetDisplay) {
+      const preview = query.length > 70 ? query.substring(0, 68) + '...' : query;
+      targetDisplay.textContent = `"${preview}"`;
+    }
   } else {
     // Website / URL
+    if (breadcrumbTag) breadcrumbTag.textContent = 'Web Asset & Domain Forensics';
     const isHttp = /^http:\/\//i.test(query);
-    if (catTag) catTag.textContent = 'Web Address';
+    if (catTag) catTag.textContent = 'WEB DOMAIN / URL';
     if (protocolTag) {
       if (isHttp) {
         protocolTag.textContent = 'HTTP Insecure (Plaintext)';
@@ -266,37 +298,55 @@ function updateTargetTypeVisuals(query, type) {
       }
     }
     if (iconBox) {
+      iconBox.style.background = '#EFF6FF';
+      iconBox.style.color = '#2563EB';
+      iconBox.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.2)';
       iconBox.innerHTML = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="2" y1="12" x2="22" y2="12"></line>
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
         </svg>
       `;
     }
+    if (targetDisplay) {
+      targetDisplay.textContent = query;
+    }
   }
 }
 
-/**
- * Resets UI to spinning / evaluating state
- */
 function showLoadingState() {
-  const scoreDisplay = document.getElementById('score-display');
-  const riskBadge = document.getElementById('risk-badge');
-  const riskSummary = document.getElementById('risk-summary');
-  const signalsContainer = document.getElementById('signals-container');
-  const gaugeCircle = document.getElementById('gauge-circle');
-
-  if (gaugeCircle) {
-    gaugeCircle.style.strokeDashoffset = '439.8';
-    gaugeCircle.style.stroke = '#2563EB';
+  const type = currentTargetType || 'url';
+  document.querySelectorAll('.tool-result-view').forEach(v => {
+    v.classList.remove('active');
+    v.style.display = 'none';
+  });
+  const activeView = document.getElementById('view-' + type) || document.getElementById('view-url');
+  if (activeView) {
+    activeView.classList.add('active');
+    activeView.style.display = 'block';
   }
 
+  const spinnerHTML = `
+    <div style="padding: 48px 24px; text-align: center; color: var(--ink-500, #4B5570);">
+      <div style="display: inline-block; width: 32px; height: 32px; border: 3px solid #E8EBF3; border-top-color: #2563EB; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;"></div>
+      <div style="font-weight: 600; font-size: 0.9375rem; color: var(--ink-800, #1E2742); margin-bottom: 4px;">Evaluating Target Heuristics...</div>
+      <div style="font-size: 0.8125rem;">Checking syntax, spoofing indicators, regulatory series, and fraud telemetry.</div>
+    </div>
+  `;
+
+  ['signals-container', 'phone-signals-container', 'upi-signals-container', 'msg-signals-container'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = spinnerHTML;
+  });
+
+  const scoreDisplay = document.getElementById('score-display');
   if (scoreDisplay) {
     scoreDisplay.innerHTML = `<span style="font-size: 2.25rem; opacity: 0.5;">...</span>`;
     scoreDisplay.style.color = 'var(--ink-500, #4B5570)';
   }
 
+  const riskBadge = document.getElementById('risk-badge');
   if (riskBadge) {
     riskBadge.textContent = 'ANALYZING';
     riskBadge.style.color = 'var(--ink-500, #4B5570)';
@@ -304,29 +354,28 @@ function showLoadingState() {
     riskBadge.style.borderColor = 'rgba(75, 85, 112, 0.2)';
   }
 
+  const riskSummary = document.getElementById('risk-summary');
   if (riskSummary) {
     riskSummary.textContent = 'Executing real-time heuristic inspection across protocol, syntax, and threat indicators...';
   }
 
-  if (signalsContainer) {
-    signalsContainer.innerHTML = `
-      <div style="padding: 48px 24px; text-align: center; color: var(--ink-500, #4B5570);">
-        <div style="display: inline-block; width: 32px; height: 32px; border: 3px solid #E8EBF3; border-top-color: #2563EB; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;"></div>
-        <div style="font-weight: 600; font-size: 0.9375rem; color: var(--ink-800, #1E2742); margin-bottom: 4px;">Evaluating Target Heuristics...</div>
-        <div style="font-size: 0.8125rem;">Checking hostname structure, brand mimics, TLD risk, and active community reports.</div>
-      </div>
-    `;
+  const gaugeCircle = document.getElementById('gauge-circle');
+  if (gaugeCircle) {
+    gaugeCircle.style.strokeDashoffset = '439.8';
+    gaugeCircle.style.stroke = '#2563EB';
   }
 }
 
+
 /**
- * Renders verified analysis results with full visual styling
+ * Renders verified analysis results with dedicated layout per tool
  */
 function renderAnalysisResult(data) {
   const riskScore = Math.max(0, Math.min(100, Number(data.riskScore) || 0));
   const signals = data.signals || [];
   const recommendations = data.recommendations || [];
   const target = data.target || currentTargetQuery;
+  const type = currentTargetType || 'url';
 
   // 1. Color and Verdict Configuration
   let theme = {
@@ -367,7 +416,400 @@ function renderAnalysisResult(data) {
     };
   }
 
-  // 2. Animate SVG Gauge
+  // 2. Hide all tool views and activate tool-specific view
+  document.querySelectorAll('.tool-result-view').forEach(v => {
+    v.classList.remove('active');
+    v.style.display = 'none';
+  });
+
+  const activeView = document.getElementById('view-' + type) || document.getElementById('view-url');
+  if (activeView) {
+    activeView.classList.add('active');
+    activeView.style.display = 'block';
+  }
+
+  // 3. Render specialized view
+  if (type === 'phone') {
+    renderPhoneView(data, theme, riskScore, signals, recommendations);
+  } else if (type === 'upi') {
+    renderUpiView(data, theme, riskScore, signals, recommendations);
+  } else if (type === 'message') {
+    renderMessageView(data, theme, riskScore, signals, recommendations);
+  } else {
+    renderUrlView(data, theme, riskScore, signals, recommendations, target);
+  }
+}
+
+/**
+ * 1. Dedicated Renderer for Phone Numbers (Telecom & Caller Dossier)
+ */
+function renderPhoneView(data, theme, riskScore, signals, recommendations) {
+  const target = data.target || currentTargetQuery;
+  const digits = target.replace(/\D/g, '');
+  let formatted = target;
+  if (digits.length === 10) {
+    formatted = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
+  } else if (digits.length > 10 && digits.startsWith('91')) {
+    const d = digits.slice(2);
+    formatted = `+91 ${d.slice(0, 5)} ${d.slice(5)}`;
+  }
+
+  const phoneFormattedEl = document.getElementById('phone-val-formatted');
+  if (phoneFormattedEl) phoneFormattedEl.textContent = formatted;
+
+  const phoneAvatarWrap = document.getElementById('phone-avatar-wrap');
+  if (phoneAvatarWrap) {
+    phoneAvatarWrap.style.color = theme.color;
+    phoneAvatarWrap.style.background = theme.bgPill;
+  }
+
+  const phoneCatPill = document.getElementById('phone-category-pill');
+  if (phoneCatPill) {
+    phoneCatPill.textContent = data.lineType === 'TOLL_FREE' ? 'TOLL-FREE HELPLINE' : (data.lineType === 'VOIP' ? 'VOIP CLOUD LINE' : 'CELLULAR MOBILE LINE');
+    phoneCatPill.style.color = theme.color;
+    phoneCatPill.style.background = theme.bgPill;
+  }
+
+  const phoneSpamPercent = document.getElementById('phone-spam-percent');
+  if (phoneSpamPercent) {
+    phoneSpamPercent.textContent = `${riskScore}%`;
+    phoneSpamPercent.style.color = theme.color;
+  }
+
+  // Update spam segments
+  const seg1 = document.getElementById('phone-seg-1');
+  const seg2 = document.getElementById('phone-seg-2');
+  const seg3 = document.getElementById('phone-seg-3');
+  const seg4 = document.getElementById('phone-seg-4');
+
+  if (seg1) seg1.style.background = '#10B981';
+  if (seg2) seg2.style.background = riskScore >= 25 ? '#F59E0B' : '#E2E8F0';
+  if (seg3) seg3.style.background = riskScore >= 50 ? '#EA580C' : '#E2E8F0';
+  if (seg4) seg4.style.background = riskScore >= 75 ? '#EF4444' : '#E2E8F0';
+
+  // TRAI 140 & 160 series
+  const isTrai140 = (signals || []).some(s => s.id === 'TRAI_140_TELEMARKETING');
+  const isTrai160 = (signals || []).some(s => s.id === 'TRAI_160_TRANSACTIONAL');
+
+  const trai140Pill = document.getElementById('trai-140-pill');
+  if (trai140Pill) {
+    if (isTrai140) {
+      trai140Pill.innerHTML = `<span>⚠️</span><span>TRAI 140: <strong>Telemarketing</strong></span>`;
+      trai140Pill.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+      trai140Pill.style.background = 'rgba(254, 243, 199, 0.6)';
+      trai140Pill.style.color = '#B45309';
+    } else {
+      trai140Pill.innerHTML = `<span>✅</span><span>TRAI 140: <strong>Clean Non-Promo</strong></span>`;
+      trai140Pill.style.borderColor = 'rgba(16, 185, 129, 0.25)';
+      trai140Pill.style.background = 'rgba(209, 250, 229, 0.3)';
+      trai140Pill.style.color = '#065F46';
+    }
+  }
+
+  const trai160Pill = document.getElementById('trai-160-pill');
+  if (trai160Pill) {
+    if (isTrai160) {
+      trai160Pill.innerHTML = `<span>🏦</span><span>TRAI 160: <strong>Govt/Bank Entity</strong></span>`;
+      trai160Pill.style.borderColor = 'rgba(37, 99, 235, 0.3)';
+      trai160Pill.style.background = 'rgba(219, 234, 254, 0.4)';
+      trai160Pill.style.color = '#1E40AF';
+    } else {
+      trai160Pill.innerHTML = `<span>ℹ️</span><span>TRAI 160: <strong>Standard Number</strong></span>`;
+      trai160Pill.style.borderColor = 'var(--ink-100, #E2E8F0)';
+      trai160Pill.style.background = '#FFFFFF';
+      trai160Pill.style.color = 'var(--ink-700, #1E2742)';
+    }
+  }
+
+  // 3 Metric Tiles
+  const tileLine = document.getElementById('phone-tile-line');
+  const tileCarrier = document.getElementById('phone-tile-carrier');
+  if (tileLine) {
+    tileLine.textContent = data.lineType === 'TOLL_FREE' ? 'Toll-Free Helpline' : (data.lineType === 'VOIP' ? 'VoIP Cloud Number' : 'Cellular Mobile');
+  }
+  if (tileCarrier) {
+    tileCarrier.textContent = `Carrier channel: ${data.lineType || 'MOBILE'}`;
+  }
+
+  const tileOrigin = document.getElementById('phone-tile-origin');
+  if (tileOrigin) {
+    const countryName = data.normalized ? data.normalized.countryName : 'India';
+    const callingCode = data.normalized ? data.normalized.callingCode : '+91';
+    tileOrigin.textContent = `${countryName} (${callingCode})`;
+  }
+
+  const tileReports = document.getElementById('phone-tile-reports');
+  if (tileReports) {
+    const reportCount = data.communityReportCount || 0;
+    tileReports.textContent = reportCount > 0 ? `${reportCount} Active Scam Report(s)` : '0 Active Reports';
+    tileReports.style.color = reportCount > 0 ? '#EF4444' : 'var(--ink-900, #0A0F1E)';
+  }
+
+  // Scam Vector Checklist
+  const vectors = [
+    { id: 'vector-digital-arrest', match: /digital\s*arrest|police|cbi|customs|warrant/i },
+    { id: 'vector-fedex', match: /courier|parcel|fedex|dhl|narcotics|package/i },
+    { id: 'vector-electricity', match: /electricity|power|mseb|bses|cut\s*tonight/i },
+    { id: 'vector-work-from-home', match: /telegram|job|part-time|like|youtube/i }
+  ];
+
+  vectors.forEach(v => {
+    const cardEl = document.getElementById(v.id);
+    if (!cardEl) return;
+    const isThreat = (signals || []).some(s => v.match.test(s.title || '') || v.match.test(s.description || '')) ||
+                     v.match.test(target);
+    const statusEl = cardEl.querySelector('.vector-status');
+    if (isThreat) {
+      cardEl.className = 'scam-vector-card threat';
+      if (statusEl) {
+        statusEl.textContent = 'HIGH THREAT INDICATOR DETECTED';
+        statusEl.style.color = '#DC2626';
+      }
+    } else {
+      cardEl.className = 'scam-vector-card clean';
+      if (statusEl) {
+        statusEl.textContent = 'NO ACTIVE REPORT';
+        statusEl.style.color = '#059669';
+      }
+    }
+  });
+
+  // Populate signals
+  renderSignalsList(signals, theme, 'phone-signals-container', 'phone-signals-count');
+
+  // Populate recommendations
+  renderRecommendationsList(recommendations, theme, 'phone-recommendations-list');
+}
+
+/**
+ * 2. Dedicated Renderer for UPI IDs (Fintech Payment Terminal & Receipt)
+ */
+function renderUpiView(data, theme, riskScore, signals, recommendations) {
+  const target = (data.target || currentTargetQuery).trim();
+  const upiDisplay = document.getElementById('upi-display-handle');
+  if (upiDisplay) upiDisplay.textContent = target;
+
+  const parts = target.split('@');
+  const psp = (parts[1] || '').toLowerCase();
+  const username = parts[0] || '';
+
+  // Identify Bank & App
+  const bankMap = {
+    okhdfcbank: { bank: 'HDFC Bank Ltd', app: 'Google Pay' },
+    okaxis: { bank: 'Axis Bank Ltd', app: 'Google Pay' },
+    oksbi: { bank: 'State Bank of India', app: 'Google Pay' },
+    okicici: { bank: 'ICICI Bank Ltd', app: 'Google Pay' },
+    paytm: { bank: 'Paytm Payments Bank / Axis Bank', app: 'Paytm UPI' },
+    ybl: { bank: 'YES Bank Ltd', app: 'PhonePe' },
+    ibl: { bank: 'ICICI Bank Ltd', app: 'PhonePe' },
+    axl: { bank: 'Axis Bank Ltd', app: 'PhonePe' },
+    sbi: { bank: 'State Bank of India', app: 'BHIM SBI Pay' },
+    kotak: { bank: 'Kotak Mahindra Bank', app: 'Kotak 811 UPI' },
+    barodampay: { bank: 'Bank of Baroda', app: 'Baroda mPay' },
+    airtel: { bank: 'Airtel Payments Bank', app: 'Airtel Thanks' },
+    freecharge: { bank: 'Axis Bank (Freecharge)', app: 'Freecharge UPI' },
+    upi: { bank: 'NPCI Central Switch', app: 'BHIM App' }
+  };
+
+  const partner = bankMap[psp] || {
+    bank: psp ? `@${psp.toUpperCase()} Partner Bank` : 'Standard Bank Partner',
+    app: 'NPCI UPI 2.0 Network'
+  };
+
+  // Verdict Shield
+  const shieldEl = document.getElementById('upi-verdict-shield');
+  const shieldIcon = document.getElementById('upi-shield-icon');
+  const shieldTitle = document.getElementById('upi-shield-title');
+  const shieldDesc = document.getElementById('upi-shield-desc');
+
+  if (shieldEl && shieldTitle && shieldDesc && shieldIcon) {
+    if (riskScore >= 50) {
+      shieldEl.className = 'upi-shield-verdict danger';
+      shieldIcon.textContent = '🚨';
+      shieldTitle.textContent = 'DO NOT SEND MONEY — HIGH RISK';
+      shieldDesc.textContent = 'Handle flagged for deceptive keywords, brand impersonation, or reported fraud.';
+    } else if (riskScore >= 25) {
+      shieldEl.className = 'upi-shield-verdict danger';
+      shieldEl.style.background = 'rgba(245, 158, 11, 0.08)';
+      shieldEl.style.borderColor = 'rgba(245, 158, 11, 0.25)';
+      shieldEl.style.color = '#B45309';
+      shieldIcon.textContent = '⚠️';
+      shieldTitle.textContent = 'EXERCISE CAUTION BEFORE PAYING';
+      shieldDesc.textContent = 'Uncommon handle or non-standard PSP provider. Verify beneficiary name.';
+    } else {
+      shieldEl.className = 'upi-shield-verdict safe';
+      shieldIcon.textContent = '🛡️';
+      shieldTitle.textContent = 'SAFE TO TRANSFER';
+      shieldDesc.textContent = 'Standard NPCI UPI format. Zero adverse fraudulent mule reports on record.';
+    }
+  }
+
+  // Digital Receipt Rows
+  const valPsp = document.getElementById('upi-val-psp');
+  if (valPsp) valPsp.textContent = partner.bank;
+
+  const valApp = document.getElementById('upi-val-app');
+  if (valApp) valApp.textContent = partner.app;
+
+  const valType = document.getElementById('upi-val-type');
+  if (valType) {
+    const isMerchant = /(merchant|store|shop|mart|pay|biz|enterprise)/i.test(username);
+    valType.textContent = isMerchant ? 'P2M Merchant Account' : 'P2P Individual Handle';
+  }
+
+  const valMule = document.getElementById('upi-val-mule');
+  if (valMule) {
+    if (riskScore >= 50) {
+      valMule.textContent = 'High Mule Risk / Suspicious';
+      valMule.style.color = '#DC2626';
+    } else {
+      valMule.textContent = 'Low / Clean Velocity';
+      valMule.style.color = '#059669';
+    }
+  }
+
+  // 4 Tiles
+  const tileBank = document.getElementById('upi-tile-bank');
+  if (tileBank) tileBank.textContent = partner.bank;
+
+  const tileKeyword = document.getElementById('upi-tile-keyword');
+  if (tileKeyword) {
+    const hasImpersonation = (signals || []).some(s => s.id === 'BRAND_IMPERSONATION_HANDLE' || s.id === 'SOCIAL_ENGINEERING_HANDLE');
+    if (hasImpersonation) {
+      tileKeyword.textContent = 'Deceptive Keyword Flagged';
+      tileKeyword.style.color = '#DC2626';
+    } else {
+      tileKeyword.textContent = 'No Brand Spoofing';
+      tileKeyword.style.color = 'var(--ink-900, #0A0F1E)';
+    }
+  }
+
+  const tileDisputes = document.getElementById('upi-tile-disputes');
+  if (tileDisputes) {
+    const reportCount = data.communityReportCount || 0;
+    tileDisputes.textContent = reportCount > 0 ? `${reportCount} Active Dispute Report(s)` : '0 Active Chargebacks';
+    tileDisputes.style.color = reportCount > 0 ? '#DC2626' : 'var(--ink-900, #0A0F1E)';
+  }
+
+  // Populate signals & recommendations
+  renderSignalsList(signals, theme, 'upi-signals-container', 'upi-signals-count');
+  renderRecommendationsList(recommendations, theme, 'upi-recommendations-list');
+}
+
+/**
+ * 3. Dedicated Renderer for Messages (NLP Forensic Chat Lab)
+ */
+function renderMessageView(data, theme, riskScore, signals, recommendations) {
+  const text = (data.target || currentTargetQuery).trim();
+  const bubbleEl = document.getElementById('msg-bubble-content');
+  if (bubbleEl) {
+    let highlighted = escapeHtml(text);
+    // Highlight critical panic keywords
+    const criticalWords = [
+      'electricity', 'power', 'bijli', 'disconnect(?:ed)?', 'cut tonight', 'account blocked',
+      'immediately', 'urgent(?:ly)?', 'within \\d+ hours?', 'police', 'cbi', 'arrest', 'customs',
+      'narcotics', 'warrant', 'apk', 'deactivated', 'immediate action'
+    ];
+    criticalWords.forEach(kw => {
+      const re = new RegExp(`\\b(${kw})\\b`, 'gi');
+      highlighted = highlighted.replace(re, '<mark class="threat-kw-critical">$1</mark>');
+    });
+
+    // Highlight warning credential / financial keywords
+    const warnWords = [
+      'otp', 'upi pin', 'mpin', 'pin', 'password', 'cvv', 'share', 'verify',
+      'refund', 'cashback', 'lottery', 'winner', 'prize', 'reward', 'daily income', 'part-time job'
+    ];
+    warnWords.forEach(kw => {
+      const re = new RegExp(`\\b(${kw})\\b`, 'gi');
+      highlighted = highlighted.replace(re, '<mark class="threat-kw-warn">$1</mark>');
+    });
+
+    bubbleEl.innerHTML = highlighted;
+  }
+
+  const pressureScore = document.getElementById('msg-pressure-score');
+  if (pressureScore) {
+    pressureScore.textContent = `${riskScore}%`;
+    pressureScore.style.color = theme.color;
+  }
+
+  const pressurePill = document.getElementById('msg-pressure-pill');
+  if (pressurePill) {
+    pressurePill.textContent = theme.label;
+    pressurePill.style.color = theme.color;
+    pressurePill.style.background = theme.bgPill;
+    pressurePill.style.borderColor = theme.borderPill;
+  }
+
+  // Extracted Payloads
+  const extractedContainer = document.getElementById('msg-extracted-container');
+  if (extractedContainer) {
+    const urls = data.embeddedUrls || [];
+    const phones = data.embeddedPhones || [];
+    const upis = data.embeddedUpis || [];
+
+    // Fallback regex extraction if empty
+    if (urls.length === 0) {
+      const urlMatches = text.match(/(?:https?:\/\/|www\.)[^\s<>"'{}|\\^`]+|[a-zA-Z0-9][-a-zA-Z0-9]{1,62}\.(?:com|org|net|in|xyz|top|link|live|app|download|online|site)(?:\/[^\s<>"'{}|\\^`]*)?/gi);
+      if (urlMatches) urls.push(...urlMatches);
+    }
+    if (phones.length === 0) {
+      const phoneMatches = text.match(/(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?\d{3}[\s-]?\d{3,4}\b/g);
+      if (phoneMatches) phones.push(...phoneMatches);
+    }
+    if (upis.length === 0) {
+      const upiMatches = text.match(/[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}/g);
+      if (upiMatches) upis.push(...upiMatches);
+    }
+
+    if (urls.length === 0 && phones.length === 0 && upis.length === 0) {
+      extractedContainer.innerHTML = `
+        <div style="font-size:0.8125rem; color:var(--ink-500); padding:6px 0;">
+          No embedded web links, phone numbers, or UPI handles detected in message body.
+        </div>
+      `;
+    } else {
+      let chipsHtml = '<div class="extracted-payloads-wrap">';
+      urls.forEach(u => {
+        chipsHtml += `
+          <div class="extracted-chip">
+            <span style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🔗 ${escapeHtml(u)}</span>
+            <a href="result.html?type=url&query=${encodeURIComponent(u)}" class="btn-chip-inspect">Scan Link</a>
+          </div>
+        `;
+      });
+      phones.forEach(p => {
+        chipsHtml += `
+          <div class="extracted-chip">
+            <span>📞 ${escapeHtml(p)}</span>
+            <a href="result.html?type=phone&query=${encodeURIComponent(p)}" class="btn-chip-inspect">Inspect Caller</a>
+          </div>
+        `;
+      });
+      upis.forEach(up => {
+        chipsHtml += `
+          <div class="extracted-chip">
+            <span>₹ ${escapeHtml(up)}</span>
+            <a href="result.html?type=upi&query=${encodeURIComponent(up)}" class="btn-chip-inspect">Verify UPI</a>
+          </div>
+        `;
+      });
+      chipsHtml += '</div>';
+      extractedContainer.innerHTML = chipsHtml;
+    }
+  }
+
+  // Populate signals & recommendations
+  renderSignalsList(signals, theme, 'msg-signals-container', 'msg-signals-count');
+  renderRecommendationsList(recommendations, theme, 'msg-recommendations-list');
+}
+
+/**
+ * 4. Dedicated Renderer for Web URLs (Cyber Domain Sandbox)
+ */
+function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
+  // 1. Animate SVG Gauge
   const gaugeCircle = document.getElementById('gauge-circle');
   if (gaugeCircle) {
     const circumference = 439.8; // 2 * PI * 70
@@ -376,14 +818,14 @@ function renderAnalysisResult(data) {
     gaugeCircle.style.strokeDashoffset = offset;
   }
 
-  // 3. Smooth Numerical Count-up
+  // 2. Smooth Numerical Count-up
   const scoreDisplay = document.getElementById('score-display');
   if (scoreDisplay) {
     scoreDisplay.style.color = theme.color;
     animateCountUp(scoreDisplay, riskScore);
   }
 
-  // 4. Update Verdict Pill & Summary
+  // 3. Update Verdict Pill & Summary
   const riskBadge = document.getElementById('risk-badge');
   if (riskBadge) {
     riskBadge.textContent = theme.label;
@@ -402,128 +844,157 @@ function renderAnalysisResult(data) {
     scoreSidebar.style.boxShadow = `0 12px 32px ${theme.cardGlow}`;
   }
 
-  // 5. Populate Telemetry Tiles
+  // 4. Populate Telemetry Tiles
   populateTelemetryTiles(data, target);
 
-  // 6. Populate Signals List or All-Clear Certificate
-  const signalsCountPill = document.getElementById('signals-count-pill');
-  if (signalsCountPill) {
-    signalsCountPill.textContent = signals.length;
-    signalsCountPill.style.background = signals.length > 0 ? theme.bgPill : 'var(--ink-100, #E8EBF3)';
-    signalsCountPill.style.color = signals.length > 0 ? theme.color : 'var(--ink-700, #1E2742)';
+  // 5. Populate Signals List or All-Clear Certificate
+  renderSignalsList(signals, theme, 'signals-container', 'signals-count-pill');
+
+  // 6. Incident Playbook & Actionable Recommendations
+  const recBox = document.getElementById('recommendation-box');
+  if (recBox) recBox.style.borderLeftColor = theme.color;
+  renderRecommendationsList(recommendations, theme, 'recommendation-text');
+}
+
+/**
+ * Shared Helper to render heuristic signals list or clean certificate
+ */
+function renderSignalsList(signals, theme, containerId, countPillId) {
+  const countPill = document.getElementById(countPillId);
+  if (countPill) {
+    countPill.textContent = signals.length;
+    countPill.style.background = signals.length > 0 ? theme.bgPill : 'var(--ink-100, #E8EBF3)';
+    countPill.style.color = signals.length > 0 ? theme.color : 'var(--ink-700, #1E2742)';
   }
 
-  const signalsContainer = document.getElementById('signals-container');
-  if (signalsContainer) {
-    if (signals.length === 0) {
-      signalsContainer.innerHTML = `
-        <div class="clean-certificate-box">
-          <div class="clean-cert-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              <polyline points="9 12 11 14 15 10"></polyline>
-            </svg>
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (signals.length === 0) {
+    container.innerHTML = `
+      <div class="clean-certificate-box">
+        <div class="clean-cert-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 12 11 14 15 10"></polyline>
+          </svg>
+        </div>
+        <div style="font-size: 1.05rem; font-weight: 800; color: #065F46; margin-bottom: 6px;">
+          Zero Adverse Threat Signals Detected
+        </div>
+        <div style="font-size: 0.875rem; color: #047857; max-width: 540px; margin: 0 auto 16px; line-height: 1.55;">
+          No deceptive vectors, fraudulent impersonation patterns, or known scam flags were detected in this target.
+        </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 0.75rem; font-weight: 700;">
+          ${getCleanCertBadges(currentTargetType)}
+        </div>
+      </div>
+    `;
+  } else {
+    container.innerHTML = signals.map(sig => {
+      const severity = (sig.severity || 'low').toLowerCase();
+      let iconClass = 'signal-status-clean';
+      let badgeStyle = 'background: rgba(16, 185, 129, 0.1); color: #059669;';
+      let iconSvg = '<polyline points="20 6 9 17 4 12"></polyline>';
+
+      if (severity === 'critical') {
+        iconClass = 'signal-status-crit';
+        badgeStyle = 'background: rgba(239, 68, 68, 0.1); color: #DC2626; border: 1px solid rgba(239, 68, 68, 0.2);';
+        iconSvg = '<polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+      } else if (severity === 'high' || severity === 'medium') {
+        iconClass = 'signal-status-warn';
+        badgeStyle = 'background: rgba(245, 158, 11, 0.1); color: #D97706; border: 1px solid rgba(245, 158, 11, 0.2);';
+        iconSvg = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>';
+      }
+
+      return `
+        <div class="signal-item-row">
+          <div class="signal-item-left">
+            <div class="signal-status-icon ${iconClass}">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                ${iconSvg}
+              </svg>
+            </div>
+            <div>
+              <div class="signal-title-text">${escapeHtml(sig.title || sig.id)}</div>
+              <div class="signal-desc-text">${escapeHtml(sig.description || '')}</div>
+            </div>
           </div>
-          <div style="font-size: 1.05rem; font-weight: 800; color: #065F46; margin-bottom: 6px;">
-            Zero Adverse Heuristic Signals Detected
-          </div>
-          <div style="font-size: 0.875rem; color: #047857; max-width: 540px; margin: 0 auto 16px; line-height: 1.55;">
-            No deceptive patterns, lookalike typography, disposable namespaces, or raw IP hosts were identified in this target structure.
-          </div>
-          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 0.75rem; font-weight: 700;">
-            <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ TLD Clean</span>
-            <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ Brand Passed</span>
-            <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ Syntax Safe</span>
-            <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ No Blacklist Flags</span>
-          </div>
+          <span style="display: inline-block; padding: 4px 10px; border-radius: 99px; font-weight: 800; font-size: 0.6875rem; text-transform: uppercase; white-space: nowrap; ${badgeStyle}">
+            ${escapeHtml(severity)}
+          </span>
         </div>
       `;
-    } else {
-      signalsContainer.innerHTML = signals.map(sig => {
-        const severity = (sig.severity || 'low').toLowerCase();
-        let iconClass = 'signal-status-clean';
-        let badgeStyle = 'background: rgba(16, 185, 129, 0.1); color: #059669;';
-        let iconSvg = '<polyline points="20 6 9 17 4 12"></polyline>';
-
-        if (severity === 'critical') {
-          iconClass = 'signal-status-crit';
-          badgeStyle = 'background: rgba(239, 68, 68, 0.1); color: #DC2626; border: 1px solid rgba(239, 68, 68, 0.2);';
-          iconSvg = '<polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
-        } else if (severity === 'high' || severity === 'medium') {
-          iconClass = 'signal-status-warn';
-          badgeStyle = 'background: rgba(245, 158, 11, 0.1); color: #D97706; border: 1px solid rgba(245, 158, 11, 0.2);';
-          iconSvg = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>';
-        }
-
-        return `
-          <div class="signal-item-row">
-            <div class="signal-item-left">
-              <div class="signal-status-icon ${iconClass}">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  ${iconSvg}
-                </svg>
-              </div>
-              <div>
-                <div class="signal-title-text">${escapeHtml(sig.title || sig.id)}</div>
-                <div class="signal-desc-text">${escapeHtml(sig.description || '')}</div>
-              </div>
-            </div>
-            <span style="display: inline-block; padding: 4px 10px; border-radius: 99px; font-weight: 800; font-size: 0.6875rem; text-transform: uppercase; white-space: nowrap; ${badgeStyle}">
-              ${escapeHtml(severity)}
-            </span>
-          </div>
-        `;
-      }).join('');
-    }
-  }
-
-  // 7. Incident Playbook & Actionable Recommendations
-  const recBox = document.getElementById('recommendation-box');
-  const recList = document.getElementById('recommendation-text');
-  if (recBox) {
-    recBox.style.borderLeftColor = theme.color;
-  }
-  if (recList) {
-    if (recommendations && recommendations.length > 0) {
-      recList.innerHTML = recommendations.map(rec => `
-        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--ink-700, #1E2742); line-height: 1.55;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${theme.color}" stroke-width="2.5" style="flex-shrink: 0; margin-top: 3px;">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>${escapeHtml(rec)}</span>
-        </li>
-      `).join('');
-    } else {
-      recList.innerHTML = `
-        <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--ink-700, #1E2742); line-height: 1.55;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" style="flex-shrink: 0; margin-top: 3px;">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>Always exercise standard cyber safety: double-check domain spellings before submitting login credentials.</span>
-        </li>
-      `;
-    }
+    }).join('');
   }
 }
 
 /**
- * Fills the 4 telemetry grid cards based on target properties and signals
+ * Shared Helper to render recommendations list
  */
+function renderRecommendationsList(recommendations, theme, listId) {
+  const listEl = document.getElementById(listId);
+  if (!listEl) return;
+
+  if (recommendations && recommendations.length > 0) {
+    listEl.innerHTML = recommendations.map(rec => `
+      <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--ink-700, #1E2742); line-height: 1.55;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${theme.color}" stroke-width="2.5" style="flex-shrink: 0; margin-top: 3px;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>${escapeHtml(rec)}</span>
+      </li>
+    `).join('');
+  } else {
+    listEl.innerHTML = `
+      <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--ink-700, #1E2742); line-height: 1.55;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" style="flex-shrink: 0; margin-top: 3px;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>${getFallbackGuidance(currentTargetType)}</span>
+      </li>
+    `;
+  }
+}
+
+
 function populateTelemetryTiles(data, target) {
-  // 1. Protocol Tile
+  // ── Tile 1 Elements ──
+  const lblProto = document.getElementById('tile-lbl-protocol');
   const valProto = document.getElementById('tile-val-protocol');
   const subProto = document.getElementById('tile-sub-protocol');
   const iconProto = document.getElementById('tile-icon-protocol');
 
-  const isHttp = /^http:\/\//i.test(target);
-  const isHttps = /^https:\/\//i.test(target);
+  // ── Tile 2 Elements ──
+  const lblTld = document.getElementById('tile-lbl-tld');
+  const valTld = document.getElementById('tile-val-tld');
+  const subTld = document.getElementById('tile-sub-tld');
+  const iconTld = document.getElementById('tile-icon-tld');
+
+  // ── Tile 3 Elements ──
+  const lblBrand = document.getElementById('tile-lbl-brand');
+  const valBrand = document.getElementById('tile-val-brand');
+  const subBrand = document.getElementById('tile-sub-brand');
+  const iconBrand = document.getElementById('tile-icon-brand');
+
+  // ── Tile 4 Elements ──
+  const lblDb = document.getElementById('tile-lbl-db');
+  const valDb = document.getElementById('tile-val-db');
+  const subDb = document.getElementById('tile-sub-db');
+  const iconDb = document.getElementById('tile-icon-db');
 
   if (currentTargetType === 'phone') {
+    // ════════════════════════════════════════════
+    // 1. PHONE TELEMETRY TILES
+    // ════════════════════════════════════════════
+    
+    // Tile 1: Line & Channel Type
+    if (lblProto) lblProto.textContent = 'Telecom Channel / Line Type';
     const lineType = (data.lineType || 'CELLULAR').toUpperCase();
     if (valProto) {
       if (lineType === 'TOLL_FREE') {
         valProto.textContent = 'Toll-Free Helpline';
-        valProto.style.color = '#38BDF8';
+        valProto.style.color = '#0284C7';
       } else if (lineType === 'PREMIUM_RATE') {
         valProto.textContent = 'Premium Rate Line';
         valProto.style.color = '#EF4444';
@@ -534,93 +1005,19 @@ function populateTelemetryTiles(data, target) {
         valProto.textContent = 'Fixed-Line (Landline)';
         valProto.style.color = 'var(--ink-900, #0A0F1E)';
       } else {
-        valProto.textContent = 'Cellular Mobile';
+        valProto.textContent = 'Cellular Mobile Line';
         valProto.style.color = 'var(--ink-900, #0A0F1E)';
       }
     }
-    if (subProto) subProto.textContent = `Telecom Carrier Channel: ${lineType}`;
+    if (subProto) subProto.textContent = `Carrier allocation channel: ${lineType}`;
     if (iconProto) {
-      iconProto.style.background = lineType === 'PREMIUM_RATE' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(37, 99, 235, 0.1)';
-      iconProto.style.color = lineType === 'PREMIUM_RATE' ? '#EF4444' : '#2563EB';
+      iconProto.style.background = 'rgba(5, 150, 105, 0.1)';
+      iconProto.style.color = '#059669';
+      iconProto.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
     }
-  } else if (currentTargetType === 'upi') {
-    if (valProto) {
-      valProto.textContent = 'NPCI UPI VPA';
-      valProto.style.color = 'var(--ink-900, #0A0F1E)';
-    }
-    if (subProto) {
-      subProto.textContent = data.handleDetails ? `Handle: @${data.handleDetails.psp}` : 'Unified Payments Interface standard';
-    }
-    if (iconProto) {
-      iconProto.style.background = 'rgba(37, 99, 235, 0.1)';
-      iconProto.style.color = '#2563EB';
-    }
-  } else if (currentTargetType === 'message') {
-    if (valProto) {
-      valProto.textContent = 'SMS / Text Body';
-      valProto.style.color = 'var(--ink-900, #0A0F1E)';
-    }
-    if (subProto) {
-      const charLen = (data.metadata && data.metadata.charCount) || target.length;
-      const wordLen = (data.metadata && data.metadata.wordCount) || target.trim().split(/\s+/).filter(Boolean).length;
-      subProto.textContent = `Payload size: ${charLen} chars (${wordLen} words)`;
-    }
-    if (iconProto) {
-      iconProto.style.background = 'rgba(37, 99, 235, 0.1)';
-      iconProto.style.color = '#2563EB';
-    }
-  } else {
-    if (isHttp) {
-      if (valProto) {
-        valProto.textContent = 'HTTP (Unencrypted)';
-        valProto.style.color = '#EA580C';
-      }
-      if (subProto) subProto.textContent = 'Vulnerable to plaintext interception';
-      if (iconProto) {
-        iconProto.style.background = 'rgba(234, 88, 12, 0.1)';
-        iconProto.style.color = '#EA580C';
-      }
-    } else {
-      if (valProto) {
-        valProto.textContent = 'TLS / HTTPS Encrypted';
-        valProto.style.color = 'var(--ink-900, #0A0F1E)';
-      }
-      if (subProto) subProto.textContent = 'Standard cryptographic transport';
-      if (iconProto) {
-        iconProto.style.background = 'rgba(16, 185, 129, 0.1)';
-        iconProto.style.color = '#059669';
-      }
-    }
-  }
 
-  // 2. TLD / PSP Tile
-  const valTld = document.getElementById('tile-val-tld');
-  const subTld = document.getElementById('tile-sub-tld');
-  const iconTld = document.getElementById('tile-icon-tld');
-
-  if (currentTargetType === 'url') {
-    let hostname = '';
-    try {
-      hostname = new URL(target.startsWith('http') ? target : 'https://' + target).hostname;
-    } catch (e) {
-      hostname = target;
-    }
-    const parts = hostname.split('.');
-    const tld = parts.length > 1 ? '.' + parts[parts.length - 1] : '.com';
-    const isSuspiciousTld = ['tk', 'ml', 'ga', 'cf', 'gq', 'top', 'xyz', 'icu', 'buzz', 'club', 'work'].includes(tld.replace('.', ''));
-
-    if (valTld) {
-      valTld.textContent = `${tld.toUpperCase()} Namespace`;
-      if (isSuspiciousTld) valTld.style.color = '#EF4444';
-    }
-    if (subTld) {
-      subTld.textContent = isSuspiciousTld ? 'Frequently abused disposable TLD' : 'Recognized generic / ccTLD namespace';
-    }
-    if (iconTld && isSuspiciousTld) {
-      iconTld.style.background = 'rgba(239, 68, 68, 0.1)';
-      iconTld.style.color = '#EF4444';
-    }
-  } else if (currentTargetType === 'phone') {
+    // Tile 2: Dialing Origin & Region (NO MORE "TOP-LEVEL DOMAIN" BUG!)
+    if (lblTld) lblTld.textContent = 'Dialing Origin & Region';
     const countryName = data.normalized ? data.normalized.countryName : 'India';
     const callingCode = data.normalized ? data.normalized.callingCode : '+91';
     const isDomestic = !data.normalized || data.normalized.countryCode === 'IN';
@@ -629,82 +1026,25 @@ function populateTelemetryTiles(data, target) {
       valTld.style.color = isDomestic ? 'var(--ink-900, #0A0F1E)' : '#D97706';
     }
     if (subTld) {
-      subTld.textContent = isDomestic ? 'Domestic Indian numbering plan' : 'International dialing origin';
+      subTld.textContent = isDomestic ? 'Domestic Indian numbering plan (ITU-T E.164)' : 'International dialing origin';
     }
     if (iconTld) {
-      iconTld.style.background = isDomestic ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+      iconTld.style.background = isDomestic ? 'rgba(5, 150, 105, 0.1)' : 'rgba(245, 158, 11, 0.1)';
       iconTld.style.color = isDomestic ? '#059669' : '#D97706';
+      iconTld.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
     }
-  } else if (currentTargetType === 'upi') {
-    const isRec = data.handleDetails && data.handleDetails.isRecognizedPsp;
-    if (valTld) {
-      valTld.textContent = data.handleDetails ? `@${data.handleDetails.psp.toUpperCase()}` : 'VPA Banking Extension';
-      valTld.style.color = isRec ? 'var(--ink-900, #0A0F1E)' : '#F59E0B';
-    }
-    if (subTld) {
-      subTld.textContent = isRec ? 'Recognized NPCI Banking PSP handle' : 'Custom or cooperative banking handle';
-    }
-  } else if (currentTargetType === 'message') {
-    const embeddedUrls = data.embeddedUrls || [];
-    const embeddedPhones = data.embeddedPhones || [];
-    const embeddedUpis = data.embeddedUpis || [];
-    const totalEmbedded = embeddedUrls.length + embeddedPhones.length + embeddedUpis.length;
 
-    if (totalEmbedded > 0) {
-      if (valTld) {
-        valTld.textContent = `${totalEmbedded} Extraction Vector${totalEmbedded > 1 ? 's' : ''}`;
-        valTld.style.color = embeddedUrls.length > 0 ? '#EF4444' : '#F59E0B';
-      }
-      if (subTld) {
-        const details = [];
-        if (embeddedUrls.length) details.push(`${embeddedUrls.length} link(s)`);
-        if (embeddedPhones.length) details.push(`${embeddedPhones.length} phone(s)`);
-        if (embeddedUpis.length) details.push(`${embeddedUpis.length} UPI(s)`);
-        subTld.textContent = `Extracted: ${details.join(', ')}`;
-      }
-      if (iconTld) {
-        iconTld.style.background = embeddedUrls.length > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)';
-        iconTld.style.color = embeddedUrls.length > 0 ? '#EF4444' : '#F59E0B';
-      }
-    } else {
-      if (valTld) {
-        valTld.textContent = 'Zero Embedded Links';
-        valTld.style.color = 'var(--ink-900, #0A0F1E)';
-      }
-      if (subTld) subTld.textContent = 'No external hyperlinks, call numbers, or UPI handles';
-      if (iconTld) {
-        iconTld.style.background = 'rgba(16, 185, 129, 0.1)';
-        iconTld.style.color = '#059669';
-      }
-    }
-  } else {
-    if (valTld) valTld.textContent = 'VPA Banking Extension';
-    if (subTld) subTld.textContent = 'Standardized PSP routing handle';
-  }
-
-  // 3. Brand & Impersonation Tile
-  const valBrand = document.getElementById('tile-val-brand');
-  const subBrand = document.getElementById('tile-sub-brand');
-  const iconBrand = document.getElementById('tile-icon-brand');
-
-  const brandSignal = (data.signals || []).find(s => 
-    s.id === 'BRAND_IMPERSONATION' || 
-    s.id === 'BRAND_IMPERSONATION_HANDLE' || 
-    s.id === 'HOMOGLYPH_ATTACK' || 
-    s.id === 'SOCIAL_ENGINEERING_HANDLE'
-  );
-
-  if (currentTargetType === 'phone') {
+    // Tile 3: Regulatory & Plan Status
+    if (lblBrand) lblBrand.textContent = 'Regulatory Plan Status';
     const isTrai140 = (data.signals || []).some(s => s.id === 'TRAI_140_TELEMARKETING');
     const isTrai160 = (data.signals || []).some(s => s.id === 'TRAI_160_TRANSACTIONAL');
     const status = data.validationStatus || 'VALID';
-
     if (valBrand) {
       if (isTrai140) {
         valBrand.textContent = 'TRAI 140 Series';
         valBrand.style.color = '#F59E0B';
       } else if (isTrai160) {
-        valBrand.textContent = 'TRAI 160 Series';
+        valBrand.textContent = 'TRAI 160 Official Series';
         valBrand.style.color = '#2563EB';
       } else if (status === 'VALID') {
         valBrand.textContent = 'E.164 Validated Plan';
@@ -719,27 +1059,198 @@ function populateTelemetryTiles(data, target) {
     }
     if (subBrand) {
       if (isTrai140) subBrand.textContent = 'Commercial promotional telemarketing prefix';
-      else if (isTrai160) subBrand.textContent = 'Official financial entity service call';
+      else if (isTrai160) subBrand.textContent = 'Authorized financial service entity call';
       else if (status === 'VALID') subBrand.textContent = 'Standard national telecom allocation';
       else subBrand.textContent = 'Does not match standard operator numbering plan';
     }
     if (iconBrand) {
       const isNegative = isTrai140 || status === 'MALFORMED';
-      iconBrand.style.background = isNegative ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)';
+      iconBrand.style.background = isNegative ? 'rgba(239, 68, 68, 0.1)' : 'rgba(5, 150, 105, 0.1)';
       iconBrand.style.color = isNegative ? '#EF4444' : '#059669';
+      iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
     }
+
+    // Tile 4: Community Spam Radar
+    if (lblDb) lblDb.textContent = 'Community Spam Radar';
+    if (iconDb) {
+      iconDb.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>`;
+    }
+    if (data.communityReportCount && data.communityReportCount > 0) {
+      if (valDb) {
+        valDb.textContent = `${data.communityReportCount} Active Spam Report(s)`;
+        valDb.style.color = '#EF4444';
+      }
+      if (subDb) subDb.textContent = 'Flagged in user fraud & scam call database';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(239, 68, 68, 0.1)';
+        iconDb.style.color = '#EF4444';
+      }
+    } else {
+      if (valDb) {
+        valDb.textContent = 'No Active Flags';
+        valDb.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subDb) subDb.textContent = 'Cross-checked against 18,000+ daily scam records';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(5, 150, 105, 0.1)';
+        iconDb.style.color = '#059669';
+      }
+    }
+
+  } else if (currentTargetType === 'upi') {
+    // ════════════════════════════════════════════
+    // 2. UPI PAYMENT TELEMETRY TILES
+    // ════════════════════════════════════════════
+    
+    // Tile 1: Payment Protocol
+    if (lblProto) lblProto.textContent = 'Payment Protocol';
+    if (valProto) {
+      valProto.textContent = 'NPCI UPI 2.0 Standard';
+      valProto.style.color = 'var(--ink-900, #0A0F1E)';
+    }
+    if (subProto) {
+      subProto.textContent = data.handleDetails ? `Handle format: @${data.handleDetails.psp}` : 'Unified Payments Interface rail';
+    }
+    if (iconProto) {
+      iconProto.style.background = 'rgba(124, 58, 237, 0.1)';
+      iconProto.style.color = '#7C3AED';
+      iconProto.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`;
+    }
+
+    // Tile 2: Banking PSP & Handle Extension
+    if (lblTld) lblTld.textContent = 'Banking PSP & Extension';
+    const isRec = data.handleDetails && data.handleDetails.isRecognizedPsp;
+    if (valTld) {
+      valTld.textContent = data.handleDetails ? `@${data.handleDetails.psp.toUpperCase()}` : 'VPA Banking Extension';
+      valTld.style.color = isRec ? 'var(--ink-900, #0A0F1E)' : '#F59E0B';
+    }
+    if (subTld) {
+      subTld.textContent = isRec ? 'Authorized NPCI member bank handle' : 'Custom cooperative handle';
+    }
+    if (iconTld) {
+      iconTld.style.background = isRec ? 'rgba(124, 58, 237, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+      iconTld.style.color = isRec ? '#7C3AED' : '#F59E0B';
+      iconTld.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 22 7 12 2"/><rect x="4" y="10" width="3" height="7"/><rect x="10" y="10" width="3" height="7"/><rect x="17" y="10" width="3" height="7"/><line x1="2" y1="21" x2="22" y2="21"/></svg>`;
+    }
+
+    // Tile 3: Impersonation / Mule Risk
+    if (lblBrand) lblBrand.textContent = 'VPA Impersonation Risk';
+    const brandSignal = (data.signals || []).find(s => 
+      s.id === 'BRAND_IMPERSONATION' || 
+      s.id === 'BRAND_IMPERSONATION_HANDLE' || 
+      s.id === 'SOCIAL_ENGINEERING_HANDLE'
+    );
+    if (brandSignal) {
+      if (valBrand) {
+        valBrand.textContent = 'Impersonation Suspected';
+        valBrand.style.color = '#EF4444';
+      }
+      if (subBrand) subBrand.textContent = brandSignal.title || 'Brand or refund mimicry identified';
+      if (iconBrand) {
+        iconBrand.style.background = 'rgba(239, 68, 68, 0.1)';
+        iconBrand.style.color = '#EF4444';
+        iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+      }
+    } else {
+      if (valBrand) {
+        valBrand.textContent = 'Clean Account Profile';
+        valBrand.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subBrand) subBrand.textContent = 'Zero brand spoofing or deceptive keywords';
+      if (iconBrand) {
+        iconBrand.style.background = 'rgba(124, 58, 237, 0.1)';
+        iconBrand.style.color = '#7C3AED';
+        iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
+      }
+    }
+
+    // Tile 4: Financial Dispute DB
+    if (lblDb) lblDb.textContent = 'Financial Dispute Intel';
+    if (iconDb) {
+      iconDb.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+    }
+    if (data.communityReportCount && data.communityReportCount > 0) {
+      if (valDb) {
+        valDb.textContent = `${data.communityReportCount} Payment Dispute(s)`;
+        valDb.style.color = '#EF4444';
+      }
+      if (subDb) subDb.textContent = 'Flagged in user fraud payment reports';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(239, 68, 68, 0.1)';
+        iconDb.style.color = '#EF4444';
+      }
+    } else {
+      if (valDb) {
+        valDb.textContent = 'No Active Flags';
+        valDb.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subDb) subDb.textContent = 'Checked against financial dispute registry';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(124, 58, 237, 0.1)';
+        iconDb.style.color = '#7C3AED';
+      }
+    }
+
   } else if (currentTargetType === 'message') {
+    // ════════════════════════════════════════════
+    // 3. SMS & MESSAGE TELEMETRY TILES
+    // ════════════════════════════════════════════
+    
+    // Tile 1: Payload & Text Metrics
+    if (lblProto) lblProto.textContent = 'Payload & Text Metrics';
+    const charLen = (data.metadata && data.metadata.charCount) || target.length;
+    const wordLen = (data.metadata && data.metadata.wordCount) || target.trim().split(/\s+/).filter(Boolean).length;
+    if (valProto) {
+      valProto.textContent = `${charLen} Chars • ${wordLen} Words`;
+      valProto.style.color = 'var(--ink-900, #0A0F1E)';
+    }
+    if (subProto) subProto.textContent = 'Natural language token evaluation';
+    if (iconProto) {
+      iconProto.style.background = 'rgba(217, 119, 6, 0.1)';
+      iconProto.style.color = '#D97706';
+      iconProto.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+    }
+
+    // Tile 2: Embedded Attack Vectors
+    if (lblTld) lblTld.textContent = 'Embedded Attack Vectors';
+    const embeddedUrls = data.embeddedUrls || [];
+    const embeddedPhones = data.embeddedPhones || [];
+    const embeddedUpis = data.embeddedUpis || [];
+    const totalEmbedded = embeddedUrls.length + embeddedPhones.length + embeddedUpis.length;
+    if (totalEmbedded > 0) {
+      if (valTld) {
+        valTld.textContent = `${totalEmbedded} Extracted Vector${totalEmbedded > 1 ? 's' : ''}`;
+        valTld.style.color = embeddedUrls.length > 0 ? '#EF4444' : '#F59E0B';
+      }
+      if (subTld) {
+        const details = [];
+        if (embeddedUrls.length) details.push(`${embeddedUrls.length} link(s)`);
+        if (embeddedPhones.length) details.push(`${embeddedPhones.length} phone(s)`);
+        if (embeddedUpis.length) details.push(`${embeddedUpis.length} UPI(s)`);
+        subTld.textContent = `Extracted: ${details.join(', ')}`;
+      }
+      if (iconTld) {
+        iconTld.style.background = embeddedUrls.length > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+        iconTld.style.color = embeddedUrls.length > 0 ? '#EF4444' : '#F59E0B';
+        iconTld.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+      }
+    } else {
+      if (valTld) {
+        valTld.textContent = 'Zero Embedded Links';
+        valTld.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subTld) subTld.textContent = 'No external hyperlinks, call numbers, or UPI handles';
+      if (iconTld) {
+        iconTld.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconTld.style.color = '#059669';
+        iconTld.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+      }
+    }
+
+    // Tile 3: Coercion & Urgency
+    if (lblBrand) lblBrand.textContent = 'Coercion & Urgency Index';
     const signals = data.signals || [];
-    const otpSig = signals.find(s => s.id === 'OTP_CREDENTIAL_HARVESTING');
-    const apkSig = signals.find(s => s.id === 'UNVERIFIED_APK_DOWNLOAD');
-    const kycSig = signals.find(s => s.id === 'KYC_PAN_UPDATE_PHISHING');
-    const discSig = signals.find(s => s.id === 'DISCONNECTION_THREAT');
-    const jobSig = signals.find(s => s.id === 'FAKE_JOB_PART_TIME_OFFER');
-    const lotterySig = signals.find(s => s.id === 'LOTTERY_PRIZE_SCAM');
-    const urgencySig = signals.find(s => s.id === 'URGENCY_COERCION');
-
-    const topHazard = otpSig || apkSig || kycSig || discSig || jobSig || lotterySig || urgencySig;
-
+    const topHazard = signals.find(s => s.id === 'OTP_CREDENTIAL_HARVESTING' || s.id === 'UNVERIFIED_APK_DOWNLOAD' || s.id === 'KYC_PAN_UPDATE_PHISHING' || s.id === 'DISCONNECTION_THREAT' || s.id === 'FAKE_JOB_PART_TIME_OFFER' || s.id === 'LOTTERY_PRIZE_SCAM' || s.id === 'URGENCY_COERCION');
     if (topHazard) {
       if (valBrand) {
         valBrand.textContent = topHazard.title || 'Threat Vector Flagged';
@@ -749,64 +1260,154 @@ function populateTelemetryTiles(data, target) {
       if (iconBrand) {
         iconBrand.style.background = (topHazard.severity === 'critical') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(234, 88, 12, 0.1)';
         iconBrand.style.color = (topHazard.severity === 'critical') ? '#EF4444' : '#EA580C';
+        iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
       }
     } else {
       if (valBrand) {
         valBrand.textContent = 'Low Pressure Tone';
         valBrand.style.color = 'var(--ink-900, #0A0F1E)';
       }
-      if (subBrand) subBrand.textContent = 'Zero coercive threats, OTP demands, or fake prizes';
+      if (subBrand) subBrand.textContent = 'Zero artificial urgency, threats, or fake lottery prizes';
       if (iconBrand) {
         iconBrand.style.background = 'rgba(16, 185, 129, 0.1)';
         iconBrand.style.color = '#059669';
+        iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
       }
     }
-  } else if (brandSignal) {
-    if (valBrand) {
-      valBrand.textContent = brandSignal.id === 'SOCIAL_ENGINEERING_HANDLE' ? 'Scam Keywords' : 'Impersonation Suspected';
-      valBrand.style.color = '#EF4444';
-    }
-    if (subBrand) subBrand.textContent = brandSignal.title || 'Brand or refund mimicry identified';
-    if (iconBrand) {
-      iconBrand.style.background = 'rgba(239, 68, 68, 0.1)';
-      iconBrand.style.color = '#EF4444';
-    }
-  } else {
-    if (valBrand) {
-      valBrand.textContent = 'Clean / No Spoofing';
-      valBrand.style.color = 'var(--ink-900, #0A0F1E)';
-    }
-    if (subBrand) subBrand.textContent = 'Zero brand spoofing or deceptive keywords';
-    if (iconBrand) {
-      iconBrand.style.background = 'rgba(16, 185, 129, 0.1)';
-      iconBrand.style.color = '#059669';
-    }
-  }
 
-  // 4. Community Intel Status Tile
-  const valDb = document.getElementById('tile-val-db');
-  const subDb = document.getElementById('tile-sub-db');
-  const iconDb = document.getElementById('tile-icon-db');
+    // Tile 4: Scam Scripts Match
+    if (lblDb) lblDb.textContent = 'Known Scam Scripts';
+    if (iconDb) {
+      iconDb.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+    }
+    if (data.communityReportCount && data.communityReportCount > 0) {
+      if (valDb) {
+        valDb.textContent = `${data.communityReportCount} Matching Template(s)`;
+        valDb.style.color = '#EF4444';
+      }
+      if (subDb) subDb.textContent = 'Matches reported SMS/WhatsApp fraud campaigns';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(239, 68, 68, 0.1)';
+        iconDb.style.color = '#EF4444';
+      }
+    } else {
+      if (valDb) {
+        valDb.textContent = 'No Script Match';
+        valDb.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subDb) subDb.textContent = 'Audited against 4,000+ known Indian scam scripts';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconDb.style.color = '#059669';
+      }
+    }
 
-  if (data.communityReportCount && data.communityReportCount > 0) {
-    if (valDb) {
-      valDb.textContent = `${data.communityReportCount} Active Report(s)`;
-      valDb.style.color = '#EF4444';
-    }
-    if (subDb) subDb.textContent = 'Flagged by users in live community database';
-    if (iconDb) {
-      iconDb.style.background = 'rgba(239, 68, 68, 0.1)';
-      iconDb.style.color = '#EF4444';
-    }
   } else {
-    if (valDb) {
-      valDb.textContent = 'No Active Flags';
-      valDb.style.color = 'var(--ink-900, #0A0F1E)';
+    // ════════════════════════════════════════════
+    // 4. URL / WEBSITE TELEMETRY TILES
+    // ════════════════════════════════════════════
+    
+    // Tile 1: Transport & Encryption
+    if (lblProto) lblProto.textContent = 'Transport Protocol';
+    const isHttp = /^http:\/\//i.test(target);
+    if (isHttp) {
+      if (valProto) {
+        valProto.textContent = 'HTTP (Unencrypted)';
+        valProto.style.color = '#EA580C';
+      }
+      if (subProto) subProto.textContent = 'Vulnerable to plaintext interception';
+      if (iconProto) {
+        iconProto.style.background = 'rgba(234, 88, 12, 0.1)';
+        iconProto.style.color = '#EA580C';
+        iconProto.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+      }
+    } else {
+      if (valProto) {
+        valProto.textContent = 'TLS / HTTPS Encrypted';
+        valProto.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subProto) subProto.textContent = 'Standard cryptographic transport';
+      if (iconProto) {
+        iconProto.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconProto.style.color = '#059669';
+        iconProto.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+      }
     }
-    if (subDb) subDb.textContent = 'Checked against live fraud registry';
+
+    // Tile 2: Top-Level Domain (TLD)
+    if (lblTld) lblTld.textContent = 'Top-Level Domain (TLD)';
+    let hostname = '';
+    try {
+      hostname = new URL(target.startsWith('http') ? target : 'https://' + target).hostname;
+    } catch (e) {
+      hostname = target;
+    }
+    const parts = hostname.split('.');
+    const tld = parts.length > 1 ? '.' + parts[parts.length - 1] : '.com';
+    const isSuspiciousTld = ['tk', 'ml', 'ga', 'cf', 'gq', 'top', 'xyz', 'icu', 'buzz', 'club', 'work'].includes(tld.replace('.', ''));
+    if (valTld) {
+      valTld.textContent = `${tld.toUpperCase()} Namespace`;
+      if (isSuspiciousTld) valTld.style.color = '#EF4444';
+    }
+    if (subTld) subTld.textContent = isSuspiciousTld ? 'Frequently abused disposable TLD' : 'Recognized generic / ccTLD namespace';
+    if (iconTld) {
+      iconTld.style.background = isSuspiciousTld ? 'rgba(239, 68, 68, 0.1)' : 'rgba(37, 99, 235, 0.1)';
+      iconTld.style.color = isSuspiciousTld ? '#EF4444' : '#2563EB';
+      iconTld.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>`;
+    }
+
+    // Tile 3: Impersonation Analysis
+    if (lblBrand) lblBrand.textContent = 'Impersonation Analysis';
+    const brandSignal = (data.signals || []).find(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'HOMOGLYPH_ATTACK');
+    if (brandSignal) {
+      if (valBrand) {
+        valBrand.textContent = 'Impersonation Suspected';
+        valBrand.style.color = '#EF4444';
+      }
+      if (subBrand) subBrand.textContent = brandSignal.title || 'Brand or banking mimicry identified';
+      if (iconBrand) {
+        iconBrand.style.background = 'rgba(239, 68, 68, 0.1)';
+        iconBrand.style.color = '#EF4444';
+        iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+      }
+    } else {
+      if (valBrand) {
+        valBrand.textContent = 'Clean / No Spoofing';
+        valBrand.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subBrand) subBrand.textContent = 'Homoglyphs and brand checks passed';
+      if (iconBrand) {
+        iconBrand.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconBrand.style.color = '#059669';
+        iconBrand.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+      }
+    }
+
+    // Tile 4: Community Threat DB
+    if (lblDb) lblDb.textContent = 'Community Threat Radar';
     if (iconDb) {
-      iconDb.style.background = 'rgba(16, 185, 129, 0.1)';
-      iconDb.style.color = '#059669';
+      iconDb.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+    }
+    if (data.communityReportCount && data.communityReportCount > 0) {
+      if (valDb) {
+        valDb.textContent = `${data.communityReportCount} Active Threat Report(s)`;
+        valDb.style.color = '#EF4444';
+      }
+      if (subDb) subDb.textContent = 'Flagged in user fraud and malware database';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(239, 68, 68, 0.1)';
+        iconDb.style.color = '#EF4444';
+      }
+    } else {
+      if (valDb) {
+        valDb.textContent = 'No Active Flags';
+        valDb.style.color = 'var(--ink-900, #0A0F1E)';
+      }
+      if (subDb) subDb.textContent = 'Checked against live phishing & fraud reports';
+      if (iconDb) {
+        iconDb.style.background = 'rgba(16, 185, 129, 0.1)';
+        iconDb.style.color = '#059669';
+      }
     }
   }
 }
@@ -1514,4 +2115,49 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+
+function getCleanCertBadges(type) {
+  if (type === 'phone') {
+    return `
+      <span style="background: rgba(5, 150, 105, 0.12); color: #047857; padding: 4px 12px; border-radius: 100px;">✓ Valid E.164 Plan</span>
+      <span style="background: rgba(5, 150, 105, 0.12); color: #047857; padding: 4px 12px; border-radius: 100px;">✓ Standard Cellular Allocation</span>
+      <span style="background: rgba(5, 150, 105, 0.12); color: #047857; padding: 4px 12px; border-radius: 100px;">✓ Non-Telemarketing Line</span>
+      <span style="background: rgba(5, 150, 105, 0.12); color: #047857; padding: 4px 12px; border-radius: 100px;">✓ Zero Active Spam Reports</span>
+    `;
+  } else if (type === 'upi') {
+    return `
+      <span style="background: rgba(124, 58, 237, 0.12); color: #6D28D9; padding: 4px 12px; border-radius: 100px;">✓ NPCI Format Valid</span>
+      <span style="background: rgba(124, 58, 237, 0.12); color: #6D28D9; padding: 4px 12px; border-radius: 100px;">✓ Authorized Bank PSP</span>
+      <span style="background: rgba(124, 58, 237, 0.12); color: #6D28D9; padding: 4px 12px; border-radius: 100px;">✓ Normal Velocity</span>
+      <span style="background: rgba(124, 58, 237, 0.12); color: #6D28D9; padding: 4px 12px; border-radius: 100px;">✓ Zero Dispute Flags</span>
+    `;
+  } else if (type === 'message') {
+    return `
+      <span style="background: rgba(217, 119, 6, 0.12); color: #B45309; padding: 4px 12px; border-radius: 100px;">✓ Low Pressure Tone</span>
+      <span style="background: rgba(217, 119, 6, 0.12); color: #B45309; padding: 4px 12px; border-radius: 100px;">✓ Zero Malicious Links</span>
+      <span style="background: rgba(217, 119, 6, 0.12); color: #B45309; padding: 4px 12px; border-radius: 100px;">✓ No Coercion Triggers</span>
+      <span style="background: rgba(217, 119, 6, 0.12); color: #B45309; padding: 4px 12px; border-radius: 100px;">✓ Clean Payload</span>
+    `;
+  } else {
+    return `
+      <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ TLD Clean</span>
+      <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ Brand Passed</span>
+      <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ Syntax Safe</span>
+      <span style="background: rgba(16, 185, 129, 0.15); color: #065F46; padding: 4px 12px; border-radius: 100px;">✓ No Blacklist Flags</span>
+    `;
+  }
+}
+
+function getFallbackGuidance(type) {
+  if (type === 'phone') {
+    return 'Never disclose OTPs, banking passwords, or personal identity details over unsolicited phone calls. Police, Customs, and Banks will never demand funds transfers over Skype or phone.';
+  } else if (type === 'upi') {
+    return 'Remember: Entering your UPI PIN is strictly used to send money from your bank account, NEVER to receive funds, prizes, or merchant refunds.';
+  } else if (type === 'message') {
+    return 'Avoid opening hyperlinks received in SMS or chat claiming urgent account suspension. Always verify security notices directly in the official service provider app.';
+  } else {
+    return 'Always exercise standard cyber safety: double-check domain spellings before submitting login credentials.';
+  }
 }

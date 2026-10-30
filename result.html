@@ -647,6 +647,372 @@
         transform: translateY(0);
         opacity: 1;
       }
+    
+      /* ═══════════════════════════════════════════════
+         DISTINCT TOOL-SPECIFIC RESULT VIEWS CSS
+         ═══════════════════════════════════════════════ */
+      .tool-result-view {
+        display: none;
+        animation: fadeInView 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .tool-result-view.active {
+        display: block;
+      }
+      @keyframes fadeInView {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── 1. PHONE DOSSIER VIEW ─────────────────────────── */
+      .phone-dossier-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 32px;
+        align-items: start;
+        margin-bottom: 32px;
+      }
+      @media (max-width: 992px) {
+        .phone-dossier-grid { grid-template-columns: 1fr; }
+      }
+
+      .phone-caller-card {
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 24px;
+        padding: 32px 28px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+        position: sticky;
+        top: 96px;
+        text-align: center;
+      }
+
+      .phone-avatar-wrap {
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: rgba(5, 150, 105, 0.1);
+        color: #059669;
+      }
+
+      .phone-avatar-pulse {
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        opacity: 0.3;
+        animation: phonePulse 2s infinite ease-out;
+      }
+
+      @keyframes phonePulse {
+        0% { transform: scale(0.95); opacity: 0.8; }
+        100% { transform: scale(1.22); opacity: 0; }
+      }
+
+      .phone-formatted-number {
+        font-family: var(--mono, 'JetBrains Mono', monospace);
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--ink-900, #0A0F1E);
+        margin-bottom: 6px;
+      }
+
+      .phone-category-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: 100px;
+        background: rgba(5, 150, 105, 0.1);
+        color: #059669;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+      }
+
+      .phone-spam-meter-wrap {
+        background: var(--ink-50, #F8FAFC);
+        border: 1px solid var(--ink-100, #E2E8F0);
+        border-radius: 16px;
+        padding: 16px;
+        margin: 16px 0;
+        text-align: left;
+      }
+
+      .phone-meter-bar {
+        display: flex;
+        height: 10px;
+        border-radius: 100px;
+        overflow: hidden;
+        gap: 3px;
+        margin: 8px 0 6px;
+      }
+
+      .phone-trai-badge-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .phone-trai-pill {
+        padding: 9px 10px;
+        border-radius: 12px;
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E2E8F0);
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        text-align: left;
+      }
+
+      .scam-vector-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      @media (max-width: 600px) {
+        .scam-vector-list { grid-template-columns: 1fr; }
+      }
+
+      .scam-vector-card {
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        transition: all 0.2s;
+      }
+
+      .scam-vector-card.threat {
+        border-color: rgba(239, 68, 68, 0.4);
+        background: rgba(254, 242, 242, 0.6);
+      }
+
+      .scam-vector-card.clean {
+        border-color: rgba(16, 185, 129, 0.25);
+      }
+
+      .scam-vector-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 1.2rem;
+        background: var(--ink-50, #F1F5F9);
+      }
+
+      /* ── 2. UPI PAYMENT TERMINAL VIEW ────────────────── */
+      .upi-golden-rule-banner {
+        background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+        border: 1.5px solid #F59E0B;
+        border-radius: 20px;
+        padding: 20px 24px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
+      }
+      .upi-alert-icon {
+        font-size: 2.2rem;
+        flex-shrink: 0;
+      }
+      .upi-alert-title {
+        font-size: 0.8125rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #B45309;
+        margin-bottom: 2px;
+      }
+      .upi-alert-text {
+        font-size: 0.9375rem;
+        color: #92400E;
+        line-height: 1.5;
+      }
+
+      .upi-terminal-grid {
+        display: grid;
+        grid-template-columns: 390px 1fr;
+        gap: 32px;
+        align-items: start;
+        margin-bottom: 32px;
+      }
+      @media (max-width: 992px) {
+        .upi-terminal-grid { grid-template-columns: 1fr; }
+      }
+
+      .upi-pass-card {
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 24px;
+        padding: 32px 28px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+        position: sticky;
+        top: 96px;
+      }
+
+      .upi-chip-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px dashed var(--ink-100, #E2E8F0);
+      }
+
+      .upi-chip-icon {
+        width: 44px;
+        height: 32px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);
+      }
+
+      .upi-shield-verdict {
+        text-align: center;
+        padding: 22px 18px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+      }
+      .upi-shield-verdict.safe {
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        color: #065F46;
+      }
+      .upi-shield-verdict.danger {
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        color: #991B1B;
+      }
+
+      .upi-receipt-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--ink-50, #F1F5F9);
+        font-size: 0.8125rem;
+      }
+      .upi-receipt-row:last-child { border-bottom: none; }
+      .upi-receipt-lbl { color: var(--ink-400, #94A3B8); font-weight: 600; }
+      .upi-receipt-val { font-weight: 700; color: var(--ink-900, #0A0F1E); text-align: right; }
+
+      /* ── 3. MESSAGE CHAT LAB VIEW ────────────────────── */
+      .msg-chat-lab-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 32px;
+        align-items: start;
+        margin-bottom: 32px;
+      }
+      @media (max-width: 992px) {
+        .msg-chat-lab-grid { grid-template-columns: 1fr; }
+      }
+
+      .chat-bubble-window {
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E8EBF3);
+        border-radius: 24px;
+        padding: 24px;
+        margin-bottom: 28px;
+        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.03);
+      }
+
+      .chat-bubble-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--ink-50, #F1F5F9);
+        font-size: 0.8125rem;
+        color: var(--ink-500, #64748B);
+      }
+
+      .chat-bubble-container {
+        background: #F1F5F9;
+        border-radius: 18px 18px 18px 4px;
+        padding: 20px 24px;
+        font-size: 1.05rem;
+        line-height: 1.65;
+        color: #0F172A;
+        position: relative;
+        max-width: 100%;
+        border-left: 4px solid #2563EB;
+      }
+
+      mark.threat-kw-critical {
+        background: #FEE2E2;
+        color: #DC2626;
+        font-weight: 800;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid rgba(220, 38, 38, 0.3);
+      }
+      mark.threat-kw-warn {
+        background: #FEF3C7;
+        color: #D97706;
+        font-weight: 800;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid rgba(217, 119, 6, 0.3);
+      }
+
+      .extracted-payloads-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .extracted-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 100px;
+        background: #FFFFFF;
+        border: 1px solid var(--ink-100, #E2E8F0);
+        font-size: 0.8125rem;
+        font-weight: 700;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      }
+
+      .btn-chip-inspect {
+        background: var(--blue-600, #2563EB);
+        color: #FFFFFF;
+        border: none;
+        padding: 4px 10px;
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-chip-inspect:hover {
+        background: var(--blue-700, #1D4ED8);
+      }
+
     </style>
 </head>
 <body>
@@ -1043,7 +1409,7 @@
             Check Scanner
           </a>
           <span>/</span>
-          <span>Security Heuristic Audit</span>
+          <span id="audit-breadcrumb-tag">Security Heuristic Audit</span>
         </div>
 
         <div class="scan-meta-pill" id="scan-meta">
@@ -1084,131 +1450,577 @@
         </div>
       </div>
 
-      <!-- Main Grid: Score Gauge (Left) + Telemetry & Signals (Right) -->
-      <div class="result-main-grid">
-        
-        <!-- Left Column: Threat Verdict Card -->
-        <div class="score-card" id="score-sidebar">
-          <div class="gauge-wrap">
-            <svg class="gauge-svg" viewBox="0 0 160 160">
-              <circle class="gauge-bg-circle" cx="80" cy="80" r="70"></circle>
-              <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70"></circle>
-            </svg>
-            <div class="gauge-center-content">
-              <div class="gauge-score-num" id="score-display">--</div>
-              <div class="gauge-score-denom">THREAT SCORE</div>
+      
+      <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE (CYBER DOMAIN SANDBOX)
+           ═══════════════════════════════════════════════ -->
+      <div id="view-url" class="tool-result-view">
+        <div class="result-main-grid">
+          <!-- Left Column: Threat Verdict Card -->
+          <div class="score-card" id="score-sidebar">
+            <div class="gauge-wrap">
+              <svg class="gauge-svg" viewBox="0 0 160 160">
+                <circle class="gauge-bg-circle" cx="80" cy="80" r="70"></circle>
+                <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+              </svg>
+              <div class="gauge-center-content">
+                <div class="gauge-score-num" id="score-display">--</div>
+                <div class="gauge-score-denom">THREAT SCORE</div>
+              </div>
+            </div>
+
+            <div class="risk-verdict-pill" id="risk-badge">
+              EVALUATING RISK
+            </div>
+
+            <p class="risk-explanation-text" id="risk-summary">
+              Analyzing target URL structure and checking for heuristic deception vectors...
+            </p>
+
+            <div class="risk-meter-container">
+              <div class="risk-meter-bar">
+                <div class="meter-seg seg-low" title="0-25: Safe"></div>
+                <div class="meter-seg seg-mod" title="26-50: Moderate"></div>
+                <div class="meter-seg seg-high" title="51-75: High"></div>
+                <div class="meter-seg seg-crit" title="76-100: Critical"></div>
+              </div>
+              <div class="risk-meter-labels">
+                <span>Safe</span>
+                <span>Moderate</span>
+                <span>High</span>
+                <span>Critical</span>
+              </div>
             </div>
           </div>
 
-          <div class="risk-verdict-pill" id="risk-badge">
-            EVALUATING RISK
-          </div>
+          <!-- Right Column: Telemetry Tiles + Signals + Recommendations -->
+          <div>
+            <!-- 4 Telemetry Tiles for URL -->
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="tile-icon-box" id="tile-icon-protocol">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label" id="tile-lbl-protocol">Transport Protocol</div>
+                  <div class="tile-value" id="tile-val-protocol">TLS / HTTPS Encrypted</div>
+                  <div class="tile-subtext" id="tile-sub-protocol">Secure communications channel</div>
+                </div>
+              </div>
 
-          <p class="risk-explanation-text" id="risk-summary">
-            Analyzing target URL structure and checking for heuristic deception vectors...
-          </p>
+              <div class="telemetry-card">
+                <div class="tile-icon-box" id="tile-icon-tld">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label" id="tile-lbl-tld">Top-Level Domain (TLD)</div>
+                  <div class="tile-value" id="tile-val-tld">Standard Namespace</div>
+                  <div class="tile-subtext" id="tile-sub-tld">Established domain extension</div>
+                </div>
+              </div>
 
-          <div class="risk-meter-container">
-            <div class="risk-meter-bar">
-              <div class="meter-seg seg-low" title="0-25: Safe"></div>
-              <div class="meter-seg seg-mod" title="26-50: Moderate"></div>
-              <div class="meter-seg seg-high" title="51-75: High"></div>
-              <div class="meter-seg seg-crit" title="76-100: Critical"></div>
+              <div class="telemetry-card">
+                <div class="tile-icon-box" id="tile-icon-brand">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label" id="tile-lbl-brand">Impersonation Analysis</div>
+                  <div class="tile-value" id="tile-val-brand">Clean / No Spoofing</div>
+                  <div class="tile-subtext" id="tile-sub-brand">Homoglyphs and brand checks passed</div>
+                </div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="tile-icon-box" id="tile-icon-db">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label" id="tile-lbl-db">Community Intel Status</div>
+                  <div class="tile-value" id="tile-val-db">No Active Flags</div>
+                  <div class="tile-subtext" id="tile-sub-db">Checked against live fraud reports</div>
+                </div>
+              </div>
             </div>
-            <div class="risk-meter-labels">
-              <span>Safe</span>
-              <span>Moderate</span>
-              <span>High</span>
-              <span>Critical</span>
+
+            <!-- Forensic Signals Card -->
+            <div class="signals-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Detected Signals & Heuristic Indicators
+                  <span class="signals-count-pill" id="signals-count-pill">0</span>
+                </h3>
+              </div>
+              <div id="signals-container"></div>
+            </div>
+
+            <!-- Incident Playbook / Recommendation Box -->
+            <div class="playbook-card" id="recommendation-box">
+              <div class="playbook-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Security Recommendations & Advisory Guidance
+              </div>
+              <ul class="playbook-list" id="recommendation-text">
+                <li>Evaluating contextual safety recommendations...</li>
+              </ul>
             </div>
           </div>
         </div>
-
-        <!-- Right Column: Telemetry Tiles + Signals + Recommendations -->
-        <div>
-          
-          <!-- 4 Telemetry Tiles -->
-          <div class="telemetry-grid">
-            
-            <!-- Tile 1: Transport & Encryption -->
-            <div class="telemetry-card">
-              <div class="tile-icon-box" id="tile-icon-protocol">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              </div>
-              <div>
-                <div class="tile-label">Transport Protocol</div>
-                <div class="tile-value" id="tile-val-protocol">TLS / HTTPS Encrypted</div>
-                <div class="tile-subtext" id="tile-sub-protocol">Secure communications channel</div>
-              </div>
-            </div>
-
-            <!-- Tile 2: Domain & TLD -->
-            <div class="telemetry-card">
-              <div class="tile-icon-box" id="tile-icon-tld">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
-              </div>
-              <div>
-                <div class="tile-label">Top-Level Domain (TLD)</div>
-                <div class="tile-value" id="tile-val-tld">Standard Namespace</div>
-                <div class="tile-subtext" id="tile-sub-tld">Established domain extension</div>
-              </div>
-            </div>
-
-            <!-- Tile 3: Brand & Homoglyphs -->
-            <div class="telemetry-card">
-              <div class="tile-icon-box" id="tile-icon-brand">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </div>
-              <div>
-                <div class="tile-label">Impersonation Analysis</div>
-                <div class="tile-value" id="tile-val-brand">Clean / No Spoofing</div>
-                <div class="tile-subtext" id="tile-sub-brand">Homoglyphs and brand checks passed</div>
-              </div>
-            </div>
-
-            <!-- Tile 4: Community Threat DB -->
-            <div class="telemetry-card">
-              <div class="tile-icon-box" id="tile-icon-db">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              </div>
-              <div>
-                <div class="tile-label">Community Intel Status</div>
-                <div class="tile-value" id="tile-val-db">No Active Flags</div>
-                <div class="tile-subtext" id="tile-sub-db">Checked against live fraud reports</div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Forensic Signals Card -->
-          <div class="signals-card">
-            <div class="signals-card-header">
-              <h3 class="signals-card-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                Detected Signals & Heuristic Indicators
-                <span class="signals-count-pill" id="signals-count-pill">0</span>
-              </h3>
-            </div>
-
-            <div id="signals-container">
-              <!-- Populated dynamically -->
-            </div>
-          </div>
-
-          <!-- Incident Playbook / Recommendation Box -->
-          <div class="playbook-card" id="recommendation-box">
-            <div class="playbook-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              Security Recommendations & Advisory Guidance
-            </div>
-            <ul class="playbook-list" id="recommendation-text">
-              <li>Evaluating contextual safety recommendations...</li>
-            </ul>
-          </div>
-
-        </div>
-
       </div>
+
+      <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 2: PHONE (TELECOM & CALLER DOSSIER)
+           ═══════════════════════════════════════════════ -->
+      <div id="view-phone" class="tool-result-view">
+        <div class="phone-dossier-grid">
+          <!-- Left Column: Telecom Caller Identity & Risk Meter -->
+          <div class="phone-caller-card">
+            <div class="phone-avatar-wrap" id="phone-avatar-wrap">
+              <div class="phone-avatar-pulse" id="phone-pulse"></div>
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            
+            <div class="phone-formatted-number" id="phone-val-formatted">+91 00000 00000</div>
+            <div class="phone-category-pill" id="phone-category-pill">CELLULAR MOBILE LINE</div>
+            
+            <!-- Spam Probability Meter -->
+            <div class="phone-spam-meter-wrap">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--ink-400);">Spam Probability</span>
+                <span style="font-size:1.15rem; font-weight:900;" id="phone-spam-percent">15%</span>
+              </div>
+              <div class="phone-meter-bar">
+                <div class="meter-seg" id="phone-seg-1" style="background:#10B981; flex:1;"></div>
+                <div class="meter-seg" id="phone-seg-2" style="background:#E2E8F0; flex:1;"></div>
+                <div class="meter-seg" id="phone-seg-3" style="background:#E2E8F0; flex:1;"></div>
+                <div class="meter-seg" id="phone-seg-4" style="background:#E2E8F0; flex:1;"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.6875rem; color:var(--ink-400); font-weight:700;">
+                <span>Safe Personal</span>
+                <span>Commercial</span>
+                <span>Suspected</span>
+                <span>Fraud</span>
+              </div>
+            </div>
+
+            <!-- TRAI & Regulatory Badges -->
+            <div class="phone-trai-badge-grid">
+              <div class="phone-trai-pill" id="trai-140-pill">
+                <span id="trai-140-icon">✅</span>
+                <span>TRAI 140 Series: <strong>Clean</strong></span>
+              </div>
+              <div class="phone-trai-pill" id="trai-160-pill">
+                <span id="trai-160-icon">ℹ️</span>
+                <span>TRAI 160 Series: <strong>Non-160</strong></span>
+              </div>
+            </div>
+
+            <!-- Official DoT / Sanchar Saathi Warning -->
+            <div style="margin-top:20px; padding:14px; border-radius:14px; background:rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.2); font-size:0.75rem; color:#1E40AF; text-align:left; line-height:1.5;">
+              <strong>🛡️ DoT / TRAI Advisory:</strong> Law enforcement agencies, Police, CBI, and Telecom operators NEVER place video calls demanding money or threatening digital arrest.
+            </div>
+          </div>
+
+          <!-- Right Column: Telecom Metrics & Scam Vectors -->
+          <div>
+            <!-- 3 Telecom Tiles -->
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:24px;" class="phone-metrics-3col">
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(5,150,105,0.1); color:#059669;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">Line Allocation</div>
+                  <div class="tile-value" id="phone-tile-line">Cellular Mobile</div>
+                  <div class="tile-subtext" id="phone-tile-carrier">Carrier channel: MOBILE</div>
+                </div>
+              </div>
+              
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(37,99,235,0.1); color:#2563EB;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">Dialing Origin</div>
+                  <div class="tile-value" id="phone-tile-origin">India (+91)</div>
+                  <div class="tile-subtext">ITU-T E.164 Numbering Plan</div>
+                </div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(124,58,237,0.1); color:#7C3AED;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">Community Flags</div>
+                  <div class="tile-value" id="phone-tile-reports">0 Active Reports</div>
+                  <div class="tile-subtext">National Fraud DB</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scam Vector Checklist -->
+            <div class="signals-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  Telecom Threat Vector & Modus Operandi Matrix
+                </h3>
+              </div>
+              
+              <div class="scam-vector-list" id="phone-scam-vectors">
+                <div class="scam-vector-card clean" id="vector-digital-arrest">
+                  <div class="scam-vector-icon">👮</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.875rem;">Digital Arrest / Police Extortion</div>
+                    <div style="font-size:0.75rem; color:var(--ink-500); margin:2px 0 4px;">Fake summons or threats claiming CBI / Customs video arrest</div>
+                    <div style="font-size:0.6875rem; font-weight:800; color:#059669;" class="vector-status">NO ACTIVE REPORT</div>
+                  </div>
+                </div>
+
+                <div class="scam-vector-card clean" id="vector-fedex">
+                  <div class="scam-vector-icon">📦</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.875rem;">Courier / Parcel Scam</div>
+                    <div style="font-size:0.75rem; color:var(--ink-500); margin:2px 0 4px;">Fake FedEx / DHL package seized with contraband narcotics</div>
+                    <div style="font-size:0.6875rem; font-weight:800; color:#059669;" class="vector-status">NO ACTIVE REPORT</div>
+                  </div>
+                </div>
+
+                <div class="scam-vector-card clean" id="vector-electricity">
+                  <div class="scam-vector-icon">⚡</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.875rem;">Power Cut Disconnection Threat</div>
+                    <div style="font-size:0.75rem; color:var(--ink-500); margin:2px 0 4px;">Fake MSEDCL / Electricity department disconnection notice</div>
+                    <div style="font-size:0.6875rem; font-weight:800; color:#059669;" class="vector-status">NO ACTIVE REPORT</div>
+                  </div>
+                </div>
+
+                <div class="scam-vector-card clean" id="vector-work-from-home">
+                  <div class="scam-vector-icon">💼</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.875rem;">Part-Time Job / Telegram Scam</div>
+                    <div style="font-size:0.75rem; color:var(--ink-500); margin:2px 0 4px;">Paid YouTube likes, rating tasks, prepaid deposit traps</div>
+                    <div style="font-size:0.6875rem; font-weight:800; color:#059669;" class="vector-status">NO ACTIVE REPORT</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phone Heuristic Signals -->
+            <div class="signals-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Detected Telecom Numbering Signals
+                  <span class="signals-count-pill" id="phone-signals-count">0</span>
+                </h3>
+              </div>
+              <div id="phone-signals-container"></div>
+            </div>
+
+            <!-- Telecom Playbook & Action Box -->
+            <div class="playbook-card" style="border-left-color: #059669;" id="phone-playbook-card">
+              <div class="playbook-title" style="color:#065F46;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Telecom Incident Playbook & Defense Steps
+              </div>
+              <ul class="playbook-list" id="phone-recommendations-list">
+                <li>Never share OTPs, bank passwords, or PINs with any caller.</li>
+                <li>Government departments will never demand immediate money transfers.</li>
+              </ul>
+              
+              <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--ink-100); display:flex; gap:12px; flex-wrap:wrap;">
+                <a href="https://sancharsaathi.gov.in/sfc/" target="_blank" rel="noopener noreferrer" class="btn-action-pill" style="color:#2563EB; border-color:#2563EB;">
+                  <span>Report on Chakshu Portal (DoT)</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+                <a href="tel:1930" class="btn-action-pill" style="color:#DC2626; border-color:#DC2626;">
+                  <span>National Cyber Helpline 1930</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 3: UPI (FINTECH PAYMENT TERMINAL & RECEIPT)
+           ═══════════════════════════════════════════════ -->
+      <div id="view-upi" class="tool-result-view">
+        <!-- Golden Rule Banner -->
+        <div class="upi-golden-rule-banner">
+          <div class="upi-alert-icon">⚠️</div>
+          <div>
+            <div class="upi-alert-title">CRITICAL GOLDEN RULE OF UPI PAYMENTS</div>
+            <div class="upi-alert-text">
+              You <strong>NEVER</strong> need to enter your UPI PIN or scan a QR code to <strong>RECEIVE</strong> money or claim refunds. Entering your UPI PIN will always <strong>DEDUCT</strong> money from your account!
+            </div>
+          </div>
+        </div>
+
+        <div class="upi-terminal-grid">
+          <!-- Left Column: Bank Security Receipt -->
+          <div class="upi-pass-card">
+            <div class="upi-chip-header">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div class="upi-chip-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:0.6875rem; font-weight:800; color:var(--ink-400); letter-spacing:0.08em; text-transform:uppercase;">NPCI Rail Verified</div>
+                  <div style="font-size:0.875rem; font-weight:800; color:var(--ink-900);">PAYMENT TERMINAL</div>
+                </div>
+              </div>
+              <span style="font-family:var(--mono); font-size:0.75rem; font-weight:700; color:#7C3AED; background:rgba(124,58,237,0.1); padding:4px 8px; border-radius:6px;">₹ UPI 2.0</span>
+            </div>
+
+            <div style="text-align:center; margin-bottom:18px;">
+              <div style="font-size:0.75rem; font-weight:800; color:var(--ink-400); text-transform:uppercase; margin-bottom:4px;">Target UPI VPA</div>
+              <div style="font-family:var(--mono); font-size:1.15rem; font-weight:800; color:#1E1B4B; word-break:break-all;" id="upi-display-handle">user@bank</div>
+            </div>
+
+            <!-- Transfer Safety Verdict Shield -->
+            <div class="upi-shield-verdict safe" id="upi-verdict-shield">
+              <div style="font-size:2rem; margin-bottom:4px;" id="upi-shield-icon">🛡️</div>
+              <div style="font-size:1.1rem; font-weight:900; letter-spacing:-0.02em;" id="upi-shield-title">SAFE TO TRANSFER</div>
+              <div style="font-size:0.8125rem; opacity:0.9; margin-top:4px;" id="upi-shield-desc">No known mule account reports or brand impersonation detected.</div>
+            </div>
+
+            <!-- Digital Receipt Breakdown -->
+            <div style="border-top:1px dashed var(--ink-100); padding-top:14px; margin-top:14px;">
+              <div class="upi-receipt-row">
+                <span class="upi-receipt-lbl">PSP Provider Bank:</span>
+                <span class="upi-receipt-val" id="upi-val-psp">HDFC Bank Ltd</span>
+              </div>
+              <div class="upi-receipt-row">
+                <span class="upi-receipt-lbl">App Ecosystem:</span>
+                <span class="upi-receipt-val" id="upi-val-app">Google Pay / PhonePe / BHIM</span>
+              </div>
+              <div class="upi-receipt-row">
+                <span class="upi-receipt-lbl">Handle Category:</span>
+                <span class="upi-receipt-val" id="upi-val-type">P2P Individual Handle</span>
+              </div>
+              <div class="upi-receipt-row">
+                <span class="upi-receipt-lbl">Mule Account Risk:</span>
+                <span class="upi-receipt-val" id="upi-val-mule" style="color:#059669;">Low / Clean Velocity</span>
+              </div>
+            </div>
+
+            <div style="margin-top:20px;">
+              <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="btn-action-pill" style="width:100%; justify-content:center; color:#DC2626; border-color:rgba(220,38,38,0.25); background:rgba(220,38,38,0.04);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Report Fraudulent UPI Handle
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Fintech Telemetry & Vector Analysis -->
+          <div>
+            <!-- 4 Fintech Metric Tiles -->
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(124,58,237,0.1); color:#7C3AED;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">Payment Rail</div>
+                  <div class="tile-value">NPCI UPI 2.0</div>
+                  <div class="tile-subtext">Unified Payments Interface</div>
+                </div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(37,99,235,0.1); color:#2563EB;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">PSP Bank Partner</div>
+                  <div class="tile-value" id="upi-tile-bank">Identified Bank</div>
+                  <div class="tile-subtext">Recognized NPCI Gateway</div>
+                </div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(245,158,11,0.1); color:#D97706;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">Impersonation / Keywords</div>
+                  <div class="tile-value" id="upi-tile-keyword">No Brand Spoofing</div>
+                  <div class="tile-subtext">Refund / Support mimic check</div>
+                </div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="tile-icon-box" style="background:rgba(16,185,129,0.1); color:#059669;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <div class="tile-label">Dispute Registry</div>
+                  <div class="tile-value" id="upi-tile-disputes">0 Active Chargebacks</div>
+                  <div class="tile-subtext">National Cyber Cell Freeze List</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Common UPI Attack Vectors Card -->
+            <div class="signals-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  Common UPI Fraud Scenarios & Defenses
+                </h3>
+              </div>
+              
+              <div class="scam-vector-list">
+                <div class="scam-vector-card clean">
+                  <div class="scam-vector-icon">🔄</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.875rem;">Collect Request Trap</div>
+                    <div style="font-size:0.75rem; color:var(--ink-500); margin-top:2px;">Scammer sends a payment request disguised as a refund or cashback. Reject it!</div>
+                  </div>
+                </div>
+
+                <div class="scam-vector-card clean">
+                  <div class="scam-vector-icon">📷</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.875rem;">QR Code Scam</div>
+                    <div style="font-size:0.75rem; color:var(--ink-500); margin-top:2px;">Scanning a QR code is ONLY for paying someone, never for receiving money.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- UPI Signals Card -->
+            <div class="signals-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Payment Heuristic Signals
+                  <span class="signals-count-pill" id="upi-signals-count">0</span>
+                </h3>
+              </div>
+              <div id="upi-signals-container"></div>
+            </div>
+
+            <!-- Financial Safety Playbook -->
+            <div class="playbook-card" style="border-left-color: #7C3AED;" id="upi-playbook-card">
+              <div class="playbook-title" style="color:#6D28D9;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Golden Hour Financial Defense Playbook
+              </div>
+              <ul class="playbook-list" id="upi-recommendations-list">
+                <li>If you sent money to a scammer, call 1930 IMMEDIATELY within the 'Golden Hour' to freeze the beneficiary account.</li>
+                <li>Always check the real name that appears in your UPI app before entering your PIN.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 4: MESSAGE (NLP FORENSIC CHAT LAB)
+           ═══════════════════════════════════════════════ -->
+      <div id="view-message" class="tool-result-view">
+        <!-- Mobile Chat Preview Window -->
+        <div class="chat-bubble-window">
+          <div class="chat-bubble-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#EF4444;"></span>
+              <span style="font-weight:700;" id="msg-sender-header">SMS / Chat Payload Inspection</span>
+            </div>
+            <span style="font-family:var(--mono); font-size:0.75rem; color:var(--ink-400);">NLP THREAT PARSER ACTIVE</span>
+          </div>
+
+          <div class="chat-bubble-container" id="msg-bubble-content">
+            Analyzing message text for social engineering patterns...
+          </div>
+
+          <div style="margin-top:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:0.75rem;">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <span style="font-weight:700; color:var(--ink-600);">Legend:</span>
+              <span><mark class="threat-kw-critical">Panic & Coercion</mark></span>
+              <span><mark class="threat-kw-warn">Credential / OTP Solicitation</mark></span>
+            </div>
+            <span style="color:var(--ink-400);">Highlighted tokens indicate deceptive triggers</span>
+          </div>
+        </div>
+
+        <div class="msg-chat-lab-grid">
+          <!-- Left Column: Psychological Manipulation Thermometer -->
+          <div class="phone-caller-card">
+            <div style="font-size:2.5rem; margin-bottom:8px;">🧠</div>
+            <div style="font-size:0.75rem; font-weight:800; color:var(--ink-400); text-transform:uppercase; letter-spacing:0.06em;">Psychological Pressure Level</div>
+            <div style="font-size:2.4rem; font-weight:900; margin:4px 0 8px; color:#EF4444;" id="msg-pressure-score">85%</div>
+            <div class="risk-verdict-pill" id="msg-pressure-pill" style="margin-bottom:16px;">HIGH COERCION / PANIC</div>
+            
+            <p style="font-size:0.8125rem; color:var(--ink-500); line-height:1.5; margin-bottom:20px;" id="msg-pressure-desc">
+              Message relies on artificial urgency to induce fear and force irrational compliance.
+            </p>
+
+            <!-- Coercion Vector Details -->
+            <div style="text-align:left; border-top:1px solid var(--ink-100); padding-top:14px; font-size:0.8125rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--ink-400);">Coercion Strategy:</span>
+                <span style="font-weight:700;" id="msg-val-strategy">Utility Bill Panic</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--ink-400);">Sender Channel:</span>
+                <span style="font-weight:700; color:#EF4444;" id="msg-val-sender">Private +91 Mobile</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--ink-400);">Official Header:</span>
+                <span style="font-weight:700; color:#EF4444;">Missing TRAI ID</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Extracted Payloads & NLP Indicators -->
+          <div>
+            <!-- Extracted Payloads Card (URLs, Phones, UPIs) -->
+            <div class="signals-card" id="msg-payloads-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  Extracted Threat Payloads Inside Message
+                </h3>
+              </div>
+              <div id="msg-extracted-container">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Detected NLP Signals Card -->
+            <div class="signals-card">
+              <div class="signals-card-header">
+                <h3 class="signals-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Linguistic Threat Signals & Heuristics
+                  <span class="signals-count-pill" id="msg-signals-count">0</span>
+                </h3>
+              </div>
+              <div id="msg-signals-container"></div>
+            </div>
+
+            <!-- Emergency SMS Defense Playbook -->
+            <div class="playbook-card" style="border-left-color: #D97706;" id="msg-playbook-card">
+              <div class="playbook-title" style="color:#B45309;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                SMS / Chat Defense Playbook
+              </div>
+              <ul class="playbook-list" id="msg-recommendations-list">
+                <li>Never click links received from unknown mobile numbers.</li>
+                <li>Utility companies will send official notifications via registered consumer portals, not personal WhatsApp messages.</li>
+                <li>Report unsolicited promotional or spam messages by forwarding to 1909 (TRAI DND).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- Inline Quick Scanner Bar -->
       <div class="quick-scanner-bar">

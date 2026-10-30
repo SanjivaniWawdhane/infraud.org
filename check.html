@@ -421,93 +421,606 @@
             </div>
           </div>
 
-          <!-- Right: Checker Card -->
-          <div class="card" style="background: var(--page); border: 1px solid var(--ink-100); padding: 32px; box-shadow: var(--shadow-lg);">
+          <!-- Right: Checker Card (Vastly Different UI per Tool) -->
+          <div class="card tool-checker-master-card" style="background: var(--page); border: 1px solid var(--ink-100); padding: 32px; box-shadow: var(--shadow-lg); border-radius: 20px;">
             
             <style>
               .checker-tabs-container {
-                display: flex; gap: 16px;
-                border-bottom: 1px solid var(--ink-100);
-                margin-bottom: 24px;
+                display: flex; gap: 10px;
+                border-bottom: 2px solid var(--ink-100);
+                margin-bottom: 28px;
                 overflow-x: auto;
                 padding-bottom: 0;
               }
               .checker-tab {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
                 color: var(--ink-500);
                 border: none; background: none;
-                border-bottom: 2px solid transparent;
-                padding-bottom: 12px; margin-bottom: -1px;
-                font-size: 0.9375rem; font-weight: 600;
+                border-bottom: 3px solid transparent;
+                padding: 10px 14px 14px; margin-bottom: -2px;
+                font-size: 0.9375rem; font-weight: 700;
                 cursor: pointer; white-space: nowrap;
-                transition: color 0.2s, border-color 0.2s;
+                transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+                border-radius: 8px 8px 0 0;
               }
-              .checker-tab:hover { color: var(--ink-900); }
-              .checker-tab.active {
-                color: var(--blue-600);
-                border-bottom-color: var(--blue-600);
+              .checker-tab svg {
+                width: 18px; height: 18px; stroke-width: 2.2;
+                transition: transform 0.2s;
+              }
+              .checker-tab:hover {
+                color: var(--ink-900);
+                background: rgba(10, 15, 30, 0.03);
+              }
+              .checker-tab:hover svg {
+                transform: scale(1.12);
+              }
+              /* Distinct tab active themes */
+              .checker-tab[data-tool="url"].active {
+                color: #2563EB;
+                border-bottom-color: #2563EB;
+                background: rgba(37, 99, 235, 0.06);
+              }
+              .checker-tab[data-tool="phone"].active {
+                color: #059669;
+                border-bottom-color: #059669;
+                background: rgba(5, 150, 105, 0.06);
+              }
+              .checker-tab[data-tool="upi"].active {
+                color: #7C3AED;
+                border-bottom-color: #7C3AED;
+                background: rgba(124, 58, 237, 0.06);
+              }
+              .checker-tab[data-tool="message"].active {
+                color: #D97706;
+                border-bottom-color: #D97706;
+                background: rgba(217, 119, 6, 0.06);
+              }
+
+              /* Individual Tool Panels */
+              .tool-panel {
+                display: none;
+                animation: panelFadeIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+              }
+              .tool-panel.active {
+                display: block;
+              }
+              @keyframes panelFadeIn {
+                from { opacity: 0; transform: translateY(6px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+
+              .tool-panel-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;
+                flex-wrap: wrap;
+                gap: 10px;
+              }
+              .tool-badge-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.75rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                padding: 4px 12px;
+                border-radius: 100px;
+              }
+              .tool-badge-url { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+              .tool-badge-phone { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+              .tool-badge-upi { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+              .tool-badge-message { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+
+              .tool-chips-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 14px;
+                margin-bottom: 20px;
+              }
+              .tool-feature-tag {
+                font-size: 0.75rem;
+                color: var(--ink-500);
+                background: var(--surface);
+                border: 1px solid var(--ink-100);
+                padding: 4px 10px;
+                border-radius: 6px;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                font-weight: 500;
+              }
+
+              .quick-sample-btn {
+                background: var(--surface);
+                border: 1px dashed var(--ink-200);
+                color: var(--ink-700);
+                font-size: 0.78125rem;
+                font-family: var(--mono);
+                padding: 4px 10px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-align: left;
+              }
+              .quick-sample-btn:hover {
+                background: var(--ink-50);
+                border-color: var(--ink-400);
+                color: var(--ink-900);
+                transform: translateY(-1px);
+              }
+
+              /* Themed CTA Buttons */
+              .btn-tool-url {
+                background: #2563EB; color: #fff; border: none; font-weight: 700;
+                box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+              }
+              .btn-tool-url:hover { background: #1D4ED8; }
+
+              .btn-tool-phone {
+                background: #059669; color: #fff; border: none; font-weight: 700;
+                box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+              }
+              .btn-tool-phone:hover { background: #047857; }
+
+              .btn-tool-upi {
+                background: #7C3AED; color: #fff; border: none; font-weight: 700;
+                box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+              }
+              .btn-tool-upi:hover { background: #6D28D9; }
+
+              .btn-tool-message {
+                background: #D97706; color: #fff; border: none; font-weight: 700;
+                box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+              }
+              .btn-tool-message:hover { background: #B45309; }
+
+              /* UPI Quick Handle Chips */
+              .upi-handle-chip {
+                background: #F3E8FF;
+                color: #6B21A8;
+                border: 1px solid #D8B4FE;
+                padding: 4px 10px;
+                border-radius: 100px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+              }
+              .upi-handle-chip:hover {
+                background: #7C3AED;
+                color: #fff;
+                border-color: #7C3AED;
+                transform: scale(1.05);
+              }
+
+              /* Message Scenarios Grid */
+              .message-scenarios-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin-top: 10px;
+              }
+              .scenario-card-btn {
+                background: var(--surface);
+                border: 1px solid var(--ink-100);
+                padding: 10px 12px;
+                border-radius: 8px;
+                text-align: left;
+                cursor: pointer;
+                transition: all 0.2s;
+              }
+              .scenario-card-btn:hover {
+                border-color: #F59E0B;
+                background: #FFFBEB;
+                transform: translateY(-1px);
+              }
+              .scenario-card-btn .scenario-title {
+                font-size: 0.8125rem;
+                font-weight: 700;
+                color: var(--ink-900);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin-bottom: 2px;
+              }
+              .scenario-card-btn .scenario-desc {
+                font-size: 0.71875rem;
+                color: var(--ink-500);
+                line-height: 1.3;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
               }
             </style>
             
-            <!-- Tabs -->
+            <!-- Distinct Tabs Header -->
             <div class="checker-tabs-container">
-              <button class="t-title checker-tab active" onclick="setCheckerType('url', this)">Website</button>
-              <button class="t-title checker-tab" onclick="setCheckerType('phone', this)">Phone</button>
-              <button class="t-title checker-tab" onclick="setCheckerType('upi', this)">UPI ID</button>
-              <button class="t-title checker-tab" onclick="setCheckerType('message', this)">Message</button>
+              <button class="checker-tab active" data-tool="url" onclick="switchToolTab('url')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span>Website</span>
+              </button>
+              <button class="checker-tab" data-tool="phone" onclick="switchToolTab('phone')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span>Phone</span>
+              </button>
+              <button class="checker-tab" data-tool="upi" onclick="switchToolTab('upi')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>
+                <span>UPI ID</span>
+              </button>
+              <button class="checker-tab" data-tool="message" onclick="switchToolTab('message')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>Message</span>
+              </button>
             </div>
 
-            <!-- Input Area -->
-            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
-              <div style="position: relative; flex: 1;">
-                <div style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--ink-300); display: flex; align-items: center;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                </div>
-                <input type="text" id="main-checker-input" onkeypress="if(event.key === 'Enter') performCheckAnalysis()" class="input" placeholder="e.g. amazon-secure-login.in" style="width: 100%; height: 48px; padding-left: 44px; border-radius: 8px; border: 1px solid var(--ink-100); transition: border-color 0.2s, box-shadow 0.2s;" onfocus="this.style.borderColor='var(--blue-600)'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+            <!-- ─────────────────────────────────────────────
+                 1. TOOL PANEL: WEBSITE / URL INSPECTOR
+            ───────────────────────────────────────────── -->
+            <div id="panel-url" class="tool-panel active">
+              <div class="tool-panel-header">
+                <span class="tool-badge-pill tool-badge-url">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Web Forensic Engine
+                </span>
+                <span class="t-small" style="color: var(--ink-400);">WHOIS • SSL • Homoglyph • Phishing DB</span>
               </div>
-              <button class="btn btn-primary" style="flex-shrink: 0; padding: 0 24px; border-radius: 8px; height: 48px;" onclick="performCheckAnalysis()">Analyze</button>
-            </div>
-            
-            <script>
-              let currentCheckerType = 'url';
-              function setCheckerType(type, btn) {
-                currentCheckerType = type;
-                document.querySelectorAll('.checker-tab').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const input = document.getElementById('main-checker-input');
-                if(type === 'url') input.placeholder = 'e.g. amazon-secure-login.in';
-                if(type === 'phone') input.placeholder = 'e.g. +91 98765 43210';
-                if(type === 'upi') input.placeholder = 'e.g. username@okhdfcbank';
-                if(type === 'message') input.placeholder = 'Paste a suspicious message...';
-              }
 
-              function performCheckAnalysis() {
-                const input = document.getElementById('main-checker-input');
-                if (input && input.value.trim() !== '') {
-                  window.location.href = 'result.html?type=' + encodeURIComponent(currentCheckerType) + '&query=' + encodeURIComponent(input.value.trim());
-                } else {
-                  alert('Please enter a URL or target to analyze.');
+              <!-- Input Row with Protocol Lock -->
+              <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                <div style="position: relative; flex: 1; display: flex; align-items: center;">
+                  <span style="position: absolute; left: 12px; font-family: var(--mono); font-size: 0.8125rem; font-weight: 700; color: #16A34A; background: #DCFCE7; padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; pointer-events: none;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    https://
+                  </span>
+                  <input type="text" id="input-url" onkeypress="if(event.key === 'Enter') analyzeTool('url')" class="input" placeholder="amazon-security-update.in or any domain..." style="width: 100%; height: 50px; padding-left: 92px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: var(--mono); font-size: 0.9375rem;" onfocus="this.style.borderColor='#2563EB'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+                </div>
+                <button class="btn btn-tool-url" style="flex-shrink: 0; padding: 0 24px; border-radius: 10px; height: 50px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('url')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  Scan URL
+                </button>
+              </div>
+
+              <!-- URL Features Radar -->
+              <div class="tool-chips-row">
+                <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Domain Age Check</span>
+                <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> SSL Encryption</span>
+                <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Redirection Chain</span>
+              </div>
+
+              <!-- Quick Tests -->
+              <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Targets:</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'fake-sbi-secure-portal.xyz')">🚨 fake-sbi-secure-portal.xyz</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'amazon-support-india.in')">🚨 amazon-support-india.in</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'google.com')">✅ google.com</button>
+              </div>
+            </div>
+
+            <!-- ─────────────────────────────────────────────
+                 2. TOOL PANEL: TELECOM PHONE SCANNER
+            ───────────────────────────────────────────── -->
+            <div id="panel-phone" class="tool-panel">
+              <div class="tool-panel-header">
+                <span class="tool-badge-pill tool-badge-phone">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Telecom & Caller Intelligence
+                </span>
+                <span class="t-small" style="color: var(--ink-400);">Carrier • Spam DB • VoIP • DND Registry</span>
+              </div>
+
+              <!-- Input Row with Country Selector -->
+              <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                <select id="phone-country-code" style="height: 50px; border-radius: 10px; border: 1.5px solid var(--ink-100); background: var(--surface); padding: 0 12px; font-weight: 700; font-size: 0.875rem; color: var(--ink-800); cursor: pointer; outline: none;">
+                  <option value="+91" selected>🇮🇳 +91 (IN)</option>
+                  <option value="+1">🇺🇸 +1 (US)</option>
+                  <option value="+44">🇬🇧 +44 (UK)</option>
+                  <option value="+971">🇦🇪 +971 (AE)</option>
+                  <option value="+65">🇸🇬 +65 (SG)</option>
+                  <option value="+61">🇦🇺 +61 (AU)</option>
+                </select>
+                <div style="position: relative; flex: 1;">
+                  <input type="text" id="input-phone" onkeypress="if(event.key === 'Enter') analyzeTool('phone')" class="input" placeholder="98765 43210 or 14098 76543..." style="width: 100%; height: 50px; padding-left: 16px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: var(--mono); font-size: 0.9375rem;" onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5,150,105,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+                </div>
+                <button class="btn btn-tool-phone" style="flex-shrink: 0; padding: 0 24px; border-radius: 10px; height: 50px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('phone')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  Verify Number
+                </button>
+              </div>
+
+              <!-- Phone Features Radar -->
+              <div class="tool-chips-row">
+                <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> FedEx Courier Scam Alert</span>
+                <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Digital Arrest Impersonation</span>
+                <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> VoIP / SIM Spoofer Detection</span>
+              </div>
+
+              <!-- Quick Tests -->
+              <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Suspicious Numbers:</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 98765 43210')">🚨 +91 98765 43210 (FedEx Parcel Scam)</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 70001 23456')">🚨 +91 70001 23456 (Electricity Bill Due)</button>
+              </div>
+            </div>
+
+            <!-- ─────────────────────────────────────────────
+                 3. TOOL PANEL: UPI & VPA FRAUD RADAR
+            ───────────────────────────────────────────── -->
+            <div id="panel-upi" class="tool-panel">
+              <div class="tool-panel-header">
+                <span class="tool-badge-pill tool-badge-upi">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  NPCI Payment Safety Radar
+                </span>
+                <span class="t-small" style="color: var(--ink-400);">Mule Account • Handle Age • Merchant Cross-Check</span>
+              </div>
+
+              <!-- Input Row with Rupee Symbol -->
+              <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                <div style="position: relative; flex: 1; display: flex; align-items: center;">
+                  <span style="position: absolute; left: 14px; font-weight: 800; font-size: 1.1rem; color: #7C3AED;">₹</span>
+                  <input type="text" id="input-upi" onkeypress="if(event.key === 'Enter') analyzeTool('upi')" class="input" placeholder="username@okhdfcbank or merchant@paytm..." style="width: 100%; height: 50px; padding-left: 36px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: var(--mono); font-size: 0.9375rem;" onfocus="this.style.borderColor='#7C3AED'; this.style.boxShadow='0 0 0 3px rgba(124,58,237,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+                </div>
+                <button class="btn btn-tool-upi" style="flex-shrink: 0; padding: 0 24px; border-radius: 10px; height: 50px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('upi')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                  Audit UPI
+                </button>
+              </div>
+
+              <!-- Quick Append Bank Suffixes -->
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 10px; margin-bottom: 12px;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--ink-400);">Quick Suffixes:</span>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@okhdfcbank')">@okhdfcbank</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@paytm')">@paytm</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@ybl')">@ybl</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@axl')">@axl</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@ibl')">@ibl</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@sbi')">@sbi</button>
+              </div>
+
+              <!-- Quick Tests -->
+              <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Payment Handles:</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'sbi-reward-claim@ybl')">🚨 sbi-reward-claim@ybl</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'lottery-cashback@okhdfcbank')">🚨 lottery-cashback@okhdfcbank</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'johndoe@ybl')">✅ johndoe@ybl</button>
+              </div>
+            </div>
+
+            <!-- ─────────────────────────────────────────────
+                 4. TOOL PANEL: SMS & MESSAGE ANALYZER
+            ───────────────────────────────────────────── -->
+            <div id="panel-message" class="tool-panel">
+              <div class="tool-panel-header">
+                <span class="tool-badge-pill tool-badge-message">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  NLP Phishing & Coercion Detector
+                </span>
+                <span id="msg-char-counter" class="t-small" style="color: var(--ink-400); font-family: var(--mono);">0 chars</span>
+              </div>
+
+              <!-- Rich Textarea -->
+              <div style="position: relative; margin-bottom: 10px;">
+                <textarea id="input-message" class="input" placeholder="Paste suspicious SMS, WhatsApp message, KYC alert, or job offer here..." style="width: 100%; height: 110px; padding: 14px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: inherit; font-size: 0.9375rem; resize: vertical; line-height: 1.5;" oninput="updateMessageCount(this)" onfocus="this.style.borderColor='#D97706'; this.style.boxShadow='0 0 0 3px rgba(217,119,6,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';"></textarea>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" class="btn btn-neutral" style="height: 36px; padding: 0 12px; font-size: 0.8125rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;" onclick="pasteMessageClipboard()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                    Paste Clipboard
+                  </button>
+                  <button type="button" class="btn btn-neutral" style="height: 36px; padding: 0 10px; font-size: 0.8125rem; border-radius: 6px;" onclick="clearMessageInput()">
+                    Clear
+                  </button>
+                </div>
+                <button class="btn btn-tool-message" style="padding: 0 24px; border-radius: 8px; height: 42px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('message')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  Analyze Message
+                </button>
+              </div>
+
+              <!-- Clickable Real Scam Scenarios -->
+              <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Test Real-World Scam Scenarios:</div>
+              <div class="message-scenarios-grid">
+                <button type="button" class="scenario-card-btn" onclick="loadScenario('electricity')">
+                  <div class="scenario-title">⚡ Electricity Cutoff</div>
+                  <div class="scenario-desc">"Your power will be disconnected at 9:30 PM..."</div>
+                </button>
+                <button type="button" class="scenario-card-btn" onclick="loadScenario('bank')">
+                  <div class="scenario-title">🏦 Bank KYC Panic</div>
+                  <div class="scenario-desc">"SBI netbanking blocked. Update PAN immediately..."</div>
+                </button>
+                <button type="button" class="scenario-card-btn" onclick="loadScenario('job')">
+                  <div class="scenario-title">💼 Part-Time Job</div>
+                  <div class="scenario-desc">"Earn ₹5000/day liking YouTube videos..."</div>
+                </button>
+                <button type="button" class="scenario-card-btn" onclick="loadScenario('fedex')">
+                  <div class="scenario-title">📦 Customs Detention</div>
+                  <div class="scenario-desc">"Parcel detained by police. Arrest warrant issued..."</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Unified Controller Scripts -->
+            <script>
+              let currentTool = 'url';
+
+              function switchToolTab(toolKey) {
+                currentTool = toolKey;
+                // Update active tab buttons
+                document.querySelectorAll('.checker-tab').forEach(tab => {
+                  if (tab.getAttribute('data-tool') === toolKey) {
+                    tab.classList.add('active');
+                  } else {
+                    tab.classList.remove('active');
+                  }
+                });
+
+                // Update active tool panels
+                document.querySelectorAll('.tool-panel').forEach(panel => {
+                  panel.classList.remove('active');
+                });
+                const targetPanel = document.getElementById('panel-' + toolKey);
+                if (targetPanel) {
+                  targetPanel.classList.add('active');
+                  const input = targetPanel.querySelector('input, textarea');
                   if (input) input.focus();
                 }
               }
 
-              // Auto-activate tab from URL query parameter (e.g. check.html?type=upi)
+              function analyzeTool(toolKey) {
+                let query = '';
+                if (toolKey === 'url') {
+                  query = (document.getElementById('input-url')?.value || '').trim();
+                } else if (toolKey === 'phone') {
+                  const country = document.getElementById('phone-country-code')?.value || '+91';
+                  let rawNum = (document.getElementById('input-phone')?.value || '').trim();
+                  if (!rawNum) {
+                    alert('Please enter a phone number to analyze.');
+                    document.getElementById('input-phone')?.focus();
+                    return;
+                  }
+                  if (rawNum.startsWith('+')) {
+                    query = rawNum;
+                  } else {
+                    query = country + ' ' + rawNum;
+                  }
+                } else if (toolKey === 'upi') {
+                  query = (document.getElementById('input-upi')?.value || '').trim();
+                } else if (toolKey === 'message') {
+                  query = (document.getElementById('input-message')?.value || '').trim();
+                }
+
+                if (!query) {
+                  alert('Please enter input for the ' + toolKey.toUpperCase() + ' analyzer.');
+                  return;
+                }
+
+                window.location.href = 'result.html?type=' + encodeURIComponent(toolKey) + '&query=' + encodeURIComponent(query);
+              }
+
+              function fillAndAnalyze(toolKey, sampleText) {
+                switchToolTab(toolKey);
+                if (toolKey === 'url') {
+                  const el = document.getElementById('input-url');
+                  if (el) el.value = sampleText;
+                } else if (toolKey === 'phone') {
+                  const el = document.getElementById('input-phone');
+                  if (el) el.value = sampleText;
+                } else if (toolKey === 'upi') {
+                  const el = document.getElementById('input-upi');
+                  if (el) el.value = sampleText;
+                } else if (toolKey === 'message') {
+                  const el = document.getElementById('input-message');
+                  if (el) {
+                    el.value = sampleText;
+                    updateMessageCount(el);
+                  }
+                }
+                setTimeout(() => {
+                  analyzeTool(toolKey);
+                }, 150);
+              }
+
+              function appendUpiSuffix(suffix) {
+                const el = document.getElementById('input-upi');
+                if (!el) return;
+                let val = el.value.trim();
+                if (val.includes('@')) {
+                  val = val.split('@')[0];
+                }
+                if (!val) val = 'payment-user';
+                el.value = val + suffix;
+                el.focus();
+              }
+
+              function updateMessageCount(textarea) {
+                const len = textarea.value.length;
+                const words = textarea.value.trim() ? textarea.value.trim().split(/\s+/).length : 0;
+                const counter = document.getElementById('msg-char-counter');
+                if (counter) {
+                  counter.textContent = `${len} chars • ${words} words`;
+                }
+              }
+
+              async function pasteMessageClipboard() {
+                try {
+                  const text = await navigator.clipboard.readText();
+                  const textarea = document.getElementById('input-message');
+                  if (textarea && text) {
+                    textarea.value = text;
+                    updateMessageCount(textarea);
+                    textarea.focus();
+                  }
+                } catch (e) {
+                  alert('Clipboard access not permitted. Please paste manually with Ctrl+V.');
+                }
+              }
+
+              function clearMessageInput() {
+                const textarea = document.getElementById('input-message');
+                if (textarea) {
+                  textarea.value = '';
+                  updateMessageCount(textarea);
+                  textarea.focus();
+                }
+              }
+
+              const SCENARIO_PRESETS = {
+                electricity: "Dear consumer, your electricity power will be disconnected tonight at 9:30 PM from electricity office because your previous month bill was not updated. Please immediately call our electricity officer at 9876543210 to avoid disconnection.",
+                bank: "Dear SBI customer, your netbanking access is blocked due to expired KYC documentation. Click link immediately to update PAN card: http://sbi-kyc-verify-portal.xyz to prevent account suspension.",
+                job: "Congratulations! You have been shortlisted for part-time work from home role. Earn Rs 3,000 to Rs 8,000 daily by simply rating apps and liking videos. No experience required. Message HR on WhatsApp now: +919876543210",
+                fedex: "FedEx alert: Your parcel tracking #FDX-88219 has been seized by Mumbai Customs department. Suspicious narcotics and illegal passport detected. Supreme Court warrant issued. Contact Customs Inspector immediately."
+              };
+
+              function loadScenario(scenarioKey) {
+                const text = SCENARIO_PRESETS[scenarioKey];
+                const textarea = document.getElementById('input-message');
+                if (textarea && text) {
+                  textarea.value = text;
+                  updateMessageCount(textarea);
+                  textarea.focus();
+                }
+              }
+
+              // Auto-activate tab from URL query parameter (e.g. check.html?type=phone&query=...)
               document.addEventListener('DOMContentLoaded', () => {
                 const params = new URLSearchParams(window.location.search);
                 const typeParam = params.get('type');
-                if (typeParam) {
-                  const targetBtn = Array.from(document.querySelectorAll('.checker-tab')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${typeParam}'`));
-                  if (targetBtn) {
-                    setCheckerType(typeParam, targetBtn);
-                  }
+                const queryParam = params.get('query') || params.get('q');
+
+                if (typeParam && ['url', 'phone', 'upi', 'message'].includes(typeParam.toLowerCase())) {
+                  switchToolTab(typeParam.toLowerCase());
                 }
-                const queryParam = params.get('query');
+
                 if (queryParam) {
-                  const input = document.getElementById('main-checker-input');
-                  if (input) input.value = queryParam;
+                  const tool = typeParam ? typeParam.toLowerCase() : 'url';
+                  if (tool === 'url') {
+                    const el = document.getElementById('input-url');
+                    if (el) el.value = queryParam;
+                  } else if (tool === 'phone') {
+                    const el = document.getElementById('input-phone');
+                    if (el) el.value = queryParam;
+                  } else if (tool === 'upi') {
+                    const el = document.getElementById('input-upi');
+                    if (el) el.value = queryParam;
+                  } else if (tool === 'message') {
+                    const el = document.getElementById('input-message');
+                    if (el) {
+                      el.value = queryParam;
+                      updateMessageCount(el);
+                    }
+                  }
                 }
               });
             </script>
-
+            
+            <div style="margin-top: 24px;"></div>
             <!-- Privacy Notice -->
             <div class="t-small flex items-c gap-2" style="color: var(--ink-500); margin-bottom: 28px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 
