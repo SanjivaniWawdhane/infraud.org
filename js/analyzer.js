@@ -21,12 +21,51 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * Initializes and executes analysis based on current URL parameters
  */
+/**
+ * Smart heuristic type detector
+ * Automatically identifies Phone numbers, UPI handles, and Messages
+ * even if they were passed without an explicit type or defaulted to 'url'.
+ */
+function detectTargetType(rawQuery, explicitType) {
+  const query = (rawQuery || '').trim();
+  if (!query) return explicitType || 'url';
+
+  // 1. UPI check: contains '@' without slashes or spaces and doesn't start with http
+  if (query.includes('@') && !query.includes('/') && !query.includes(' ') && !query.startsWith('http')) {
+    return 'upi';
+  }
+
+  // 2. Phone check:
+  // e.g. 8010237029, +918010237029, +91 80102 37029, 1800112233, 022-26590000
+  const cleanDigits = query.replace(/[\s\-\+\(\)]/g, '');
+  const isAllPhoneChars = /^[\+\d\s\-\(\)]+$/.test(query);
+  if (isAllPhoneChars && cleanDigits.length >= 7 && cleanDigits.length <= 15 && !query.includes('.') && !query.includes('/')) {
+    return 'phone';
+  }
+
+  // 3. Message check:
+  // Multiple words with spaces, known Indian scam trigger phrases, or long messages
+  const words = query.split(/\s+/).filter(Boolean);
+  const scamKeywords = /\b(dear|consumer|electricity|power|bill|cut|tonight|police|arrest|cbi|customs|parcel|narcotics|lottery|winner|kyc|otp|deactivated|blocked|urgent|immediately|part-time|job|telegram)\b/i;
+  if (!query.startsWith('http://') && !query.startsWith('https://') && !query.startsWith('www.')) {
+    if (words.length >= 4 || (words.length >= 2 && scamKeywords.test(query)) || query.length > 60) {
+      return 'message';
+    }
+  }
+
+  // 4. If explicitType is valid and not generic 'url'
+  if (explicitType && ['phone', 'upi', 'message'].includes(explicitType)) {
+    return explicitType;
+  }
+
+  // 5. Default to URL
+  return 'url';
+}
+
 async function initAnalysis() {
   const urlParams = new URLSearchParams(window.location.search);
   const rawQuery = urlParams.get('query') || urlParams.get('q') || urlParams.get('url');
-  const type = (urlParams.get('type') || 'url').toLowerCase();
-
-  currentTargetType = type;
+  const rawType = (urlParams.get('type') || '').toLowerCase().trim();
 
   // If no query parameter provided, show prompt
   if (!rawQuery || !rawQuery.trim()) {
@@ -36,6 +75,20 @@ async function initAnalysis() {
 
   const query = rawQuery.trim();
   currentTargetQuery = query;
+
+  // SMART AUTO-DETECTION: Guarantee that Phone numbers, UPI IDs, and Messages
+  // are NEVER mistakenly classified as URLs!
+  const type = detectTargetType(query, rawType);
+  currentTargetType = type;
+
+  // If detected type differs from parameter, silently update URL for accurate bookmarks & sharing
+  if (rawType !== type) {
+    try {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('type', type);
+      window.history.replaceState(null, '', newUrl.toString());
+    } catch (e) {}
+  }
 
   // Set Scan ID and Localized Timestamp
   const scanMetaEl = document.getElementById('scan-meta');
@@ -208,6 +261,12 @@ async function initAnalysis() {
  * Updates hero icons and badges based on target type
  */
 function updateTargetTypeVisuals(query, type) {
+  const heroCard = document.querySelector('.target-hero-card');
+  if (heroCard) {
+    heroCard.classList.remove('hero-card-url', 'hero-card-phone', 'hero-card-upi', 'hero-card-message');
+    heroCard.classList.add('hero-card-' + type);
+  }
+
   const iconBox = document.getElementById('target-type-icon');
   const catTag = document.getElementById('target-category-tag');
   const protocolTag = document.getElementById('target-protocol-tag');
@@ -340,29 +399,60 @@ function showLoadingState() {
     if (el) el.innerHTML = spinnerHTML;
   });
 
-  const scoreDisplay = document.getElementById('score-display');
-  if (scoreDisplay) {
-    scoreDisplay.innerHTML = `<span style="font-size: 2.25rem; opacity: 0.5;">...</span>`;
-    scoreDisplay.style.color = 'var(--ink-500, #4B5570)';
-  }
+  if (type === 'phone') {
+    const phoneVal = document.getElementById('phone-val-formatted');
+    if (phoneVal) phoneVal.textContent = currentTargetQuery;
+    const phonePill = document.getElementById('phone-category-pill');
+    if (phonePill) phonePill.textContent = 'CONNECTING TO TELECOM RADAR...';
+    const spamPct = document.getElementById('phone-spam-percent');
+    if (spamPct) spamPct.textContent = '--%';
+    const tileLine = document.getElementById('phone-tile-line');
+    if (tileLine) tileLine.textContent = 'Inspecting...';
+    const tileCarrier = document.getElementById('phone-tile-carrier');
+    if (tileCarrier) tileCarrier.textContent = 'Querying allocation channel...';
+    const tileOrigin = document.getElementById('phone-tile-origin');
+    if (tileOrigin) tileOrigin.textContent = 'Resolving dialing prefix...';
+    const tileReports = document.getElementById('phone-tile-reports');
+    if (tileReports) tileReports.textContent = 'Querying spam DB...';
+  } else if (type === 'upi') {
+    const upiDisplay = document.getElementById('upi-display-handle');
+    if (upiDisplay) upiDisplay.textContent = currentTargetQuery;
+    const shieldTitle = document.getElementById('upi-shield-title');
+    if (shieldTitle) shieldTitle.textContent = 'VERIFYING NPCI RAIL...';
+    const shieldDesc = document.getElementById('upi-shield-desc');
+    if (shieldDesc) shieldDesc.textContent = 'Auditing acquiring bank partner and active mule registry...';
+  } else if (type === 'message') {
+    const bubble = document.getElementById('msg-bubble-content');
+    if (bubble) bubble.textContent = 'Parsing message semantics, extracting payload URLs, phones, and checking linguistic fear triggers...';
+    const pressScore = document.getElementById('msg-pressure-score');
+    if (pressScore) pressScore.textContent = '--%';
+    const pressPill = document.getElementById('msg-pressure-pill');
+    if (pressPill) pressPill.textContent = 'PARSING COERCION PATTERNS';
+  } else {
+    const scoreDisplay = document.getElementById('score-display');
+    if (scoreDisplay) {
+      scoreDisplay.innerHTML = `<span style="font-size: 2.25rem; opacity: 0.5;">...</span>`;
+      scoreDisplay.style.color = 'var(--ink-500, #4B5570)';
+    }
 
-  const riskBadge = document.getElementById('risk-badge');
-  if (riskBadge) {
-    riskBadge.textContent = 'ANALYZING';
-    riskBadge.style.color = 'var(--ink-500, #4B5570)';
-    riskBadge.style.background = 'rgba(75, 85, 112, 0.08)';
-    riskBadge.style.borderColor = 'rgba(75, 85, 112, 0.2)';
-  }
+    const riskBadge = document.getElementById('risk-badge');
+    if (riskBadge) {
+      riskBadge.textContent = 'ANALYZING';
+      riskBadge.style.color = 'var(--ink-500, #4B5570)';
+      riskBadge.style.background = 'rgba(75, 85, 112, 0.08)';
+      riskBadge.style.borderColor = 'rgba(75, 85, 112, 0.2)';
+    }
 
-  const riskSummary = document.getElementById('risk-summary');
-  if (riskSummary) {
-    riskSummary.textContent = 'Executing real-time heuristic inspection across protocol, syntax, and threat indicators...';
-  }
+    const riskSummary = document.getElementById('risk-summary');
+    if (riskSummary) {
+      riskSummary.textContent = 'Executing real-time heuristic inspection across protocol, syntax, and threat indicators...';
+    }
 
-  const gaugeCircle = document.getElementById('gauge-circle');
-  if (gaugeCircle) {
-    gaugeCircle.style.strokeDashoffset = '439.8';
-    gaugeCircle.style.stroke = '#2563EB';
+    const gaugeCircle = document.getElementById('gauge-circle');
+    if (gaugeCircle) {
+      gaugeCircle.style.strokeDashoffset = '439.8';
+      gaugeCircle.style.stroke = '#2563EB';
+    }
   }
 }
 
@@ -2028,16 +2118,7 @@ window.submitInlineScan = function() {
   if (!inputEl || !inputEl.value.trim()) return;
 
   const val = inputEl.value.trim();
-  let type = 'url';
-
-  // Smart detect type
-  if (val.includes('@') && !val.includes('/')) {
-    type = 'upi';
-  } else if (/^\+?\d[\d\s-]{8,}$/.test(val)) {
-    type = 'phone';
-  } else if (val.length > 80 || /\b(?:dear|urgent|otp|click|http|won|bill|electricity|kyc)\b/i.test(val)) {
-    type = 'message';
-  }
+  const type = detectTargetType(val, '');
 
   window.location.href = `result.html?type=${encodeURIComponent(type)}&query=${encodeURIComponent(val)}`;
 };
