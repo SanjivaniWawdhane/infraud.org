@@ -261,6 +261,25 @@ async function initAnalysis() {
  * Updates hero icons and badges based on target type
  */
 function updateTargetTypeVisuals(query, type) {
+  // Update all target displays across all tool headers
+  document.querySelectorAll('.target-display-value').forEach(el => {
+    if (type === 'phone') {
+      const cleanNum = query.replace(/[^\d+]/g, '');
+      if (cleanNum.startsWith('+91') || (/^\d{10}$/.test(cleanNum) && !cleanNum.startsWith('+'))) {
+        const d = cleanNum.replace(/^\+91/, '');
+        el.innerHTML = `<span style="font-size: 1.25rem; margin-right: 6px;">🇮🇳</span> <span style="font-family: var(--mono); color: #FFFFFF;">${cleanNum.startsWith('+') ? cleanNum : '+91 ' + d}</span>`;
+      } else {
+        el.innerHTML = `<span style="font-family: var(--mono); color: #FFFFFF;">${escapeHtml(query)}</span>`;
+      }
+    } else if (type === 'upi') {
+      el.innerHTML = `<span style="color: #FBBF24; margin-right: 4px; font-weight: 800;">₹</span> <span style="font-family: var(--mono); color: #FFFFFF;">${escapeHtml(query)}</span>`;
+    } else if (type === 'message') {
+      const preview = query.length > 70 ? query.substring(0, 68) + '...' : query;
+      el.innerHTML = `<span style="color: #FFFFFF;">"${escapeHtml(preview)}"</span>`;
+    } else {
+      el.innerHTML = `<span style="color: #FFFFFF; font-family: var(--mono);">${escapeHtml(query)}</span>`;
+    }
+  });
   const heroCard = document.querySelector('.target-hero-card');
   if (heroCard) {
     heroCard.classList.remove('hero-card-url', 'hero-card-phone', 'hero-card-upi', 'hero-card-message');
