@@ -847,6 +847,35 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     pressurePill.style.borderColor = theme.borderPill;
   }
 
+  const descEl = document.getElementById('msg-pressure-desc');
+  if (descEl) {
+    descEl.textContent = theme.summary;
+  }
+
+  const stratEl = document.getElementById('msg-val-strategy');
+  if (stratEl) {
+    if (/electricity|power|bijli|cut tonight/i.test(text)) {
+      stratEl.textContent = 'Electricity Bill Panic';
+    } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
+      stratEl.textContent = 'Digital Arrest Extortion';
+    } else if (/job|part-time|like|youtube|telegram|daily income/i.test(text)) {
+      stratEl.textContent = 'Part-Time Task Scam';
+    } else if (/lottery|prize|winner|reward|cashback/i.test(text)) {
+      stratEl.textContent = 'Financial Bait / Reward';
+    } else if (/blocked|kyc|pan|aadhaar|deactivated/i.test(text)) {
+      stratEl.textContent = 'Banking KYC Phishing';
+    } else {
+      stratEl.textContent = riskScore > 30 ? 'Social Engineering' : 'Standard Greeting / Message';
+    }
+  }
+
+  const senderEl = document.getElementById('msg-val-sender');
+  if (senderEl) {
+    const hasPhone = /(?:\+91[\s-]?)?[6-9]\d{9}/.test(text);
+    senderEl.textContent = hasPhone ? 'Private +91 Mobile' : 'Unregistered Private Channel';
+    senderEl.style.color = riskScore >= 50 ? '#EF4444' : 'var(--ink-900, #0A0F1E)';
+  }
+
   // Extracted Payloads
   const extractedContainer = document.getElementById('msg-extracted-container');
   if (extractedContainer) {

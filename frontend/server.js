@@ -281,7 +281,10 @@ async function handleRequest(req, res) {
   if (pathname === '/api/analyze/url' && method === 'POST') {
     try {
       const data = await parseRequestBody(req);
-      const targetUrl = data.url || data.query || '';
+      let targetUrl = (data.url || data.query || '').trim();
+      if (targetUrl && !/^https?:\/\//i.test(targetUrl)) {
+        targetUrl = 'https://' + targetUrl;
+      }
       if (!urlAnalyzerService) {
         try { urlAnalyzerService = require('../backend/src/services/urlAnalyzer'); } catch (e) {}
       }
