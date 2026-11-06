@@ -420,6 +420,202 @@
         margin: 8px 0 10px;
       }
 
+      /* Gauge & Circular Scoreboard Architecture */
+      .gauge-wrap {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        margin: 6px auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .gauge-svg {
+        transform: rotate(-90deg);
+        width: 160px;
+        height: 160px;
+        display: block;
+      }
+      .gauge-bg-circle {
+        fill: none !important;
+        stroke: var(--ink-50, #F1F5F9);
+        stroke-width: 12;
+      }
+      .gauge-progress-circle {
+        fill: none !important;
+        stroke: #10B981;
+        stroke-width: 12;
+        stroke-linecap: round;
+        stroke-dasharray: 439.8;
+        stroke-dashoffset: 439.8;
+        transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+      }
+      .gauge-center-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        pointer-events: none;
+      }
+      .gauge-score-num {
+        font-size: 3.25rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: #10B981;
+        transition: color 0.3s ease;
+      }
+      .gauge-score-denom {
+        font-size: 0.6875rem;
+        font-weight: 800;
+        color: var(--ink-400, #94A3B8);
+        margin-top: 4px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      /* Risk Verdict Pill & Summary Description */
+      .risk-verdict-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.8125rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 100px;
+        background: rgba(16, 185, 129, 0.1);
+        color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        transition: all 0.3s ease;
+      }
+      .risk-explanation-text {
+        font-size: 0.84rem;
+        color: var(--ink-600, #475569);
+        line-height: 1.55;
+        text-align: center;
+        margin: 6px 0 16px;
+        transition: color 0.3s ease;
+      }
+
+      /* 4-Stage Visual Risk Bar */
+      .risk-meter-container {
+        width: 100%;
+        padding-top: 14px;
+        border-top: 1px solid var(--ink-100, #E8EBF3);
+      }
+      .risk-meter-bar {
+        display: flex;
+        height: 6px;
+        border-radius: 100px;
+        overflow: hidden;
+        margin-bottom: 6px;
+        gap: 3px;
+        background: transparent;
+      }
+      .meter-seg {
+        flex: 1;
+        height: 100%;
+        border-radius: 2px;
+      }
+      .seg-low { background: #10B981; }
+      .seg-mod { background: #F59E0B; }
+      .seg-high { background: #EA580C; }
+      .seg-crit { background: #EF4444; }
+      .risk-meter-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--ink-400, #94A3B8);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      /* Signals Item Rows & Clean Certificate Box (Shared across URL and other tools) */
+      .clean-certificate-box {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        color: #065F46;
+      }
+      .clean-cert-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.15);
+        color: #059669;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+      }
+      .signal-item-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--ink-100, #E8EBF3);
+        transition: background 0.15s;
+      }
+      .signal-item-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .signal-item-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex: 1;
+      }
+      .signal-status-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .signal-status-clean { background: rgba(16, 185, 129, 0.1); color: #059669; }
+      .signal-status-warn  { background: rgba(245, 158, 11, 0.1); color: #D97706; }
+      .signal-status-crit  { background: rgba(239, 68, 68, 0.1); color: #DC2626; }
+      .signal-title-text {
+        font-weight: 700;
+        font-size: 0.9375rem;
+        color: var(--ink-900, #0A0F1E);
+        margin-bottom: 3px;
+      }
+      .signal-desc-text {
+        font-size: 0.8125rem;
+        color: var(--ink-500, #4B5570);
+        line-height: 1.5;
+      }
+
+      /* Playbook Sidebar Card */
+      .playbook-sidebar-card {
+        border-left: 4px solid #10B981 !important;
+      }
+      .playbook-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
       /* Global Threat Feeds Checklist */
       .threat-engine-list {
         display: flex;
@@ -2072,9 +2268,9 @@
               
               <div class="sidebar-gauge-wrap">
                 <div class="gauge-wrap">
-                  <svg class="gauge-svg" viewBox="0 0 160 160">
-                    <circle class="gauge-bg-circle" cx="80" cy="80" r="70"></circle>
-                    <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+                  <svg class="gauge-svg" viewBox="0 0 160 160" width="160" height="160">
+                    <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#F1F5F9" stroke-width="12"></circle>
+                    <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
                   </svg>
                   <div class="gauge-center-content">
                     <div class="gauge-score-num" id="score-display">--</div>
@@ -2131,9 +2327,9 @@
             </div>
 
             <!-- C. Incident Mitigation Playbook -->
-            <div class="forensic-card playbook-sidebar-card">
+            <div class="forensic-card playbook-sidebar-card" id="recommendation-box">
               <div class="sidebar-card-label">USER ACTION PLAYBOOK</div>
-              <div id="recommendation-box"></div>
+              <ul class="playbook-list" id="recommendation-text"></ul>
             </div>
 
           </div>
