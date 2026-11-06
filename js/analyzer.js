@@ -274,16 +274,16 @@ function updateTargetTypeVisuals(query, type) {
   const targetDisplay = document.getElementById('target-display');
 
   if (type === 'phone') {
-    if (breadcrumbTag) breadcrumbTag.textContent = 'Telecom & Caller Intelligence';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'Telecom & Caller Intelligence Dossier';
     if (catTag) catTag.textContent = 'PHONE NUMBER TARGET';
     if (protocolTag) {
-      protocolTag.textContent = 'CELLULAR / TELECOM CHANNEL';
-      protocolTag.style.color = '#059669';
+      protocolTag.textContent = 'CELLULAR / TELECOM 5G CHANNEL';
+      protocolTag.style.color = '#34D399';
     }
     if (iconBox) {
-      iconBox.style.background = '#ECFDF5';
-      iconBox.style.color = '#059669';
-      iconBox.style.boxShadow = '0 4px 14px rgba(5, 150, 105, 0.2)';
+      iconBox.style.background = 'rgba(16, 185, 129, 0.25)';
+      iconBox.style.color = '#34D399';
+      iconBox.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
       iconBox.innerHTML = `
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -294,22 +294,22 @@ function updateTargetTypeVisuals(query, type) {
       const cleanNum = query.replace(/[^\d+]/g, '');
       if (cleanNum.startsWith('+91') || (/^\d{10}$/.test(cleanNum) && !cleanNum.startsWith('+'))) {
         const d = cleanNum.replace(/^\+91/, '');
-        targetDisplay.innerHTML = `<span style="font-size: 1.25rem; margin-right: 6px;">🇮🇳</span> <span style="font-family: var(--mono);">${cleanNum.startsWith('+') ? cleanNum : '+91 ' + d}</span>`;
+        targetDisplay.innerHTML = `<span style="font-size: 1.25rem; margin-right: 6px;">🇮🇳</span> <span style="font-family: var(--mono); color: #FFFFFF;">${cleanNum.startsWith('+') ? cleanNum : '+91 ' + d}</span>`;
       } else {
-        targetDisplay.innerHTML = `<span style="font-family: var(--mono);">${escapeHtml(query)}</span>`;
+        targetDisplay.innerHTML = `<span style="font-family: var(--mono); color: #FFFFFF;">${escapeHtml(query)}</span>`;
       }
     }
   } else if (type === 'upi') {
-    if (breadcrumbTag) breadcrumbTag.textContent = 'NPCI Payment Safety Radar';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'NPCI Payment Safety Radar & VPA Audit';
     if (catTag) catTag.textContent = 'UPI VPA HANDLE';
     if (protocolTag) {
-      protocolTag.textContent = 'NPCI PAYMENT RAIL';
-      protocolTag.style.color = '#7C3AED';
+      protocolTag.textContent = 'NPCI PAYMENT RAIL 2.0';
+      protocolTag.style.color = '#FBBF24';
     }
     if (iconBox) {
-      iconBox.style.background = '#F5F3FF';
-      iconBox.style.color = '#7C3AED';
-      iconBox.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.2)';
+      iconBox.style.background = 'rgba(245, 158, 11, 0.25)';
+      iconBox.style.color = '#FBBF24';
+      iconBox.style.boxShadow = '0 0 20px rgba(245, 158, 11, 0.4)';
       iconBox.innerHTML = `
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <rect x="2" y="5" width="20" height="14" rx="2"></rect>
@@ -319,19 +319,19 @@ function updateTargetTypeVisuals(query, type) {
       `;
     }
     if (targetDisplay) {
-      targetDisplay.innerHTML = `<span style="color: #7C3AED; margin-right: 4px; font-weight: 800;">₹</span> <span style="font-family: var(--mono);">${escapeHtml(query)}</span>`;
+      targetDisplay.innerHTML = `<span style="color: #FBBF24; margin-right: 4px; font-weight: 800;">₹</span> <span style="font-family: var(--mono); color: #FFFFFF;">${escapeHtml(query)}</span>`;
     }
   } else if (type === 'message') {
-    if (breadcrumbTag) breadcrumbTag.textContent = 'Linguistic NLP Threat Audit';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'NLP Social Engineering Threat Lab';
     if (catTag) catTag.textContent = 'SUSPICIOUS MESSAGE TARGET';
     if (protocolTag) {
-      protocolTag.textContent = 'NLP THREAT PARSER';
-      protocolTag.style.color = '#D97706';
+      protocolTag.textContent = 'NLP THREAT PARSER ACTIVE';
+      protocolTag.style.color = '#FDE68A';
     }
     if (iconBox) {
-      iconBox.style.background = '#FFFBEB';
-      iconBox.style.color = '#D97706';
-      iconBox.style.boxShadow = '0 4px 14px rgba(217, 119, 6, 0.2)';
+      iconBox.style.background = 'rgba(245, 158, 11, 0.25)';
+      iconBox.style.color = '#FCD34D';
+      iconBox.style.boxShadow = '0 0 20px rgba(245, 158, 11, 0.4)';
       iconBox.innerHTML = `
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -340,7 +340,7 @@ function updateTargetTypeVisuals(query, type) {
     }
     if (targetDisplay) {
       const preview = query.length > 70 ? query.substring(0, 68) + '...' : query;
-      targetDisplay.textContent = `"${preview}"`;
+      targetDisplay.innerHTML = `<span style="color: #FFFFFF;">"${escapeHtml(preview)}"</span>`;
     }
   } else {
     // Website / URL
@@ -350,16 +350,16 @@ function updateTargetTypeVisuals(query, type) {
     if (protocolTag) {
       if (isHttp) {
         protocolTag.textContent = 'HTTP Insecure (Plaintext)';
-        protocolTag.style.color = '#EA580C';
+        protocolTag.style.color = '#FB923C';
       } else {
-        protocolTag.textContent = 'HTTPS Encrypted';
-        protocolTag.style.color = '#10B981';
+        protocolTag.textContent = 'HTTPS Encrypted (TLS 1.3)';
+        protocolTag.style.color = '#34D399';
       }
     }
     if (iconBox) {
-      iconBox.style.background = '#EFF6FF';
-      iconBox.style.color = '#2563EB';
-      iconBox.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.2)';
+      iconBox.style.background = 'rgba(59, 130, 246, 0.25)';
+      iconBox.style.color = '#60A5FA';
+      iconBox.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.4)';
       iconBox.innerHTML = `
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <circle cx="12" cy="12" r="10"></circle>
@@ -369,7 +369,7 @@ function updateTargetTypeVisuals(query, type) {
       `;
     }
     if (targetDisplay) {
-      targetDisplay.textContent = query;
+      targetDisplay.innerHTML = `<span style="color: #FFFFFF; font-family: var(--mono);">${escapeHtml(query)}</span>`;
     }
   }
 }
@@ -731,6 +731,21 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
       shieldIcon.textContent = '🛡️';
       shieldTitle.textContent = 'SAFE TO TRANSFER';
       shieldDesc.textContent = 'Standard NPCI UPI format. Zero adverse fraudulent mule reports on record.';
+    }
+  }
+
+  // Stamp Badge
+  const stampEl = document.getElementById('upi-rubber-stamp');
+  if (stampEl) {
+    if (riskScore >= 50) {
+      stampEl.className = 'upi-stamp-badge upi-stamp-danger';
+      stampEl.textContent = 'DO NOT PAY • MULE ACCOUNT';
+    } else if (riskScore >= 25) {
+      stampEl.className = 'upi-stamp-badge upi-stamp-danger';
+      stampEl.textContent = 'SUSPICIOUS VPA';
+    } else {
+      stampEl.className = 'upi-stamp-badge upi-stamp-safe';
+      stampEl.textContent = 'VERIFIED SAFE BENEFICIARY';
     }
   }
 

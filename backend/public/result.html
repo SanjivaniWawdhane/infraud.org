@@ -112,45 +112,290 @@
         overflow: hidden;
       }
 
-      /* Tool-specific Hero Card Theming */
+      /* ═══════════════════════════════════════════════════════════════
+         RADICALLY DISTINCT TOOL HERO BANNERS & DOMAIN-SPECIFIC THEMES
+         ═══════════════════════════════════════════════════════════════ */
+
+      /* 1. URL / WEB DOMAIN: Dark Cyber SecOps Command Center */
       .target-hero-card.hero-card-url {
-        border: 1px solid rgba(37, 99, 235, 0.25);
-        border-left: 6px solid #2563EB;
-        background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 55%, #EFF6FF 100%);
-        box-shadow: 0 8px 28px rgba(37, 99, 235, 0.08);
+        border: 1px solid rgba(59, 130, 246, 0.45);
+        background: linear-gradient(135deg, #0B132B 0%, #1C2541 55%, #1E3A8A 100%);
+        box-shadow: 0 12px 36px rgba(11, 19, 43, 0.35);
+        color: #FFFFFF;
       }
+      .target-hero-card.hero-card-url .target-url-title {
+        color: #FFFFFF !important;
+        font-family: var(--mono);
+        letter-spacing: -0.01em;
+      }
+      .target-hero-card.hero-card-url .target-label-sub {
+        color: #93C5FD !important;
+      }
+      .target-hero-card.hero-card-url .target-type-avatar {
+        background: rgba(59, 130, 246, 0.25);
+        color: #60A5FA;
+        border: 1px solid rgba(96, 165, 250, 0.5);
+        box-shadow: 0 0 24px rgba(59, 130, 246, 0.4);
+      }
+      .target-hero-card.hero-card-url .btn-action-pill {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .target-hero-card.hero-card-url .btn-action-pill:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #60A5FA;
+        color: #60A5FA;
+      }
+      .target-hero-card.hero-card-url .btn-action-report {
+        background: rgba(239, 68, 68, 0.25);
+        color: #FCA5A5;
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      /* URL Tool Score Card (Dark Cyber Glass) */
+      #view-url .score-card {
+        background: linear-gradient(180deg, #0B132B 0%, #1C2541 100%);
+        border: 1px solid rgba(59, 130, 246, 0.35);
+        box-shadow: 0 16px 40px rgba(11, 19, 43, 0.25);
+        color: #FFFFFF;
+      }
+      #view-url .score-card .gauge-bg-circle {
+        stroke: rgba(255, 255, 255, 0.08);
+      }
+      #view-url .score-card .gauge-score-denom {
+        color: #94A3B8;
+      }
+      #view-url .score-card .risk-explanation-text {
+        color: #CBD5E1;
+      }
+
+      /* 2. PHONE: Authentic Telecom Emerald & Smartphone Caller Screen */
       .target-hero-card.hero-card-phone {
-        border: 1px solid rgba(5, 150, 105, 0.25);
-        border-left: 6px solid #059669;
-        background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 55%, #ECFDF5 100%);
-        box-shadow: 0 8px 28px rgba(5, 150, 105, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.45);
+        background: linear-gradient(135deg, #064E3B 0%, #065F46 55%, #047857 100%);
+        box-shadow: 0 12px 36px rgba(6, 78, 59, 0.35);
+        color: #FFFFFF;
+      }
+      .target-hero-card.hero-card-phone .target-url-title {
+        color: #FFFFFF !important;
+        font-family: var(--mono);
+        letter-spacing: 0.02em;
+      }
+      .target-hero-card.hero-card-phone .target-label-sub {
+        color: #A7F3D0 !important;
       }
       .target-hero-card.hero-card-phone .target-type-avatar {
-        background: #ECFDF5;
-        color: #059669;
-        box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+        background: rgba(16, 185, 129, 0.25);
+        color: #34D399;
+        border: 1px solid rgba(52, 211, 153, 0.5);
+        box-shadow: 0 0 24px rgba(16, 185, 129, 0.4);
       }
+      .target-hero-card.hero-card-phone .btn-action-pill {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .target-hero-card.hero-card-phone .btn-action-pill:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #34D399;
+        color: #34D399;
+      }
+      .target-hero-card.hero-card-phone .btn-action-report {
+        background: rgba(239, 68, 68, 0.25);
+        color: #FCA5A5;
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      /* Phone View Caller Card (Mint & Telecom Dossier) */
+      #view-phone .phone-caller-card {
+        background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 50%);
+        border: 2px solid #A7F3D0;
+        box-shadow: 0 12px 36px rgba(5, 150, 105, 0.08);
+      }
+      .voice-waveform {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        height: 28px;
+        margin: 8px auto 14px;
+      }
+      .voice-waveform .vbar {
+        width: 3.5px;
+        height: 10px;
+        background: #10B981;
+        border-radius: 4px;
+        animation: voiceWave 1.2s ease-in-out infinite alternate;
+      }
+      .voice-waveform .vbar:nth-child(1) { animation-delay: 0.1s; height: 12px; }
+      .voice-waveform .vbar:nth-child(2) { animation-delay: 0.3s; height: 22px; }
+      .voice-waveform .vbar:nth-child(3) { animation-delay: 0.15s; height: 16px; }
+      .voice-waveform .vbar:nth-child(4) { animation-delay: 0.4s; height: 26px; }
+      .voice-waveform .vbar:nth-child(5) { animation-delay: 0.25s; height: 18px; }
+      .voice-waveform .vbar:nth-child(6) { animation-delay: 0.5s; height: 24px; }
+      .voice-waveform .vbar:nth-child(7) { animation-delay: 0.2s; height: 14px; }
+      .voice-waveform .vbar:nth-child(8) { animation-delay: 0.35s; height: 8px; }
+
+      @keyframes voiceWave {
+        0% { transform: scaleY(0.4); opacity: 0.6; }
+        100% { transform: scaleY(1.3); opacity: 1; }
+      }
+
+      /* 3. UPI: Luxury Fintech Purple & Gold NPCI Cheque Pass */
       .target-hero-card.hero-card-upi {
-        border: 1px solid rgba(124, 58, 237, 0.25);
-        border-left: 6px solid #7C3AED;
-        background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 55%, #F5F3FF 100%);
-        box-shadow: 0 8px 28px rgba(124, 58, 237, 0.08);
+        border: 1px solid rgba(167, 139, 250, 0.45);
+        background: linear-gradient(135deg, #2E1065 0%, #4C1D95 55%, #5B21B6 100%);
+        box-shadow: 0 12px 36px rgba(46, 16, 101, 0.35);
+        color: #FFFFFF;
+      }
+      .target-hero-card.hero-card-upi .target-url-title {
+        color: #FFFFFF !important;
+        font-family: var(--mono);
+      }
+      .target-hero-card.hero-card-upi .target-label-sub {
+        color: #DDD6FE !important;
       }
       .target-hero-card.hero-card-upi .target-type-avatar {
-        background: #F5F3FF;
-        color: #7C3AED;
-        box-shadow: 0 4px 14px rgba(124, 58, 237, 0.2);
+        background: rgba(245, 158, 11, 0.25);
+        color: #FBBF24;
+        border: 1px solid rgba(251, 191, 36, 0.5);
+        box-shadow: 0 0 24px rgba(245, 158, 11, 0.4);
       }
+      .target-hero-card.hero-card-upi .btn-action-pill {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .target-hero-card.hero-card-upi .btn-action-pill:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #FBBF24;
+        color: #FBBF24;
+      }
+      .target-hero-card.hero-card-upi .btn-action-report {
+        background: rgba(239, 68, 68, 0.25);
+        color: #FCA5A5;
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      /* UPI Pass Card (Perforated Passbook) */
+      #view-upi .upi-pass-card {
+        background: linear-gradient(180deg, #FAF5FF 0%, #FFFFFF 50%);
+        border: 2px solid #DDD6FE;
+        box-shadow: 0 12px 36px rgba(124, 58, 237, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      #view-upi .upi-pass-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 6px;
+        background: repeating-linear-gradient(90deg, #7C3AED 0, #7C3AED 12px, transparent 12px, transparent 18px);
+      }
+      .upi-stamp-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-family: var(--mono);
+        font-weight: 900;
+        font-size: 0.8125rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border: 2px dashed currentColor;
+        transform: rotate(-1.5deg);
+        margin: 10px 0;
+      }
+      .upi-stamp-safe {
+        color: #059669;
+        background: rgba(16, 185, 129, 0.08);
+      }
+      .upi-stamp-danger {
+        color: #DC2626;
+        background: rgba(239, 68, 68, 0.08);
+      }
+
+      /* 4. MESSAGE: Forensic Amber & Carbon Smartphone Chat Frame */
       .target-hero-card.hero-card-message {
-        border: 1px solid rgba(217, 119, 6, 0.25);
-        border-left: 6px solid #D97706;
-        background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 55%, #FFFBEB 100%);
-        box-shadow: 0 8px 28px rgba(217, 119, 6, 0.08);
+        border: 1px solid rgba(245, 158, 11, 0.45);
+        background: linear-gradient(135deg, #78350F 0%, #92400E 55%, #B45309 100%);
+        box-shadow: 0 12px 36px rgba(120, 53, 15, 0.35);
+        color: #FFFFFF;
+      }
+      .target-hero-card.hero-card-message .target-url-title {
+        color: #FFFFFF !important;
+      }
+      .target-hero-card.hero-card-message .target-label-sub {
+        color: #FDE68A !important;
       }
       .target-hero-card.hero-card-message .target-type-avatar {
-        background: #FFFBEB;
-        color: #D97706;
-        box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2);
+        background: rgba(245, 158, 11, 0.25);
+        color: #FCD34D;
+        border: 1px solid rgba(252, 211, 77, 0.5);
+        box-shadow: 0 0 24px rgba(245, 158, 11, 0.4);
+      }
+      .target-hero-card.hero-card-message .btn-action-pill {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .target-hero-card.hero-card-message .btn-action-pill:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #FCD34D;
+        color: #FCD34D;
+      }
+      .target-hero-card.hero-card-message .btn-action-report {
+        background: rgba(239, 68, 68, 0.25);
+        color: #FCA5A5;
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      /* Smartphone Mockup Frame for Message Tool */
+      .phone-mockup-frame {
+        background: #0F172A;
+        border-radius: 32px;
+        padding: 14px;
+        box-shadow: 0 20px 48px rgba(15, 23, 42, 0.15);
+        border: 3px solid #1E293B;
+        margin-bottom: 28px;
+      }
+      .phone-mockup-screen {
+        background: #F8FAFC;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+      .phone-mockup-statusbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 18px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #64748B;
+        background: #F1F5F9;
+        border-bottom: 1px solid #E2E8F0;
+      }
+      .phone-mockup-chatbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 18px;
+        background: #FFFFFF;
+        border-bottom: 1px solid #E2E8F0;
+      }
+      .phone-mockup-body {
+        padding: 20px 18px;
+      }
+      .chat-speech-bubble {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 18px 18px 18px 4px;
+        padding: 18px 20px;
+        font-size: 1.05rem;
+        line-height: 1.65;
+        color: #0F172A;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        position: relative;
       }
 
       .target-info-wrap {
@@ -1634,6 +1879,18 @@
               </svg>
             </div>
             
+            <!-- Live Telecom Audio Spectrum Waveform -->
+            <div class="voice-waveform" title="Live Telecom Spectrum Analysis">
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+              <span class="vbar"></span>
+            </div>
+            
             <div class="phone-formatted-number" id="phone-val-formatted">+91 00000 00000</div>
             <div class="phone-category-pill" id="phone-category-pill">CELLULAR MOBILE LINE</div>
             
@@ -1832,6 +2089,7 @@
             <div style="text-align:center; margin-bottom:18px;">
               <div style="font-size:0.75rem; font-weight:800; color:var(--ink-400); text-transform:uppercase; margin-bottom:4px;">Target UPI VPA</div>
               <div style="font-family:var(--mono); font-size:1.15rem; font-weight:800; color:#1E1B4B; word-break:break-all;" id="upi-display-handle">user@bank</div>
+              <div><span class="upi-stamp-badge upi-stamp-safe" id="upi-rubber-stamp">VERIFIED BENEFICIARY</span></div>
             </div>
 
             <!-- Transfer Safety Verdict Shield -->
@@ -1977,27 +2235,41 @@
            TOOL-SPECIFIC RESULT VIEW 4: MESSAGE (NLP FORENSIC CHAT LAB)
            ═══════════════════════════════════════════════ -->
       <div id="view-message" class="tool-result-view">
-        <!-- Mobile Chat Preview Window -->
-        <div class="chat-bubble-window">
-          <div class="chat-bubble-header">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#EF4444;"></span>
-              <span style="font-weight:700;" id="msg-sender-header">SMS / Chat Payload Inspection</span>
+        <!-- Forensic Smartphone SMS Inspection Console -->
+        <div class="phone-mockup-frame">
+          <div class="phone-mockup-screen">
+            <div class="phone-mockup-statusbar">
+              <span>9:41 AM</span>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span>5G</span>
+                <span>100%</span>
+              </div>
             </div>
-            <span style="font-family:var(--mono); font-size:0.75rem; color:var(--ink-400);">NLP THREAT PARSER ACTIVE</span>
-          </div>
-
-          <div class="chat-bubble-container" id="msg-bubble-content">
-            Analyzing message text for social engineering patterns...
-          </div>
-
-          <div style="margin-top:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:0.75rem;">
-            <div style="display:flex; gap:12px; align-items:center;">
-              <span style="font-weight:700; color:var(--ink-600);">Legend:</span>
-              <span><mark class="threat-kw-critical">Panic & Coercion</mark></span>
-              <span><mark class="threat-kw-warn">Credential / OTP Solicitation</mark></span>
+            
+            <div class="phone-mockup-chatbar">
+              <div style="width:36px; height:36px; border-radius:50%; background:#FEF3C7; color:#D97706; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:800; border:1px solid #FCD34D;">
+                💬
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:0.875rem;" id="msg-sender-header">SMS / Chat Payload Inspection</div>
+                <div style="font-size:0.6875rem; color:#EF4444; font-weight:700;">UNREGISTERED PRIVATE SIM • NO OFFICIAL TRAI DLT ENTITY HEADER</div>
+              </div>
             </div>
-            <span style="color:var(--ink-400);">Highlighted tokens indicate deceptive triggers</span>
+
+            <div class="phone-mockup-body">
+              <div class="chat-speech-bubble" id="msg-bubble-content">
+                Analyzing message text for social engineering patterns...
+              </div>
+
+              <div style="margin-top:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:0.75rem;">
+                <div style="display:flex; gap:12px; align-items:center;">
+                  <span style="font-weight:700; color:var(--ink-600);">Threat Legend:</span>
+                  <span><mark class="threat-kw-critical">Panic & Coercion</mark></span>
+                  <span><mark class="threat-kw-warn">Credential / OTP Solicitation</mark></span>
+                </div>
+                <span style="color:var(--ink-400);">Highlighted tokens indicate deceptive triggers</span>
+              </div>
+            </div>
           </div>
         </div>
 
