@@ -420,62 +420,72 @@
               Systems fully operational
             </div>
           </div>
-
           <!-- Right: Checker Card (Vastly Different UI per Tool) -->
           <div class="card tool-checker-master-card" style="background: var(--page); border: 1px solid var(--ink-100); padding: 32px; box-shadow: var(--shadow-lg); border-radius: 20px;">
             
             <style>
+              /* ─── Responsive Tab Dock ─── */
               .checker-tabs-container {
-                display: flex; gap: 10px;
-                border-bottom: 2px solid var(--ink-100);
-                margin-bottom: 28px;
-                overflow-x: auto;
-                padding-bottom: 0;
+                display: flex;
+                gap: 8px;
+                background: #FFFFFF;
+                border: 1px solid var(--ink-100, #E8EBF3);
+                border-radius: 14px;
+                padding: 6px;
+                margin-bottom: 24px;
+                box-shadow: 0 1px 4px rgba(10, 15, 30, 0.03);
               }
               .checker-tab {
+                flex: 1;
                 display: inline-flex;
                 align-items: center;
+                justify-content: center;
                 gap: 8px;
-                color: var(--ink-500);
-                border: none; background: none;
-                border-bottom: 3px solid transparent;
-                padding: 10px 14px 14px; margin-bottom: -2px;
-                font-size: 0.9375rem; font-weight: 700;
-                cursor: pointer; white-space: nowrap;
+                color: var(--ink-500, #64748B);
+                border: none;
+                background: transparent;
+                padding: 10px 14px;
+                font-size: 0.875rem;
+                font-weight: 700;
+                cursor: pointer;
+                white-space: nowrap;
                 transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-                border-radius: 8px 8px 0 0;
+                border-radius: 10px;
               }
               .checker-tab svg {
-                width: 18px; height: 18px; stroke-width: 2.2;
+                width: 17px;
+                height: 17px;
+                stroke-width: 2.2;
                 transition: transform 0.2s;
               }
               .checker-tab:hover {
-                color: var(--ink-900);
-                background: rgba(10, 15, 30, 0.03);
+                color: var(--ink-900, #0A0F1E);
+                background: rgba(10, 15, 30, 0.04);
               }
               .checker-tab:hover svg {
-                transform: scale(1.12);
+                transform: scale(1.1);
               }
-              /* Distinct tab active themes */
+
+              /* Distinct Active Tab Themes */
               .checker-tab[data-tool="url"].active {
                 color: #2563EB;
-                border-bottom-color: #2563EB;
-                background: rgba(37, 99, 235, 0.06);
+                background: #EFF6FF;
+                box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
               }
               .checker-tab[data-tool="phone"].active {
                 color: #059669;
-                border-bottom-color: #059669;
-                background: rgba(5, 150, 105, 0.06);
+                background: #ECFDF5;
+                box-shadow: 0 2px 8px rgba(5, 150, 105, 0.12);
               }
               .checker-tab[data-tool="upi"].active {
                 color: #7C3AED;
-                border-bottom-color: #7C3AED;
-                background: rgba(124, 58, 237, 0.06);
+                background: #F5F3FF;
+                box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
               }
               .checker-tab[data-tool="message"].active {
                 color: #D97706;
-                border-bottom-color: #D97706;
-                background: rgba(217, 119, 6, 0.06);
+                background: #FFFBEB;
+                box-shadow: 0 2px 8px rgba(217, 119, 6, 0.12);
               }
 
               /* Individual Tool Panels */
@@ -515,18 +525,121 @@
               .tool-badge-upi { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
               .tool-badge-message { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
 
+              /* Input Rows & Shells */
+              .tool-input-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 12px;
+                align-items: stretch;
+              }
+              .tool-input-shell {
+                position: relative;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                background: #FFFFFF;
+                border: 1.5px solid var(--ink-100, #E8EBF3);
+                border-radius: 12px;
+                transition: all 0.2s;
+                overflow: hidden;
+              }
+              .tool-input-shell:focus-within {
+                border-color: #2563EB;
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+              }
+              .tool-input-shell.phone-shell:focus-within {
+                border-color: #059669;
+                box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+              }
+              .tool-input-shell.upi-shell:focus-within {
+                border-color: #7C3AED;
+                box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+              }
+              .shell-prefix-badge {
+                padding: 0 12px;
+                font-family: var(--mono, monospace);
+                font-size: 0.8125rem;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                height: 100%;
+                border-right: 1.5px solid var(--ink-100, #E8EBF3);
+                user-select: none;
+                flex-shrink: 0;
+              }
+              .shell-prefix-url { background: #F0FDF4; color: #16A34A; }
+              .shell-prefix-upi { background: #F5F3FF; color: #7C3AED; font-size: 1.15rem; font-weight: 800; padding: 0 14px; }
+              .shell-prefix-phone { background: #F8FAFC; color: #059669; padding: 0 12px; }
+
+              .tool-input-field {
+                flex: 1;
+                height: 50px;
+                border: none;
+                background: transparent;
+                padding: 0 14px;
+                font-family: var(--mono, monospace);
+                font-size: 0.9375rem;
+                color: var(--ink-900, #0A0F1E);
+                outline: none;
+                min-width: 0;
+              }
+              .tool-input-field::placeholder {
+                color: var(--ink-400, #94A3B8);
+                font-family: var(--font, 'Inter', sans-serif);
+              }
+
+              /* Themed CTA Buttons */
+              .btn-tool-cta {
+                flex-shrink: 0;
+                padding: 0 24px;
+                border-radius: 12px;
+                height: 50px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                font-weight: 700;
+                font-size: 0.9375rem;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+              }
+              .btn-tool-cta:hover { transform: translateY(-1px); }
+              .btn-tool-url {
+                background: #2563EB; color: #fff;
+                box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+              }
+              .btn-tool-url:hover { background: #1D4ED8; }
+              .btn-tool-phone {
+                background: #059669; color: #fff;
+                box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+              }
+              .btn-tool-phone:hover { background: #047857; }
+              .btn-tool-upi {
+                background: #7C3AED; color: #fff;
+                box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+              }
+              .btn-tool-upi:hover { background: #6D28D9; }
+              .btn-tool-message {
+                background: #D97706; color: #fff;
+                box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+              }
+              .btn-tool-message:hover { background: #B45309; }
+
+              /* Feature Tags */
               .tool-chips-row {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 8px;
-                margin-top: 14px;
-                margin-bottom: 20px;
+                margin-top: 10px;
+                margin-bottom: 18px;
               }
               .tool-feature-tag {
                 font-size: 0.75rem;
-                color: var(--ink-500);
-                background: var(--surface);
-                border: 1px solid var(--ink-100);
+                color: var(--ink-500, #64748B);
+                background: var(--surface, #FFFFFF);
+                border: 1px solid var(--ink-100, #E8EBF3);
                 padding: 4px 10px;
                 border-radius: 6px;
                 display: inline-flex;
@@ -535,19 +648,19 @@
                 font-weight: 500;
               }
 
+              /* Threat Chips */
               .quick-sample-btn {
                 background: #FFFFFF;
                 border: 1px solid #E2E8F0;
-                color: #1E293B;
-                font-size: 0.78125rem;
-                font-family: inherit;
-                padding: 5px 12px;
                 border-radius: 8px;
+                padding: 6px 10px;
+                font-size: 0.78125rem;
+                color: var(--ink-700, #1E2742);
                 cursor: pointer;
-                transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                transition: all 0.2s;
                 display: inline-flex;
                 align-items: center;
-                gap: 8px;
+                gap: 6px;
                 box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
               }
               .quick-sample-btn:hover {
@@ -590,36 +703,42 @@
               .sample-tag-threat { background: #FEE2E2; color: #B91C1C; }
               .sample-tag-safe { background: #DCFCE7; color: #15803D; }
 
-              /* Themed CTA Buttons */
-              .btn-tool-url {
-                background: #2563EB; color: #fff; border: none; font-weight: 700;
-                box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+              /* UPI Golden Rule Banner */
+              .tool-golden-rule-banner {
+                background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+                border: 1.5px solid #FCD34D;
+                border-radius: 12px;
+                padding: 12px 14px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
               }
-              .btn-tool-url:hover { background: #1D4ED8; }
-
-              .btn-tool-phone {
-                background: #059669; color: #fff; border: none; font-weight: 700;
-                box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+              .tool-golden-rule-icon {
+                font-size: 1.15rem;
+                line-height: 1;
+                flex-shrink: 0;
+                margin-top: 2px;
               }
-              .btn-tool-phone:hover { background: #047857; }
-
-              .btn-tool-upi {
-                background: #7C3AED; color: #fff; border: none; font-weight: 700;
-                box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+              .tool-golden-rule-title {
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: #92400E;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                margin-bottom: 2px;
               }
-              .btn-tool-upi:hover { background: #6D28D9; }
-
-              .btn-tool-message {
-                background: #D97706; color: #fff; border: none; font-weight: 700;
-                box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+              .tool-golden-rule-text {
+                font-size: 0.8125rem;
+                color: #78350F;
+                line-height: 1.4;
               }
-              .btn-tool-message:hover { background: #B45309; }
 
               /* UPI Quick Handle Chips */
               .upi-handle-chip {
-                background: #F3E8FF;
-                color: #6B21A8;
-                border: 1px solid #D8B4FE;
+                background: #F5F3FF;
+                color: #6D28D9;
+                border: 1px solid #DDD6FE;
                 padding: 4px 10px;
                 border-radius: 100px;
                 font-size: 0.75rem;
@@ -634,6 +753,50 @@
                 transform: scale(1.05);
               }
 
+              /* Message Mockup Window */
+              .tool-chat-window-shell {
+                background: #FFFFFF;
+                border: 1.5px solid var(--ink-100, #E8EBF3);
+                border-radius: 14px;
+                overflow: hidden;
+                margin-bottom: 14px;
+                transition: all 0.2s;
+              }
+              .tool-chat-window-shell:focus-within {
+                border-color: #D97706;
+                box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+              }
+              .tool-chat-window-header {
+                background: #F8FAFC;
+                border-bottom: 1px solid var(--ink-100, #E8EBF3);
+                padding: 8px 14px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              }
+              .tool-chat-window-dots {
+                display: flex;
+                gap: 5px;
+              }
+              .tool-chat-dot {
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+              }
+              .tool-chat-textarea {
+                width: 100%;
+                height: 110px;
+                padding: 12px 14px;
+                border: none;
+                font-family: inherit;
+                font-size: 0.9375rem;
+                color: var(--ink-900, #0A0F1E);
+                resize: vertical;
+                line-height: 1.5;
+                outline: none;
+                box-sizing: border-box;
+              }
+
               /* Message Scenarios Grid */
               .message-scenarios-grid {
                 display: grid;
@@ -642,10 +805,10 @@
                 margin-top: 10px;
               }
               .scenario-card-btn {
-                background: var(--surface);
-                border: 1px solid var(--ink-100);
+                background: var(--surface, #FFFFFF);
+                border: 1px solid var(--ink-100, #E8EBF3);
                 padding: 10px 12px;
-                border-radius: 8px;
+                border-radius: 10px;
                 text-align: left;
                 cursor: pointer;
                 transition: all 0.2s;
@@ -658,7 +821,7 @@
               .scenario-card-btn .scenario-title {
                 font-size: 0.8125rem;
                 font-weight: 700;
-                color: var(--ink-900);
+                color: var(--ink-900, #0A0F1E);
                 display: flex;
                 align-items: center;
                 gap: 6px;
@@ -666,15 +829,60 @@
               }
               .scenario-card-btn .scenario-desc {
                 font-size: 0.71875rem;
-                color: var(--ink-500);
-                line-height: 1.3;
+                color: var(--ink-500, #64748B);
+                line-height: 1.35;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
               }
+
+              /* ─── Responsive Queries ─── */
+              @media (max-width: 768px) {
+                .tool-checker-master-card {
+                  padding: 20px 16px !important;
+                  border-radius: 16px !important;
+                }
+              }
+              @media (max-width: 640px) {
+                .checker-tabs-container {
+                  display: grid !important;
+                  grid-template-columns: repeat(2, 1fr) !important;
+                  gap: 6px !important;
+                  padding: 5px !important;
+                }
+                .checker-tab {
+                  padding: 9px 8px !important;
+                  font-size: 0.8125rem !important;
+                  border-radius: 8px !important;
+                }
+                .tool-input-row {
+                  flex-direction: column !important;
+                  gap: 8px !important;
+                }
+                .btn-tool-cta {
+                  width: 100% !important;
+                  height: 48px !important;
+                }
+                .tool-phone-row-top {
+                  display: flex !important;
+                  gap: 8px !important;
+                  width: 100% !important;
+                }
+                .message-scenarios-grid {
+                  grid-template-columns: 1fr !important;
+                }
+                .msg-actions-bar {
+                  flex-direction: column !important;
+                  gap: 10px !important;
+                  align-items: stretch !important;
+                }
+                .msg-actions-bar .btn-tool-message {
+                  width: 100% !important;
+                }
+              }
             </style>
             
-            <!-- Distinct Tabs Header -->
+            <!-- Distinct Tabs Header (Responsive 2x2 grid on mobile, segmented dock on desktop) -->
             <div class="checker-tabs-container">
               <button class="checker-tab active" data-tool="url" onclick="switchToolTab('url')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -706,16 +914,16 @@
                 <span class="t-small" style="color: var(--ink-400);">WHOIS • SSL • Homoglyph • Phishing DB</span>
               </div>
 
-              <!-- Input Row with Protocol Lock -->
-              <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                <div style="position: relative; flex: 1; display: flex; align-items: center;">
-                  <span style="position: absolute; left: 12px; font-family: var(--mono); font-size: 0.8125rem; font-weight: 700; color: #16A34A; background: #DCFCE7; padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; pointer-events: none;">
+              <!-- Input Row with Protocol Shell -->
+              <div class="tool-input-row">
+                <div class="tool-input-shell">
+                  <span class="shell-prefix-badge shell-prefix-url">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     https://
                   </span>
-                  <input type="text" id="input-url" onkeypress="if(event.key === 'Enter') analyzeTool('url')" class="input" placeholder="amazon-security-update.in or any domain..." style="width: 100%; height: 50px; padding-left: 92px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: var(--mono); font-size: 0.9375rem;" onfocus="this.style.borderColor='#2563EB'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+                  <input type="text" id="input-url" onkeypress="if(event.key === 'Enter') analyzeTool('url')" class="tool-input-field" placeholder="amazon-security-update.in or any domain..." />
                 </div>
-                <button class="btn btn-tool-url" style="flex-shrink: 0; padding: 0 24px; border-radius: 10px; height: 50px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('url')">
+                <button class="btn-tool-cta btn-tool-url" onclick="analyzeTool('url')">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                   Scan URL
                 </button>
@@ -728,7 +936,7 @@
                 <span class="tool-feature-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Redirection Chain</span>
               </div>
 
-              <!-- Quick Tests -->
+              <!-- Quick Threat Intel Presets -->
               <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Targets:</div>
               <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                 <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'fake-sbi-secure-portal.xyz')">
@@ -762,19 +970,24 @@
               </div>
 
               <!-- Input Row with Country Selector -->
-              <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                <select id="phone-country-code" style="height: 50px; border-radius: 10px; border: 1.5px solid var(--ink-100); background: var(--surface); padding: 0 12px; font-weight: 700; font-size: 0.875rem; color: var(--ink-800); cursor: pointer; outline: none;">
-                  <option value="+91" selected>🇮🇳 +91 (IN)</option>
-                  <option value="+1">🇺🇸 +1 (US)</option>
-                  <option value="+44">🇬🇧 +44 (UK)</option>
-                  <option value="+971">🇦🇪 +971 (AE)</option>
-                  <option value="+65">🇸🇬 +65 (SG)</option>
-                  <option value="+61">🇦🇺 +61 (AU)</option>
-                </select>
-                <div style="position: relative; flex: 1;">
-                  <input type="text" id="input-phone" onkeypress="if(event.key === 'Enter') analyzeTool('phone')" class="input" placeholder="98765 43210 or 14098 76543..." style="width: 100%; height: 50px; padding-left: 16px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: var(--mono); font-size: 0.9375rem;" onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5,150,105,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+              <div class="tool-input-row">
+                <div class="tool-phone-row-top" style="display: flex; gap: 10px; flex: 1;">
+                  <select id="phone-country-code" style="height: 50px; border-radius: 12px; border: 1.5px solid var(--ink-100); background: #FFFFFF; padding: 0 12px; font-weight: 700; font-size: 0.875rem; color: var(--ink-800); cursor: pointer; outline: none; flex-shrink: 0;">
+                    <option value="+91" selected>🇮🇳 +91 (IN)</option>
+                    <option value="+1">🇺🇸 +1 (US)</option>
+                    <option value="+44">🇬🇧 +44 (UK)</option>
+                    <option value="+971">🇦🇪 +971 (AE)</option>
+                    <option value="+65">🇸🇬 +65 (SG)</option>
+                    <option value="+61">🇦🇺 +61 (AU)</option>
+                  </select>
+                  <div class="tool-input-shell phone-shell">
+                    <span class="shell-prefix-badge shell-prefix-phone">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </span>
+                    <input type="text" id="input-phone" onkeypress="if(event.key === 'Enter') analyzeTool('phone')" class="tool-input-field" placeholder="98765 43210 or 14098 76543..." />
+                  </div>
                 </div>
-                <button class="btn btn-tool-phone" style="flex-shrink: 0; padding: 0 24px; border-radius: 10px; height: 50px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('phone')">
+                <button class="btn-tool-cta btn-tool-phone" onclick="analyzeTool('phone')">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                   Verify Number
                 </button>
@@ -790,8 +1003,26 @@
               <!-- Quick Tests -->
               <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Suspicious Numbers:</div>
               <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 98765 43210')">🚨 +91 98765 43210 (FedEx Parcel Scam)</button>
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 70001 23456')">🚨 +91 70001 23456 (Electricity Bill Due)</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 80102 37029')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">+91 80102 37029</span>
+                  <span class="sample-tag-pill sample-tag-threat">Digital Arrest</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 98765 43210')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">+91 98765 43210</span>
+                  <span class="sample-tag-pill sample-tag-threat">FedEx Scam</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '+91 70001 23456')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">+91 70001 23456</span>
+                  <span class="sample-tag-pill sample-tag-threat">Electricity Due</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('phone', '1800 11 2211')">
+                  <span class="sample-dot-safe"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">1800 11 2211</span>
+                  <span class="sample-tag-pill sample-tag-safe">SBI Official</span>
+                </button>
               </div>
             </div>
 
@@ -799,6 +1030,17 @@
                  3. TOOL PANEL: UPI & VPA FRAUD RADAR
             ───────────────────────────────────────────── -->
             <div id="panel-upi" class="tool-panel">
+              <!-- Golden Rule Notice Banner -->
+              <div class="tool-golden-rule-banner">
+                <span class="tool-golden-rule-icon">⚠️</span>
+                <div>
+                  <div class="tool-golden-rule-title">CRITICAL GOLDEN RULE OF UPI PAYMENTS</div>
+                  <div class="tool-golden-rule-text">
+                    You <strong>NEVER</strong> need to enter your UPI PIN or scan a QR code to <strong>RECEIVE</strong> money. Entering your PIN will always <strong>DEDUCT</strong> money!
+                  </div>
+                </div>
+              </div>
+
               <div class="tool-panel-header">
                 <span class="tool-badge-pill tool-badge-upi">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -808,12 +1050,12 @@
               </div>
 
               <!-- Input Row with Rupee Symbol -->
-              <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                <div style="position: relative; flex: 1; display: flex; align-items: center;">
-                  <span style="position: absolute; left: 14px; font-weight: 800; font-size: 1.1rem; color: #7C3AED;">₹</span>
-                  <input type="text" id="input-upi" onkeypress="if(event.key === 'Enter') analyzeTool('upi')" class="input" placeholder="username@okhdfcbank or merchant@paytm..." style="width: 100%; height: 50px; padding-left: 36px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: var(--mono); font-size: 0.9375rem;" onfocus="this.style.borderColor='#7C3AED'; this.style.boxShadow='0 0 0 3px rgba(124,58,237,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';" />
+              <div class="tool-input-row">
+                <div class="tool-input-shell upi-shell">
+                  <span class="shell-prefix-badge shell-prefix-upi">₹ UPI</span>
+                  <input type="text" id="input-upi" onkeypress="if(event.key === 'Enter') analyzeTool('upi')" class="tool-input-field" placeholder="username@okhdfcbank or merchant@paytm..." />
                 </div>
-                <button class="btn btn-tool-upi" style="flex-shrink: 0; padding: 0 24px; border-radius: 10px; height: 50px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('upi')">
+                <button class="btn-tool-cta btn-tool-upi" onclick="analyzeTool('upi')">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
                   Audit UPI
                 </button>
@@ -823,19 +1065,37 @@
               <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 10px; margin-bottom: 12px;">
                 <span style="font-size: 0.75rem; font-weight: 700; color: var(--ink-400);">Quick Suffixes:</span>
                 <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@okhdfcbank')">@okhdfcbank</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@okaxis')">@okaxis</button>
                 <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@paytm')">@paytm</button>
                 <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@ybl')">@ybl</button>
                 <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@axl')">@axl</button>
                 <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@ibl')">@ibl</button>
-                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@sbi')">@sbi</button>
+                <button type="button" class="upi-handle-chip" onclick="appendUpiSuffix('@oksbi')">@oksbi</button>
               </div>
 
               <!-- Quick Tests -->
               <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Payment Handles:</div>
               <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'sbi-reward-claim@ybl')">🚨 sbi-reward-claim@ybl</button>
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'lottery-cashback@okhdfcbank')">🚨 lottery-cashback@okhdfcbank</button>
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'johndoe@ybl')">✅ johndoe@ybl</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'sbi-reward-claim@ybl')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">sbi-reward-claim@ybl</span>
+                  <span class="sample-tag-pill sample-tag-threat">Fake Cashback</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'lottery-cashback@okhdfcbank')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">lottery-cashback@okhdfcbank</span>
+                  <span class="sample-tag-pill sample-tag-threat">Lottery Scam</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'electricity-bill-pay@paytm')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">electricity-bill-pay@paytm</span>
+                  <span class="sample-tag-pill sample-tag-threat">Impersonation</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('upi', 'merchant@hdfcbank')">
+                  <span class="sample-dot-safe"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">merchant@hdfcbank</span>
+                  <span class="sample-tag-pill sample-tag-safe">Verified Merchant</span>
+                </button>
               </div>
             </div>
 
@@ -851,24 +1111,33 @@
                 <span id="msg-char-counter" class="t-small" style="color: var(--ink-400); font-family: var(--mono);">0 chars</span>
               </div>
 
-              <!-- Rich Textarea -->
-              <div style="position: relative; margin-bottom: 10px;">
-                <textarea id="input-message" class="input" placeholder="Paste suspicious SMS, WhatsApp message, KYC alert, or job offer here..." style="width: 100%; height: 110px; padding: 14px; border-radius: 10px; border: 1.5px solid var(--ink-100); font-family: inherit; font-size: 0.9375rem; resize: vertical; line-height: 1.5;" oninput="updateMessageCount(this)" onfocus="this.style.borderColor='#D97706'; this.style.boxShadow='0 0 0 3px rgba(217,119,6,0.12)';" onblur="this.style.borderColor='var(--ink-100)'; this.style.boxShadow='none';"></textarea>
+              <!-- Chat Mockup Window Shell -->
+              <div class="tool-chat-window-shell">
+                <div class="tool-chat-window-header">
+                  <div class="tool-chat-window-dots">
+                    <span class="tool-chat-dot" style="background: #EF4444;"></span>
+                    <span class="tool-chat-dot" style="background: #F59E0B;"></span>
+                    <span class="tool-chat-dot" style="background: #10B981;"></span>
+                  </div>
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--ink-500);">Incoming SMS / WhatsApp Payload</span>
+                  <span style="font-family: var(--mono); font-size: 0.6875rem; color: #D97706; font-weight: 700;">NLP PARSER</span>
+                </div>
+                <textarea id="input-message" class="tool-chat-textarea" placeholder="Paste suspicious SMS, WhatsApp message, KYC alert, or job offer here..." oninput="updateMessageCount(this)"></textarea>
               </div>
 
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <div class="msg-actions-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <div style="display: flex; gap: 8px;">
-                  <button type="button" class="btn btn-neutral" style="height: 36px; padding: 0 12px; font-size: 0.8125rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;" onclick="pasteMessageClipboard()">
+                  <button type="button" class="btn btn-neutral" style="height: 38px; padding: 0 12px; font-size: 0.8125rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;" onclick="pasteMessageClipboard()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
                     Paste Clipboard
                   </button>
-                  <button type="button" class="btn btn-neutral" style="height: 36px; padding: 0 10px; font-size: 0.8125rem; border-radius: 6px;" onclick="clearMessageInput()">
+                  <button type="button" class="btn btn-neutral" style="height: 38px; padding: 0 10px; font-size: 0.8125rem; border-radius: 8px;" onclick="clearMessageInput()">
                     Clear
                   </button>
                 </div>
-                <button class="btn btn-tool-message" style="padding: 0 24px; border-radius: 8px; height: 42px; display: inline-flex; align-items: center; gap: 8px;" onclick="analyzeTool('message')">
+                <button class="btn-tool-cta btn-tool-message" style="height: 42px; padding: 0 22px; border-radius: 8px;" onclick="analyzeTool('message')">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                  Analyze Message
+                  Decode Threat NLP
                 </button>
               </div>
 

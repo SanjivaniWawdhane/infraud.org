@@ -930,90 +930,252 @@
               instant, explainable risk verdict.
             </p>
 
-                        <!-- 1. Sleek Docked Segmented Control Pill Bar -->
+                                    <!-- 1. Sleek Responsive Tool Switcher Tabs -->
             <div class="hero-dock-tabs" id="hero-dock-tabs">
-              <button type="button" class="hero-dock-tab active" data-tool="url" onclick="setSearchType('url', this)">
-                <svg class="tab-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <button type="button" class="hero-dock-tab active" data-tool="url" onclick="switchHeroTool('url')">
+                <svg class="tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                 </svg>
-                <span>URL / Domain</span>
+                <span>Website / URL</span>
               </button>
-              <button type="button" class="hero-dock-tab" data-tool="phone" onclick="setSearchType('phone', this)">
-                <svg class="tab-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <button type="button" class="hero-dock-tab" data-tool="phone" onclick="switchHeroTool('phone')">
+                <svg class="tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-                <span>Phone Number</span>
+                <span>Phone & Caller</span>
               </button>
-              <button type="button" class="hero-dock-tab" data-tool="upi" onclick="setSearchType('upi', this)">
-                <svg class="tab-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <button type="button" class="hero-dock-tab" data-tool="upi" onclick="switchHeroTool('upi')">
+                <svg class="tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /><line x1="6" y1="15" x2="10" y2="15" />
                 </svg>
-                <span>UPI ID</span>
+                <span>UPI Payment</span>
               </button>
-              <button type="button" class="hero-dock-tab" data-tool="message" onclick="setSearchType('message', this)">
-                <svg class="tab-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <button type="button" class="hero-dock-tab" data-tool="message" onclick="switchHeroTool('message')">
+                <svg class="tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                 </svg>
-                <span>SMS / Text</span>
+                <span>SMS / Chat</span>
               </button>
             </div>
 
-            <!-- 2. Integrated Cyber Command Terminal -->
-            <div class="hero-console-bar" id="hero-console-bar">
-              <div class="console-prefix-pill" id="hero-prefix-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-                <span>https://</span>
+            <!-- 2. FOUR DISTINCT INTERACTIVE TOOL CONSOLES -->
+
+            <!-- ──────────────────────────────────────────
+                 TOOL 1: WEBSITE / DOMAIN SECURITY CONSOLE
+                 ────────────────────────────────────────── -->
+            <div id="hero-panel-url" class="hero-tool-panel active">
+              <div class="hero-console-bar">
+                <div class="console-prefix-pill prefix-url" title="SSL Encrypted Protocol">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>https://</span>
+                </div>
+                <input type="text" id="input-hero-url" class="console-input"
+                  placeholder="Paste suspicious website or link (e.g. sbi-secure-portal.xyz)..."
+                  autocomplete="off" spellcheck="false"
+                  onkeypress="if(event.key === 'Enter') submitHeroTool('url')" />
+                <div class="console-kbd-hint"><span>↵</span> Enter</div>
+                <button type="button" class="console-scan-btn btn-url" onclick="submitHeroTool('url')">
+                  <span>Scan Domain</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
               </div>
 
-              <input type="text" id="hero-search-input" class="console-input"
-                placeholder="Paste suspicious website URL (e.g. sbi-secure-portal.xyz)..."
-                autocomplete="off"
-                spellcheck="false"
-                onkeypress="if(event.key === 'Enter') performAnalysis()" />
-
-              <div class="console-kbd-hint">
-                <span>↵</span> Enter
+              <!-- URL Live Radar Features -->
+              <div class="hero-feature-tags">
+                <span class="feat-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Domain Age (WHOIS)</span>
+                <span class="feat-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> SSL / TLS Audit</span>
+                <span class="feat-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/></svg> Homoglyph Typosquatting</span>
               </div>
 
-              <button id="hero-analyze-btn" class="console-scan-btn" onclick="performAnalysis()">
-                <span id="hero-btn-text">Scan URL</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </button>
+              <!-- Live Intelligence Telemetry Chips -->
+              <div class="hero-intel-feed">
+                <span class="intel-feed-label">⚡ Live Threat Intel:</span>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('url', 'fake-sbi-portal.xyz')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">fake-sbi-portal.xyz</span>
+                  <span class="intel-badge-label threat">Phishing Clone</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('url', 'amazon-support.in')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">amazon-support.in</span>
+                  <span class="intel-badge-label threat">Brand Spoof</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('url', 'google.com')">
+                  <span class="intel-dot-beacon safe"></span>
+                  <span class="intel-target-text">google.com</span>
+                  <span class="intel-badge-label safe">Verified Clean</span>
+                </button>
+              </div>
             </div>
 
-            <!-- 3. Threat Intelligence Live Feed Chips -->
-            <div class="hero-intel-feed" id="hero-quick-chips">
-              <span class="intel-feed-label">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Live Feed:
-              </span>
+            <!-- ──────────────────────────────────────────
+                 TOOL 2: TELECOM PHONE & CALLER CONSOLE
+                 ────────────────────────────────────────── -->
+            <div id="hero-panel-phone" class="hero-tool-panel">
+              <div class="hero-console-bar">
+                <select id="hero-phone-country" class="console-select-country" aria-label="Country Code">
+                  <option value="+91" selected>🇮🇳 +91 (IN)</option>
+                  <option value="+1">🇺🇸 +1 (US)</option>
+                  <option value="+44">🇬🇧 +44 (UK)</option>
+                  <option value="+971">🇦🇪 +971 (AE)</option>
+                  <option value="+65">🇸🇬 +65 (SG)</option>
+                  <option value="+61">🇦🇺 +61 (AU)</option>
+                </select>
+                <input type="tel" id="input-hero-phone" class="console-input"
+                  placeholder="Enter 10-digit mobile number or caller ID..."
+                  autocomplete="tel"
+                  onkeypress="if(event.key === 'Enter') submitHeroTool('phone')" />
+                <div class="console-kbd-hint"><span>↵</span> Enter</div>
+                <button type="button" class="console-scan-btn btn-phone" onclick="submitHeroTool('phone')">
+                  <span>Verify Caller</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+              </div>
 
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('fake-sbi-portal.xyz')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">fake-sbi-portal.xyz</span>
-                <span class="intel-badge-label threat">Phishing</span>
-              </button>
+              <!-- Phone Live Features -->
+              <div class="hero-feature-tags">
+                <span class="feat-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> Cellular Line vs VoIP</span>
+                <span class="feat-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> TRAI 140 / 160 Telemarketing Check</span>
+                <span class="feat-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg> DoT Sanchar Saathi Crosscheck</span>
+              </div>
 
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('amazon-support.in')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">amazon-support.in</span>
-                <span class="intel-badge-label threat">Spoof</span>
-              </button>
-
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('google.com')">
-                <span class="intel-dot-beacon safe"></span>
-                <span class="intel-target-text">google.com</span>
-                <span class="intel-badge-label safe">Verified</span>
-              </button>
+              <!-- Telecom Scam Vector Presets -->
+              <div class="hero-intel-feed">
+                <span class="intel-feed-label">⚡ Reported Call Vectors:</span>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('phone', '+91 80102 37029')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">+91 80102 37029</span>
+                  <span class="intel-badge-label threat">Police / Digital Arrest</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('phone', '+91 98765 43210')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">+91 98765 43210</span>
+                  <span class="intel-badge-label threat">FedEx Parcel Scam</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('phone', '1800 11 2211')">
+                  <span class="intel-dot-beacon safe"></span>
+                  <span class="intel-target-text">1800 11 2211</span>
+                  <span class="intel-badge-label safe">SBI Official Toll-Free</span>
+                </button>
+              </div>
             </div>
 
-            <!-- 4. Trust Badges -->
+            <!-- ──────────────────────────────────────────
+                 TOOL 3: FINTECH NPCI UPI SECURITY TERMINAL
+                 ────────────────────────────────────────── -->
+            <div id="hero-panel-upi" class="hero-tool-panel">
+              <!-- Golden Rule Notice -->
+              <div class="upi-mini-notice">
+                <span style="font-size: 1rem;">⚠️</span>
+                <span><strong>Golden Rule:</strong> You NEVER need to enter your UPI PIN to <strong>RECEIVE</strong> money or refunds!</span>
+              </div>
+
+              <div class="hero-console-bar">
+                <div class="console-prefix-pill prefix-upi">
+                  <span style="font-weight: 800;">₹</span>
+                  <span>UPI VPA</span>
+                </div>
+                <input type="text" id="input-hero-upi" class="console-input"
+                  placeholder="Enter UPI ID (e.g. merchant.support@okhdfcbank)..."
+                  autocomplete="off" spellcheck="false"
+                  onkeypress="if(event.key === 'Enter') submitHeroTool('upi')" />
+                <div class="console-kbd-hint"><span>↵</span> Enter</div>
+                <button type="button" class="console-scan-btn btn-upi" onclick="submitHeroTool('upi')">
+                  <span>Audit UPI</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+              </div>
+
+              <!-- Quick Append Bank PSP Pills -->
+              <div class="upi-bank-pills-row">
+                <span style="font-size: 0.72rem; font-weight: 800; color: #64748B; text-transform: uppercase;">Quick Bank Handle:</span>
+                <button type="button" class="upi-bank-chip" onclick="appendHeroUpi('@okhdfcbank')">@okhdfcbank</button>
+                <button type="button" class="upi-bank-chip" onclick="appendHeroUpi('@okaxis')">@okaxis</button>
+                <button type="button" class="upi-bank-chip" onclick="appendHeroUpi('@paytm')">@paytm</button>
+                <button type="button" class="upi-bank-chip" onclick="appendHeroUpi('@ybl')">@ybl</button>
+                <button type="button" class="upi-bank-chip" onclick="appendHeroUpi('@oksbi')">@oksbi</button>
+              </div>
+
+              <!-- Payment Intel Chips -->
+              <div class="hero-intel-feed">
+                <span class="intel-feed-label">⚡ Fraud Database:</span>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('upi', 'electricity.support@okaxis')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">electricity.support@okaxis</span>
+                  <span class="intel-badge-label threat">Fake Utility Desk</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('upi', 'sbi-refund-portal@ybl')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">sbi-refund-portal@ybl</span>
+                  <span class="intel-badge-label threat">Brand Spoof</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('upi', 'merchant.official@paytm')">
+                  <span class="intel-dot-beacon safe"></span>
+                  <span class="intel-target-text">merchant.official@paytm</span>
+                  <span class="intel-badge-label safe">P2M Merchant</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- ──────────────────────────────────────────
+                 TOOL 4: NLP FORENSIC CHAT LAB & SMS DECODER
+                 ────────────────────────────────────────── -->
+            <div id="hero-panel-message" class="hero-tool-panel">
+              <!-- Chat Bubble Editor Frame -->
+              <div class="hero-chat-box-frame">
+                <div class="chat-frame-header">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #D97706;"></span>
+                    <span style="font-weight: 700; font-size: 0.8125rem; color: #1E293B;">SMS / WhatsApp Threat Inspector</span>
+                  </div>
+                  <span style="font-family: var(--mono); font-size: 0.6875rem; color: #64748B; font-weight: 600;">NLP LEXICAL PARSER ACTIVE</span>
+                </div>
+
+                <textarea id="input-hero-message" class="chat-frame-textarea"
+                  placeholder="Paste suspicious SMS, utility cutoff warning, courier parcel alert, or Telegram job text here..."
+                  rows="3" oninput="updateHeroMsgCounter(this)"></textarea>
+
+                <div class="chat-frame-footer">
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <button type="button" class="chat-frame-action-btn" onclick="pasteFromClipboardHero()">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                      <span>Paste Clipboard</span>
+                    </button>
+                    <button type="button" class="chat-frame-action-btn" onclick="clearHeroMsg()">
+                      <span>Clear</span>
+                    </button>
+                    <span id="hero-msg-char-count" style="font-size: 0.72rem; color: #94A3B8; font-family: var(--mono);">0 chars</span>
+                  </div>
+
+                  <button type="button" class="console-scan-btn btn-message" onclick="submitHeroTool('message')">
+                    <span>Decode Threat NLP</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Pre-loaded Scam Scenarios -->
+              <div class="hero-intel-feed" style="margin-top: 12px;">
+                <span class="intel-feed-label">⚡ Test Scam Scenarios:</span>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('message', 'Dear consumer, your electricity power will be disconnected tonight at 9:30 PM from electricity office because your previous month bill was not updated. Immediately call electricity officer at 9876543210.')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">⚡ Power Cut Panic</span>
+                  <span class="intel-badge-label threat">Extortion</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('message', 'Dear SBI customer, your netbanking access has been blocked due to unverified KYC. Click link immediately to update PAN card: http://sbi-kyc-update.xyz to prevent account suspension.')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">🏦 Bank KYC Block</span>
+                  <span class="intel-badge-label threat">Phishing</span>
+                </button>
+                <button type="button" class="intel-chip-card" onclick="fillHeroInput('message', 'Earn Rs 5000 daily working from home liking YouTube videos and hotel ratings. No experience needed. Contact HR immediately on WhatsApp.')">
+                  <span class="intel-dot-beacon threat"></span>
+                  <span class="intel-target-text">💼 YouTube Task Job</span>
+                  <span class="intel-badge-label threat">Task Fraud</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 4. Global Trust Badges -->
             <div class="hero-trust-bar">
               <span class="trust-item">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
@@ -1027,10 +1189,10 @@
               <span class="trust-dot">•</span>
               <span class="trust-item">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-                Privacy-First (Zero Data Storage)
+                Zero-Knowledge Privacy
               </span>
             </div>
-          </div>
+            </div>
 
           <!-- RIGHT SIDE: Visual Showcase -->
           <div class="hero-visual" style="position: relative; perspective: 1000px; padding: 40px 0;">
@@ -1139,7 +1301,7 @@
         </div>
       </div>
 
-            <style>
+                  <style>
         /* ═══════════════════════════════════════════════
            REDEFINED CYBER COMMAND RADAR CONSOLE (HERO)
            ═══════════════════════════════════════════════ */
@@ -1153,15 +1315,16 @@
           border: 1px solid #E2E8F0;
           padding: 4px;
           border-radius: 100px;
-          margin-bottom: 18px;
+          margin-bottom: 20px;
           box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+          max-width: 100%;
         }
 
         .hero-dock-tab {
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          padding: 8px 16px;
+          padding: 8px 18px;
           border-radius: 100px;
           border: none;
           background: transparent;
@@ -1199,6 +1362,21 @@
         .hero-dock-tab[data-tool="upi"].active .tab-icon { color: #7C3AED; }
         .hero-dock-tab[data-tool="message"].active .tab-icon { color: #D97706; }
 
+        /* Tool Panels Switching */
+        .hero-tool-panel {
+          display: none;
+          animation: heroPanelFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          width: 100%;
+          max-width: 620px;
+        }
+        .hero-tool-panel.active {
+          display: block;
+        }
+        @keyframes heroPanelFade {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
         /* 2. Unified Command Terminal Input Bar */
         .hero-console-bar {
           background: #FFFFFF;
@@ -1208,7 +1386,6 @@
           display: flex;
           align-items: center;
           gap: 10px;
-          max-width: 580px;
           width: 100%;
           box-shadow: 0 12px 32px -6px rgba(15, 23, 42, 0.07), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
           transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1217,6 +1394,16 @@
         .hero-console-bar:focus-within {
           border-color: #2563EB;
           box-shadow: 0 16px 40px -8px rgba(37, 99, 235, 0.2), 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        #hero-panel-phone .hero-console-bar:focus-within {
+          border-color: #059669;
+          box-shadow: 0 16px 40px -8px rgba(5, 150, 105, 0.2), 0 0 0 4px rgba(5, 150, 105, 0.12);
+        }
+
+        #hero-panel-upi .hero-console-bar:focus-within {
+          border-color: #7C3AED;
+          box-shadow: 0 16px 40px -8px rgba(124, 58, 237, 0.2), 0 0 0 4px rgba(124, 58, 237, 0.12);
         }
 
         .console-prefix-pill {
@@ -1229,10 +1416,23 @@
           font-weight: 700;
           font-family: var(--mono);
           flex-shrink: 0;
-          background: #ECFDF5;
-          border: 1px solid #A7F3D0;
-          color: #047857;
           user-select: none;
+        }
+        .prefix-url { background: #ECFDF5; border: 1px solid #A7F3D0; color: #047857; }
+        .prefix-upi { background: #F5F3FF; border: 1px solid #DDD6FE; color: #6D28D9; }
+
+        .console-select-country {
+          height: 38px;
+          border-radius: 8px;
+          border: 1px solid #BFDBFE;
+          background: #EFF6FF;
+          color: #1D4ED8;
+          font-weight: 700;
+          font-size: 0.78125rem;
+          padding: 0 8px;
+          outline: none;
+          cursor: pointer;
+          flex-shrink: 0;
         }
 
         .console-input {
@@ -1267,16 +1467,12 @@
           font-family: var(--mono);
           flex-shrink: 0;
         }
-        @media (max-width: 600px) {
-          .console-kbd-hint { display: none; }
-        }
 
         .console-scan-btn {
           height: 48px;
           padding: 0 22px;
           border-radius: 12px;
           border: none;
-          background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
           color: #FFFFFF;
           font-family: inherit;
           font-size: 0.875rem;
@@ -1286,28 +1482,172 @@
           align-items: center;
           gap: 8px;
           flex-shrink: 0;
-          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
           transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
           white-space: nowrap;
         }
-
-        .console-scan-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        .btn-url {
+          background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+        .btn-url:hover {
           background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+          transform: translateY(-1px);
+        }
+        .btn-phone {
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+        }
+        .btn-phone:hover {
+          background: linear-gradient(135deg, #047857 0%, #065F46 100%);
+          transform: translateY(-1px);
+        }
+        .btn-upi {
+          background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+          box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+        }
+        .btn-upi:hover {
+          background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%);
+          transform: translateY(-1px);
+        }
+        .btn-message {
+          background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+          box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
+        }
+        .btn-message:hover {
+          background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+          transform: translateY(-1px);
         }
 
-        .console-scan-btn:active {
-          transform: translateY(1px);
+        /* 3. UPI Specific Features & Golden Rule Notice */
+        .upi-mini-notice {
+          background: #FFFBEB;
+          border: 1px solid #FDE68A;
+          border-radius: 12px;
+          padding: 8px 14px;
+          font-size: 0.78125rem;
+          color: #92400E;
+          margin-bottom: 12px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          line-height: 1.4;
         }
 
-        /* 3. Threat Intelligence Live Feed Chips */
+        .upi-bank-pills-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-wrap: wrap;
+          margin-top: 10px;
+        }
+        .upi-bank-chip {
+          background: #FFFFFF;
+          border: 1px solid #E2E8F0;
+          color: #475569;
+          font-family: var(--mono);
+          font-size: 0.72rem;
+          font-weight: 600;
+          padding: 4px 10px;
+          border-radius: 100px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .upi-bank-chip:hover {
+          background: #F5F3FF;
+          border-color: #C4B5FD;
+          color: #6D28D9;
+          transform: translateY(-1px);
+        }
+
+        /* 4. Message Specific Chat Box Frame */
+        .hero-chat-box-frame {
+          background: #FFFFFF;
+          border: 1.5px solid #CBD5E1;
+          border-radius: 20px;
+          padding: 14px 16px;
+          box-shadow: 0 12px 32px -6px rgba(15, 23, 42, 0.07);
+          transition: all 0.25s;
+        }
+        .hero-chat-box-frame:focus-within {
+          border-color: #D97706;
+          box-shadow: 0 16px 40px -8px rgba(217, 119, 6, 0.2), 0 0 0 4px rgba(217, 119, 6, 0.12);
+        }
+        .chat-frame-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-bottom: 8px;
+          margin-bottom: 8px;
+          border-bottom: 1px solid #F1F5F9;
+        }
+        .chat-frame-textarea {
+          width: 100%;
+          border: none;
+          outline: none;
+          background: #F8FAFC;
+          border-radius: 12px;
+          padding: 12px 14px;
+          font-family: inherit;
+          font-size: 0.9375rem;
+          color: #0F172A;
+          resize: vertical;
+          line-height: 1.55;
+          min-height: 78px;
+        }
+        .chat-frame-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 10px;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .chat-frame-action-btn {
+          background: #F1F5F9;
+          border: 1px solid #E2E8F0;
+          color: #475569;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 6px 12px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          transition: all 0.2s;
+        }
+        .chat-frame-action-btn:hover {
+          background: #E2E8F0;
+          color: #0F172A;
+        }
+
+        /* 5. Tool Feature Tags Radar */
+        .hero-feature-tags {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          margin-top: 10px;
+        }
+        .feat-tag {
+          font-size: 0.72rem;
+          color: #64748B;
+          background: #F8FAFC;
+          border: 1px solid #E2E8F0;
+          padding: 3px 8px;
+          border-radius: 6px;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        /* 6. Threat Intelligence Live Feed Chips */
         .hero-intel-feed {
           display: flex;
           align-items: center;
           gap: 8px;
           flex-wrap: wrap;
-          margin-top: 14px;
+          margin-top: 12px;
         }
 
         .intel-feed-label {
@@ -1388,7 +1728,7 @@
           color: #15803D;
         }
 
-        /* 4. Trust Badges */
+        /* 7. Trust Badges */
         .hero-trust-bar {
           display: flex;
           align-items: center;
@@ -1410,10 +1750,13 @@
           color: #CBD5E1;
         }
 
-        @media (max-width: 900px) {
+        /* ═══════════════════════════════════════════════
+           RESPONSIVE BREAKPOINTS (MOBILE & TABLET EXCELLENCE)
+           ═══════════════════════════════════════════════ */
+        @media (max-width: 992px) {
           .hero-grid {
             grid-template-columns: 1fr !important;
-            gap: 32px !important;
+            gap: 40px !important;
             text-align: center;
           }
 
@@ -1423,11 +1766,23 @@
             align-items: center;
           }
 
-          .hero-console-bar {
+          .hero-content h1 {
+            font-size: 2.5rem !important;
+          }
+
+          .hero-tool-panel {
             max-width: 100%;
           }
 
           .hero-intel-feed {
+            justify-content: center;
+          }
+
+          .hero-feature-tags {
+            justify-content: center;
+          }
+
+          .upi-bank-pills-row {
             justify-content: center;
           }
 
@@ -1437,154 +1792,175 @@
 
           .hero-visual {
             padding: 0 !important;
+            display: flex;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .hero-dock-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            border-radius: 16px;
+            padding: 5px;
+          }
+
+          .hero-dock-tab {
+            justify-content: center;
+            padding: 8px 10px;
+            font-size: 0.75rem;
+          }
+
+          .hero-console-bar {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 12px;
+            border-radius: 16px;
+            gap: 10px;
+          }
+
+          .console-kbd-hint {
+            display: none;
+          }
+
+          .console-scan-btn {
+            width: 100%;
+            justify-content: center;
+            height: 46px;
+          }
+
+          .chat-frame-footer {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .chat-frame-footer .console-scan-btn {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .hero-trust-bar {
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+          }
+          .trust-dot {
+            display: none;
           }
         }
       </style>
       <script>
-        window.currentSearchType = 'url';
+        window.currentHeroTool = 'url';
 
-        function setSearchType(type, btn) {
-          window.currentSearchType = type;
-          document.querySelectorAll('.hero-dock-tabs .hero-dock-tab').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+        function switchHeroTool(toolKey) {
+          window.currentHeroTool = toolKey;
 
-          const input = document.getElementById('hero-search-input');
-          const badge = document.getElementById('hero-prefix-badge');
-          const heroBtn = document.getElementById('hero-analyze-btn');
-          const btnText = document.getElementById('hero-btn-text');
-          const chips = document.getElementById('hero-quick-chips');
-          const bar = document.getElementById('hero-console-bar');
+          // Update active tab in dock
+          document.querySelectorAll('.hero-dock-tabs .hero-dock-tab').forEach(btn => {
+            if (btn.getAttribute('data-tool') === toolKey) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          });
 
-          if (!input || !badge || !heroBtn || !chips) return;
-
-          if (type === 'url') {
-            badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>https://</span>`;
-            badge.style.background = '#ECFDF5';
-            badge.style.borderColor = '#A7F3D0';
-            badge.style.color = '#047857';
-            input.placeholder = 'Paste suspicious website URL (e.g. sbi-secure-portal.xyz)...';
-            heroBtn.style.background = 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)';
-            heroBtn.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.3)';
-            if (btnText) btnText.innerText = 'Scan URL';
-            chips.innerHTML = `
-              <span class="intel-feed-label">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Live Feed:
-              </span>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('fake-sbi-portal.xyz')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">fake-sbi-portal.xyz</span>
-                <span class="intel-badge-label threat">Phishing</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('amazon-support.in')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">amazon-support.in</span>
-                <span class="intel-badge-label threat">Spoof</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('google.com')">
-                <span class="intel-dot-beacon safe"></span>
-                <span class="intel-target-text">google.com</span>
-                <span class="intel-badge-label safe">Verified</span>
-              </button>
-            `;
-          } else if (type === 'phone') {
-            badge.innerHTML = `<span>🇮🇳 +91</span>`;
-            badge.style.background = '#EFF6FF';
-            badge.style.borderColor = '#BFDBFE';
-            badge.style.color = '#1D4ED8';
-            input.placeholder = 'Enter 10-digit mobile number or caller ID...';
-            heroBtn.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
-            heroBtn.style.boxShadow = '0 4px 14px rgba(5, 150, 105, 0.3)';
-            if (btnText) btnText.innerText = 'Verify Caller';
-            chips.innerHTML = `
-              <span class="intel-feed-label">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Telecom Vectors:
-              </span>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('+91 80102 37029')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">+91 80102 37029</span>
-                <span class="intel-badge-label threat">Digital Arrest</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('+91 98765 43210')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">+91 98765 43210</span>
-                <span class="intel-badge-label threat">FedEx Parcel</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('1800 11 2211')">
-                <span class="intel-dot-beacon safe"></span>
-                <span class="intel-target-text">1800 11 2211</span>
-                <span class="intel-badge-label safe">SBI Toll-Free</span>
-              </button>
-            `;
-          } else if (type === 'upi') {
-            badge.innerHTML = `<span style="font-weight: 800;">₹ UPI</span>`;
-            badge.style.background = '#F5F3FF';
-            badge.style.borderColor = '#DDD6FE';
-            badge.style.color = '#6D28D9';
-            input.placeholder = 'Enter UPI VPA address (e.g. merchant@okhdfcbank)...';
-            heroBtn.style.background = 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)';
-            heroBtn.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.3)';
-            if (btnText) btnText.innerText = 'Audit UPI';
-            chips.innerHTML = `
-              <span class="intel-feed-label">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Payment Radar:
-              </span>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('electricity.support@okhdfcbank')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">electricity.support@okhdfcbank</span>
-                <span class="intel-badge-label threat">Fake Desk</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('sbi.kyc.refund@ybl')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">sbi.kyc.refund@ybl</span>
-                <span class="intel-badge-label threat">Brand Spoof</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('merchant.official@paytm')">
-                <span class="intel-dot-beacon safe"></span>
-                <span class="intel-target-text">merchant.official@paytm</span>
-                <span class="intel-badge-label safe">Verified Merchant</span>
-              </button>
-            `;
-          } else if (type === 'message') {
-            badge.innerHTML = `<span>💬 SMS</span>`;
-            badge.style.background = '#FFFBEB';
-            badge.style.borderColor = '#FDE68A';
-            badge.style.color = '#B45309';
-            input.placeholder = 'Paste suspicious SMS, cutoff alert, or job offer text...';
-            heroBtn.style.background = 'linear-gradient(135deg, #D97706 0%, #B45309 100%)';
-            heroBtn.style.boxShadow = '0 4px 14px rgba(217, 119, 6, 0.3)';
-            if (btnText) btnText.innerText = 'Analyze Text';
-            chips.innerHTML = `
-              <span class="intel-feed-label">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Scam Scenarios:
-              </span>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('Dear consumer electricity power disconnected tonight at 9:30 PM. Call officer 9876543210 immediately.')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">Power Cut Panic</span>
-                <span class="intel-badge-label threat">Extortion</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('SBI netbanking blocked due to expired KYC. Click link immediately to update PAN: http://sbi-kyc.xyz')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">Bank KYC Freeze</span>
-                <span class="intel-badge-label threat">Phishing</span>
-              </button>
-              <button type="button" class="intel-chip-card" onclick="fillHeroInput('Earn Rs 5000 daily liking YouTube videos. Contact WhatsApp HR now.')">
-                <span class="intel-dot-beacon threat"></span>
-                <span class="intel-target-text">YouTube Task Job</span>
-                <span class="intel-badge-label threat">Prepaid Trap</span>
-              </button>
-            `;
+          // Show specific tool panel
+          document.querySelectorAll('.hero-tool-panel').forEach(panel => {
+            panel.classList.remove('active');
+          });
+          const targetPanel = document.getElementById('hero-panel-' + toolKey);
+          if (targetPanel) {
+            targetPanel.classList.add('active');
+            const inp = targetPanel.querySelector('input, textarea');
+            if (inp) inp.focus();
           }
         }
 
-        function fillHeroInput(text) {
-          const input = document.getElementById('hero-search-input');
-          if (input) {
-            input.value = text;
-            input.focus();
+        function submitHeroTool(toolKey) {
+          let val = '';
+          if (toolKey === 'url') {
+            const el = document.getElementById('input-hero-url');
+            val = el ? el.value.trim() : '';
+          } else if (toolKey === 'phone') {
+            const countryEl = document.getElementById('hero-phone-country');
+            const phoneEl = document.getElementById('input-hero-phone');
+            const country = countryEl ? countryEl.value : '+91';
+            let num = phoneEl ? phoneEl.value.trim() : '';
+            if (num && !num.startsWith('+')) {
+              num = country + ' ' + num;
+            }
+            val = num;
+          } else if (toolKey === 'upi') {
+            const el = document.getElementById('input-hero-upi');
+            val = el ? el.value.trim() : '';
+          } else if (toolKey === 'message') {
+            const el = document.getElementById('input-hero-message');
+            val = el ? el.value.trim() : '';
+          }
+
+          if (!val) {
+            alert('Please enter a target to analyze.');
+            return;
+          }
+
+          window.location.href = 'result.html?type=' + encodeURIComponent(toolKey) + '&query=' + encodeURIComponent(val);
+        }
+
+        function fillHeroInput(toolKey, text) {
+          switchHeroTool(toolKey);
+          let inputEl;
+          if (toolKey === 'url') inputEl = document.getElementById('input-hero-url');
+          else if (toolKey === 'phone') inputEl = document.getElementById('input-hero-phone');
+          else if (toolKey === 'upi') inputEl = document.getElementById('input-hero-upi');
+          else if (toolKey === 'message') {
+            inputEl = document.getElementById('input-hero-message');
+            if (inputEl) updateHeroMsgCounter(inputEl);
+          }
+          if (inputEl) {
+            inputEl.value = text;
+            inputEl.focus();
+          }
+        }
+
+        function appendHeroUpi(suffix) {
+          const el = document.getElementById('input-hero-upi');
+          if (!el) return;
+          let val = el.value.trim();
+          if (val.includes('@')) {
+            val = val.split('@')[0];
+          }
+          if (!val) val = 'payment-user';
+          el.value = val + suffix;
+          el.focus();
+        }
+
+        function updateHeroMsgCounter(el) {
+          const counter = document.getElementById('hero-msg-char-count');
+          if (counter) {
+            counter.textContent = el.value.length + ' chars';
+          }
+        }
+
+        function clearHeroMsg() {
+          const el = document.getElementById('input-hero-message');
+          if (el) {
+            el.value = '';
+            updateHeroMsgCounter(el);
+            el.focus();
+          }
+        }
+
+        async function pasteFromClipboardHero() {
+          try {
+            const text = await navigator.clipboard.readText();
+            const el = document.getElementById('input-hero-message');
+            if (el && text) {
+              el.value = text;
+              updateHeroMsgCounter(el);
+              el.focus();
+            }
+          } catch (e) {
+            alert('Clipboard permission not granted. Please paste text using Ctrl+V.');
           }
         }
       </script>
