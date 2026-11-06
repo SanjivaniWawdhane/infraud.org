@@ -103,551 +103,934 @@
       
       
       /* ═══════════════════════════════════════════════════════════════
-         TOOL 1: ASYMMETRIC DOMAIN FORENSICS DOSSIER (CLEAN & ATTRACTIVE)
-         ═══════════════════════════════════════════════════════════════ */
-      #view-url {
-        color: var(--ink-900, #0A0F1E);
-      }
+   TOOL 1: CYBER FORENSIC SANDBOX & THREAT RADAR CONSOLE (URL TOOL)
+   High-Tech Executive Cybersecurity Investigation Chassis
+   ═══════════════════════════════════════════════════════════════ */
+#view-url {
+  color: var(--ink-900, #0A0F1E);
+}
 
-      /* Executive Domain Clearance Header */
-      .url-dossier-header {
-        background: #FFFFFF;
-        border: 1px solid var(--ink-100, #E8EBF3);
-        border-radius: 20px;
-        padding: 26px 32px;
-        box-shadow: 0 4px 20px rgba(10, 15, 30, 0.04);
-        margin-bottom: 24px;
-        transition: all 0.25s ease;
-      }
-      .url-dossier-header:hover {
-        border-color: #CBD5E1;
-        box-shadow: 0 8px 28px rgba(37, 99, 235, 0.05);
-      }
-      .dossier-header-main {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-      .dossier-identity-wrap {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-      }
-      .dossier-favicon-ring {
-        width: 58px; height: 58px;
-        border-radius: 18px;
-        background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-        border: 1.5px solid #BFDBFE;
-        color: #2563EB;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
-      }
-      .dossier-title-stack {
-        display: flex;
-        flex-direction: column;
-      }
-      .dossier-badges-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-bottom: 6px;
-      }
-      .dossier-chip {
-        font-size: 0.6875rem;
-        font-weight: 700;
-        padding: 3px 9px;
-        border-radius: 6px;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        letter-spacing: 0.03em;
-      }
-      .chip-category {
-        background: #EFF6FF;
-        color: #1D4ED8;
-        border: 1px solid #BFDBFE;
-      }
-      .chip-protocol {
-        background: #ECFDF5;
-        color: #047857;
-        border: 1px solid #A7F3D0;
-      }
-      .chip-status {
-        background: #F1F5F9;
-        color: #059669;
-        border: 1px solid #E2E8F0;
-        font-family: var(--mono, monospace);
-        font-weight: 700;
-      }
-      .dossier-target-name {
-        font-family: var(--mono, 'JetBrains Mono', monospace);
-        font-size: 2rem;
-        font-weight: 900;
-        color: #0F172A !important;
-        margin: 0 0 4px;
-        letter-spacing: -0.02em;
-        word-break: break-all;
-      }
-      .dossier-sub-routing {
-        font-size: 0.8125rem;
-        color: var(--ink-500, #64748B);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .dossier-sub-routing strong {
-        color: #334155;
-        font-weight: 600;
-      }
+/* ── 1. Executive Cyber Mission Command Bar ── */
+.url-cyber-command-bar {
+  background: linear-gradient(135deg, #0B1120 0%, #0F172A 55%, #1E293B 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 20px;
+  padding: 24px 28px;
+  box-shadow: 0 16px 40px rgba(11, 17, 32, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  color: #FFFFFF;
+}
 
-      .dossier-action-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .dossier-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        color: var(--ink-700, #334155);
-        background: #FFFFFF;
-        border: 1px solid var(--ink-200, #CBD5E1);
-        padding: 8px 16px;
-        border-radius: 10px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-      }
-      .dossier-btn:hover {
-        background: #F8FAFC;
-        border-color: #94A3B8;
-        color: #0F172A;
-        transform: translateY(-1px);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-      }
-      .btn-report-threat {
-        background: #FEF2F2;
-        border-color: #FECACA;
-        color: #DC2626;
-      }
-      .btn-report-threat:hover {
-        background: #FEE2E2;
-        border-color: #F87171;
-        color: #B91C1C;
-      }
+.url-cyber-command-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3B82F6 0%, #10B981 50%, #6366F1 100%);
+}
 
-      /* Asymmetric 65 / 35 Layout */
-      .url-asymmetric-layout {
-        display: grid;
-        grid-template-columns: 1.65fr 1fr;
-        gap: 24px;
-        align-items: start;
-      }
-      @media (max-width: 980px) {
-        .url-asymmetric-layout { grid-template-columns: 1fr; }
-      }
+.command-bar-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+}
 
-      /* Reusable Forensic Card */
-      .forensic-card {
-        background: #FFFFFF;
-        border: 1px solid var(--ink-100, #E8EBF3);
-        border-radius: 20px;
-        padding: 24px 26px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
-        margin-bottom: 24px;
-        transition: all 0.25s ease;
-      }
-      .forensic-card:hover {
-        border-color: #CBD5E1;
-        box-shadow: 0 6px 24px rgba(37, 99, 235, 0.05);
-      }
-      .forensic-card-title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.75rem;
-        font-weight: 800;
-        letter-spacing: 0.06em;
-        color: var(--ink-600, #475569);
-        text-transform: uppercase;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--ink-100, #E8EBF3);
-      }
+.window-dots-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-red { background: #EF4444; }
+.dot-yellow { background: #F59E0B; }
+.dot-green { background: #10B981; }
 
-      /* A. Visual Redirect Trace Flow */
-      .redirect-trace-flow {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        padding: 10px 0;
-      }
-      .trace-node {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 10px 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-      }
-      .node-dest {
-        background: #EFF6FF;
-        border-color: #BFDBFE;
-      }
-      .node-badge {
-        font-size: 0.625rem;
-        font-weight: 800;
-        color: #64748B;
-        letter-spacing: 0.04em;
-      }
-      .node-val {
-        font-family: var(--mono, monospace);
-        font-size: 0.8125rem;
-        font-weight: 700;
-        color: #0F172A;
-      }
-      .trace-arrow {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-      }
-      .trace-label {
-        font-size: 0.625rem;
-        font-weight: 700;
-        color: #64748B;
-      }
+.command-bar-status-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: #94A3B8;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
 
-      /* B. Telemetry Rows List (Full-Width Rows) */
-      .telemetry-rows-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-      .telemetry-row-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-        padding: 14px 16px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 14px;
-        transition: all 0.2s ease;
-      }
-      .telemetry-row-item:hover {
-        background: #FFFFFF;
-        border-color: #CBD5E1;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
-      }
-      .row-icon-cell {
-        width: 44px; height: 44px;
-        border-radius: 12px;
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        color: #2563EB;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-      }
-      .row-content-cell {
-        flex: 1;
-      }
-      .row-header-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 3px;
-      }
-      .row-label {
-        font-size: 0.6875rem;
-        font-weight: 700;
-        color: var(--ink-500, #64748B);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
-      .row-status-tag {
-        font-size: 0.6875rem;
-        font-weight: 700;
-        padding: 2px 8px;
-        border-radius: 4px;
-      }
-      .tag-pass { background: #ECFDF5; color: #047857; }
-      .tag-neutral { background: #EFF6FF; color: #1D4ED8; }
-      .row-primary-val {
-        font-size: 0.9375rem;
-        font-weight: 700;
-        color: var(--ink-900, #0A0F1E);
-        margin-bottom: 2px;
-      }
-      .row-subtext {
-        font-size: 0.75rem;
-        color: var(--ink-400, #94A3B8);
-      }
+.status-chip-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34D399;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-weight: 700;
+}
+.pulse-live-beacon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34D399;
+  box-shadow: 0 0 8px #34D399;
+  animation: pulseBeacon 1.8s infinite;
+}
+@keyframes pulseBeacon {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
-      /* Right Column Sidebar */
-      .sidebar-card-label {
-        font-size: 0.75rem;
-        font-weight: 800;
-        letter-spacing: 0.06em;
-        color: var(--ink-600, #475569);
-        text-transform: uppercase;
-        margin-bottom: 16px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid var(--ink-100, #E8EBF3);
-      }
-      .sidebar-gauge-wrap {
-        margin: 6px auto;
-        display: flex;
-        justify-content: center;
-      }
-      .sidebar-verdict-pill-wrap {
-        text-align: center;
-        margin: 8px 0 10px;
-      }
+.command-bar-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
 
-      /* Gauge & Circular Scoreboard Architecture */
-      .gauge-wrap {
-        position: relative;
-        width: 160px;
-        height: 160px;
-        margin: 6px auto 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .gauge-svg {
-        transform: rotate(-90deg);
-        width: 160px;
-        height: 160px;
-        display: block;
-      }
-      .gauge-bg-circle {
-        fill: none !important;
-        stroke: var(--ink-50, #F1F5F9);
-        stroke-width: 12;
-      }
-      .gauge-progress-circle {
-        fill: none !important;
-        stroke: #10B981;
-        stroke-width: 12;
-        stroke-linecap: round;
-        stroke-dasharray: 439.8;
-        stroke-dashoffset: 439.8;
-        transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
-      }
-      .gauge-center-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        pointer-events: none;
-      }
-      .gauge-score-num {
-        font-size: 3.25rem;
-        font-weight: 900;
-        letter-spacing: -0.04em;
-        line-height: 1;
-        color: #10B981;
-        transition: color 0.3s ease;
-      }
-      .gauge-score-denom {
-        font-size: 0.6875rem;
-        font-weight: 800;
-        color: var(--ink-400, #94A3B8);
-        margin-top: 4px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
+.target-hero-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
-      /* Risk Verdict Pill & Summary Description */
-      .risk-verdict-pill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-size: 0.8125rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        padding: 6px 16px;
-        border-radius: 100px;
-        background: rgba(16, 185, 129, 0.1);
-        color: #059669;
-        border: 1px solid rgba(16, 185, 129, 0.25);
-        transition: all 0.3s ease;
-      }
-      .risk-explanation-text {
-        font-size: 0.84rem;
-        color: var(--ink-600, #475569);
-        line-height: 1.55;
-        text-align: center;
-        margin: 6px 0 16px;
-        transition: color 0.3s ease;
-      }
+.cyber-radar-ring {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: rgba(37, 99, 235, 0.2);
+  border: 1.5px solid rgba(59, 130, 246, 0.45);
+  box-shadow: 0 0 24px rgba(37, 99, 235, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60A5FA;
+  flex-shrink: 0;
+  position: relative;
+}
 
-      /* 4-Stage Visual Risk Bar */
-      .risk-meter-container {
-        width: 100%;
-        padding-top: 14px;
-        border-top: 1px solid var(--ink-100, #E8EBF3);
-      }
-      .risk-meter-bar {
-        display: flex;
-        height: 6px;
-        border-radius: 100px;
-        overflow: hidden;
-        margin-bottom: 6px;
-        gap: 3px;
-        background: transparent;
-      }
-      .meter-seg {
-        flex: 1;
-        height: 100%;
-        border-radius: 2px;
-      }
-      .seg-low { background: #10B981; }
-      .seg-mod { background: #F59E0B; }
-      .seg-high { background: #EA580C; }
-      .seg-crit { background: #EF4444; }
-      .risk-meter-labels {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.65rem;
-        font-weight: 700;
-        color: var(--ink-400, #94A3B8);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
+.target-hero-title-box {
+  display: flex;
+  flex-direction: column;
+}
 
-      /* Signals Item Rows & Clean Certificate Box (Shared across URL and other tools) */
-      .clean-certificate-box {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
-        border: 1px solid rgba(16, 185, 129, 0.25);
-        border-radius: 16px;
-        padding: 24px;
-        text-align: center;
-        color: #065F46;
-      }
-      .clean-cert-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: rgba(16, 185, 129, 0.15);
-        color: #059669;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 12px;
-      }
-      .signal-item-row {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--ink-100, #E8EBF3);
-        transition: background 0.15s;
-      }
-      .signal-item-row:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-      }
-      .signal-item-left {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        flex: 1;
-      }
-      .signal-status-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        margin-top: 2px;
-      }
-      .signal-status-clean { background: rgba(16, 185, 129, 0.1); color: #059669; }
-      .signal-status-warn  { background: rgba(245, 158, 11, 0.1); color: #D97706; }
-      .signal-status-crit  { background: rgba(239, 68, 68, 0.1); color: #DC2626; }
-      .signal-title-text {
-        font-weight: 700;
-        font-size: 0.9375rem;
-        color: var(--ink-900, #0A0F1E);
-        margin-bottom: 3px;
-      }
-      .signal-desc-text {
-        font-size: 0.8125rem;
-        color: var(--ink-500, #4B5570);
-        line-height: 1.5;
-      }
+.target-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
 
-      /* Playbook Sidebar Card */
-      .playbook-sidebar-card {
-        border-left: 4px solid #10B981 !important;
-      }
-      .playbook-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
+.url-hero-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge-cat {
+  background: rgba(37, 99, 235, 0.25);
+  color: #93C5FD;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+.badge-proto {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6EE7B7;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.badge-dns {
+  background: rgba(147, 51, 234, 0.2);
+  color: #D8B4FE;
+  border: 1px solid rgba(147, 51, 234, 0.35);
+}
 
-      /* Global Threat Feeds Checklist */
-      .threat-engine-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .engine-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 12px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-      }
-      .engine-name {
-        font-size: 0.8125rem;
-        font-weight: 600;
-        color: #334155;
-      }
-      .engine-badge {
-        font-size: 0.6875rem;
-        font-weight: 700;
-        padding: 2px 8px;
-        border-radius: 4px;
-      }
-      .engine-badge.pass {
-        background: #ECFDF5;
-        color: #047857;
-      }
+.url-target-headline {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  word-break: break-all;
+  font-family: var(--font-mono, monospace);
+}
 
-    /* ── TOOL 2: TELECOM CALLER DOSSIER & SMARTPHONE UI (PHONE SCANNER) ── */
+.url-routing-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #94A3B8;
+}
+.url-routing-strip strong {
+  color: #E2E8F0;
+  font-weight: 600;
+}
+
+.command-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cyber-btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #F1F5F9;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.cyber-btn-pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  color: #FFFFFF;
+}
+.cyber-btn-report {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+}
+.cyber-btn-report:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+  border-color: #EF4444;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+}
+
+/* ── 2. Master-Detail Layout (65% / 35%) ── */
+.url-master-grid {
+  display: grid;
+  grid-template-columns: 1fr 370px;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1080px) {
+  .url-master-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 3. Developer Sandbox Browser Viewport (Visual Web Stage) ── */
+.url-browser-sandbox {
+  background: #FFFFFF;
+  border: 1px solid var(--ink-100, #E8EBF3);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(10, 15, 30, 0.04);
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+}
+.url-browser-sandbox:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 12px 36px rgba(37, 99, 235, 0.06);
+}
+
+.sandbox-chrome-topbar {
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.sandbox-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sandbox-address-bar {
+  flex: 1;
+  max-width: 520px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: #334155;
+  font-family: var(--font-mono, monospace);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.sandbox-padlock-icon {
+  color: #10B981;
+  display: flex;
+}
+.sandbox-address-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sandbox-meta-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+.sandbox-badge-http {
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.sandbox-latency-chip {
+  color: #64748B;
+}
+
+.sandbox-viewport-canvas {
+  padding: 22px 24px;
+  background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.viewport-site-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.viewport-site-favicon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.viewport-site-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 3px;
+}
+.viewport-site-meta {
+  font-size: 0.75rem;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewport-specs-hud {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.specs-hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6px 12px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  min-width: 80px;
+}
+.hud-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.hud-val {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #0F172A;
+  font-family: var(--font-mono, monospace);
+}
+
+/* ── 4. Interactive 3-Tab Deck ── */
+.url-tabs-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #E2E8F0;
+  padding-bottom: 2px;
+}
+.url-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px 10px 0 0;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  letter-spacing: 0.02em;
+}
+.url-tab-btn:hover {
+  color: #2563EB;
+  background: #EFF6FF;
+}
+.url-tab-btn.active {
+  color: #2563EB;
+  background: #EFF6FF;
+  border-bottom: 3px solid #2563EB;
+}
+
+.url-tab-pane {
+  display: none;
+}
+.url-tab-pane.active {
+  display: block;
+}
+
+/* ── Tab 1: Heuristics & Telemetry Components ── */
+.forensic-panel-card {
+  background: #FFFFFF;
+  border: 1px solid var(--ink-100, #E8EBF3);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+  transition: all 0.2s ease;
+}
+.forensic-panel-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.05);
+}
+
+.panel-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #475569;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E8EBF3;
+}
+
+/* Visual Redirect Flow */
+.redirect-trace-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+}
+.trace-node {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.node-badge {
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748B;
+}
+.node-val {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: var(--font-mono, monospace);
+  color: #0F172A;
+}
+.trace-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.trace-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94A3B8;
+}
+
+/* 2x2 Telemetry Cards Grid */
+.telemetry-2x2-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .telemetry-2x2-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.telemetry-tile-item {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: all 0.2s ease;
+}
+.telemetry-tile-item:hover {
+  background: #FFFFFF;
+  border-color: #BFDBFE;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+}
+.telemetry-tile-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #EFF6FF;
+  color: #2563EB;
+}
+.telemetry-tile-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.telemetry-tile-label {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.telemetry-tile-val {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 3px;
+  line-height: 1.35;
+}
+.telemetry-tile-sub {
+  font-size: 0.75rem;
+  color: #64748B;
+  line-height: 1.45;
+}
+
+/* Signals & Clean Certificate Components */
+.clean-certificate-box {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  color: #065F46;
+}
+.clean-cert-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+}
+
+.signal-item-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #E8EBF3;
+}
+.signal-item-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.signal-item-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+.signal-status-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.signal-status-clean { background: rgba(16, 185, 129, 0.1); color: #059669; }
+.signal-status-warn  { background: rgba(245, 158, 11, 0.1); color: #D97706; }
+.signal-status-crit  { background: rgba(239, 68, 68, 0.1); color: #DC2626; }
+.signal-title-text {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #0A0F1E;
+  margin-bottom: 3px;
+}
+.signal-desc-text {
+  font-size: 0.8125rem;
+  color: #4B5570;
+  line-height: 1.5;
+}
+
+/* ── Tab 2: DNS & Network Topology Table ── */
+.dns-records-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.dns-records-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.dns-records-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #334155;
+  font-family: var(--font-mono, monospace);
+}
+.dns-type-tag {
+  font-weight: 800;
+  color: #2563EB;
+  background: #EFF6FF;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  display: inline-block;
+}
+
+/* ── Tab 3: SSL & Security Headers ── */
+.security-headers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (max-width: 640px) {
+  .security-headers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.header-spec-item {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.header-spec-name {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+.header-spec-status {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #047857;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ── 5. Threat Intelligence Core (Right Column 35%) ── */
+.url-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scoreboard-chassis-card {
+  background: linear-gradient(145deg, #0B1120 0%, #0F172A 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 20px;
+  padding: 26px 24px;
+  box-shadow: 0 16px 36px rgba(11, 17, 32, 0.25);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+
+.scoreboard-chassis-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #10B981 0%, #3B82F6 100%);
+}
+
+.scoreboard-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.scoreboard-header-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.sidebar-gauge-wrap {
+  margin: 6px auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Circular Gauge Engine */
+.gauge-wrap {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  margin: 6px auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gauge-svg {
+  transform: rotate(-90deg);
+  width: 170px;
+  height: 170px;
+  display: block;
+}
+.gauge-bg-circle {
+  fill: none !important;
+  stroke: #1E293B;
+  stroke-width: 12;
+}
+.gauge-progress-circle {
+  fill: none !important;
+  stroke: #10B981;
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 439.8;
+  stroke-dashoffset: 439.8;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+}
+.gauge-center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.gauge-score-num {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: #10B981;
+  transition: color 0.3s ease;
+}
+.gauge-score-denom {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #94A3B8;
+  margin-top: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar-verdict-pill-wrap {
+  text-align: center;
+  margin: 8px 0 10px;
+}
+.risk-verdict-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 100px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  transition: all 0.3s ease;
+}
+.risk-explanation-text {
+  font-size: 0.84rem;
+  color: #94A3B8;
+  line-height: 1.55;
+  text-align: center;
+  margin: 6px 0 16px;
+  transition: color 0.3s ease;
+}
+
+/* 4-Stage Visual Spectrum Bar */
+.risk-meter-container {
+  width: 100%;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.risk-meter-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  gap: 3px;
+  background: transparent;
+}
+.meter-seg {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+}
+.seg-low { background: #10B981; }
+.seg-mod { background: #F59E0B; }
+.seg-high { background: #EA580C; }
+.seg-crit { background: #EF4444; }
+.risk-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Global Feeds Checklist Card */
+.threat-feeds-card {
+  background: #FFFFFF;
+  border: 1px solid #E8EBF3;
+  border-radius: 18px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+}
+.threat-engine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.engine-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+}
+.engine-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #334155;
+}
+.engine-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.engine-badge.pass {
+  background: #ECFDF5;
+  color: #047857;
+}
+
+/* Incident Playbook Sidebar Card */
+.playbook-sidebar-card {
+  background: #FFFFFF;
+  border: 1px solid #E8EBF3;
+  border-left: 4px solid #10B981 !important;
+  border-radius: 18px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+}
+.playbook-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+      /* ── TOOL 2: TELECOM CALLER DOSSIER & SMARTPHONE UI (PHONE SCANNER) ── */
       .phone-telecom-header-bar {
         background: linear-gradient(135deg, #064E3B 0%, #065F46 60%, #047857 100%);
         border: 1px solid rgba(16, 185, 129, 0.45);
@@ -2087,54 +2470,71 @@
            TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE (CYBER SOC COMMAND DECK)
            Full-width 3-tier horizontal SecOps architecture
            ═══════════════════════════════════════════════ -->
-                  <!-- ═══════════════════════════════════════════════
-           TOOL 1: ASYMMETRIC DOMAIN FORENSICS DOSSIER (URL SCANNER)
-           65/35 Technical Investigation & Threat Clearance Architecture
+                        <!-- ═══════════════════════════════════════════════
+           TOOL 1: CYBER FORENSIC SANDBOX & THREAT RADAR CONSOLE (URL TOOL)
+           Interactive Chromium Sandbox • DNS & SSL Deep Dives • Threat Matrix
            ═══════════════════════════════════════════════ -->
       <div id="view-url" class="tool-result-view">
         
-        <!-- 1. Executive Domain Clearance Bar -->
-        <div class="url-dossier-header">
-          <div class="dossier-header-main">
-            <div class="dossier-identity-wrap">
-              <div class="dossier-favicon-ring">
+        <!-- 1. Executive Cyber Mission Command Bar -->
+        <div class="url-cyber-command-bar">
+          <div class="command-bar-meta-row">
+            <div class="window-dots-group">
+              <span class="window-dot dot-red"></span>
+              <span class="window-dot dot-yellow"></span>
+              <span class="window-dot dot-green"></span>
+              <span style="margin-left: 8px; color: #94A3B8; font-weight: 700;">INFRAUD DOMAIN FORENSICS ENGINE 2.4</span>
+            </div>
+            <div class="command-bar-status-strip">
+              <span class="status-chip-live">
+                <span class="pulse-live-beacon"></span>
+                ACTIVE AUDIT SESSION
+              </span>
+              <span>EDGE: CLOUDFLARE ANYCAST</span>
+              <span>HTTP/2 ACTIVE</span>
+            </div>
+          </div>
+
+          <div class="command-bar-main">
+            <div class="target-hero-identity">
+              <div class="cyber-radar-ring">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="2" y1="12" x2="22" y2="12"></line>
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                 </svg>
               </div>
-              <div class="dossier-title-stack">
-                <div class="dossier-badges-row">
-                  <span id="target-category-tag" class="dossier-chip chip-category">WEB DOMAIN / URL</span>
-                  <span id="target-protocol-tag" class="dossier-chip chip-protocol">
+              <div class="target-hero-title-box">
+                <div class="target-badges-row">
+                  <span id="target-category-tag" class="url-hero-badge badge-cat">WEB DOMAIN / URL</span>
+                  <span id="target-protocol-tag" class="url-hero-badge badge-proto">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     HTTPS Encrypted (TLS 1.3)
                   </span>
-                  <span class="dossier-chip chip-status">● 200 OK Active</span>
+                  <span class="url-hero-badge badge-dns">ICANN CANONICAL ROOT</span>
                 </div>
-                <h1 class="dossier-target-name target-display-value" id="target-display">Analyzing URL...</h1>
-                <div class="dossier-sub-routing">
-                  <span>Canonical Target: <strong id="dossier-canonical">https://x.com/</strong></span>
+                <h1 class="url-target-headline target-display-value" id="target-display">Analyzing URL...</h1>
+                <div class="url-routing-strip">
+                  <span>Canonical Route: <strong id="dossier-canonical">https://x.com/</strong></span>
                   <span>•</span>
-                  <span>Edge Server: <strong>Cloudflare Anycast Global Edge</strong></span>
+                  <span>BGP Anycast IP: <strong>104.244.42.1</strong></span>
                   <span>•</span>
-                  <span>Origin IP: <strong>104.244.42.1</strong></span>
+                  <span>TLS Handshake: <strong>24ms</strong></span>
                 </div>
               </div>
             </div>
 
-            <!-- Header Quick Action Bar -->
-            <div class="dossier-action-bar">
-              <button class="dossier-btn" onclick="rescanTarget()" title="Rescan target heuristics">
+            <!-- Action Controls -->
+            <div class="command-bar-actions">
+              <button class="cyber-btn-pill" onclick="rescanTarget()" title="Rescan target heuristics">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                 Rescan Target
               </button>
-              <button class="dossier-btn" onclick="copyResultLink()" title="Copy shareable audit link">
+              <button class="cyber-btn-pill" onclick="copyResultLink()" title="Copy shareable audit link">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 Share Dossier
               </button>
-              <a href="reports.html" class="dossier-btn btn-report-threat" id="btn-report-target" title="File scam report with moderators">
+              <a href="reports.html" class="cyber-btn-pill cyber-btn-report" id="btn-report-target" title="File scam report with moderators">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                 Report Threat
               </a>
@@ -2142,139 +2542,325 @@
           </div>
         </div>
 
-        <!-- 2. Asymmetric 65 / 35 Forensic Dossier Layout -->
-        <div class="url-asymmetric-layout">
+        <!-- 2. Master-Detail Layout (65% Investigation Deck / 35% Threat Core) -->
+        <div class="url-master-grid">
           
-          <!-- LEFT COLUMN (65%): Forensic Investigation & Telemetry -->
-          <div class="url-left-column">
+          <!-- LEFT COLUMN (65%): Developer Sandbox & Multi-Tab Deck -->
+          <div class="url-left-deck">
             
-            <!-- A. Visual Redirect & Transport Chain -->
-            <div class="forensic-card redirect-trace-card">
-              <div class="forensic-card-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
-                <span>HTTP RESOLUTION & REDIRECT TRACE</span>
-              </div>
-              <div class="redirect-trace-flow">
-                <div class="trace-node node-start">
-                  <span class="node-badge">1. REQUEST</span>
-                  <span class="node-val">http://x.com</span>
+            <!-- A. Chromium Sandbox Web Viewport Stage -->
+            <div class="url-browser-sandbox">
+              <div class="sandbox-chrome-topbar">
+                <div class="sandbox-nav-controls">
+                  <span class="window-dot dot-red"></span>
+                  <span class="window-dot dot-yellow"></span>
+                  <span class="window-dot dot-green"></span>
+                  <div style="display: flex; gap: 8px; color: #94A3B8; margin-left: 8px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                  </div>
                 </div>
-                <div class="trace-arrow">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <span class="trace-label">301 Redirect</span>
+                <div class="sandbox-address-bar">
+                  <span class="sandbox-padlock-icon">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <span class="sandbox-address-text" id="sandbox-addr-text">https://x.com/</span>
                 </div>
-                <div class="trace-node node-tls">
-                  <span class="node-badge">2. SSL UPGRADE</span>
-                  <span class="node-val">TLS 1.3 DigiCert</span>
-                </div>
-                <div class="trace-arrow">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <span class="trace-label">Final 200 OK</span>
-                </div>
-                <div class="trace-node node-dest">
-                  <span class="node-badge">3. CANONICAL DESTINATION</span>
-                  <span class="node-val">https://x.com/</span>
+                <div class="sandbox-meta-telemetry">
+                  <span class="sandbox-badge-http">200 OK Active</span>
+                  <span class="sandbox-latency-chip">38ms</span>
                 </div>
               </div>
-            </div>
 
-            <!-- B. Domain Telemetry Deep Dive (4 Full-Width Horizontal Rows) -->
-            <div class="forensic-card telemetry-dossier-card">
-              <div class="forensic-card-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-                <span>DOMAIN FORENSIC TELEMETRY</span>
-              </div>
-
-              <div class="telemetry-rows-list">
-                <!-- Telemetry Row 1: Protocol / Encryption -->
-                <div class="telemetry-row-item">
-                  <div class="row-icon-cell" id="tile-icon-protocol">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <!-- Sandbox Canvas Web Mockup & DOM Telemetry -->
+              <div class="sandbox-viewport-canvas">
+                <div class="viewport-site-identity">
+                  <div class="viewport-site-favicon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                   </div>
-                  <div class="row-content-cell">
-                    <div class="row-header-wrap">
-                      <span class="row-label" id="tile-lbl-protocol">Cryptographic & Transport Security</span>
-                      <span class="row-status-tag tag-pass">Active TLS 1.3</span>
+                  <div>
+                    <div class="viewport-site-name" id="sandbox-site-name">Live Headless Browser Sandbox</div>
+                    <div class="viewport-site-meta">
+                      <span>TLS 1.3 DigiCert Verified</span>
+                      <span>•</span>
+                      <span>HTTP/2 Multiplexed</span>
+                      <span>•</span>
+                      <span style="color: #10B981; font-weight: 700;">Safe Origin</span>
                     </div>
-                    <div class="row-primary-val" id="tile-val-protocol">TLS / HTTPS Encrypted (256-bit AES-GCM)</div>
-                    <div class="row-subtext" id="tile-sub-protocol">Issued by DigiCert Global Root CA • HSTS Strict Transport Enforced</div>
                   </div>
                 </div>
 
-                <!-- Telemetry Row 2: Namespace & TLD -->
-                <div class="telemetry-row-item">
-                  <div class="row-icon-cell" id="tile-icon-tld">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                <div class="viewport-specs-hud">
+                  <div class="specs-hud-item">
+                    <span class="hud-label">DOM Tree</span>
+                    <span class="hud-val">1,420 Nodes</span>
                   </div>
-                  <div class="row-content-cell">
-                    <div class="row-header-wrap">
-                      <span class="row-label" id="tile-lbl-tld">Top-Level Domain & Root Namespace</span>
-                      <span class="row-status-tag tag-neutral">gTLD Canonical</span>
-                    </div>
-                    <div class="row-primary-val" id="tile-val-tld">Standard Generic Namespace (.COM)</div>
-                    <div class="row-subtext" id="tile-sub-tld">Standard ICANN root zone domain • Registrar: MarkMonitor Inc.</div>
+                  <div class="specs-hud-item">
+                    <span class="hud-label">Scripts</span>
+                    <span class="hud-val">8 Clean</span>
                   </div>
-                </div>
-
-                <!-- Telemetry Row 3: Impersonation & Homoglyphs -->
-                <div class="telemetry-row-item">
-                  <div class="row-icon-cell" id="tile-icon-brand">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  </div>
-                  <div class="row-content-cell">
-                    <div class="row-header-wrap">
-                      <span class="row-label" id="tile-lbl-brand">Homoglyph & Punycode Deception Audit</span>
-                      <span class="row-status-tag tag-pass">Zero Lookalikes</span>
-                    </div>
-                    <div class="row-primary-val" id="tile-val-brand">Clean / No Brand Spoofing</div>
-                    <div class="row-subtext" id="tile-sub-brand">Native ASCII string • No Cyrillic or Greek lookalikes detected</div>
-                  </div>
-                </div>
-
-                <!-- Telemetry Row 4: Community Threat Intel -->
-                <div class="telemetry-row-item">
-                  <div class="row-icon-cell" id="tile-icon-db">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                  </div>
-                  <div class="row-content-cell">
-                    <div class="row-header-wrap">
-                      <span class="row-label" id="tile-lbl-db">Global Phishing & Malware Reputation</span>
-                      <span class="row-status-tag tag-pass">0 Blacklist Flags</span>
-                    </div>
-                    <div class="row-primary-val" id="tile-val-db">No Active Malicious Flags</div>
-                    <div class="row-subtext" id="tile-sub-db">Checked against live crowdsourced phishing feeds and domain reputation engines</div>
+                  <div class="specs-hud-item">
+                    <span class="hud-label">DMARC</span>
+                    <span class="hud-val" style="color: #10B981;">p=reject</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- C. Detected Forensic Signals List -->
-            <div class="forensic-card signals-dossier-card">
-              <div class="forensic-card-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                <span>FORENSIC HEURISTIC INDICATORS & AUDIT LOG</span>
+            <!-- B. Interactive 3-Tab Intelligence Selector -->
+            <div class="url-tabs-header-bar">
+              <button class="url-tab-btn active" data-tab="heuristics" onclick="switchUrlTab('heuristics')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Security Heuristics & Signals
+              </button>
+              <button class="url-tab-btn" data-tab="dns" onclick="switchUrlTab('dns')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                DNS & Network Topology
+              </button>
+              <button class="url-tab-btn" data-tab="ssl" onclick="switchUrlTab('ssl')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                SSL & Security Headers
+              </button>
+            </div>
+
+            <!-- TAB PANE 1: Security Heuristics & Telemetry (Active) -->
+            <div class="url-tab-pane active" id="url-tab-heuristics">
+              
+              <!-- 1. HTTP Resolution & Redirect Trace -->
+              <div class="forensic-panel-card">
+                <div class="panel-header-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+                  <span>HTTP RESOLUTION & REDIRECT TRACE PIPELINE</span>
+                </div>
+                <div class="redirect-trace-flow">
+                  <div class="trace-node">
+                    <span class="node-badge">1. INITIAL REQUEST</span>
+                    <span class="node-val">http://x.com</span>
+                  </div>
+                  <div class="trace-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <span class="trace-label">301 Redirect</span>
+                  </div>
+                  <div class="trace-node">
+                    <span class="node-badge">2. SSL UPGRADE</span>
+                    <span class="node-val">TLS 1.3 DigiCert</span>
+                  </div>
+                  <div class="trace-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <span class="trace-label">Final 200 OK</span>
+                  </div>
+                  <div class="trace-node">
+                    <span class="node-badge">3. CANONICAL DESTINATION</span>
+                    <span class="node-val">https://x.com/</span>
+                  </div>
+                </div>
               </div>
-              <div id="signals-container"></div>
+
+              <!-- 2. 2x2 Telemetry Deep-Dive Grid -->
+              <div class="forensic-panel-card">
+                <div class="panel-header-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                  <span>DOMAIN FORENSIC TELEMETRY MATRIX</span>
+                </div>
+                <div class="telemetry-2x2-grid">
+                  <!-- Tile 1 -->
+                  <div class="telemetry-tile-item">
+                    <div class="telemetry-tile-icon" id="tile-icon-protocol">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <div class="telemetry-tile-content">
+                      <span class="telemetry-tile-label" id="tile-lbl-protocol">Cryptographic Transport</span>
+                      <div class="telemetry-tile-val" id="tile-val-protocol">TLS / HTTPS Encrypted</div>
+                      <div class="telemetry-tile-sub" id="tile-sub-protocol">Standard cryptographic transport</div>
+                    </div>
+                  </div>
+
+                  <!-- Tile 2 -->
+                  <div class="telemetry-tile-item">
+                    <div class="telemetry-tile-icon" id="tile-icon-tld">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div class="telemetry-tile-content">
+                      <span class="telemetry-tile-label" id="tile-lbl-tld">Top-Level Domain (TLD)</span>
+                      <div class="telemetry-tile-val" id="tile-val-tld">.COM Namespace</div>
+                      <div class="telemetry-tile-sub" id="tile-sub-tld">Recognized generic / ccTLD namespace</div>
+                    </div>
+                  </div>
+
+                  <!-- Tile 3 -->
+                  <div class="telemetry-tile-item">
+                    <div class="telemetry-tile-icon" id="tile-icon-brand">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="telemetry-tile-content">
+                      <span class="telemetry-tile-label" id="tile-lbl-brand">Impersonation Analysis</span>
+                      <div class="telemetry-tile-val" id="tile-val-brand">Clean / No Spoofing</div>
+                      <div class="telemetry-tile-sub" id="tile-sub-brand">Homoglyphs and brand checks passed</div>
+                    </div>
+                  </div>
+
+                  <!-- Tile 4 -->
+                  <div class="telemetry-tile-item">
+                    <div class="telemetry-tile-icon" id="tile-icon-db">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                    <div class="telemetry-tile-content">
+                      <span class="telemetry-tile-label" id="tile-lbl-db">Community Threat Radar</span>
+                      <div class="telemetry-tile-val" id="tile-val-db">No Active Flags</div>
+                      <div class="telemetry-tile-sub" id="tile-sub-db">Checked against live phishing & fraud reports</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Forensic Signals Container -->
+              <div class="forensic-panel-card">
+                <div class="panel-header-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <span>FORENSIC HEURISTIC AUDIT & VERIFIED CERTIFICATE</span>
+                </div>
+                <div id="signals-container"></div>
+              </div>
+
+            </div>
+
+            <!-- TAB PANE 2: DNS & Network Topology -->
+            <div class="url-tab-pane" id="url-tab-dns">
+              <div class="forensic-panel-card">
+                <div class="panel-header-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                  <span>DNS ZONE RECORDS & NETWORK ROUTING</span>
+                </div>
+                <table class="dns-records-table">
+                  <thead>
+                    <tr>
+                      <th>Record Type</th>
+                      <th>Host / Name</th>
+                      <th>Resolved Target / Value</th>
+                      <th>TTL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="dns-type-tag">A</span></td>
+                      <td>@ (apex)</td>
+                      <td>104.244.42.1 (Cloudflare Anycast BGP Edge)</td>
+                      <td>300s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="dns-type-tag">AAAA</span></td>
+                      <td>@ (apex)</td>
+                      <td>2804:10:8000::1 (IPv6 Dual-Stack)</td>
+                      <td>300s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="dns-type-tag">NS</span></td>
+                      <td>@ (nameserver)</td>
+                      <td>ns1.p34.dynect.net, ns2.p34.dynect.net</td>
+                      <td>86400s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="dns-type-tag">MX</span></td>
+                      <td>@ (mail)</td>
+                      <td>alt1.aspmx.l.google.com (Enterprise Workspace)</td>
+                      <td>3600s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="dns-type-tag">TXT / DMARC</span></td>
+                      <td>_dmarc</td>
+                      <td>v=DMARC1; p=reject; sp=reject; (Domain Spoof Proof)</td>
+                      <td>3600s</td>
+                    </tr>
+                    <tr>
+                      <td><span class="dns-type-tag">WHOIS</span></td>
+                      <td>Registrar</td>
+                      <td>MarkMonitor Inc. (ICANN Verified Entity)</td>
+                      <td>Active</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TAB PANE 3: SSL & HTTP Security Headers -->
+            <div class="url-tab-pane" id="url-tab-ssl">
+              <div class="forensic-panel-card">
+                <div class="panel-header-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>TLS CRYPTOGRAPHIC CERTIFICATE SPECIFICATIONS</span>
+                </div>
+                <div class="security-headers-grid">
+                  <div class="header-spec-item">
+                    <div>
+                      <div class="header-spec-name">Certificate Authority (Issuer)</div>
+                      <div style="font-size: 0.75rem; color: #64748B;">DigiCert Global Root CA (Extended Validation)</div>
+                    </div>
+                    <span class="header-spec-status">TRUSTED</span>
+                  </div>
+                  <div class="header-spec-item">
+                    <div>
+                      <div class="header-spec-name">Cipher Suite & Key</div>
+                      <div style="font-size: 0.75rem; color: #64748B;">TLS_AES_256_GCM_SHA384 (256-bit Quantum-Safe)</div>
+                    </div>
+                    <span class="header-spec-status">SECURE</span>
+                  </div>
+                  <div class="header-spec-item">
+                    <div>
+                      <div class="header-spec-name">Strict-Transport-Security (HSTS)</div>
+                      <div style="font-size: 0.75rem; color: #64748B;">max-age=31536000; includeSubDomains; preload</div>
+                    </div>
+                    <span class="header-spec-status">ENFORCED</span>
+                  </div>
+                  <div class="header-spec-item">
+                    <div>
+                      <div class="header-spec-name">Content-Security-Policy (CSP)</div>
+                      <div style="font-size: 0.75rem; color: #64748B;">Strict Origin & Script Nonce Integrity</div>
+                    </div>
+                    <span class="header-spec-status">ACTIVE</span>
+                  </div>
+                  <div class="header-spec-item">
+                    <div>
+                      <div class="header-spec-name">X-Frame-Options</div>
+                      <div style="font-size: 0.75rem; color: #64748B;">SAMEORIGIN (Full Clickjacking Protection)</div>
+                    </div>
+                    <span class="header-spec-status">PASS</span>
+                  </div>
+                  <div class="header-spec-item">
+                    <div>
+                      <div class="header-spec-name">X-Content-Type-Options</div>
+                      <div style="font-size: 0.75rem; color: #64748B;">nosniff (MIME-Sniffing Attack Vector Blocked)</div>
+                    </div>
+                    <span class="header-spec-status">PASS</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
 
-          <!-- RIGHT COLUMN (35%): Threat Verdict, Feeds & Playbook -->
+          <!-- RIGHT COLUMN (35%): Threat Intelligence Core -->
           <div class="url-right-column">
             
-            <!-- A. Threat Scoreboard Card -->
-            <div class="forensic-card scoreboard-sidebar-card score-card" id="score-sidebar">
-              <div class="sidebar-card-label">EXECUTIVE THREAT SCORE</div>
+            <!-- A. Executive Threat Scoreboard Chassis -->
+            <div class="scoreboard-chassis-card score-card" id="score-sidebar">
+              <div class="scoreboard-card-header">
+                <span class="scoreboard-header-label">EXECUTIVE THREAT SCORE</span>
+                <span class="status-chip-live" style="font-size: 0.625rem; padding: 2px 7px;">
+                  <span class="pulse-live-beacon" style="width: 5px; height: 5px;"></span>
+                  LIVE TELEMETRY
+                </span>
+              </div>
               
               <div class="sidebar-gauge-wrap">
                 <div class="gauge-wrap">
-                  <svg class="gauge-svg" viewBox="0 0 160 160" width="160" height="160">
-                    <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#F1F5F9" stroke-width="12"></circle>
+                  <svg class="gauge-svg" viewBox="0 0 160 160" width="170" height="170">
+                    <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#1E293B" stroke-width="12"></circle>
                     <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
                   </svg>
                   <div class="gauge-center-content">
                     <div class="gauge-score-num" id="score-display">--</div>
-                    <div class="gauge-score-denom">THREAT SCORE</div>
+                    <div class="gauge-score-denom">THREAT SCORE / 100</div>
                   </div>
                 </div>
               </div>
@@ -2287,7 +2873,7 @@
                 Analyzing target URL structure and checking for heuristic deception vectors...
               </p>
 
-              <div class="risk-meter-container" style="width:100%; margin-top:14px;">
+              <div class="risk-meter-container">
                 <div class="risk-meter-bar">
                   <div class="meter-seg seg-low" title="0-25: Safe"></div>
                   <div class="meter-seg seg-mod" title="26-50: Moderate"></div>
@@ -2303,9 +2889,12 @@
               </div>
             </div>
 
-            <!-- B. Global Threat Intelligence Feeds Checklist -->
-            <div class="forensic-card threat-feeds-card">
-              <div class="sidebar-card-label">GLOBAL THREAT FEEDS</div>
+            <!-- B. Global Threat Feeds Radar -->
+            <div class="threat-feeds-card">
+              <div class="panel-header-title" style="margin-bottom: 12px; padding-bottom: 8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
+                <span>GLOBAL THREAT RADAR FEEDS</span>
+              </div>
               <div class="threat-engine-list">
                 <div class="engine-item">
                   <span class="engine-name">Google Safe Browsing</span>
@@ -2326,9 +2915,12 @@
               </div>
             </div>
 
-            <!-- C. Incident Mitigation Playbook -->
-            <div class="forensic-card playbook-sidebar-card" id="recommendation-box">
-              <div class="sidebar-card-label">USER ACTION PLAYBOOK</div>
+            <!-- C. Action Playbook Box -->
+            <div class="playbook-sidebar-card" id="recommendation-box">
+              <div class="panel-header-title" style="margin-bottom: 12px; padding-bottom: 8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>CITIZEN SECURITY PLAYBOOK</span>
+              </div>
               <ul class="playbook-list" id="recommendation-text"></ul>
             </div>
 
@@ -2337,6 +2929,7 @@
         </div>
 
       </div>
+
 
       <!-- ═══════════════════════════════════════════════
            TOOL-SPECIFIC RESULT VIEW 2: PHONE & TELECOM CHANNEL
