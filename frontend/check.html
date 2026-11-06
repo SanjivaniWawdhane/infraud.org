@@ -536,23 +536,59 @@
               }
 
               .quick-sample-btn {
-                background: var(--surface);
-                border: 1px dashed var(--ink-200);
-                color: var(--ink-700);
+                background: #FFFFFF;
+                border: 1px solid #E2E8F0;
+                color: #1E293B;
                 font-size: 0.78125rem;
-                font-family: var(--mono);
-                padding: 4px 10px;
-                border-radius: 6px;
+                font-family: inherit;
+                padding: 5px 12px;
+                border-radius: 8px;
                 cursor: pointer;
-                transition: all 0.2s;
-                text-align: left;
+                transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
               }
               .quick-sample-btn:hover {
-                background: var(--ink-50);
-                border-color: var(--ink-400);
-                color: var(--ink-900);
+                background: #F8FAFC;
+                border-color: #94A3B8;
+                color: #0F172A;
                 transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
               }
+              .sample-dot-threat {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #EF4444;
+                box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+                animation: pulseThreatDot 2s infinite;
+                flex-shrink: 0;
+              }
+              .sample-dot-safe {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #10B981;
+                box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+                flex-shrink: 0;
+              }
+              @keyframes pulseThreatDot {
+                0% { transform: scale(0.95); opacity: 1; }
+                50% { transform: scale(1.25); opacity: 0.5; }
+                100% { transform: scale(0.95); opacity: 1; }
+              }
+              .sample-tag-pill {
+                font-size: 0.65rem;
+                font-weight: 700;
+                padding: 1px 6px;
+                border-radius: 4px;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+              }
+              .sample-tag-threat { background: #FEE2E2; color: #B91C1C; }
+              .sample-tag-safe { background: #DCFCE7; color: #15803D; }
 
               /* Themed CTA Buttons */
               .btn-tool-url {
@@ -695,9 +731,21 @@
               <!-- Quick Tests -->
               <div style="font-size: 0.78125rem; font-weight: 700; color: var(--ink-500); margin-bottom: 6px;">Try Live Targets:</div>
               <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'fake-sbi-secure-portal.xyz')">🚨 fake-sbi-secure-portal.xyz</button>
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'amazon-support-india.in')">🚨 amazon-support-india.in</button>
-                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'google.com')">✅ google.com</button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'fake-sbi-secure-portal.xyz')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">fake-sbi-secure-portal.xyz</span>
+                  <span class="sample-tag-pill sample-tag-threat">Phishing Clone</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'amazon-support-india.in')">
+                  <span class="sample-dot-threat"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">amazon-support-india.in</span>
+                  <span class="sample-tag-pill sample-tag-threat">Brand Spoof</span>
+                </button>
+                <button type="button" class="quick-sample-btn" onclick="fillAndAnalyze('url', 'google.com')">
+                  <span class="sample-dot-safe"></span>
+                  <span style="font-family: var(--mono); font-weight: 600;">google.com</span>
+                  <span class="sample-tag-pill sample-tag-safe">Verified</span>
+                </button>
               </div>
             </div>
 
