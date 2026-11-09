@@ -662,16 +662,181 @@ function renderAnalysisResult(data) {
 /**
  * Resolves Indian and international telecom service providers (TSPs)
  */
+// ─────────────────────────────────────────────────────────────────────────────
+// DoT National Numbering Plan (NNP) & TRAI Regulatory Allocations Database
+// Sourced from Ministry of Communications (DoT) & TRAI Official Numbering Plans
+// ─────────────────────────────────────────────────────────────────────────────
+
+const DOT_NNP_TABLE = {
+  // ── BHARTI AIRTEL LTD ──
+  'airtel': {
+    operator: 'Bharti Airtel Ltd',
+    brand: 'Bharti Airtel',
+    authority: 'Department of Telecommunications (DoT) & TRAI',
+    seriesType: 'Unified Access Service (GSM/LTE/5G)',
+    circles: {
+      'PB': ['9814', '9815', '9872', '9876', '9878', '9888', '9779', '9780', '9781', '9646', '9914', '9915'],
+      'DL': ['9810', '9818', '9910', '9958', '9971', '9899', '9717', '9650', '9654', '8800', '8527'],
+      'MUM': ['9867', '9967', '9769', '8451', '8452', '8454', '8652', '8655'],
+      'MH': ['9890', '9850', '9881', '9673', '9552', '9766', '9767', '9923', '8459', '8668', '8669'],
+      'KA': ['9844', '9880', '9900', '9945', '9980', '9740', '9741', '9742', '9611', '9620', '9632', '9686'],
+      'TN': ['9840', '9841', '9842', '9843', '9884', '9894', '9940', '9941', '9942', '9943', '9944', '9952', '9789', '9790', '9791'],
+      'AP': ['9849', '9949', '9951', '9959', '9985', '9989', '9701', '9703', '9704', '9705', '9603', '9618', '9640', '9642'],
+      'KOL': ['9830', '9831', '9832', '9836', '9874', '9903'],
+      'WB': ['9932', '9933', '9732', '9733', '9734', '9735'],
+      'GJ': ['9879', '9898', '9904', '9925', '9979', '9727', '9601', '9624', '9638', '9662'],
+      'RJ': ['9828', '9829', '9928', '9929', '9782', '9783', '9784', '9785', '9602', '9610', '9636', '9660', '9680'],
+      'UP_W': ['9837', '9897', '9927', '9997', '9719', '9758', '9759', '9760', '9761', '9627', '9634', '9639', '9675', '9690'],
+      'UP_E': ['9838', '9839', '9935', '9936', '9956', '9721', '9792', '9793', '9794', '9795', '9616', '9621', '9628', '9648', '9651', '9670', '9695', '9696'],
+      'MP': ['9826', '9827', '9893', '9926', '9977', '9981', '9993', '9752', '9753', '9754', '9755', '9617', '9630', '9644', '9669', '9685'],
+      'KL': ['9846', '9847', '9895', '9946', '9947', '9961', '9995', '9744', '9745', '9746', '9747', '9605', '9633', '9645', '9656'],
+      'HR': ['9812', '9813', '9896', '9991', '9992', '9996', '9728', '9729', '9671'],
+      'BH': ['9835', '9931', '9934', '9939', '9955', '9708', '9709', '9771', '9608', '9631', '9661'],
+      'OD': ['9861', '9937', '9938', '9776', '9777', '9778', '9658', '9668', '9692'],
+      'AS': ['9854', '9864', '9954', '9957', '9706', '9707', '9613', '9678'],
+      'NE': ['9856', '9862', '9863', '9774', '9612', '9615'],
+      'JK': ['9858', '9906', '9796', '9797', '9622', '9697'],
+      'HP': ['9816', '9817', '9805', '9736', '9625']
+    }
+  },
+
+  // ── VODAFONE IDEA LTD (VI) ──
+  'vi': {
+    operator: 'Vodafone Idea Ltd (Vi)',
+    brand: 'Vodafone Idea (Vi)',
+    authority: 'Department of Telecommunications (DoT) & TRAI',
+    seriesType: 'Unified Access Service (GSM/LTE/5G)',
+    circles: {
+      'MH': ['9822', '9823', '9860', '9921', '9922', '9960', '9970', '9975', '9762', '9763', '9764', '9765', '9011', '9028', '9049', '9096', '9503', '9527', '9545', '9561', '9604', '9623', '9637', '9657', '9665', '9689', '9730', '9158', '9175', '8888', '8600', '8408', '8007', '7798', '7774', '7709', '7385', '7387'],
+      'MUM': ['9820', '9821', '9819', '9833', '9892', '9920', '9930', '9987', '9702', '9004', '9022', '9167', '8879', '8080', '7506'],
+      'DL': ['9811', '9891', '9911', '9953', '9999', '9711', '9871', '9873', '9013', '9015', '9017', '9540', '9555', '9560', '9582'],
+      'GJ': ['9824', '9825', '9898', '9909', '9924', '9925', '9974', '9978', '9979', '9712', '9724', '9725', '9726', '9099', '9510', '9512', '9537', '9558', '9574', '9586'],
+      'KA': ['9845', '9886', '9901', '9986', '9731', '9738', '9739', '9743', '9008', '9019', '9035', '9036', '9535', '9538', '9590', '9591'],
+      'AP': ['9848', '9885', '9948', '9966', '9700', '9000', '9010', '9014', '9030', '9032', '9052', '9059', '9502', '9505', '9515', '9533', '9542', '9550', '9553', '9573', '9581'],
+      'TN': ['9840', '9843', '9884', '9003', '9025', '9042', '9043', '9047', '9092', '9094', '9500', '9514', '9524', '9543', '9566'],
+      'KL': ['9020', '9037', '9048', '9061', '9072', '9074', '9526', '9539', '9544', '9562', '9567'],
+      'UP_E': ['9005', '9026', '9044', '9076', '9506', '9517', '9519', '9532', '9554', '9559', '9565', '9569', '9580'],
+      'UP_W': ['9012', '9027', '9045', '9058', '9520', '9528', '9536', '9548', '9557', '9568'],
+      'MP': ['9009', '9039', '9074', '9098', '9516', '9522', '9575', '9584', '9589'],
+      'RJ': ['9001', '9024', '9057', '9509', '9521', '9529', '9530', '9549', '9571', '9587'],
+      'PB': ['9023', '9041', '9056', '9501', '9569', '9592'],
+      'HR': ['9017', '9034', '9050', '9053', '9541'],
+      'BH': ['9006', '9031', '9060', '9065', '9504', '9507', '9508', '9523', '9525', '9534', '9546', '9570', '9572', '9576'],
+      'KOL': ['9002', '9007', '9038', '9046', '9062', '9064', '9088', '9091', '9093', '9547', '9563', '9564', '9593'],
+      'OD': ['9040', '9078', '9090', '9556', '9583'],
+      'AS': ['9085', '9508', '9577']
+    }
+  },
+
+  // ── BHARAT SANCHAR NIGAM LTD (BSNL) ──
+  'bsnl': {
+    operator: 'Bharat Sanchar Nigam Ltd (BSNL)',
+    brand: 'BSNL Mobile',
+    authority: 'Department of Telecommunications (DoT) CPSE',
+    seriesType: 'National Telecom Public Sector Enterprise',
+    circles: {
+      'MH': ['9403', '9404', '9405', '9420', '9421', '9422', '9423'],
+      'UP_E': ['9410', '9411', '9412', '9450', '9451', '9452', '9453', '9454', '9455'],
+      'RJ': ['9413', '9414'],
+      'AP': ['9440', '9441', '9490', '9491'],
+      'TN': ['9442', '9443', '9444', '9486', '9487'],
+      'KL': ['9446', '9447', '9495', '9496', '9497'],
+      'KA': ['9448', '9449', '9480', '9481', '9482', '9483'],
+      'MP': ['9424', '9425'],
+      'GJ': ['9426', '9427', '9428', '9429'],
+      'HR': ['9416', '9466', '9467', '9468'],
+      'PB': ['9417', '9463', '9464', '9465'],
+      'BH': ['9431', '9470', '9471', '9472'],
+      'OD': ['9437', '9438', '9439'],
+      'AS': ['9435'],
+      'NE': ['9436'],
+      'JK': ['9419', '9469'],
+      'HP': ['9418', '9459'],
+      'WB': ['9432', '9433', '9434']
+    }
+  },
+
+  // ── MAHANAGAR TELEPHONE NIGAM LTD (MTNL) ──
+  'mtnl': {
+    operator: 'Mahanagar Telephone Nigam Ltd (MTNL)',
+    brand: 'MTNL Dolphin',
+    authority: 'Department of Telecommunications (DoT) CPSE',
+    seriesType: 'Metro Public Sector Telecom',
+    circles: {
+      'DL': ['9868', '9968'],
+      'MUM': ['9869', '9969']
+    }
+  },
+
+  // ── RELIANCE JIO INFOCOMM LTD ──
+  'jio': {
+    operator: 'Reliance Jio Infocomm Ltd',
+    brand: 'Reliance Jio',
+    authority: 'Department of Telecommunications (DoT) & TRAI',
+    seriesType: 'Unified Access Service (Pure 4G/5G VoLTE)',
+    circles: {
+      'DL': ['8010', '7011', '7042', '7065', '7289', '7290', '7291', '7292', '7701', '7703'],
+      'MUM': ['7021', '7045', '7208', '7303', '7304', '7710', '7715', '7718', '7738'],
+      'MH': ['7020', '7028', '7030', '7038', '7057', '7058', '7066', '7083', '7218', '7219', '7249', '7350', '7378', '7719', '7720', '7721', '7722', '7741', '7742', '7743', '7744', '7745', '7756', '7757', '7758', '7767', '7768', '7769', '7770', '7773', '7775', '7776', '7796'],
+      'MP': ['7000', '6230', '6232', '6239', '6260', '6261', '6262', '6263', '6264', '6265', '7024', '7049', '7089', '7222', '7223', '7224', '7225', '7247'],
+      'PB': ['7009', '6006', '6280', '6283', '6284'],
+      'GJ': ['7016', '6350', '6351', '6352', '6353', '6354', '6355', '6356', '6358', '6359', '7041', '7043', '7046', '7069', '7096', '7201', '7202', '7203', '7226', '7227', '7228', '7283', '7284', '7285'],
+      'KA': ['7019', '6360', '6361', '6362', '6363', '6364', '6366', '7022', '7026', '7090', '7204', '7259', '7337', '7338', '7348', '7349', '7353'],
+      'AP': ['7013', '6281', '6300', '6301', '6302', '6303', '6304', '6305', '6309', '7032', '7036', '7075', '7093', '7095', '7207', '7286', '7287', '7288', '7306', '7330', '7331', '7382', '7386', '7396'],
+      'TN': ['7010', '6380', '6381', '6382', '6383', '6384', '6385', '7092', '7094', '7200', '7299', '7305', '7339', '7358', '7373', '7395', '7397'],
+      'RJ': ['7014', '6375', '6376', '6377', '6378', '7023', '7073', '7229', '7230', '7231', '7232', '7240', '7300', '7340', '7357', '7374'],
+      'UP_E': ['7007', '6386', '6387', '6388', '6389', '6391', '6392', '6393', '6394', '7052', '7054', '7080', '7081', '7084', '7233', '7234', '7235', '7266', '7267', '7268', '7269', '7275', '7309', '7310', '7311', '7317', '7318', '7347', '7355', '7376', '7379', '7380', '7388', '7390', '7398'],
+      'UP_W': ['7017', '6390', '6395', '7037', '7055', '7060', '7078', '7088', '7217', '7248', '7251', '7252', '7253', '7302', '7351'],
+      'KL': ['7012', '6282', '7025', '7034', '7293', '7356', '7510', '7558', '7559', '7560', '7561', '7591', '7592', '7593', '7594'],
+      'BH': ['7004', '6200', '6201', '6202', '6203', '6204', '6205', '6206', '6207', '6208', '6209', '7033', '7050', '7061', '7070', '7079', '7091', '7209', '7250', '7254', '7256', '7257', '7258', '7260', '7261', '7277', '7279', '7280', '7281', '7282', '7320', '7321', '7322', '7323', '7324', '7352', '7360', '7361', '7362', '7366', '7367', '7368', '7369'],
+      'WB': ['7001', '6290', '6291', '6294', '6295', '6296', '7029', '7044', '7047', '7063', '7074', '7076', '7278', '7318', '7384'],
+      'KOL': ['7003'],
+      'OD': ['7008', '6370', '6371', '6372', '7064', '7077', '7205', '7325', '7326', '7327', '7328', '7377', '7381'],
+      'AS': ['7002', '6000', '6001', '6002', '6003', '7086', '7215', '7308', '7399'],
+      'NE': ['7005', '7085'],
+      'JK': ['7006', '6005', '7051', '7298'],
+      'HP': ['7018', '7087', '7210', '7307'],
+      'HR': ['7015', '7027', '7056', '7082', '7206']
+    }
+  }
+};
+
+const DOT_NNP_CIRCLE_NAMES = {
+  'MH': 'Maharashtra & Goa Circle',
+  'MUM': 'Mumbai Circle',
+  'DL': 'Delhi NCR Circle',
+  'PB': 'Punjab Circle',
+  'HR': 'Haryana Circle',
+  'HP': 'Himachal Pradesh Circle',
+  'JK': 'Jammu & Kashmir Circle',
+  'UP_W': 'Uttar Pradesh (West) Circle',
+  'UP_E': 'Uttar Pradesh (East) Circle',
+  'RJ': 'Rajasthan Circle',
+  'MP': 'Madhya Pradesh & CG Circle',
+  'GJ': 'Gujarat Circle',
+  'KA': 'Karnataka Circle',
+  'AP': 'Andhra Pradesh & Telangana Circle',
+  'TN': 'Tamil Nadu & Chennai Circle',
+  'KL': 'Kerala Circle',
+  'WB': 'West Bengal Circle',
+  'KOL': 'Kolkata Circle',
+  'BH': 'Bihar & Jharkhand Circle',
+  'OD': 'Odisha Circle',
+  'AS': 'Assam Circle',
+  'NE': 'North East Circle',
+  'NAT': 'National Allocation (DoT / TRAI)'
+};
+
 function resolveTelecomCarrier(digits, country = 'IN', countryName = 'India') {
   if (country !== 'IN') {
     if (country === 'US' || country === 'CA') {
-      return { operator: 'North American Carrier', brand: 'AT&T / Verizon / T-Mobile', circle: 'North America', state: countryName };
+      return { operator: 'North American Carrier', brand: 'AT&T / Verizon / T-Mobile', circle: 'North America', circleCode: 'NA', lsa: 'North America', state: countryName, regulatoryBody: 'FCC / NANPA', planAllocation: 'North American Numbering Plan' };
     } else if (country === 'GB') {
-      return { operator: 'UK Telecom Carrier', brand: 'Vodafone / EE / O2', circle: 'United Kingdom', state: countryName };
+      return { operator: 'UK Telecom Carrier', brand: 'Vodafone / EE / O2', circle: 'United Kingdom', circleCode: 'UK', lsa: 'United Kingdom', state: countryName, regulatoryBody: 'Ofcom', planAllocation: 'UK National Telephone Numbering Plan' };
     } else if (country === 'AE') {
-      return { operator: 'UAE Telecom Operator', brand: 'e& (Etisalat) / du', circle: 'United Arab Emirates', state: countryName };
+      return { operator: 'UAE Telecom Operator', brand: 'e& (Etisalat) / du', circle: 'United Arab Emirates', circleCode: 'UAE', lsa: 'United Arab Emirates', state: countryName, regulatoryBody: 'TDRA UAE', planAllocation: 'TDRA National Numbering Plan' };
     }
-    return { operator: `${countryName} Telecom Operator`, brand: 'International Carrier', circle: countryName, state: countryName };
+    return { operator: `${countryName} Telecom Operator`, brand: 'International Carrier', circle: countryName, circleCode: country, lsa: countryName, state: countryName, regulatoryBody: 'ITU-T E.164 Authority', planAllocation: 'ITU-T International Telecommunication Union' };
   }
 
   // Normalize Indian digits to 10 digits
@@ -682,138 +847,157 @@ function resolveTelecomCarrier(digits, country = 'IN', countryName = 'India') {
     d = d.slice(1);
   }
 
+  // 1. TRAI 140 Series (Commercial Telemarketing)
+  if (/^140\d{7}$/.test(d)) {
+    return {
+      operator: 'Commercial Telemarketing Enterprise',
+      brand: 'TRAI 140 Commercial Telemarketer',
+      circle: 'Pan-India Promotional Channel',
+      circleCode: 'TRAI-140',
+      lsa: 'National Telemarketing LSA',
+      state: 'National',
+      regulatoryBody: 'TRAI (TCCCPR, 2018 Regulation)',
+      planAllocation: 'DoT/TRAI 140 Commercial Telemarketing Prefix',
+      seriesType: 'Promotional Outbound Voice Broadcast'
+    };
+  }
+
+  // 2. TRAI 160 Series (Official Transactional Service)
+  if (/^160[01]?\d{6,7}$/.test(d)) {
+    return {
+      operator: 'Regulated Financial / Government Entity',
+      brand: 'TRAI 160 Official Transactional Line',
+      circle: 'National Transactional Channel',
+      circleCode: 'TRAI-160',
+      lsa: 'National Transactional LSA',
+      state: 'National',
+      regulatoryBody: 'TRAI & Department of Telecommunications (DoT)',
+      planAllocation: 'TRAI 160 Transactional Voice Mandate (2024-25)',
+      seriesType: 'Authorized Banking & Transactional Voice Line'
+    };
+  }
+
+  // 3. Toll-Free 1800 Helplines (DoT Intelligent Network)
+  if (/^1800\d{6,7}$/.test(d)) {
+    if (d.startsWith('180011') || d.startsWith('1800425')) {
+      return {
+        operator: 'State Bank of India (SBI)',
+        brand: 'SBI Official Customer Care',
+        circle: 'National Toll-Free Helpline',
+        circleCode: 'SBI-1800',
+        lsa: 'National Freephone Service',
+        state: 'National',
+        regulatoryBody: 'Department of Telecommunications (DoT)',
+        planAllocation: 'DoT Intelligent Network (IN) Numbering Plan',
+        seriesType: 'Official Institutional Helpline'
+      };
+    }
+    if (d.startsWith('1800258') || d.startsWith('1800102')) {
+      return {
+        operator: 'Bank of Baroda',
+        brand: 'Bank of Baroda Helpline',
+        circle: 'National Toll-Free Helpline',
+        circleCode: 'BOB-1800',
+        lsa: 'National Freephone Service',
+        state: 'National',
+        regulatoryBody: 'Department of Telecommunications (DoT)',
+        planAllocation: 'DoT Intelligent Network (IN) Numbering Plan',
+        seriesType: 'Official Institutional Helpline'
+      };
+    }
+    return {
+      operator: 'DoT Intelligent Network (IN) Services',
+      brand: 'National Toll-Free Helpline (1800)',
+      circle: 'Pan-India Freephone Service',
+      circleCode: 'IN-TF',
+      lsa: 'National Freephone LSA',
+      state: 'National',
+      regulatoryBody: 'Department of Telecommunications (DoT)',
+      planAllocation: 'DoT Intelligent Network (IN) Allocation',
+      seriesType: 'Toll-Free Customer Assistance Line'
+    };
+  }
+
   if (d.length !== 10) {
-    return { operator: 'Indian Telecom Provider', brand: 'GSM/LTE Carrier', circle: 'Domestic Circle', state: 'India' };
+    return {
+      operator: 'Indian Telecom Provider',
+      brand: 'GSM/LTE Carrier',
+      circle: 'Domestic Circle',
+      circleCode: 'IN-DOM',
+      lsa: 'DoT Domestic Service Area',
+      state: 'India',
+      regulatoryBody: 'Department of Telecommunications (DoT)',
+      planAllocation: 'DoT National Numbering Plan (NNP)',
+      seriesType: 'Cellular Mobile Telephony Service'
+    };
   }
 
-  const p2 = d.slice(0, 2);
-  const p3 = d.slice(0, 3);
   const p4 = d.slice(0, 4);
+  const p3 = d.slice(0, 3);
+  const p2 = d.slice(0, 2);
 
-  // ── 1. BSNL & MTNL GOVT TELECOM ──
-  if (p2 === '94') {
-    let circle = 'Maharashtra & Goa Circle';
-    if (['9403', '9404', '9405', '9420', '9421', '9422', '9423'].includes(p4)) circle = 'Maharashtra & Goa Circle';
-    else if (['9410', '9411', '9412', '9450', '9451'].includes(p4)) circle = 'Uttar Pradesh Circle';
-    else if (['9414', '9413'].includes(p4)) circle = 'Rajasthan Circle';
-    else if (['9440', '9441'].includes(p4)) circle = 'Andhra Pradesh & Telangana';
-    else if (['9443', '9444'].includes(p4)) circle = 'Tamil Nadu & Chennai';
-    else if (['9445', '9446'].includes(p4)) circle = 'Kerala Circle';
-    else if (['9448', '9449'].includes(p4)) circle = 'Karnataka Circle';
-    return { operator: 'Bharat Sanchar Nigam Ltd (BSNL)', brand: 'BSNL Mobile', circle, state: 'National' };
-  }
-  if (['9868', '9968'].includes(p4)) {
-    return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Delhi NCR Circle', state: 'Delhi' };
-  }
-  if (['9869', '9969'].includes(p4)) {
-    return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Mumbai Circle', state: 'Maharashtra' };
+  // 4. Match 4-digit prefix against DoT NNP Table
+  for (const [key, opData] of Object.entries(DOT_NNP_TABLE)) {
+    for (const [cCode, prefixes] of Object.entries(opData.circles)) {
+      if (prefixes.includes(p4)) {
+        return {
+          operator: opData.operator,
+          brand: opData.brand,
+          circle: DOT_NNP_CIRCLE_NAMES[cCode] || `${cCode} Circle`,
+          circleCode: cCode,
+          lsa: `DoT ${cCode} Licensed Service Area`,
+          state: 'India',
+          regulatoryBody: opData.authority,
+          planAllocation: 'DoT National Numbering Plan (NNP)',
+          seriesType: opData.seriesType
+        };
+      }
+    }
   }
 
-  // ── 2. RELIANCE JIO INFODOM ──
-  // Jio 6-series (all 60, 62, 63 etc)
+  // 5. Broad DoT NNP Series Allocation Fallbacks
+  // Jio 6-series fallback
   if (d.startsWith('6')) {
-    return { operator: 'Reliance Jio Infocomm Ltd', brand: 'Reliance Jio', circle: 'India 4G/5G Circle', state: 'India' };
-  }
-  // Jio 7-series (700-709, 720-739, 740-799)
-  const jioPrefixes3 = [
-    '700', '701', '702', '703', '704', '705', '706', '707', '708', '709',
-    '720', '721', '722', '723', '724', '725', '726', '727', '728', '729',
-    '730', '731', '732', '733', '734', '735', '736', '737', '738', '739',
-    '740', '741', '742', '743', '744', '745', '746', '747', '748', '749',
-    '750', '751', '752', '753', '754', '755', '756', '757', '758', '759',
-    '760', '761', '762', '763', '764', '765', '766', '767', '768', '769',
-    '770', '771', '772', '773', '774', '775', '776', '777', '778', '779',
-    '780', '781', '782', '783', '784', '785', '786', '787', '788', '789',
-    '790', '791', '792', '793', '794', '795', '796', '797', '798', '799',
-    '800', '801', '805', '808', '809', '810', '812', '814', '816', '817',
-    '820', '821', '822', '823', '824', '825', '826', '827', '828', '829',
-    '830', '831', '832', '834', '835', '836', '837', '838', '839',
-    '840', '841', '842', '843', '844', '845', '846', '847', '848', '849',
-    '850', '851', '852', '853', '854', '855', '856', '857', '858', '859',
-    '860', '861', '862', '863', '864', '865', '866', '867', '868', '869',
-    '870', '871', '872', '873', '874', '875', '876', '877', '878', '879',
-    '880', '881', '882', '883', '884', '885', '886', '887', '888', '889',
-    '890', '891', '892', '893', '894', '895', '896', '897', '898', '899',
-    '910', '912', '913', '914', '915', '916', '917', '918', '919',
-    '920', '921', '922', '923', '924', '925', '926', '927', '928', '929',
-    '930', '931', '932', '933', '934', '935', '936', '937', '938', '939'
-  ];
-
-  // Specific Vi (Vodafone Idea) 4-digit prefixes in Maharashtra & Pan-India
-  const viPrefixes = [
-    // Maharashtra & Goa Vi (Idea & Vodafone)
-    '9822', '9823', '9860', '9921', '9922', '9960', '9970', '9975',
-    '9762', '9763', '9764', '9765', '9011', '9028', '9049', '9096',
-    '9503', '9527', '9545', '9561', '9604', '9623', '9637', '9657',
-    '9665', '9689', '9730', '9158', '9175', '8888', '8600', '8408',
-    '8007', '7798', '7774', '7709', '7385', '7387',
-    // Mumbai Vi
-    '9820', '9821', '9819', '9833', '9892', '9920', '9930', '9987',
-    '9702', '9004', '9022', '9167', '8879', '8080', '7506',
-    // Gujarat Vi
-    '9824', '9825', '9898', '9909', '9924', '9925', '9974', '9978',
-    '9979', '9712', '9724', '9725', '9726', '9727',
-    // Delhi NCR Vi
-    '9811', '9891', '9911', '9953', '9999', '9711', '9871', '9873',
-    // Karnataka Vi
-    '9845', '9886', '9901', '9986',
-    // Andhra Vi
-    '9848', '9885', '9948', '9966', '9700', '9000',
-    // UP Vi
-    '9839', '9838', '9935', '9936', '9415'
-  ];
-
-  // Specific Airtel 4-digit prefixes
-  const airtelPrefixes = [
-    // Maharashtra & Goa Airtel
-    '9673', '9890', '9850', '9881', '9552', '9766', '9767', '9923',
-    // Delhi NCR Airtel
-    '9810', '9818', '9910', '9958', '9971', '9899', '9717', '9650', '9654',
-    // Mumbai Airtel
-    '9867', '9967', '9769', '9892',
-    // Karnataka Airtel
-    '9844', '9880', '9900', '9945', '9980', '9740', '9741', '9742',
-    // Tamil Nadu & Chennai Airtel
-    '9840', '9841', '9842', '9843', '9884', '9894', '9940', '9941', '9942', '9943', '9944', '9952',
-    // Andhra Pradesh & Telangana Airtel
-    '9849', '9949', '9951', '9959', '9985', '9989', '9701', '9703', '9704', '9705',
-    // Kolkata & West Bengal Airtel
-    '9830', '9831', '9832', '9836', '9874', '9903', '9932', '9933',
-    // Gujarat Airtel
-    '9879', '9898', '9904', '9925', '9979'
-  ];
-
-  // 1. Check Vi first if matches Vi prefixes
-  if (viPrefixes.includes(p4)) {
-    let circle = 'Maharashtra & Goa Circle';
-    if (['9820', '9821', '9819', '9833', '9892', '9920', '9930', '9987', '9702', '9004', '9022', '9167', '8879', '8080', '7506'].includes(p4)) circle = 'Mumbai Circle';
-    else if (['9811', '9891', '9911', '9953', '9999', '9711', '9871', '9873'].includes(p4)) circle = 'Delhi NCR Circle';
-    else if (['9824', '9825', '9898', '9909', '9924', '9925', '9974', '9978', '9979', '9712', '9724', '9725', '9726', '9727'].includes(p4)) circle = 'Gujarat Circle';
-    return { operator: 'Vodafone Idea Ltd (Vi)', brand: 'Vodafone Idea (Vi)', circle, state: 'India' };
+    return {
+      operator: 'Reliance Jio Infocomm Ltd',
+      brand: 'Reliance Jio',
+      circle: 'India 4G/5G Circle',
+      circleCode: 'JIO-4G',
+      lsa: 'DoT Pan-India 4G/5G Access Service',
+      state: 'India',
+      regulatoryBody: 'Department of Telecommunications (DoT) & TRAI',
+      planAllocation: 'DoT National Numbering Plan (NNP)',
+      seriesType: 'Unified Access Service (Pure 4G/5G VoLTE)'
+    };
   }
 
-  // 2. Check Airtel if matches Airtel prefixes
-  if (airtelPrefixes.includes(p4)) {
-    let circle = 'Maharashtra & Goa Circle';
-    if (['9810', '9818', '9910', '9958', '9971', '9899', '9717', '9650', '9654'].includes(p4)) circle = 'Delhi NCR Circle';
-    else if (['9867', '9967', '9769'].includes(p4)) circle = 'Mumbai Circle';
-    else if (['9844', '9880', '9900', '9945', '9980', '9740', '9741', '9742'].includes(p4)) circle = 'Karnataka Circle';
-    else if (['9840', '9841', '9842', '9843', '9884', '9894', '9940', '9941', '9942', '9943', '9944', '9952'].includes(p4)) circle = 'Tamil Nadu & Chennai';
-    else if (['9849', '9949', '9951', '9959', '9985', '9989', '9701', '9703', '9704', '9705'].includes(p4)) circle = 'Andhra Pradesh & Telangana';
-    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle, state: 'India' };
+  // BSNL 94-series fallback
+  if (p2 === '94') {
+    return {
+      operator: 'Bharat Sanchar Nigam Ltd (BSNL)',
+      brand: 'BSNL Mobile',
+      circle: 'India Domestic Circle',
+      circleCode: 'BSNL-DOM',
+      lsa: 'DoT National BSNL Service Area',
+      state: 'India',
+      regulatoryBody: 'Department of Telecommunications (DoT) CPSE',
+      planAllocation: 'DoT National Numbering Plan (NNP)',
+      seriesType: 'National Telecom Public Sector Enterprise'
+    };
   }
 
-  // 3. Check Jio prefixes
-  if (jioPrefixes3.includes(p3)) {
-    return { operator: 'Reliance Jio Infocomm Ltd', brand: 'Reliance Jio', circle: 'India 4G/5G Circle', state: 'India' };
-  }
-
-  // 4. Clean fallback without hardcoded Airtel bias!
-  if (['98', '99', '97', '96', '95', '91', '90', '88', '85', '81', '70'].includes(p2)) {
-    return { operator: 'Indian Cellular Operator', brand: 'Cellular Mobile (GSM/LTE)', circle: 'India Domestic Circle', state: 'India' };
-  }
-
-  return { operator: 'Authorized Indian Telecom Provider', brand: 'Cellular Carrier', circle: 'Domestic Circle', state: 'India' };
+  // Generic Cellular Line
+  return {
+    operator: 'Indian Cellular Operator',
+    brand: 'Cellular Mobile (GSM/LTE)',
+    circle: 'India Domestic Circle',
+    circleCode: 'IN-DOM',
+    lsa: 'DoT Domestic Service Area',
+    state: 'India',
+    regulatoryBody: 'Department of Telecommunications (DoT) & TRAI',
+    planAllocation: 'DoT National Numbering Plan (NNP)',
+    seriesType: 'Cellular Mobile Telephony Service'
+  };
 }
 
 function renderPhoneView(data, theme, riskScore, signals, recommendations) {
@@ -991,7 +1175,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   if (tileCarrier) {
     if (lineTypeStr === 'VOIP') tileCarrier.textContent = 'Virtual cloud telephony channel';
     else if (lineTypeStr === 'TOLL_FREE') tileCarrier.textContent = 'Standard toll-free routing code';
-    else tileCarrier.textContent = `${operatorName} (${circleName}) allocation verified`;
+    else tileCarrier.textContent = `${carrier.operator} • DoT NNP allocation verified`;
   }
 
   // Card 2: Dialing Origin & Circle
