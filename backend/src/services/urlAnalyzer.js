@@ -12,6 +12,9 @@
  * - Clearly disclaims that a score does not guarantee safety nor confirm fraud.
  */
 
+const fs = require('fs');
+const path = require('path');
+
 // Curated list of high-abuse / low-barrier TLDs frequently abused in disposable phishing campaigns
 const SUSPICIOUS_TLDS = new Set([
   'tk', 'ml', 'ga', 'cf', 'gq', // Historical free ccTLDs
@@ -112,6 +115,51 @@ function isIpAddress(hostname) {
 }
 
 /**
+ * Checks central community reports database for existing complaints on this domain/URL.
+ */
+function checkCommunityUrlReports(targetUrl, hostname) {
+  try {
+    const candidates = [
+      path.resolve(__dirname, '../../../frontend/data/reports.json'),
+      path.resolve(__dirname, '../../frontend/data/reports.json'),
+      path.resolve(__dirname, '../data/reports.json'),
+      path.resolve('frontend/data/reports.json')
+    ];
+    let filePath = null;
+    for (const c of candidates) {
+      if (fs.existsSync(c)) { filePath = c; break; }
+    }
+    if (!filePath) return null;
+
+    const reports = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const cleanHost = (hostname || '').toLowerCase().replace(/^www\./, '');
+    const cleanTarget = (targetUrl || '').toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+    const matches = reports.filter(r => {
+      if (!r.identifier) return false;
+      if (r.type && !r.type.toLowerCase().includes('web') && !r.type.toLowerCase().includes('url') && !r.type.toLowerCase().includes('site')) return false;
+      if (r.status && r.status !== 'approved') return false;
+      const rId = String(r.identifier).toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '').replace(/^www\./, '');
+      const rHost = rId.split('/')[0].split(':')[0];
+      return cleanHost === rHost || cleanHost.endsWith('.' + rHost) || rHost.endsWith('.' + cleanHost) || cleanTarget === rId;
+    });
+
+    if (matches.length > 0) {
+      return {
+        type: 'COMMUNITY_REPORTED_PHISHING',
+        title: `Community Cyber Threat Report (${matches.length} Flag${matches.length > 1 ? 's' : ''})`,
+        description: `This web domain is actively flagged in the INFRAUD community fraud database: "${matches[0].evidence || 'Reported phishing or fraudulent clone'}" (Reported by: ${matches[0].reporterName || 'Community User'})`,
+        severity: 'critical',
+        weight: 90,
+        count: matches.length,
+        match: matches[0]
+      };
+    }
+  } catch (e) {}
+  return null;
+}
+
+/**
  * Analyzes a URL using transparent, explainable heuristic signals.
  * @param {string} rawUrl 
  * @returns {object} Analysis result
@@ -133,6 +181,23 @@ function analyzeUrl(rawUrl) {
 
   const signals = [];
   let rawScore = 0;
+
+  // ----------------------------------------------------
+  // Heuristic 0: Community Threat Reports Check (reports.json)
+  // ----------------------------------------------------
+  const communitySignal = checkCommunityUrlReports(rawUrl, hostname);
+  let communityReportCount = 0;
+  if (communitySignal) {
+    communityReportCount = communitySignal.count;
+    signals.push({
+      id: communitySignal.type,
+      title: communitySignal.title,
+      description: communitySignal.description,
+      severity: communitySignal.severity,
+      weight: communitySignal.weight
+    });
+    rawScore = Math.max(rawScore, communitySignal.weight);
+  }
 
   // ----------------------------------------------------
   // Signal 1: Insecure Protocol (HTTP vs HTTPS)
@@ -316,7 +381,9 @@ function analyzeUrl(rawUrl) {
   }
 
   let assessmentStatus;
-  if (signals.length === 0) {
+  if (communitySignal) {
+    assessmentStatus = 'community_threat_flagged';
+  } else if (signals.length === 0) {
     assessmentStatus = 'insufficient_evidence';
   } else {
     assessmentStatus = 'heuristic_signals_detected';
@@ -326,6 +393,9 @@ function analyzeUrl(rawUrl) {
   // Contextual Recommendations
   // ----------------------------------------------------
   const recommendations = [];
+  if (communitySignal) {
+    recommendations.push('This domain is actively flagged in community fraud reports. Do not enter passwords, OTPs, or financial information.');
+  }
   if (isIp) {
     recommendations.push('Do not enter passwords, credit card numbers, or private credentials on IP-based addresses.');
   }
@@ -337,7 +407,7 @@ function analyzeUrl(rawUrl) {
   }
   if (signals.length === 0) {
     recommendations.push('This website address looks genuine and clean. However, always double-check the domain name before entering passwords or payment details.');
-  } else {
+  } else if (!communitySignal) {
     recommendations.push('Verify the identity of the sender through a known, independent communication channel before taking action.');
   }
 
@@ -348,6 +418,7 @@ function analyzeUrl(rawUrl) {
     riskScore,
     riskLevel,
     assessmentStatus,
+    communityReportCount,
     signalsCount: signals.length,
     signals,
     recommendations,

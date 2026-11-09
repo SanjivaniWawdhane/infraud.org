@@ -3,69 +3,129 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.join(__dirname, '..', '..', 'data');
-const DATA_FILE = path.join(DATA_DIR, 'reports.json');
 const RETENTION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+function getReportsFilePath() {
+  const candidates = [
+    path.resolve(__dirname, '../../../frontend/data/reports.json'),
+    path.resolve(__dirname, '../../frontend/data/reports.json'),
+    path.resolve(__dirname, '../data/reports.json'),
+    path.resolve(__dirname, '../../data/reports.json'),
+    path.resolve('frontend/data/reports.json')
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  const defaultPath = path.resolve(__dirname, '../../../frontend/data/reports.json');
+  const dir = path.dirname(defaultPath);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return defaultPath;
 }
 
 // Default seed reports if file is empty
 const SEED_DEFAULTS = [
   {
-    id: 'seed-1',
-    identifier: 'google.com',
-    type: 'Website',
-    risk: 'High Risk',
-    evidence: 'this is the test for the report submit',
-    reporterName: 'Community User',
+    id: 'seed-phone-fedex',
+    identifier: '+91 98765 43210',
+    type: 'Phone',
+    risk: 'Critical',
+    evidence: 'FedEx Parcel Contraband Scam. Automated caller claims parcel seized at customs with illegal narcotics.',
+    reporterName: 'Amit Sharma (Pune)',
     reporterEmail: '',
     status: 'approved'
   },
   {
-    id: 'seed-2',
+    id: 'seed-phone-digital-arrest',
+    identifier: '+91 80102 37029',
+    type: 'Phone',
+    risk: 'Critical',
+    evidence: 'Digital Arrest Scam. Falsely poses as CBI / Mumbai Police demanding video interrogation and urgent funds transfer.',
+    reporterName: 'Sanjay Deshmukh (Nagpur)',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-site-sbi',
     identifier: 'fake-sbi-secure-portal.xyz',
     type: 'Website',
     risk: 'Critical',
     evidence: 'Phishing clone of bank portal requesting OTP and netbanking credentials.',
-    reporterName: 'Rajesh',
+    reporterName: 'Rajesh (Mumbai)',
     reporterEmail: 'rajesh@example.com',
     status: 'approved'
   },
   {
-    id: 'seed-3',
+    id: 'seed-phone-electricity',
+    identifier: '+91 70001 23456',
+    type: 'Phone',
+    risk: 'Critical',
+    evidence: 'Electricity Bill Disconnection SMS Scam. Threatens power disconnection tonight unless fraudulent officer is called.',
+    reporterName: 'Pooja Kulkarni (Nashik)',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-site-amazon',
     identifier: 'amazon-support-india.in',
     type: 'Website',
     risk: 'Critical',
-    evidence: 'Impersonates Amazon. Asks for OTP and card details. Multiple reports.',
+    evidence: 'Impersonates Amazon Customer Support. Asks for OTP and credit card numbers.',
     reporterName: 'Cyber Cell',
     reporterEmail: '',
     status: 'approved'
   },
   {
-    id: 'seed-4',
-    identifier: '+91 98765 43210',
+    id: 'seed-phone-police',
+    identifier: '+91 98229 98877',
     type: 'Phone',
-    risk: 'High Risk',
-    evidence: 'FedEx parcel scam call. Threatens legal action.',
-    reporterName: 'Amit Sharma',
+    risk: 'Critical',
+    evidence: 'Digital Arrest Scam. Falsely poses as Crime Branch officer threatening urgent video arrest warrant.',
+    reporterName: 'Sanjay Deshmukh (Nagpur)',
     reporterEmail: '',
     status: 'approved'
   },
   {
-    id: 'seed-5',
+    id: 'seed-email-paytm',
     identifier: 'paytm-kyc-verify@gmail.com',
     type: 'Email',
     risk: 'Critical',
-    evidence: 'Fake KYC notice. Uses generic gmail address instead of official domain.',
-    reporterName: 'Sneha',
+    evidence: 'Fake KYC notice. Uses generic gmail address instead of official Paytm domain.',
+    reporterName: 'Sneha (Bengaluru)',
     reporterEmail: '',
     status: 'approved'
   },
   {
-    id: 'seed-6',
+    id: 'seed-phone-task',
+    identifier: '+91 70210 99887',
+    type: 'Phone',
+    risk: 'High Risk',
+    evidence: 'Telegram Task & YouTube Like Job Scam. Prompts victims into paying prepaid deposits for fake crypto tasks.',
+    reporterName: 'Rahul More (Thane)',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-site-flipkart',
+    identifier: 'flipkart-big-billion-offers.link',
+    type: 'Website',
+    risk: 'High Risk',
+    evidence: 'Non-standard TLD (.link). Cloned interface of e-commerce festive sale collecting payment cards.',
+    reporterName: 'Community User',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-phone-utility',
+    identifier: '+91 90110 12345',
+    type: 'Phone',
+    risk: 'High Risk',
+    evidence: 'Urgent utility bill notice scam demanding immediate payment over phone to prevent cutoff.',
+    reporterName: 'Pooja Kulkarni (Nashik)',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-upi-safe',
     identifier: 'johndoe@ybl',
     type: 'UPI ID',
     risk: 'Low Risk',
@@ -73,25 +133,16 @@ const SEED_DEFAULTS = [
     reporterName: 'Verification Bot',
     reporterEmail: '',
     status: 'approved'
-  },
-  {
-    id: 'seed-7',
-    identifier: 'flipkart-big-billion-offers.link',
-    type: 'Website',
-    risk: 'High Risk',
-    evidence: 'Non-standard TLD. Cloned interface of e-commerce site.',
-    reporterName: 'Community User',
-    reporterEmail: '',
-    status: 'approved'
   }
 ];
 
 function loadReports() {
+  const dataFile = getReportsFilePath();
   const now = Date.now();
   let reports = [];
   try {
-    if (fs.existsSync(DATA_FILE)) {
-      const content = fs.readFileSync(DATA_FILE, 'utf8');
+    if (fs.existsSync(dataFile)) {
+      const content = fs.readFileSync(dataFile, 'utf8');
       if (content.trim()) {
         reports = JSON.parse(content);
       }
@@ -102,7 +153,7 @@ function loadReports() {
 
   if (!reports || reports.length === 0) {
     reports = SEED_DEFAULTS.map((seed, idx) => {
-      const offsetMs = (idx * 15 + 2) * 60 * 1000;
+      const offsetMs = (idx * 15 + 5) * 60 * 1000;
       return {
         ...seed,
         timestamp: now - offsetMs,
@@ -142,8 +193,9 @@ function loadReports() {
 }
 
 function saveReports(reports) {
+  const dataFile = getReportsFilePath();
   try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(reports, null, 2), 'utf8');
+    fs.writeFileSync(dataFile, JSON.stringify(reports, null, 2), 'utf8');
   } catch (err) {
     console.error('[Reports] Error writing reports.json:', err);
   }

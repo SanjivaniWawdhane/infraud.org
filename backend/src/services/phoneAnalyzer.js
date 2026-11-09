@@ -690,6 +690,8 @@ function checkCommunityReports(digits) {
 
       const matches = reports.filter(r => {
         if (!r.identifier) return false;
+        if (r.type && !r.type.toLowerCase().includes('phone')) return false;
+        if (r.status && r.status !== 'approved') return false;
         const rDigits = String(r.identifier).replace(/\D/g, '');
         const r10 = rDigits.slice(-10);
         return (d10 && r10 && d10 === r10) || (d.length >= 7 && rDigits.length >= 7 && (d.endsWith(rDigits) || rDigits.endsWith(d)));

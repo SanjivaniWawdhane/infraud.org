@@ -1849,33 +1849,64 @@ function renderRecommendationsList(recommendations, theme, listId) {
 
 async function enrichWithCommunityReports(resultData, query) {
   try {
+    const alreadyFlagged = (resultData.signals || []).some(s => s.id && s.id.startsWith('COMMUNITY_REPORTED'));
+
     const res = await fetch('/api/reports');
     if (!res.ok) return resultData;
 
     const data = await res.json();
     const reports = data.reports || [];
 
-    const cleanQuery = query.toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const qDigits = String(query || '').replace(/\D/g, '');
+    const cleanQuery = String(query || '').toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '').trim();
+    const qHost = cleanQuery.replace(/^www\./, '').split('/')[0].split(':')[0];
+
     const matchingReports = reports.filter(r => {
-      const rId = (r.identifier || '').toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '');
-      return rId === cleanQuery || cleanQuery.includes(rId) || rId.includes(cleanQuery);
+      if (!r.identifier) return false;
+      const rId = String(r.identifier).toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '').trim();
+      const rType = (r.type || '').toLowerCase();
+
+      // 1. Phone match by last 10 digits
+      if (qDigits.length >= 8 && (rType.includes('phone') || /^\+?\d[\d\s-]{7,}/.test(r.identifier))) {
+        const rDigits = String(r.identifier).replace(/\D/g, '');
+        if (rDigits.length >= 8 && qDigits.slice(-10) === rDigits.slice(-10)) return true;
+      }
+
+      // 2. Domain / URL match
+      if (qHost && (rType.includes('web') || rType.includes('url') || rType.includes('site') || !rType)) {
+        const rHost = rId.replace(/^www\./, '').split('/')[0].split(':')[0];
+        if (qHost === rHost || qHost.endsWith('.' + rHost) || rHost.endsWith('.' + qHost) || cleanQuery === rId) {
+          return true;
+        }
+      }
+
+      // 3. Exact string match (UPI / Email / identifier)
+      if (cleanQuery === rId || cleanQuery === rId.replace(/^@/, '') || rId === cleanQuery.replace(/^@/, '')) {
+        return true;
+      }
+
+      return false;
     });
 
     if (matchingReports.length > 0) {
       resultData.communityReportCount = matchingReports.length;
-      resultData.riskScore = Math.max(resultData.riskScore || 0, 85);
+      resultData.riskScore = Math.max(resultData.riskScore || 0, 90);
       resultData.riskLevel = 'critical';
 
       resultData.signals = resultData.signals || [];
-      resultData.signals.unshift({
-        id: 'COMMUNITY_REPORTED',
-        title: `Community Threat Flag (${matchingReports.length} Active Report${matchingReports.length > 1 ? 's' : ''})`,
-        description: `This target has been actively flagged in the INFRAUD community database: "${matchingReports[0].evidence || 'Reported scam activity'}"`,
-        severity: 'critical'
-      });
+      if (!alreadyFlagged) {
+        resultData.signals.unshift({
+          id: 'COMMUNITY_REPORTED',
+          title: `Community Cyber Threat Flag (${matchingReports.length} Active Report${matchingReports.length > 1 ? 's' : ''})`,
+          description: `This target is actively flagged in the INFRAUD community database: "${matchingReports[0].evidence || 'Reported scam activity'}" (Reported by: ${matchingReports[0].reporterName || 'Community User'})`,
+          severity: 'critical'
+        });
+      }
 
       resultData.recommendations = resultData.recommendations || [];
-      resultData.recommendations.unshift('This target is currently flagged in community fraud reports. Do not engage or transact.');
+      if (!resultData.recommendations.some(r => r.includes('community fraud reports'))) {
+        resultData.recommendations.unshift('This target is currently flagged in community fraud reports. Do not engage, transact, or disclose credentials.');
+      }
     }
   } catch (e) {
     console.warn('[Analyzer] Could not cross-check community reports:', e);

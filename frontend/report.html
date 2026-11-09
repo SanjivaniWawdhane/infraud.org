@@ -546,9 +546,32 @@
                         }
                     }
 
-                    // Auto-fill logged in user info if available
+                    // Auto-fill logged in user info & URL parameters if available
                     document.addEventListener('DOMContentLoaded', async () => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const prefillTarget = urlParams.get('target') || urlParams.get('identifier') || urlParams.get('url') || urlParams.get('q');
+                        const prefillType = urlParams.get('type');
+
+                        if (prefillType) {
+                            const assetSelect = document.getElementById('asset-type');
+                            if (assetSelect) {
+                                for (let opt of assetSelect.options) {
+                                    if (opt.value.toLowerCase() === prefillType.toLowerCase() || opt.text.toLowerCase().includes(prefillType.toLowerCase())) {
+                                        assetSelect.value = opt.value;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         updateTargetInput();
+
+                        if (prefillTarget) {
+                            const targetInput = document.getElementById('target-input');
+                            if (targetInput) {
+                                targetInput.value = prefillTarget;
+                            }
+                        }
+
                         try {
                             if (window.authApp && window.authApp.checkUserSession) {
                                 const session = await window.authApp.checkUserSession();
