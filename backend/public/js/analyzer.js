@@ -1346,19 +1346,13 @@ function renderUrlForensicsDeck(data, signals, target) {
 
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
   // Sync URL Quick Input field (Section 3)
-  const windowIdEl = document.getElementById('dossier-window-id');
-  if (windowIdEl) {
-    const scanRef = (window.currentScanId || 'INFR8892');
-    windowIdEl.textContent = `scan_report_${scanRef} • Edge Forensic Dossier`;
-  }
-
   const quickInput = document.getElementById('url-quick-input');
   if (quickInput) quickInput.value = target;
 
   // 1. Animate SVG Gauge
   const gaugeCircle = document.getElementById('gauge-circle');
   if (gaugeCircle) {
-    const circumference = 289.03; // 2 * PI * 50
+    const circumference = 301.59; // 2 * PI * 48
     if (riskScore === 0) {
       gaugeCircle.style.stroke = '#10B981';
       gaugeCircle.style.strokeDashoffset = '0';
@@ -1382,16 +1376,17 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   const mHigh = document.getElementById('meter-high');
   const mCrit = document.getElementById('meter-crit');
   if (mLow && mMod && mHigh && mCrit) {
-    mLow.classList.toggle('seg-active', riskScore < 25);
-    mMod.classList.toggle('seg-active', riskScore >= 25 && riskScore < 50);
-    mHigh.classList.toggle('seg-active', riskScore >= 50 && riskScore < 75);
-    mCrit.classList.toggle('seg-active', riskScore >= 75);
+    mLow.classList.toggle('active', riskScore < 25);
+    mMod.classList.toggle('active', riskScore >= 25 && riskScore < 50);
+    mHigh.classList.toggle('active', riskScore >= 50 && riskScore < 75);
+    mCrit.classList.toggle('active', riskScore >= 75);
   }
 
   // 3. Status Badge & Plain English Explanation (Section 4)
   const verdictPillEl = document.getElementById('risk-badge');
   const verdictTitleEl = document.getElementById('url-verdict-title');
   const verdictDescEl = document.getElementById('risk-summary');
+  const hdrStatusPill = document.getElementById('url-header-status-pill');
 
   if (riskScore < 25) {
     if (verdictPillEl) {
@@ -1406,6 +1401,10 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     if (verdictDescEl) {
       verdictDescEl.textContent = 'No suspicious indicators, brand spoofing, or active fraud complaints were identified for this website link.';
     }
+    if (hdrStatusPill) {
+      hdrStatusPill.textContent = 'SAFE & VERIFIED ROOT';
+      hdrStatusPill.className = 'url-tag-pill url-tag-green';
+    }
   } else if (riskScore < 50) {
     if (verdictPillEl) {
       verdictPillEl.innerHTML = '<span>▲</span> <span>Medium Risk • Caution Advised</span>';
@@ -1418,6 +1417,12 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
     if (verdictDescEl) {
       verdictDescEl.textContent = 'This website exhibits unusual structural indicators or newly registered infrastructure. Avoid submitting personal credentials, passwords, or payment details.';
+    }
+    if (hdrStatusPill) {
+      hdrStatusPill.textContent = 'CAUTION ADVISED';
+      hdrStatusPill.className = 'url-tag-pill';
+      hdrStatusPill.style.background = '#FEF3C7';
+      hdrStatusPill.style.color = '#92400E';
     }
   } else if (riskScore < 75) {
     if (verdictPillEl) {
@@ -1432,6 +1437,10 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     if (verdictDescEl) {
       verdictDescEl.textContent = 'Heuristic analysis detected lookalike characters, brand impersonation, or credential harvesting patterns. Close this website immediately.';
     }
+    if (hdrStatusPill) {
+      hdrStatusPill.textContent = 'HIGH THREAT DETECTED';
+      hdrStatusPill.className = 'url-tag-pill url-tag-red';
+    }
   } else {
     if (verdictPillEl) {
       verdictPillEl.innerHTML = '<span>🚨</span> <span>Critical Risk • Scam / Phishing</span>';
@@ -1445,53 +1454,72 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     if (verdictDescEl) {
       verdictDescEl.textContent = 'Warning: This domain is a confirmed fraudulent trap designed to harvest bank credentials, passwords, or OTPs. Do NOT submit any data.';
     }
-  }
-
-  // 4. Quick Telemetry Box in Zone 3
-  const metaProto = document.getElementById('hero-meta-proto');
-  const metaHost = document.getElementById('hero-meta-host');
-  const metaSpoof = document.getElementById('hero-meta-spoof');
-  const metaFlags = document.getElementById('hero-meta-flags');
-
-  // Dynamic Assurances Bar
-  const assurancesEl = document.getElementById('url-assurances');
-  if (assurancesEl) {
-    if (riskScore < 25) {
-      assurancesEl.innerHTML = `
-        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> TLS 1.3 Encryption Active</span>
-        <span>•</span>
-        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> ICANN Apex Host</span>
-        <span>•</span>
-        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Zero Spoofing Signals</span>
-      `;
-    } else {
-      assurancesEl.innerHTML = `
-        <span style="color: #DC2626;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> ${signals.length} Threat Vector${signals.length === 1 ? '' : 's'} Active</span>
-        <span>•</span>
-        <span style="color: #DC2626; font-weight: 700;">Immediate Caution Required</span>
-      `;
+    if (hdrStatusPill) {
+      hdrStatusPill.textContent = 'CRITICAL PHISHING TRAP';
+      hdrStatusPill.className = 'url-tag-pill url-tag-red';
     }
   }
 
+  // 4. Update Header Sub-Meta (Canonical, Protocol, TLD)
+  const canonicalEl = document.getElementById('dossier-canonical');
+  if (canonicalEl) {
+    const formatted = target.startsWith('http') ? target : `https://${target}/`;
+    canonicalEl.textContent = formatted;
+  }
+
   const isHttp = /^http:\/\//i.test(target);
+  const protoTag = document.getElementById('url-proto-tag');
+  if (protoTag) {
+    protoTag.textContent = isHttp ? 'HTTP INSECURE' : 'HTTPS (TLS 1.3)';
+    protoTag.className = isHttp ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
+  }
+
+  // 5. 4 Core Domain Insight Cards (Right side of Hero Bento)
+  const metaProto = document.getElementById('hero-meta-proto');
+  const metaProtoTag = document.getElementById('hero-meta-proto-tag');
+  const metaHost = document.getElementById('hero-meta-host');
+  const metaHostTag = document.getElementById('hero-meta-host-tag');
+  const metaSpoof = document.getElementById('hero-meta-spoof');
+  const metaSpoofTag = document.getElementById('hero-meta-spoof-tag');
+  const metaFlags = document.getElementById('hero-meta-flags');
+  const metaFlagsTag = document.getElementById('hero-meta-flags-tag');
+
   if (metaProto) {
     metaProto.textContent = isHttp ? 'HTTP (Plaintext)' : 'TLS 1.3 / HTTPS';
     metaProto.style.color = isHttp ? '#DC2626' : '#059669';
   }
-  if (metaHost) {
-    metaHost.textContent = (data && data.isIp) ? 'Direct IPv4 Host' : 'ICANN Apex Root';
-  }
-  if (metaSpoof) {
-    const hasSpoof = signals.some(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'PUNYCODE_DOMAIN');
-    metaSpoof.textContent = hasSpoof ? 'Impersonation Flagged' : 'Clean / No Mimicry';
-    metaSpoof.style.color = hasSpoof ? '#DC2626' : '#059669';
-  }
-  if (metaFlags) {
-    metaFlags.textContent = `${signals.length} Active Flag${signals.length === 1 ? '' : 's'}`;
-    metaFlags.style.color = signals.length > 0 ? '#DC2626' : '#059669';
+  if (metaProtoTag) {
+    metaProtoTag.textContent = isHttp ? 'Insecure' : 'Active';
+    metaProtoTag.className = isHttp ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
   }
 
-  // 5. Populate Section 6: Website Information
+  if (metaHost) {
+    metaHost.textContent = (data && data.isIp) ? 'Direct IPv4 Host' : 'ICANN Apex Domain';
+  }
+  if (metaHostTag) {
+    metaHostTag.textContent = (data && data.isIp) ? 'IP Host' : 'Apex Root';
+  }
+
+  const hasSpoof = signals.some(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'PUNYCODE_DOMAIN');
+  if (metaSpoof) {
+    metaSpoof.textContent = hasSpoof ? 'Impersonation Flagged' : 'Clean / No Spoofing';
+    metaSpoof.style.color = hasSpoof ? '#DC2626' : '#059669';
+  }
+  if (metaSpoofTag) {
+    metaSpoofTag.textContent = hasSpoof ? 'Spoof Detected' : 'Zero Mimicry';
+    metaSpoofTag.className = hasSpoof ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
+  }
+
+  if (metaFlags) {
+    metaFlags.textContent = `${signals.length} Active Report${signals.length === 1 ? '' : 's'}`;
+    metaFlags.style.color = signals.length > 0 ? '#DC2626' : '#059669';
+  }
+  if (metaFlagsTag) {
+    metaFlagsTag.textContent = signals.length > 0 ? `${signals.length} Flags` : 'Clean DB';
+    metaFlagsTag.className = signals.length > 0 ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
+  }
+
+  // 6. Populate Section 6: Website Information
   try {
     const cleanTarget = target.trim();
     const parsed = new URL(cleanTarget.startsWith('http') ? cleanTarget : `https://${cleanTarget}`);
@@ -1503,6 +1531,9 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     const subdomains = isIp ? 'None' : (parts.length > 2 ? parts.slice(0, -2).join('.') : 'Apex Domain (Root)');
     const port = parsed.port || (parsed.protocol === 'https:' ? '443 (Default HTTPS)' : '80 (Default HTTP)');
     const path = parsed.pathname || '/';
+
+    const tldTag = document.getElementById('url-tld-tag');
+    if (tldTag) tldTag.textContent = tld.toUpperCase() + ' NAMESPACE';
 
     const elDomain = document.getElementById('info-domain');
     if (elDomain) elDomain.textContent = baseDomain;
@@ -1523,14 +1554,13 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
   } catch(e) {}
 
-  // 6. Populate Telemetry Tiles & Section 5 Checks
-  populateTelemetryTiles(data, target);
+  // 7. Populate Section 5 Checks & Radar
   renderUrlForensicsDeck(data, signals, target);
 
-  // 7. Populate Section 7: Signals List or Clean Box
+  // 8. Populate Section 7: Signals List or Clean Box
   renderSignalsList(signals, theme, 'signals-container', 'signals-count-pill');
 
-  // 8. Populate Section 8: Recommendations
+  // 9. Populate Section 8: Recommendations
   renderRecommendationsList(recommendations, theme, 'recommendation-text');
 }
 
