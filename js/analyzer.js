@@ -1428,7 +1428,7 @@ function renderUrlForensicsDeck(data, signals, target) {
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
   // Sync URL Quick Input field (Section 3)
   const quickInput = document.getElementById('url-quick-input');
-  if (quickInput) quickInput.value = target;
+  if (quickInput) quickInput.value = target.replace(/^https?:\/\//i, '');
 
   // 1. Animate SVG Gauge
   const gaugeCircle = document.getElementById('gauge-circle');
@@ -1558,12 +1558,31 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   // 5. 4 Core Domain Insight Cards (Right side of Hero Bento)
   const metaProto = document.getElementById('hero-meta-proto');
   const metaProtoTag = document.getElementById('hero-meta-proto-tag');
+  const metaProtoDesc = document.getElementById('hero-meta-proto-desc');
   const metaHost = document.getElementById('hero-meta-host');
   const metaHostTag = document.getElementById('hero-meta-host-tag');
+  const metaHostDesc = document.getElementById('hero-meta-host-desc');
   const metaSpoof = document.getElementById('hero-meta-spoof');
   const metaSpoofTag = document.getElementById('hero-meta-spoof-tag');
+  const metaSpoofDesc = document.getElementById('hero-meta-spoof-desc');
   const metaFlags = document.getElementById('hero-meta-flags');
   const metaFlagsTag = document.getElementById('hero-meta-flags-tag');
+  const metaFlagsDesc = document.getElementById('hero-meta-flags-desc');
+
+  // Sync Search Bar Protocol Badge
+  const searchProtoBadge = document.getElementById('url-search-proto-badge');
+  if (searchProtoBadge) {
+    searchProtoBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> ${isHttp ? 'http://' : 'https://'}`;
+    if (isHttp) {
+      searchProtoBadge.style.background = '#FEE2E2';
+      searchProtoBadge.style.color = '#DC2626';
+      searchProtoBadge.style.borderColor = '#FECACA';
+    } else {
+      searchProtoBadge.style.background = '#ECFDF5';
+      searchProtoBadge.style.color = '#047857';
+      searchProtoBadge.style.borderColor = '#A7F3D0';
+    }
+  }
 
   if (metaProto) {
     metaProto.textContent = isHttp ? 'HTTP (Plaintext)' : 'TLS 1.3 / HTTPS';
@@ -1571,7 +1590,12 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   }
   if (metaProtoTag) {
     metaProtoTag.textContent = isHttp ? 'Insecure' : 'Active';
-    metaProtoTag.className = isHttp ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
+    metaProtoTag.className = isHttp ? 'url-pill-tag url-pill-tag-red' : 'url-pill-tag url-pill-tag-green';
+  }
+  if (metaProtoDesc) {
+    metaProtoDesc.textContent = isHttp 
+      ? 'Unencrypted plaintext communication, vulnerable to interception' 
+      : 'Cryptographically secure transport layer, valid certificate';
   }
 
   if (metaHost) {
@@ -1579,6 +1603,11 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   }
   if (metaHostTag) {
     metaHostTag.textContent = (data && data.isIp) ? 'IP Host' : 'Apex Root';
+  }
+  if (metaHostDesc) {
+    metaHostDesc.textContent = (data && data.isIp)
+      ? 'Raw IP address host, bypasses domain registry standards'
+      : 'Legitimate registered namespace, clean root hierarchy';
   }
 
   const hasSpoof = signals.some(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'PUNYCODE_DOMAIN');
@@ -1588,7 +1617,12 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   }
   if (metaSpoofTag) {
     metaSpoofTag.textContent = hasSpoof ? 'Spoof Detected' : 'Zero Mimicry';
-    metaSpoofTag.className = hasSpoof ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
+    metaSpoofTag.className = hasSpoof ? 'url-pill-tag url-pill-tag-red' : 'url-pill-tag url-pill-tag-green';
+  }
+  if (metaSpoofDesc) {
+    metaSpoofDesc.textContent = hasSpoof
+      ? 'Suspicious brand keyword or lookalike patterns identified'
+      : 'Zero homoglyphs, brand typosquatting, or bank mimicry';
   }
 
   if (metaFlags) {
@@ -1597,7 +1631,12 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   }
   if (metaFlagsTag) {
     metaFlagsTag.textContent = signals.length > 0 ? `${signals.length} Flags` : 'Clean DB';
-    metaFlagsTag.className = signals.length > 0 ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
+    metaFlagsTag.className = signals.length > 0 ? 'url-pill-tag url-pill-tag-red' : 'url-pill-tag url-pill-tag-green';
+  }
+  if (metaFlagsDesc) {
+    metaFlagsDesc.textContent = signals.length > 0
+      ? `${signals.length} forensic warning indicator(s) triggered by heuristics`
+      : 'No active flags across CERT-In, APWG, or global scam feeds';
   }
 
   // 6. Populate Section 6: Website Information
