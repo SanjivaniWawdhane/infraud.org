@@ -107,437 +107,457 @@
    Clean, intuitive, high-clarity design for everyday users
    ═══════════════════════════════════════════════════════════════ */
 
-#view-url {
-  font-family: var(--font, 'Inter', -apple-system, sans-serif);
-  max-width: 1040px;
-  margin: 0 auto;
-}
+/* ═══════════════════════════════════════════════
+   TOOL 1: CYBER AUTHORITY URL SCANNER & SANDBOX BROWSER RUNTIME
+   Matches Phone & UPI Architectural Standard
+   ═══════════════════════════════════════════════ */
 
-/* ── 1. Top URL Card ── */
-.url-minimal-header {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 20px 24px;
+/* 1. Cyber Authority Clearance Header */
+.url-authority-header-bar {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(120% 140% at 0% 0%, rgba(37, 99, 235, 0.18) 0%, rgba(15, 23, 42, 0.98) 55%), #0A0F1E;
+  border: 1px solid rgba(59, 130, 246, 0.32);
+  border-radius: 24px;
+  padding: 26px 32px;
+  box-shadow: 0 20px 50px -12px rgba(30, 58, 138, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  gap: 22px;
+  margin-bottom: 28px;
+  color: #FFFFFF;
 }
-.url-header-meta {
+.url-authority-header-bar::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.url-authority-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
+  position: relative;
+  z-index: 1;
 }
-.url-shield-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #EFF6FF;
-  color: #2563EB;
+.url-seal-icon {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(30, 58, 138, 0.12) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #60A5FA;
   flex-shrink: 0;
+  box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
 }
-.url-title-stack {
+.url-seal-icon:hover {
+  transform: rotate(6deg) scale(1.05);
+}
+.url-header-sub {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #93C5FD;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
 }
-.url-clean-title {
-  font-size: 1.5rem;
+.carrier-pill-blue {
+  background: rgba(37, 99, 235, 0.2);
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  color: #BFDBFE;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.6875rem;
   font-weight: 800;
-  color: #0F172A;
+  letter-spacing: 0.04em;
+}
+.url-target-title {
+  color: #FFFFFF !important;
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 2rem;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 14px rgba(37, 99, 235, 0.3);
   word-break: break-all;
 }
-.url-sub-meta {
+.url-authority-actions {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8125rem;
-  color: #64748B;
-  margin-top: 3px;
+  gap: 12px;
   flex-wrap: wrap;
-}
-.url-sub-meta strong {
-  color: #1E293B;
-}
-.url-tag-pill {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: #F1F5F9;
-  color: #475569;
-}
-.url-tag-green {
-  background: #ECFDF5;
-  color: #047857;
-  border: 1px solid #A7F3D0;
-}
-
-.url-hdr-actions {
-  display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
-.url-action-btn {
+.url-btn-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid #CBD5E1;
-  background: #FFFFFF;
-  color: #334155;
+  font-weight: 700;
+  color: #F1F5F9;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 10px 18px;
+  border-radius: 12px;
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.15s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
 }
-.url-action-btn:hover {
-  background: #F8FAFC;
-  border-color: #94A3B8;
-  color: #0F172A;
+.url-btn-pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
-.url-btn-report {
-  background: #FEF2F2;
-  border-color: #FECACA;
-  color: #DC2626;
+.btn-url-report {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(220, 38, 38, 0.4) 100%) !important;
+  border-color: rgba(248, 113, 113, 0.45) !important;
+  color: #FCA5A5 !important;
 }
-.url-btn-report:hover {
-  background: #FEE2E2;
-  border-color: #F87171;
-  color: #B91C1C;
+.btn-url-report:hover {
+  background: #DC2626 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.4);
 }
 
-/* ── 2. The Verdict Hero Banner (Large, Friendly, Obvious) ── */
+/* 2. Plain-Language Citizen Verdict Hero Banner */
 .url-verdict-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 28px 32px;
   display: flex;
   align-items: center;
   gap: 32px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  margin-bottom: 28px;
+  box-shadow: 0 6px 24px -6px rgba(15, 23, 42, 0.06);
   transition: all 0.3s ease;
 }
 @media (max-width: 768px) {
   .url-verdict-card {
     flex-direction: column;
     text-align: center;
-    padding: 24px;
+    padding: 22px;
     gap: 20px;
   }
 }
-
-.verdict-gauge-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-}
-.gauge-wrap {
-  position: relative;
-  width: 140px;
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.gauge-svg {
-  transform: rotate(-90deg);
-  width: 140px;
-  height: 140px;
-  display: block;
-}
-.gauge-bg-circle {
-  fill: none !important;
-  stroke: #F1F5F9;
-  stroke-width: 11;
-}
-.gauge-progress-circle {
-  fill: none !important;
-  stroke: #10B981;
-  stroke-width: 11;
-  stroke-linecap: round;
-  stroke-dasharray: 439.8;
-  stroke-dashoffset: 439.8;
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
-}
-.gauge-center-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  pointer-events: none;
-}
-.gauge-score-num {
-  font-size: 2.75rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: #10B981;
-  transition: color 0.3s ease;
-}
-.gauge-score-denom {
-  font-size: 0.625rem;
-  font-weight: 800;
-  color: #94A3B8;
-  margin-top: 3px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.risk-meter-container {
-  width: 120px;
-  margin-top: 6px;
-}
-.risk-meter-bar {
-  display: flex;
-  height: 4px;
-  border-radius: 100px;
-  overflow: hidden;
-  margin-bottom: 4px;
-  gap: 2px;
-}
-.meter-seg { flex: 1; height: 100%; border-radius: 1px; }
-.seg-low  { background: #10B981; }
-.seg-mod  { background: #F59E0B; }
-.seg-high { background: #EA580C; }
-.seg-crit { background: #EF4444; }
-.risk-meter-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.55rem;
-  font-weight: 700;
-  color: #94A3B8;
-  text-transform: uppercase;
-}
-
-.verdict-info-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.risk-verdict-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.875rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 6px 16px;
-  border-radius: 8px;
-  background: rgba(16, 185, 129, 0.12);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  margin-bottom: 10px;
-  align-self: flex-start;
-  transition: all 0.3s ease;
-}
-@media (max-width: 768px) {
-  .risk-verdict-pill {
-    align-self: center;
-  }
-}
-.risk-explanation-text {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #334155;
-  line-height: 1.55;
-  margin: 0 0 10px;
-  transition: color 0.3s ease;
-}
-.verdict-trust-note {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  color: #64748B;
-}
-
-/* ── 3. The 4 Clear Security Checks Grid ── */
-.url-checks-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
-}
-@media (max-width: 860px) {
-  .url-checks-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 480px) {
-  .url-checks-grid { grid-template-columns: 1fr; }
-}
-
-.check-item-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.18s ease;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
-}
-.check-item-card:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
-}
-.check-card-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.check-icon-circle {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.check-title-lbl {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #64748B;
-  text-transform: uppercase;
-}
-.check-main-val {
-  font-size: 0.9375rem;
+.url-verdict-title {
+  font-size: 1.35rem;
   font-weight: 800;
   color: #0F172A;
-  margin-bottom: 4px;
+  margin: 0 0 6px;
   line-height: 1.35;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  letter-spacing: -0.01em;
 }
-.check-sub-info {
-  font-size: 0.75rem;
-  color: #64748B;
-  line-height: 1.4;
+.url-verdict-desc {
+  font-size: 0.9375rem;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 14px;
+}
+.url-golden-rule-tip {
+  background: #F8FAFC;
+  border: 1px dashed #CBD5E1;
+  border-left: 4px solid #10B981;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.8125rem;
+  color: #1E293B;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+}
+.url-golden-rule-tip strong {
+  color: #047857;
 }
 
-/* ── 4. Findings & What to Do Split ── */
-.url-details-split {
+/* 3. Showcase Split (Browser Sandbox on Left + 4 Attack Vectors on Right) */
+.url-split-showcase {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: 410px 1fr;
+  gap: 32px;
+  margin-bottom: 32px;
   align-items: start;
 }
-@media (max-width: 800px) {
-  .url-details-split { grid-template-columns: 1fr; }
+@media (max-width: 1060px) {
+  .url-split-showcase { grid-template-columns: 1fr; }
 }
 
-.details-panel-card {
-  background: #FFFFFF;
+/* Realistic Desktop Sandbox Browser Device */
+.url-browser-device {
+  background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%);
   border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 22px 24px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  border-radius: 24px;
+  padding: 12px;
+  box-shadow: 0 24px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.04);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.panel-section-title {
+.url-browser-device:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 30px 70px -16px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(37, 99, 235, 0.25);
+}
+
+/* Browser Titlebar */
+.browser-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px 10px;
+}
+.browser-dots {
+  display: flex;
+  gap: 6px;
+}
+.b-dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+}
+.b-dot-red { background: #EF4444; }
+.b-dot-yellow { background: #F59E0B; }
+.b-dot-green { background: #10B981; }
+
+.browser-tab {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.8125rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: #1E293B;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #F1F5F9;
-}
-
-/* Clean certificate box */
-.clean-certificate-box {
-  background: #F0FDF4;
-  border: 1px solid #BBF7D0;
-  border-radius: 12px;
-  padding: 20px 18px;
-  text-align: center;
-  color: #166534;
-}
-.clean-cert-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #DCFCE7;
-  color: #15803D;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-}
-
-/* Signal item row */
-.signal-item-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid #F1F5F9;
-}
-.signal-item-row:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-.signal-status-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.signal-status-clean { background: rgba(16, 185, 129, 0.12); color: #059669; }
-.signal-status-warn  { background: rgba(245, 158, 11, 0.12); color: #D97706; }
-.signal-status-crit  { background: rgba(239, 68, 68, 0.12); color: #DC2626; }
-.signal-title-text {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
   font-weight: 700;
-  font-size: 0.875rem;
-  color: #0F172A;
-  margin-bottom: 3px;
-}
-.signal-desc-text {
-  font-size: 0.78rem;
-  color: #64748B;
-  line-height: 1.5;
+  color: #334155;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
-/* Playbook styling */
-.playbook-panel {
-  border-left: 4px solid #10B981 !important;
+/* Omnibox / Address Toolbar */
+.browser-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 10px;
 }
-.playbook-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.browser-nav-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.browser-nav-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+.browser-nav-btn.spin svg {
+  animation: spinReload 0.6s linear;
+}
+@keyframes spinReload {
+  100% { transform: rotate(360deg); }
+}
+
+.browser-omnibox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.78125rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+.omnibox-lock {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #059669;
+  flex-shrink: 0;
+}
+.omnibox-lock.insecure {
+  color: #DC2626;
+}
+.omnibox-url-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #0F172A;
+}
+
+/* Browser Viewport Screen */
+.browser-viewport-screen {
+  background: radial-gradient(130% 130% at 50% 0%, #0F172A 0%, #030712 100%);
+  border-radius: 16px;
+  padding: 24px 20px;
+  color: #FFFFFF;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.browser-viewport-screen::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+.viewport-shield-emblem {
+  width: 58px; height: 58px;
+  border-radius: 18px;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  color: #60A5FA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+  transition: all 0.3s ease;
+}
+.browser-domain-hero {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+  word-break: break-all;
+}
+.browser-security-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: #6EE7B7;
+  margin-bottom: 20px;
+}
+.browser-security-banner.threat {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #FCA5A5;
+}
+
+.browser-telemetry-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.b-tel-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.6875rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.b-tel-pill span:first-child {
+  font-size: 1.05rem;
+}
+.b-tel-pill div strong {
+  display: block;
+  color: #F1F5F9;
+  font-size: 0.71875rem;
+}
+.b-tel-pill div small {
+  color: #94A3B8;
+  font-size: 0.625rem;
+}
+
+.btn-sandbox-emulate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+  transition: all 0.2s ease;
+}
+.btn-sandbox-emulate:hover {
+  background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+}
+.sandbox-feedback {
+  margin-top: 12px;
+  font-size: 0.72rem;
+  min-height: 20px;
+  color: #6EE7B7;
+  font-weight: 700;
+  display: none;
+}
+.sandbox-feedback.show {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 4. Vectors Column on Right */
+.url-vectors-column {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
+}
+
+/* 5. Bottom Guidance Deck */
+.url-guidance-deck {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 860px) {
+  .url-guidance-deck { grid-template-columns: 1fr; }
+}
+.url-signals-block, .url-actions-block {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
 }
 
 /* ── TOOL 2: TELECOM CALLER DOSSIER & SMARTPHONE UI (PHONE SCANNER) ── */
@@ -2499,50 +2519,55 @@
            TOOL 1: HUMAN-CRAFTED CYBER SECURITY & DOMAIN FORENSICS DOSSIER
            Bespoke 4-Tier Architecture for Web & Phishing Inspection
            ═══════════════════════════════════════════════ -->
+            <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE CYBER DEFENSE
+           Bespoke Cyber Authority Header + Verdict Hero + Sandbox Browser Device + 4 Attack Vectors + Guidance Deck
+           ═══════════════════════════════════════════════ -->
       <div id="view-url" class="tool-result-view">
 
-        <!-- 1. Clean Top Header Card -->
-        <div class="url-minimal-header">
-          <div class="url-header-meta">
-            <div class="url-shield-badge">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <!-- 1. Cyber Authority Clearance Header Bar -->
+        <div class="url-authority-header-bar">
+          <div class="url-authority-left">
+            <div class="url-seal-icon" title="APWG Anti-Phishing & ICANN DNS Clearance">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="2" y1="12" x2="22" y2="12"></line>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
               </svg>
             </div>
-            <div class="url-title-stack">
-              <div class="url-title-row">
-                <h1 class="url-clean-title target-display-value" id="target-display">Analyzing URL...</h1>
-                <span class="url-tag-pill url-tag-green" id="url-header-status-pill">EVALUATING RISK...</span>
+            <div>
+              <div class="url-header-sub">
+                <span class="live-dot-pulse"></span>
+                <span>🇮🇳 राष्ट्रीय सायबर सुरक्षा व डोमेन पडताळणी</span>
+                <span style="opacity: 0.4;">•</span>
+                <span class="carrier-pill-blue">CERT-In & APWG VERIFIED</span>
               </div>
-              <div class="url-sub-meta">
-                <span>Web Address: <strong id="dossier-canonical">https://—</strong></span>
-                <span>•</span>
-                <span id="target-category-tag" class="url-tag-pill">WEBSITE LINK</span>
-                <span id="target-protocol-tag" class="url-tag-pill">HTTPS SECURE</span>
-              </div>
+              <h1 class="url-target-title target-display-value" id="target-display">Analyzing URL...</h1>
             </div>
           </div>
-          <div class="url-hdr-actions">
-            <button class="url-action-btn" onclick="rescanTarget()" title="Re-check this website link">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              Re-check
+          <div class="url-authority-actions">
+            <button class="url-btn-pill" onclick="rescanTarget()" title="Rescan domain route">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>पुन्हा तपासा</span>
             </button>
-            <button class="url-action-btn" onclick="copyResultLink()" title="Copy shareable link">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              Share
+            <button class="url-btn-pill" onclick="copyResultLink()" title="Copy shareable link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>शेअर करा</span>
             </button>
-            <a href="reports.html" class="url-action-btn url-btn-report" id="btn-report-target" title="Report fraudulent website">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              Report Scam
+            <button class="url-btn-pill" onclick="window.print()" title="Print / Export Dossier">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span>प्रिंट (Export)</span>
+            </button>
+            <a href="reports.html" class="url-btn-pill btn-url-report" id="btn-report-target" title="Report scam website to CERT-In">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>🚨 सायबर क्राईम तक्रार</span>
             </a>
           </div>
         </div>
 
-        <!-- 2. The Main Verdict Hero Card (Obvious, Friendly, Clear) -->
+        <!-- 2. Plain-Language Citizen Verdict Hero Banner (वेबसाईट सुरक्षा निकाल) -->
         <div class="url-verdict-card" id="score-sidebar">
-          <!-- Left: Big Circular Gauge -->
+          <!-- Left: Circular Threat Score Gauge -->
           <div class="verdict-gauge-wrap">
             <div class="gauge-wrap">
               <svg class="gauge-svg" viewBox="0 0 160 160" width="140" height="140">
@@ -2569,103 +2594,292 @@
 
           <!-- Right: Plain-Language Verdict Explanation -->
           <div class="verdict-info-col">
-            <div class="risk-verdict-pill" id="risk-badge">EVALUATING RISK...</div>
-            <p class="risk-explanation-text" id="risk-summary">
-              Checking website address for scams, fake login pages, and dangerous links...
+            <div class="risk-verdict-pill" id="risk-badge">
+              <span>🔍</span> <span>EVALUATING RISK... (तपासणी सुरू आहे)</span>
+            </div>
+            <h2 class="url-verdict-title" id="url-verdict-title">
+              Website Safety & Fraud Evaluation (वेबसाईट सुरक्षा निकाल)
+            </h2>
+            <p class="url-verdict-desc" id="risk-summary">
+              Checking website address for scams, fake banking logins, deceptive redirects, and active cybercrime reports...
             </p>
-            <div class="verdict-trust-note">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
-              <span>Instant security evaluation powered by InFraud Scam Defense</span>
+            <div class="url-golden-rule-tip">
+              <span style="font-size: 1.3rem;">💡</span>
+              <div>
+                <strong>सुवर्ण नियम (Golden Rule):</strong> बँकेचे, लॉटरीचे किंवा पार्ट-टाइम जॉबचे मेसेज आले तरी अनोळखी लिंकवर क्लिक करून कधीही पासवर्ड, ATM पिन किंवा OTP टाकू नका. अधिकृत वेबसाईट नेहमी थेट सर्च करून किंवा अ‍ॅपवरून उघडा.
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 3. The 4 Clear Security Checks (Simple Cards) -->
-        <div class="url-checks-grid">
-          <!-- Card 1: Connection Security -->
-          <div class="check-item-card">
-            <div class="check-card-top">
-              <div class="check-icon-circle" id="tile-icon-protocol" style="background: #EFF6FF; color: #2563EB;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <!-- 3. Centered Showcase: Realistic Sandbox Browser Frame + 4 Interactive Attack Vector Cards Split -->
+        <div class="url-split-showcase">
+          <!-- Left: Realistic Desktop Sandbox Browser Device Window -->
+          <div class="url-browser-device" id="url-browser-device">
+            <!-- Window Titlebar with Mac Dots & Tab -->
+            <div class="browser-titlebar">
+              <div class="browser-dots">
+                <span class="b-dot b-dot-red" title="Close Window"></span>
+                <span class="b-dot b-dot-yellow" title="Minimize Window"></span>
+                <span class="b-dot b-dot-green" title="Expand Sandbox"></span>
               </div>
-              <span class="check-title-lbl" id="tile-lbl-protocol">Connection Security</span>
+              <div class="browser-tab">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span id="browser-tab-label">Security Sandbox</span>
+                <span style="cursor: pointer; opacity: 0.6; margin-left: 4px;">✕</span>
+              </div>
+              <div style="width: 40px;"></div>
             </div>
-            <div class="check-main-val" id="tile-val-protocol">Secure & Encrypted</div>
-            <div class="check-sub-info" id="tile-sub-protocol">Protected with HTTPS encryption</div>
+
+            <!-- Toolbar & Omnibox (Address Bar) -->
+            <div class="browser-toolbar">
+              <button class="browser-nav-btn" onclick="rescanTarget()" title="Back / Reload">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="browser-nav-btn" id="btn-browser-reload" onclick="simulateBrowserReload()" title="Reload Domain Security Header">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              </button>
+
+              <div class="browser-omnibox">
+                <span class="omnibox-lock" id="browser-omnibox-lock">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>HTTPS</span>
+                </span>
+                <span class="omnibox-url-text" id="dossier-canonical">https://—</span>
+                <button onclick="copyResultLink()" title="Copy Link" style="background:none; border:none; color:#64748B; cursor:pointer; padding:0; display:flex;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Viewport Screen: Security Sandbox Certificate Display -->
+            <div class="browser-viewport-screen">
+              <div class="viewport-shield-emblem" id="browser-shield-emblem">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+              </div>
+              <div class="browser-domain-hero target-display-value">Analyzing...</div>
+              <div class="browser-security-banner" id="browser-security-banner">
+                <span>🛡️ ICANN VERIFIED OFFICIAL WEB DOMAIN</span>
+              </div>
+
+              <!-- 4 Telemetry Quick Pills inside Browser -->
+              <div class="browser-telemetry-pills">
+                <div class="b-tel-pill">
+                  <span>🔒</span>
+                  <div>
+                    <strong>TLS 1.3 / HTTPS</strong>
+                    <small>Encrypted Transport</small>
+                  </div>
+                </div>
+                <div class="b-tel-pill">
+                  <span>🌐</span>
+                  <div>
+                    <strong>Port 443 / ICANN</strong>
+                    <small>Verified Web Port</small>
+                  </div>
+                </div>
+                <div class="b-tel-pill">
+                  <span>🏷️</span>
+                  <div>
+                    <strong>No Spoofing</strong>
+                    <small>Zero Homoglyph Mimicry</small>
+                  </div>
+                </div>
+                <div class="b-tel-pill">
+                  <span>⚡</span>
+                  <div>
+                    <strong>Clean Profile</strong>
+                    <small>Zero Active Blacklists</small>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn-sandbox-emulate" onclick="simulateBrowserSandbox()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run Live Sandbox Emulation (सँडबॉक्स सिम्युलेशन)
+              </button>
+              <div class="sandbox-feedback" id="sandbox-feedback"></div>
+            </div>
           </div>
 
-          <!-- Card 2: Domain Address -->
-          <div class="check-item-card">
-            <div class="check-card-top">
-              <div class="check-icon-circle" id="tile-icon-tld" style="background: #ECFDF5; color: #059669;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <!-- Right: 4 Interactive Cyber Attack Vector Cards with Expandable Drawers -->
+          <div class="url-vectors-column">
+            <!-- Vector 1: Transport & Connection Security -->
+            <div class="scam-vector-card" id="url-vec-protocol">
+              <div class="vector-card-top">
+                <div class="vector-avatar-badge" id="tile-icon-protocol" style="background: rgba(16, 185, 129, 0.1); color: #059669;">
+                  🔒
+                </div>
+                <div style="flex: 1;">
+                  <div class="vector-title" id="tile-lbl-protocol">Connection Security & SSL</div>
+                  <div class="vector-desc" id="tile-sub-protocol">Protected with HTTPS encryption</div>
+                  <div class="vector-status" id="tile-val-protocol">Secure (HTTPS)</div>
+                </div>
               </div>
-              <span class="check-title-lbl" id="tile-lbl-tld">Web Address Type</span>
+              <div style="margin-top: 10px;">
+                <button class="btn-vector-expand" onclick="toggleVectorDetail('url-vec-protocol')">
+                  <span>Technical Analysis & Citizen Tip</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="vector-details-drawer" id="drawer-url-vec-protocol">
+                  <div class="drawer-inner">
+                    <div class="drawer-item">
+                      <span class="drawer-key">Encryption Protocol:</span>
+                      <span class="drawer-val">TLS 1.3 End-to-End Cryptography</span>
+                    </div>
+                    <div class="drawer-tip-sec defense">
+                      <strong>🛡️ Legal Fact & Defense:</strong>
+                      <p>Legitimate banks and e-commerce websites ALWAYS use HTTPS encryption. If a website starts with plain HTTP, any password or ATM card detail you enter can be intercepted by hackers on public Wi-Fi.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="check-main-val" id="tile-val-tld">Official Extension</div>
-            <div class="check-sub-info" id="tile-sub-tld">Recognized global web domain</div>
-          </div>
 
-          <!-- Card 3: Brand Identity -->
-          <div class="check-item-card">
-            <div class="check-card-top">
-              <div class="check-icon-circle" id="tile-icon-brand" style="background: #EEF2FF; color: #4F46E5;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <!-- Vector 2: Web Address Extension & TLD -->
+            <div class="scam-vector-card" id="url-vec-tld">
+              <div class="vector-card-top">
+                <div class="vector-avatar-badge" id="tile-icon-tld" style="background: rgba(37, 99, 235, 0.1); color: #2563EB;">
+                  🌐
+                </div>
+                <div style="flex: 1;">
+                  <div class="vector-title" id="tile-lbl-tld">Web Address Type & Registry</div>
+                  <div class="vector-desc" id="tile-sub-tld">Standard official domain extension</div>
+                  <div class="vector-status" id="tile-val-tld">Official (.COM)</div>
+                </div>
               </div>
-              <span class="check-title-lbl" id="tile-lbl-brand">Website Identity</span>
+              <div style="margin-top: 10px;">
+                <button class="btn-vector-expand" onclick="toggleVectorDetail('url-vec-tld')">
+                  <span>Technical Analysis & Citizen Tip</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="vector-details-drawer" id="drawer-url-vec-tld">
+                  <div class="drawer-inner">
+                    <div class="drawer-item">
+                      <span class="drawer-key">Registry Namespace:</span>
+                      <span class="drawer-val">ICANN Accredited Global ccTLD/gTLD</span>
+                    </div>
+                    <div class="drawer-tip-sec defense">
+                      <strong>🛡️ Legal Fact & Defense:</strong>
+                      <p>Beware of strange domain extensions like .xyz, .top, .buzz, or .tk. Phishing gangs frequently register cheap temporary domains to launch fake loan or lottery scams that vanish within 48 hours.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="check-main-val" id="tile-val-brand">Clean / No Spoofing</div>
-            <div class="check-sub-info" id="tile-sub-brand">Not impersonating any famous bank or brand</div>
-          </div>
 
-          <!-- Card 4: Scam Database -->
-          <div class="check-item-card">
-            <div class="check-card-top">
-              <div class="check-icon-circle" id="tile-icon-db" style="background: #F0FDF4; color: #16A34A;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <!-- Vector 3: Brand Impersonation & Lookalike Radar -->
+            <div class="scam-vector-card" id="url-vec-brand">
+              <div class="vector-card-top">
+                <div class="vector-avatar-badge" id="tile-icon-brand" style="background: rgba(16, 185, 129, 0.1); color: #059669;">
+                  🏷️
+                </div>
+                <div style="flex: 1;">
+                  <div class="vector-title" id="tile-lbl-brand">Website Identity & Homoglyph Radar</div>
+                  <div class="vector-desc" id="tile-sub-brand">No fake brand mimicry or deceptive tricks found</div>
+                  <div class="vector-status" id="tile-val-brand">Genuine / Original</div>
+                </div>
               </div>
-              <span class="check-title-lbl" id="tile-lbl-db">Scam Database</span>
+              <div style="margin-top: 10px;">
+                <button class="btn-vector-expand" onclick="toggleVectorDetail('url-vec-brand')">
+                  <span>Technical Analysis & Citizen Tip</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="vector-details-drawer" id="drawer-url-vec-brand">
+                  <div class="drawer-inner">
+                    <div class="drawer-item">
+                      <span class="drawer-key">Brand Spoofing Check:</span>
+                      <span class="drawer-val">Clean / Zero Character Mimicry</span>
+                    </div>
+                    <div class="drawer-tip-sec defense">
+                      <strong>🛡️ Legal Fact & Defense:</strong>
+                      <p>Scammers use sneaky typosquatting tricks like substituting '1' for 'l' or adding hyphens (e.g. <code>sbi-kyc-update.com</code>). Always verify that the spelling exactly matches the verified bank website.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="check-main-val" id="tile-val-db">No Scam Reports</div>
-            <div class="check-sub-info" id="tile-sub-db">Checked in citizen cyber crime database</div>
+
+            <!-- Vector 4: Scam Database & Cybercrime Blacklist -->
+            <div class="scam-vector-card" id="url-vec-db">
+              <div class="vector-card-top">
+                <div class="vector-avatar-badge" id="tile-icon-db" style="background: rgba(16, 185, 129, 0.1); color: #059669;">
+                  🚨
+                </div>
+                <div style="flex: 1;">
+                  <div class="vector-title" id="tile-lbl-db">Scam Database & Community Threat Radar</div>
+                  <div class="vector-desc" id="tile-sub-db">No fraud complaints filed against this site</div>
+                  <div class="vector-status" id="tile-val-db">Zero Scam Reports</div>
+                </div>
+              </div>
+              <div style="margin-top: 10px;">
+                <button class="btn-vector-expand" onclick="toggleVectorDetail('url-vec-db')">
+                  <span>Technical Analysis & Citizen Tip</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="vector-details-drawer" id="drawer-url-vec-db">
+                  <div class="drawer-inner">
+                    <div class="drawer-item">
+                      <span class="drawer-key">Threat Feeds:</span>
+                      <span class="drawer-val">APWG Global Phishing + InFraud Central Ledger</span>
+                    </div>
+                    <div class="drawer-tip-sec defense">
+                      <strong>🛡️ Legal Fact & Defense:</strong>
+                      <p>If you suspect a fraudulent website or have been tricked by a link, report it immediately to cybercrime.gov.in or dial 1930 to prevent fraudulent financial debits.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 4. Findings & Safety Steps (Two Clear Panels) -->
-        <div class="url-details-split">
-          <!-- Panel 1: Security Findings -->
-          <div class="details-panel-card">
-            <div class="panel-section-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              <span>Security Checks & Detection Results</span>
+        <!-- 4. Web Security Findings & National Citizen Web Safeguard Playbook Split -->
+        <div class="url-guidance-deck">
+          <div class="url-signals-block">
+            <div class="block-header" style="display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 700; color: #064E3B; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F1F5F9;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Security Inspection Signals (<span id="signals-count-pill">0</span>)</span>
             </div>
             <div id="signals-container"></div>
           </div>
-
-          <!-- Panel 2: What Should You Do? (Safety Guide) -->
-          <div class="details-panel-card playbook-panel" id="recommendation-box">
-            <div class="panel-section-title" style="color: #065F46;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>What Should You Do? (Safety Guide)</span>
+          <div class="url-actions-block">
+            <div class="block-header" style="display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 700; color: #064E3B; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F1F5F9;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>National Citizen Web Safeguard Playbook</span>
             </div>
-            <ul class="playbook-list" id="recommendation-text"></ul>
+            <ul id="recommendation-text" class="recommendation-list" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px;"></ul>
+            <!-- Quick Action Helpline Card -->
+            <div style="margin-top: 18px; padding: 14px 16px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.3rem;">🚨</span>
+                <div>
+                  <div style="font-size: 0.8125rem; font-weight: 800; color: #0F172A;">Under Financial Threat or Fake Banking Trap?</div>
+                  <div style="font-size: 0.72rem; color: #64748B;">Dial National Cyber Crime Helpline or report to cybercrime.gov.in</div>
+                </div>
+              </div>
+              <a href="tel:1930" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: #EF4444; color: #FFF; font-weight: 800; font-size: 0.75rem; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                Dial 1930
+              </a>
+            </div>
           </div>
         </div>
 
-        <!-- Hidden container for JS background compatibility (never breaks analyzer.js) -->
+        <!-- Hidden Compatibility Anchors for analyzer.js -->
         <div style="display: none;" aria-hidden="true">
-          <span id="decomp-raw-url"></span>
           <div id="url-decomp-grid"></div>
           <div id="url-engines-container"></div>
+          <div id="decomp-raw-url"></div>
+          <span id="url-header-status-pill"></span>
+          <span id="target-category-tag"></span>
+          <span id="target-protocol-tag"></span>
+          <div id="recommendation-box"></div>
         </div>
-
       </div>
-
-      <!-- ═══════════════════════════════════════════════
-           TOOL-SPECIFIC RESULT VIEW 2: PHONE & TELECOM CHANNEL
-           Centered smartphone caller screen + 2x2 police modus operandi
-           ═══════════════════════════════════════════════ -->
-      <div id="view-phone" class="tool-result-view">
+<div id="view-phone" class="tool-result-view">
         <!-- 1. Telecom Regulatory Authority Clearance Header -->
         <div class="phone-telecom-header-bar">
           <div class="telecom-badge-left">
