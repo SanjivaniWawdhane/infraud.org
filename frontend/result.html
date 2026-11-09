@@ -103,201 +103,189 @@
       
       
       /* ═══════════════════════════════════════════════════════════════
-   TOOL 1: URL & WEBSITE FORENSIC INSPECTOR — v5 "TERMINAL SLATE"
-   Inspired by URLScan.io / SecurityTrails — dark left panel, light right
+   TOOL 1: URL & WEBSITE INSPECTOR — v6 "CLEAN PROFESSIONAL"
+   VirusTotal-inspired: ruled sections, no shadow cards, real data
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Root palette for URL tool ── */
 #view-url {
-  --u-bg: #0D1117;
-  --u-panel: #161B22;
-  --u-border: #30363D;
-  --u-accent: #58A6FF;
-  --u-green: #3FB950;
-  --u-red: #F85149;
-  --u-amber: #D29922;
-  --u-txt: #E6EDF3;
-  --u-muted: #8B949E;
-  --u-card: #21262D;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #F6F8FA;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fff;
+  color: #111;
 }
 
-/* ── Top Scanner Bar ── */
-.url-scanner-topbar {
-  background: var(--u-bg);
-  border-radius: 14px 14px 0 0;
-  padding: 18px 24px 14px;
+/* ── TOP IDENTITY STRIP ── */
+.vt-identity-strip {
+  border: 1px solid #E0E0E0;
+  border-radius: 8px 8px 0 0;
+  background: #FAFAFA;
+  padding: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.vt-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #E8E8E8;
   flex-wrap: wrap;
-  border-bottom: 1px solid var(--u-border);
+  gap: 12px;
+  background: #fff;
 }
-.scanner-status-left {
+
+.vt-domain-block {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-.scanner-pulse-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--u-green);
-  box-shadow: 0 0 0 3px rgba(63,185,80,0.2);
-  flex-shrink: 0;
-  animation: pulse-anim 2s ease-in-out infinite;
-}
-@keyframes pulse-anim {
-  0%,100% { box-shadow: 0 0 0 3px rgba(63,185,80,0.2); }
-  50% { box-shadow: 0 0 0 7px rgba(63,185,80,0.05); }
-}
-.scanner-breadcrumb {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.scanner-label-sm {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--u-muted);
-}
-.scanner-domain-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  color: var(--u-txt);
-  letter-spacing: -0.01em;
-  word-break: break-all;
-}
-.scanner-domain-title span {
-  color: var(--u-accent);
-}
-.scanner-action-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.scn-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 13px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid var(--u-border);
-  background: var(--u-panel);
-  color: var(--u-muted);
-  transition: all 0.18s ease;
-  text-decoration: none;
-  line-height: 1;
-}
-.scn-btn:hover {
-  border-color: var(--u-accent);
-  color: var(--u-txt);
-  background: rgba(88,166,255,0.08);
-}
-.scn-btn-danger {
-  border-color: rgba(248,81,73,0.4);
-  color: var(--u-red);
-  background: rgba(248,81,73,0.06);
-}
-.scn-btn-danger:hover {
-  background: rgba(248,81,73,0.15);
-  border-color: var(--u-red);
-  color: var(--u-red);
+  min-width: 0;
 }
 
-/* ── Chips row under topbar ── */
-.url-meta-chipstrip {
-  background: var(--u-panel);
-  border-radius: 0;
-  padding: 10px 24px;
+.vt-favicon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #E0E0E0;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #757575;
+}
+
+.vt-domain-text {
+  min-width: 0;
+}
+
+.vt-domain-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0D0D0D;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  line-height: 1.2;
+  word-break: break-all;
+  margin: 0 0 3px;
+}
+
+.vt-canonical-url {
+  font-size: 0.72rem;
+  color: #757575;
+  font-family: ui-monospace, Consolas, monospace;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.vt-canonical-url a {
+  color: #1A73E8;
+  text-decoration: none;
+}
+.vt-canonical-url a:hover { text-decoration: underline; }
+
+.vt-actions-row {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
   flex-wrap: wrap;
-  border-bottom: 1px solid var(--u-border);
 }
-.url-chip {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid;
-  font-family: "SFMono-Regular", Consolas, monospace;
+
+.vt-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-}
-.chip-https {
-  background: rgba(63,185,80,0.1);
-  border-color: rgba(63,185,80,0.3);
-  color: var(--u-green);
-}
-.chip-category {
-  background: rgba(88,166,255,0.1);
-  border-color: rgba(88,166,255,0.3);
-  color: var(--u-accent);
-}
-.chip-neutral {
-  background: rgba(139,148,158,0.1);
-  border-color: rgba(139,148,158,0.3);
-  color: var(--u-muted);
-}
-.chip-sep {
-  color: var(--u-border);
+  padding: 6px 12px;
+  border-radius: 5px;
   font-size: 0.75rem;
-  user-select: none;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #DADCE0;
+  background: #fff;
+  color: #3C4043;
+  text-decoration: none;
+  transition: background 0.15s;
+  line-height: 1;
 }
+.vt-btn:hover { background: #F1F3F4; }
+.vt-btn-report {
+  border-color: #FECDD3;
+  background: #FFF5F5;
+  color: #C62828;
+}
+.vt-btn-report:hover { background: #FEEBEE; }
 
-/* ── Main two-column layout ── */
-.url-main-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 520px;
-  background: var(--u-bg);
-  overflow: hidden;
-}
-@media (max-width: 860px) {
-  .url-main-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ── LEFT DARK PANEL: Score + verdict ── */
-.url-left-panel {
-  background: var(--u-panel);
-  border-right: 1px solid var(--u-border);
-  padding: 28px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-}
-.left-panel-title {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--u-muted);
-  margin-bottom: 20px;
+/* Flag chips strip */
+.vt-flag-strip {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+  background: #FAFAFA;
+  border-bottom: 1px solid #E8E8E8;
 }
 
-/* Gauge */
+.vt-flag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 3px;
+  border: 1px solid;
+  font-family: ui-monospace, Consolas, monospace;
+}
+.vfc-green  { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
+.vfc-blue   { background: #E3F2FD; border-color: #90CAF9; color: #1565C0; }
+.vfc-grey   { background: #F5F5F5; border-color: #BDBDBD; color: #424242; }
+.vfc-amber  { background: #FFF8E1; border-color: #FFE082; color: #F57F17; }
+.vfc-red    { background: #FFEBEE; border-color: #EF9A9A; color: #C62828; }
+
+/* ── MAIN TWO-COLUMN ── */
+.vt-main-columns {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border: 1px solid #E0E0E0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #fff;
+}
+@media (max-width: 800px) {
+  .vt-main-columns { grid-template-columns: 1fr; }
+}
+
+/* LEFT: Score panel */
+.vt-score-panel {
+  border-right: 1px solid #E0E0E0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 24px;
+  background: #FAFAFA;
+}
+
+.vt-score-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9E9E9E;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* SVG gauge — dark ring with colored progress */
 .gauge-wrap {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 148px;
+  height: 148px;
   margin: 0 auto 16px;
   display: flex;
   align-items: center;
@@ -305,89 +293,82 @@
 }
 .gauge-svg {
   transform: rotate(-90deg);
-  width: 160px;
-  height: 160px;
+  width: 148px;
+  height: 148px;
   display: block;
 }
 .gauge-bg-circle {
   fill: none !important;
-  stroke: #30363D;
-  stroke-width: 10;
+  stroke: #EEEEEE;
+  stroke-width: 11;
 }
 .gauge-progress-circle {
   fill: none !important;
-  stroke: var(--u-green);
-  stroke-width: 10;
+  stroke: #43A047;
+  stroke-width: 11;
   stroke-linecap: round;
   stroke-dasharray: 439.8;
   stroke-dashoffset: 439.8;
-  transition: stroke-dashoffset 1.3s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
-  filter: drop-shadow(0 0 6px rgba(63,185,80,0.4));
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.16,1,0.3,1), stroke 0.4s ease;
 }
 .gauge-center-content {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%,-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
   pointer-events: none;
 }
 .gauge-score-num {
-  font-size: 3rem;
+  font-size: 2.75rem;
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
-  color: var(--u-green);
-  font-family: "SFMono-Regular", Consolas, monospace;
+  color: #43A047;
   transition: color 0.3s ease;
+  font-family: ui-monospace, Consolas, monospace;
 }
 .gauge-score-denom {
   font-size: 0.55rem;
-  font-weight: 700;
-  color: var(--u-muted);
-  margin-top: 4px;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: #9E9E9E;
+  margin-top: 3px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.risk-verdict-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.vt-verdict-badge {
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 7px 18px;
-  border-radius: 6px;
-  background: rgba(63,185,80,0.12);
-  color: var(--u-green);
-  border: 1px solid rgba(63,185,80,0.3);
-  margin-bottom: 14px;
-  width: 100%;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.risk-explanation-text {
-  font-size: 0.78rem;
-  color: var(--u-muted);
-  line-height: 1.55;
+  letter-spacing: 0.03em;
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 10px;
   text-align: center;
-  margin: 0 0 20px;
-  transition: color 0.3s ease;
+  width: 100%;
+  background: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #A5D6A7;
+  transition: all 0.3s;
 }
 
-/* Score scale bar */
+.vt-verdict-text {
+  font-size: 0.75rem;
+  color: #757575;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0 0 18px;
+  transition: color 0.3s;
+}
+
+/* Scale bar */
 .risk-meter-container {
   width: 100%;
-  padding-top: 16px;
-  border-top: 1px solid var(--u-border);
+  padding-top: 14px;
+  border-top: 1px solid #E8E8E8;
   margin-top: auto;
 }
 .risk-meter-bar {
@@ -395,110 +376,95 @@
   height: 4px;
   border-radius: 100px;
   overflow: hidden;
-  margin-bottom: 7px;
+  margin-bottom: 6px;
   gap: 2px;
   background: transparent;
 }
-.meter-seg {
-  flex: 1;
-  height: 100%;
-  border-radius: 2px;
-  opacity: 0.8;
-}
-.seg-low  { background: #3FB950; }
-.seg-mod  { background: #D29922; }
-.seg-high { background: #FFA657; }
-.seg-crit { background: #F85149; }
-
+.meter-seg { flex: 1; height: 100%; border-radius: 2px; }
+.seg-low  { background: #43A047; }
+.seg-mod  { background: #FFA000; }
+.seg-high { background: #E64A19; }
+.seg-crit { background: #C62828; }
 .risk-meter-labels {
   display: flex;
   justify-content: space-between;
   font-size: 0.6rem;
-  font-weight: 700;
-  color: var(--u-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: #9E9E9E;
+  letter-spacing: 0.03em;
 }
 
-/* ── RIGHT PANEL: Tabbed/Stacked intel ── */
-.url-right-panel {
-  background: var(--u-bg);
+/* RIGHT: Intel main area */
+.vt-intel-main {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Stat strip */
-.url-stat-strip {
+/* Telemetry stat row — 4 stats in a row */
+.vt-stat-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  border-bottom: 1px solid var(--u-border);
+  border-bottom: 1px solid #E0E0E0;
+  background: #FAFAFA;
 }
-@media (max-width: 700px) {
-  .url-stat-strip { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 600px) {
+  .vt-stat-row { grid-template-columns: repeat(2, 1fr); }
 }
-.stat-strip-cell {
-  padding: 14px 16px;
-  border-right: 1px solid var(--u-border);
+.vt-stat-cell {
+  padding: 12px 16px;
+  border-right: 1px solid #E0E0E0;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.stat-strip-cell:last-child { border-right: none; }
-.ssc-lbl {
+.vt-stat-cell:last-child { border-right: none; }
+.vt-stat-lbl {
   font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--u-muted);
+  color: #9E9E9E;
 }
-.ssc-val {
+.vt-stat-val {
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--u-txt);
-  font-family: "SFMono-Regular", Consolas, monospace;
+  color: #0D0D0D;
+  font-family: ui-monospace, Consolas, monospace;
   line-height: 1.3;
 }
-.ssc-sub {
+.vt-stat-sub {
   font-size: 0.65rem;
-  color: var(--u-muted);
+  color: #9E9E9E;
 }
 
-/* Intel sections */
-.url-intel-section {
-  padding: 18px 20px;
-  border-bottom: 1px solid var(--u-border);
+/* Intel section */
+.vt-section {
+  border-bottom: 1px solid #E0E0E0;
+  padding: 16px 20px;
 }
-.url-intel-section:last-child { border-bottom: none; }
-.intel-sec-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.6rem;
+.vt-section:last-child { border-bottom: none; }
+
+.vt-section-title {
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  color: #424242;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--u-muted);
-  margin-bottom: 14px;
-}
-.intel-sec-header-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  background: rgba(88,166,255,0.12);
-  color: var(--u-accent);
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  gap: 6px;
 }
+.vt-section-title svg { color: #757575; }
 
-/* Signal rows */
+/* Heuristic signal rows — table-like */
 .signal-item-row {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 11px 0;
-  border-bottom: 1px solid rgba(48,54,61,0.6);
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #F0F0F0;
 }
 .signal-item-row:last-child {
   border-bottom: none;
@@ -511,137 +477,105 @@
   flex: 1;
 }
 .signal-status-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 2px;
 }
-.signal-status-clean { background: rgba(63,185,80,0.12); color: #3FB950; }
-.signal-status-warn  { background: rgba(210,153,34,0.12); color: #D29922; }
-.signal-status-crit  { background: rgba(248,81,73,0.12); color: #F85149; }
+.signal-status-clean { background: #E8F5E9; color: #2E7D32; }
+.signal-status-warn  { background: #FFF8E1; color: #F57F17; }
+.signal-status-crit  { background: #FFEBEE; color: #C62828; }
 .signal-title-text {
   font-weight: 600;
   font-size: 0.875rem;
-  color: var(--u-txt);
+  color: #212121;
   margin-bottom: 2px;
+  line-height: 1.3;
 }
 .signal-desc-text {
   font-size: 0.75rem;
-  color: var(--u-muted);
+  color: #616161;
   line-height: 1.5;
 }
 
-/* Threat engine rows */
-.radar-engine-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 12px;
-  background: var(--u-panel);
-  border: 1px solid var(--u-border);
-  border-radius: 7px;
-  margin-bottom: 7px;
-  transition: border-color 0.15s;
+/* Threat engine table */
+.vt-engine-table {
+  width: 100%;
+  border-collapse: collapse;
 }
-.radar-engine-row:last-child { margin-bottom: 0; }
-.radar-engine-row:hover { border-color: rgba(88,166,255,0.3); }
-.radar-engine-name {
-  font-size: 0.8rem;
+.vt-engine-table tr {
+  border-bottom: 1px solid #F0F0F0;
+  transition: background 0.1s;
+}
+.vt-engine-table tr:last-child { border-bottom: none; }
+.vt-engine-table tr:hover { background: #F9F9F9; }
+.vt-engine-table td {
+  padding: 9px 10px;
+  font-size: 0.8125rem;
+  vertical-align: middle;
+}
+.vt-engine-name {
+  color: #212121;
   font-weight: 500;
-  color: var(--u-txt);
-  font-family: "SFMono-Regular", Consolas, monospace;
+  font-family: ui-monospace, Consolas, monospace;
 }
-.radar-engine-pass {
+.vt-engine-badge {
   font-size: 0.65rem;
   font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 4px;
-  background: rgba(63,185,80,0.12);
-  color: var(--u-green);
-  border: 1px solid rgba(63,185,80,0.25);
+  padding: 2px 8px;
+  border-radius: 3px;
+  display: inline-block;
   letter-spacing: 0.03em;
 }
+.eb-clean { background: #E8F5E9; color: #2E7D32; }
+.eb-warn  { background: #FFF8E1; color: #F57F17; }
+.eb-crit  { background: #FFEBEE; color: #C62828; }
 
-/* Two-col bottom grid for signals + right stack */
-.url-bottom-grid {
+/* Two-column bottom grid */
+.vt-bottom-cols {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 0;
-  border-top: 0;
+  grid-template-columns: 1fr 280px;
+  flex: 1;
 }
-@media (max-width: 860px) {
-  .url-bottom-grid { grid-template-columns: 1fr; }
+@media (max-width: 700px) {
+  .vt-bottom-cols { grid-template-columns: 1fr; }
 }
 
-/* Canonical breadcrumb bar */
-.url-canonical-bar {
+.vt-right-col {
+  border-left: 1px solid #E0E0E0;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: rgba(88,166,255,0.05);
-  border-bottom: 1px solid var(--u-border);
-  font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 0.7rem;
-  color: var(--u-muted);
-  flex-wrap: wrap;
-}
-.url-canonical-bar strong {
-  color: var(--u-accent);
-  font-weight: 600;
+  flex-direction: column;
 }
 
-/* Playbook / recommendation card */
+/* Playbook / recommendation */
 .clean-certificate-box {
-  background: rgba(63,185,80,0.06);
-  border: 1px solid rgba(63,185,80,0.2);
-  border-radius: 8px;
-  padding: 16px;
-  color: var(--u-green);
+  background: #E8F5E9;
+  border: 1px solid #A5D6A7;
+  border-radius: 6px;
+  padding: 14px;
+  color: #1B5E20;
   margin-top: 10px;
 }
 .clean-cert-icon {
-  width: 40px; height: 40px;
+  width: 36px; height: 36px;
   border-radius: 50%;
-  background: rgba(63,185,80,0.12);
-  color: var(--u-green);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #C8E6C9;
+  color: #2E7D32;
+  display: flex; align-items: center; justify-content: center;
   margin: 0 auto 10px;
 }
-
 .playbook-guidance-card {
-  border-left: 3px solid #3FB950 !important;
-  background: var(--u-panel);
-  border-radius: 7px;
-  padding: 14px;
+  border-left: 3px solid #43A047 !important;
+  padding: 2px 0;
 }
 .playbook-list {
   list-style: none;
   padding: 0; margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Right-side border divider */
-.url-right-side-col {
-  border-left: 1px solid var(--u-border);
-}
-
-/* Wrapper container */
-.url-forensic-wrap {
-  background: var(--u-bg);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--u-border);
-  margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column; gap: 9px;
 }
 
       /* ── TOOL 2: TELECOM CALLER DOSSIER & SMARTPHONE UI (PHONE SCANNER) ── */
@@ -1680,193 +1614,190 @@
 <body>
 
   <!-- ── NAVBAR (EDGE GLASS ARCHITECTURE) ── -->
-                <!-- ═══════════════════════════════════════════════
-           TOOL 1: URL/WEBSITE FORENSIC INSPECTOR — v5 TERMINAL SLATE
-           Dark-panel left score + light terminal right intel
+                      <!-- ═══════════════════════════════════════════════
+           TOOL 1: URL/WEBSITE INSPECTOR — v6 Clean Professional
+           VirusTotal-style: ruled, data-dense, no AI look
            ═══════════════════════════════════════════════ -->
       <div id="view-url" class="tool-result-view">
 
-        <!-- ══ FORENSIC WRAP ══ -->
-        <div class="url-forensic-wrap">
+        <!-- ══ IDENTITY STRIP ══ -->
+        <div class="vt-identity-strip">
 
-          <!-- ── TOP SCANNER BAR ── -->
-          <div class="url-scanner-topbar">
-            <div class="scanner-status-left">
-              <div class="scanner-pulse-dot"></div>
-              <div class="scanner-breadcrumb">
-                <span class="scanner-label-sm">URL Intelligence Scanner · InFraud.org</span>
-                <div class="scanner-domain-title" id="target-display">
-                  <span>Analyzing target...</span>
+          <!-- Top bar: domain + actions -->
+          <div class="vt-top-bar">
+            <div class="vt-domain-block">
+              <div class="vt-favicon-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <div class="vt-domain-text">
+                <div class="vt-domain-name" id="target-display">Analyzing target...</div>
+                <div class="vt-canonical-url">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span id="dossier-canonical">https://—</span>
                 </div>
               </div>
             </div>
-            <div class="scanner-action-row">
-              <button class="scn-btn" onclick="rescanTarget()" title="Rescan target">
+            <div class="vt-actions-row">
+              <button class="vt-btn" onclick="rescanTarget()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                 Rescan
               </button>
-              <button class="scn-btn" onclick="copyResultLink()" title="Copy report link">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <button class="vt-btn" onclick="copyResultLink()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 Share
               </button>
-              <a href="reports.html" class="scn-btn scn-btn-danger" id="btn-report-target" title="Report this URL">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <a href="reports.html" class="vt-btn vt-btn-report" id="btn-report-target">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 Report Threat
               </a>
             </div>
           </div>
 
-          <!-- ── META CHIP STRIP ── -->
-          <div class="url-meta-chipstrip">
-            <span id="target-category-tag" class="url-chip chip-category">WEB / URL</span>
-            <span class="chip-sep">|</span>
-            <span id="target-protocol-tag" class="url-chip chip-https">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              HTTPS / TLS 1.3
+          <!-- Flag chip strip -->
+          <div class="vt-flag-strip">
+            <span id="target-category-tag" class="vt-flag-chip vfc-blue">WEB / URL</span>
+            <span id="target-protocol-tag" class="vt-flag-chip vfc-green">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              HTTPS / TLS
             </span>
-            <span class="chip-sep">|</span>
-            <span class="url-chip chip-neutral">ICANN Canonical</span>
-            <span class="chip-sep">|</span>
-            <span class="url-chip chip-neutral" style="font-family:monospace; font-size:0.6rem;">
-              Canonical: <strong id="dossier-canonical" style="color:#58A6FF;">—</strong>
-            </span>
+            <span class="vt-flag-chip vfc-grey">ICANN Canonical Root</span>
+            <span class="vt-flag-chip vfc-grey">InFraud Heuristic Engine v3</span>
           </div>
+        </div>
 
-          <!-- ── MAIN TWO-COLUMN LAYOUT ── -->
-          <div class="url-main-layout">
+        <!-- ══ MAIN TWO COLUMNS ══ -->
+        <div class="vt-main-columns" id="score-sidebar">
 
-            <!-- LEFT DARK PANEL -->
-            <div class="url-left-panel" id="score-sidebar">
-              <div class="left-panel-title">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Threat Score
-              </div>
+          <!-- LEFT: Score -->
+          <div class="vt-score-panel">
+            <div class="vt-score-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Threat Score
+            </div>
 
-              <!-- Gauge -->
-              <div class="gauge-wrap">
-                <svg class="gauge-svg" viewBox="0 0 160 160" width="160" height="160">
-                  <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#30363D" stroke-width="10"></circle>
-                  <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70" fill="none" stroke="#3FB950" stroke-width="10" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
-                </svg>
-                <div class="gauge-center-content">
-                  <div class="gauge-score-num" id="score-display">--</div>
-                  <div class="gauge-score-denom">Threat Score</div>
-                </div>
-              </div>
-
-              <div class="risk-verdict-pill" id="risk-badge">EVALUATING...</div>
-              <p class="risk-explanation-text" id="risk-summary">Analyzing URL heuristics and threat vectors...</p>
-
-              <div class="risk-meter-container">
-                <div class="risk-meter-bar">
-                  <div class="meter-seg seg-low" title="Safe"></div>
-                  <div class="meter-seg seg-mod" title="Moderate"></div>
-                  <div class="meter-seg seg-high" title="High"></div>
-                  <div class="meter-seg seg-crit" title="Critical"></div>
-                </div>
-                <div class="risk-meter-labels">
-                  <span>Safe</span><span>Moderate</span><span>High</span><span>Critical</span>
-                </div>
+            <div class="gauge-wrap">
+              <svg class="gauge-svg" viewBox="0 0 160 160" width="148" height="148">
+                <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#EEEEEE" stroke-width="11"></circle>
+                <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70" fill="none" stroke="#43A047" stroke-width="11" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
+              </svg>
+              <div class="gauge-center-content">
+                <div class="gauge-score-num" id="score-display">--</div>
+                <div class="gauge-score-denom">/ 100</div>
               </div>
             </div>
 
-            <!-- RIGHT PANEL -->
-            <div class="url-right-panel">
+            <div class="vt-verdict-badge" id="risk-badge">EVALUATING...</div>
+            <p class="vt-verdict-text" id="risk-summary">Analyzing URL heuristics and threat vectors...</p>
 
-              <!-- Stat strip: 4 key telemetry tiles -->
-              <div class="url-stat-strip">
-                <div class="stat-strip-cell">
-                  <span class="ssc-lbl" id="tile-lbl-protocol">Transport</span>
-                  <span class="ssc-val" id="tile-val-protocol">TLS / HTTPS</span>
-                  <span class="ssc-sub" id="tile-sub-protocol">Encrypted channel</span>
-                </div>
-                <div class="stat-strip-cell">
-                  <span class="ssc-lbl" id="tile-lbl-tld">TLD</span>
-                  <span class="ssc-val" id="tile-val-tld">.com</span>
-                  <span class="ssc-sub" id="tile-sub-tld">Generic namespace</span>
-                </div>
-                <div class="stat-strip-cell">
-                  <span class="ssc-lbl" id="tile-lbl-brand">Impersonation</span>
-                  <span class="ssc-val" id="tile-val-brand">Clean</span>
-                  <span class="ssc-sub" id="tile-sub-brand">No homoglyphs</span>
-                </div>
-                <div class="stat-strip-cell">
-                  <span class="ssc-lbl" id="tile-lbl-db">Community DB</span>
-                  <span class="ssc-val" id="tile-val-db">No Flags</span>
-                  <span class="ssc-sub" id="tile-sub-db">Phishing DB clean</span>
-                </div>
+            <div class="risk-meter-container">
+              <div class="risk-meter-bar">
+                <div class="meter-seg seg-low" title="Safe 0–25"></div>
+                <div class="meter-seg seg-mod" title="Moderate 26–50"></div>
+                <div class="meter-seg seg-high" title="High 51–75"></div>
+                <div class="meter-seg seg-crit" title="Critical 76–100"></div>
               </div>
-              <!-- Hidden icon elements needed by analyzer.js -->
-              <span style="display:none;" id="tile-icon-protocol"></span>
-              <span style="display:none;" id="tile-icon-tld"></span>
-              <span style="display:none;" id="tile-icon-brand"></span>
-              <span style="display:none;" id="tile-icon-db"></span>
+              <div class="risk-meter-labels">
+                <span>Safe</span><span>Moderate</span><span>High</span><span>Critical</span>
+              </div>
+            </div>
+          </div>
 
-              <!-- Bottom grid: signals left, feeds+playbook right -->
-              <div class="url-bottom-grid">
+          <!-- RIGHT: Intel -->
+          <div class="vt-intel-main">
 
-                <!-- SIGNALS -->
-                <div class="url-intel-section" style="border-right:1px solid #30363D;">
-                  <div class="intel-sec-header">
-                    <div class="intel-sec-header-icon">
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    </div>
-                    Heuristic Signal Audit
+            <!-- 4-column stat strip -->
+            <div class="vt-stat-row">
+              <div class="vt-stat-cell">
+                <span class="vt-stat-lbl" id="tile-lbl-protocol">Transport</span>
+                <span class="vt-stat-val" id="tile-val-protocol">TLS 1.3</span>
+                <span class="vt-stat-sub" id="tile-sub-protocol">Encrypted</span>
+              </div>
+              <div class="vt-stat-cell">
+                <span class="vt-stat-lbl" id="tile-lbl-tld">TLD</span>
+                <span class="vt-stat-val" id="tile-val-tld">.com</span>
+                <span class="vt-stat-sub" id="tile-sub-tld">Generic</span>
+              </div>
+              <div class="vt-stat-cell">
+                <span class="vt-stat-lbl" id="tile-lbl-brand">Impersonation</span>
+                <span class="vt-stat-val" id="tile-val-brand">Clean</span>
+                <span class="vt-stat-sub" id="tile-sub-brand">No homoglyphs</span>
+              </div>
+              <div class="vt-stat-cell">
+                <span class="vt-stat-lbl" id="tile-lbl-db">Community DB</span>
+                <span class="vt-stat-val" id="tile-val-db">No Flags</span>
+                <span class="vt-stat-sub" id="tile-sub-db">Phishing DB clean</span>
+              </div>
+            </div>
+            <!-- Hidden icon slots for analyzer.js compat -->
+            <span style="display:none;" id="tile-icon-protocol"></span>
+            <span style="display:none;" id="tile-icon-tld"></span>
+            <span style="display:none;" id="tile-icon-brand"></span>
+            <span style="display:none;" id="tile-icon-db"></span>
+
+            <!-- Bottom: signals + right col -->
+            <div class="vt-bottom-cols">
+
+              <!-- Heuristic signals -->
+              <div class="vt-section">
+                <div class="vt-section-title">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Heuristic Signal Audit
+                </div>
+                <div id="signals-container"></div>
+              </div>
+
+              <!-- Right column: feeds + playbook -->
+              <div class="vt-right-col">
+
+                <!-- Threat engine results -->
+                <div class="vt-section">
+                  <div class="vt-section-title">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
+                    Global Threat Feeds
                   </div>
-                  <div id="signals-container"></div>
+                  <table class="vt-engine-table">
+                    <tr>
+                      <td class="vt-engine-name">Google Safe Browsing</td>
+                      <td style="text-align:right"><span class="vt-engine-badge eb-clean">Clean</span></td>
+                    </tr>
+                    <tr>
+                      <td class="vt-engine-name">PhishTank Live</td>
+                      <td style="text-align:right"><span class="vt-engine-badge eb-clean">Not Listed</span></td>
+                    </tr>
+                    <tr>
+                      <td class="vt-engine-name">VirusTotal DB</td>
+                      <td style="text-align:right"><span class="vt-engine-badge eb-clean">0 / 72</span></td>
+                    </tr>
+                    <tr>
+                      <td class="vt-engine-name">Spamhaus DBL</td>
+                      <td style="text-align:right"><span class="vt-engine-badge eb-clean">Clean</span></td>
+                    </tr>
+                  </table>
                 </div>
 
-                <!-- RIGHT SIDE: Feeds + Playbook -->
-                <div class="url-right-side-col">
-
-                  <!-- Global Threat Feeds -->
-                  <div class="url-intel-section">
-                    <div class="intel-sec-header">
-                      <div class="intel-sec-header-icon">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
-                      </div>
-                      Global Threat Feeds
-                    </div>
-                    <div class="radar-engine-row">
-                      <span class="radar-engine-name">Google Safe Browsing</span>
-                      <span class="radar-engine-pass">Clean</span>
-                    </div>
-                    <div class="radar-engine-row">
-                      <span class="radar-engine-name">PhishTank Live</span>
-                      <span class="radar-engine-pass">Not Listed</span>
-                    </div>
-                    <div class="radar-engine-row">
-                      <span class="radar-engine-name">VirusTotal DB</span>
-                      <span class="radar-engine-pass">0 / 72</span>
-                    </div>
-                    <div class="radar-engine-row">
-                      <span class="radar-engine-name">Spamhaus DBL</span>
-                      <span class="radar-engine-pass">Clean</span>
-                    </div>
+                <!-- Security Playbook -->
+                <div class="vt-section" id="recommendation-box">
+                  <div class="vt-section-title" style="color:#2E7D32;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#43A047" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Security Playbook
                   </div>
-
-                  <!-- Recommendation Playbook -->
-                  <div class="url-intel-section" id="recommendation-box">
-                    <div class="intel-sec-header">
-                      <div class="intel-sec-header-icon" style="background:rgba(63,185,80,0.12);color:#3FB950;">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                      </div>
-                      Security Playbook
-                    </div>
-                    <ul class="playbook-list" id="recommendation-text"></ul>
-                  </div>
-
+                  <ul class="playbook-list" id="recommendation-text"></ul>
                 </div>
-              <!-- END url-bottom-grid -->
+
+              </div>
+              <!-- END vt-right-col -->
 
             </div>
-            <!-- END url-right-panel -->
+            <!-- END vt-bottom-cols -->
 
           </div>
-          <!-- END url-main-layout -->
+          <!-- END vt-intel-main -->
 
         </div>
-        <!-- END url-forensic-wrap -->
+        <!-- END vt-main-columns -->
 
       </div>
 
