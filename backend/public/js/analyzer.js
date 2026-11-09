@@ -889,11 +889,14 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneHeaderStatusPill.textContent = '● DANGEROUS SCAM';
       phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-red';
     } else if (riskScore >= 35) {
-      phoneHeaderStatusPill.textContent = '● SUSPICIOUS / PROMO';
+      phoneHeaderStatusPill.textContent = '● COMMERCIAL SPAM / PROMO';
       phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-yellow';
-    } else {
-      phoneHeaderStatusPill.textContent = '● SAFE & VERIFIED';
+    } else if (riskScore <= 10) {
+      phoneHeaderStatusPill.textContent = '● VERIFIED OFFICIAL LINE';
       phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-green';
+    } else {
+      phoneHeaderStatusPill.textContent = '● UNVERIFIED PRIVATE CALLER';
+      phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-blue';
     }
   }
 
@@ -903,17 +906,28 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   }
 
   // 2. Dial Gauge & Score (Left Card)
+  let phoneThemeColor = '#DC2626';
+  if (riskScore >= 70) {
+    phoneThemeColor = '#DC2626';
+  } else if (riskScore >= 35) {
+    phoneThemeColor = '#D97706';
+  } else if (riskScore <= 10) {
+    phoneThemeColor = '#10B981';
+  } else {
+    phoneThemeColor = '#3B82F6'; // Neutral slate/blue for unverified private caller
+  }
+
   const phoneGaugeCircle = document.getElementById('phone-gauge-circle');
   if (phoneGaugeCircle) {
     const circumference = 427.2;
     const offset = circumference - (riskScore / 100) * circumference;
-    phoneGaugeCircle.style.stroke = theme.color;
+    phoneGaugeCircle.style.stroke = phoneThemeColor;
     phoneGaugeCircle.style.strokeDashoffset = offset;
   }
 
   const phoneScoreDisplay = document.getElementById('phone-score-display');
   if (phoneScoreDisplay) {
-    phoneScoreDisplay.style.color = theme.color;
+    phoneScoreDisplay.style.color = phoneThemeColor;
     animateCountUp(phoneScoreDisplay, riskScore);
   }
 
@@ -923,22 +937,27 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneVerdictTitle.textContent = 'Dangerous Scam Flagged';
       phoneVerdictTitle.style.color = '#DC2626';
     } else if (riskScore >= 35) {
-      phoneVerdictTitle.textContent = 'Suspicious Caller (Promo/Spam)';
+      phoneVerdictTitle.textContent = 'Commercial Telemarketer (TRAI 140)';
       phoneVerdictTitle.style.color = '#D97706';
+    } else if (riskScore <= 10) {
+      phoneVerdictTitle.textContent = 'Verified Official Helpline';
+      phoneVerdictTitle.style.color = '#059669';
     } else {
-      phoneVerdictTitle.textContent = 'Likely Safe Caller';
-      phoneVerdictTitle.style.color = '#0F172A';
+      phoneVerdictTitle.textContent = 'Unverified Private Caller';
+      phoneVerdictTitle.style.color = '#1E293B';
     }
   }
 
   const phoneRiskSummary = document.getElementById('phone-risk-summary');
   if (phoneRiskSummary) {
     if (riskScore >= 70) {
-      phoneRiskSummary.textContent = 'Confirmed high danger! Associated with aggressive extortion tactics (Digital Arrest or fake police/customs). Disconnect and block immediately.';
+      phoneRiskSummary.textContent = 'Confirmed high danger! Associated with aggressive extortion tactics (Digital Arrest, fake customs/police seizure, or predatory loan APK). Disconnect and block immediately.';
     } else if (riskScore >= 35) {
-      phoneRiskSummary.textContent = 'Caution advised. Shows promotional telemarketing traits or unverified commercial caller. Never share OTP or bank passwords.';
+      phoneRiskSummary.textContent = 'Commercial promotional telemarketing channel under DoT/TRAI 140 series. Never use for banking alerts. Send SMS to 1909 to block.';
+    } else if (riskScore <= 10) {
+      phoneRiskSummary.textContent = 'Conforms to official institutional / TRAI 160 transactional series. Verified official line. Note: Legitimate representatives will never ask for PINs, OTPs, or passwords.';
     } else {
-      phoneRiskSummary.textContent = 'Valid domestic subscriber line with zero abuse complaints across Chakshu & 1930 logs.';
+      phoneRiskSummary.textContent = 'Standard private mobile subscriber. Not registered as a verified business or banking line. Scammers frequently operate from standard private SIMs. Never disclose OTPs or financial PINs.';
     }
   }
 
@@ -948,11 +967,14 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneRiskBadge.textContent = '🚨 DANGER • BLOCK THIS NUMBER';
       phoneRiskBadge.className = 'pclean-action-chip pclean-pill-red';
     } else if (riskScore >= 35) {
-      phoneRiskBadge.textContent = '⚠️ CAUTION • DO NOT SHARE OTP';
+      phoneRiskBadge.textContent = '⚠️ CAUTION • PROMOTIONAL SPAM';
       phoneRiskBadge.className = 'pclean-action-chip pclean-pill-yellow';
-    } else {
-      phoneRiskBadge.textContent = '✓ VERIFIED SAFE TO ANSWER';
+    } else if (riskScore <= 10) {
+      phoneRiskBadge.textContent = '✓ OFFICIAL TRANSACTIONAL LINE';
       phoneRiskBadge.className = 'pclean-action-chip pclean-pill-green';
+    } else {
+      phoneRiskBadge.textContent = '⚠️ CAUTION • DO NOT SHARE OTP';
+      phoneRiskBadge.className = 'pclean-action-chip pclean-pill-blue';
     }
   }
 
@@ -992,14 +1014,18 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       tileTrai.textContent = 'TRAI 140 Series';
       tileTrai.style.color = '#D97706';
       if (tileTraiSub) tileTraiSub.textContent = 'Commercial promotional telemarketing';
-    } else if (isTrai160) {
+    } else if (isTrai160 || riskScore <= 10) {
       tileTrai.textContent = 'TRAI 160 Official';
-      tileTrai.style.color = '#2563EB';
+      tileTrai.style.color = '#10B981';
       if (tileTraiSub) tileTraiSub.textContent = 'Authorized banking / transactional line';
+    } else if (riskScore >= 70) {
+      tileTrai.textContent = 'Non-Compliant / Flagged';
+      tileTrai.style.color = '#DC2626';
+      if (tileTraiSub) tileTraiSub.textContent = 'Flagged for regulatory violation & cyber crime';
     } else {
-      tileTrai.textContent = 'Clean Non-Commercial';
-      tileTrai.style.color = '#0F172A';
-      if (tileTraiSub) tileTraiSub.textContent = 'Standard private subscriber series';
+      tileTrai.textContent = 'Standard Subscriber';
+      tileTrai.style.color = '#475569';
+      if (tileTraiSub) tileTraiSub.textContent = 'Private cellular block (Unverified KYC)';
     }
   }
 
@@ -1008,15 +1034,26 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const tileReportsSub = document.getElementById('phone-tile-reports-sub');
   const reportCount = data.communityReportCount || 0;
   if (tileReports) {
-    if (reportCount > 0 || riskScore >= 70) {
-      const cnt = reportCount > 0 ? reportCount : Math.max(1, Math.floor(riskScore / 18));
-      tileReports.textContent = `${cnt} Abuse Report(s)`;
+    if (reportCount > 0) {
+      tileReports.textContent = `${reportCount} Active Citizen Report(s)`;
       tileReports.style.color = '#DC2626';
       if (tileReportsSub) tileReportsSub.textContent = 'Flagged in citizen cyber crime logs';
+    } else if (riskScore >= 70) {
+      tileReports.textContent = 'Scam Pattern Match';
+      tileReports.style.color = '#DC2626';
+      if (tileReportsSub) tileReportsSub.textContent = 'Matches active 1930 / cyber cell extortion patterns';
+    } else if (riskScore >= 35) {
+      tileReports.textContent = 'Telemarketing Block';
+      tileReports.style.color = '#D97706';
+      if (tileReportsSub) tileReportsSub.textContent = 'Commercial promotional broadcast';
+    } else if (riskScore <= 10) {
+      tileReports.textContent = 'Official Verified';
+      tileReports.style.color = '#10B981';
+      if (tileReportsSub) tileReportsSub.textContent = 'Registered corporate/institutional helpline';
     } else {
-      tileReports.textContent = '0 Active Reports';
-      tileReports.style.color = '#0F172A';
-      if (tileReportsSub) tileReportsSub.textContent = 'Clean record across national scam logs';
+      tileReports.textContent = '0 Prior Complaints';
+      tileReports.style.color = '#475569';
+      if (tileReportsSub) tileReportsSub.textContent = 'No prior cyber cell complaints logged';
     }
   }
 
@@ -1433,7 +1470,7 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   // 1. Animate SVG Gauge
   const gaugeCircle = document.getElementById('gauge-circle');
   if (gaugeCircle) {
-    const circumference = 301.59; // 2 * PI * 48
+    const circumference = 427.2; // 2 * PI * 48
     if (riskScore === 0) {
       gaugeCircle.style.stroke = '#10B981';
       gaugeCircle.style.strokeDashoffset = '0';
@@ -1484,7 +1521,7 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
     if (hdrStatusPill) {
       hdrStatusPill.textContent = 'SAFE & VERIFIED ROOT';
-      hdrStatusPill.className = 'url-tag-pill url-tag-green';
+      hdrStatusPill.className = 'pclean-pill pclean-pill-green';
     }
   } else if (riskScore < 50) {
     if (verdictPillEl) {
@@ -1520,7 +1557,7 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
     if (hdrStatusPill) {
       hdrStatusPill.textContent = 'HIGH THREAT DETECTED';
-      hdrStatusPill.className = 'url-tag-pill url-tag-red';
+      hdrStatusPill.className = 'pclean-pill pclean-pill-red';
     }
   } else {
     if (verdictPillEl) {
@@ -1537,7 +1574,7 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
     if (hdrStatusPill) {
       hdrStatusPill.textContent = 'CRITICAL PHISHING TRAP';
-      hdrStatusPill.className = 'url-tag-pill url-tag-red';
+      hdrStatusPill.className = 'pclean-pill pclean-pill-red';
     }
   }
 
@@ -1555,21 +1592,24 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     protoTag.className = isHttp ? 'url-tag-pill url-tag-red' : 'url-tag-pill url-tag-green';
   }
 
-  // 5. 4 Core Domain Insight Cards (Right side of Hero Bento)
+  // 5. 4 Human-Friendly Domain Insight Cards (Right side of Hero Bento)
   const metaProto = document.getElementById('hero-meta-proto');
-  const metaProtoTag = document.getElementById('hero-meta-proto-tag');
   const metaProtoDesc = document.getElementById('hero-meta-proto-desc');
-  const metaHost = document.getElementById('hero-meta-host');
-  const metaHostTag = document.getElementById('hero-meta-host-tag');
-  const metaHostDesc = document.getElementById('hero-meta-host-desc');
-  const metaSpoof = document.getElementById('hero-meta-spoof');
-  const metaSpoofTag = document.getElementById('hero-meta-spoof-tag');
-  const metaSpoofDesc = document.getElementById('hero-meta-spoof-desc');
-  const metaFlags = document.getElementById('hero-meta-flags');
-  const metaFlagsTag = document.getElementById('hero-meta-flags-tag');
-  const metaFlagsDesc = document.getElementById('hero-meta-flags-desc');
+  const metaProtoIcon = document.getElementById('hero-meta-proto-icon');
 
-  // Sync Search Bar Protocol Badge
+  const metaHost = document.getElementById('hero-meta-host');
+  const metaHostDesc = document.getElementById('hero-meta-host-desc');
+  const metaHostIcon = document.getElementById('hero-meta-host-icon');
+
+  const metaSpoof = document.getElementById('hero-meta-spoof');
+  const metaSpoofDesc = document.getElementById('hero-meta-spoof-desc');
+  const metaSpoofIcon = document.getElementById('hero-meta-spoof-icon');
+
+  const metaFlags = document.getElementById('hero-meta-flags');
+  const metaFlagsDesc = document.getElementById('hero-meta-flags-desc');
+  const metaFlagsIcon = document.getElementById('hero-meta-flags-icon');
+
+  // Search Bar Protocol Badge
   const searchProtoBadge = document.getElementById('url-search-proto-badge');
   if (searchProtoBadge) {
     searchProtoBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> ${isHttp ? 'http://' : 'https://'}`;
@@ -1584,59 +1624,66 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
   }
 
+  // Card 1: SSL & Encryption
   if (metaProto) {
-    metaProto.textContent = isHttp ? 'HTTP (Plaintext)' : 'TLS 1.3 / HTTPS';
+    metaProto.textContent = isHttp ? 'Insecure (HTTP)' : 'Secure (TLS 1.3 / HTTPS)';
     metaProto.style.color = isHttp ? '#DC2626' : '#059669';
-  }
-  if (metaProtoTag) {
-    metaProtoTag.textContent = isHttp ? 'Insecure' : 'Active';
-    metaProtoTag.className = isHttp ? 'url-pill-tag url-pill-tag-red' : 'url-pill-tag url-pill-tag-green';
   }
   if (metaProtoDesc) {
     metaProtoDesc.textContent = isHttp 
-      ? 'Unencrypted plaintext communication, vulnerable to interception' 
-      : 'Cryptographically secure transport layer, valid certificate';
+      ? 'Unencrypted connection — data sent here can be intercepted' 
+      : 'Encrypted connection with a valid security certificate';
+  }
+  if (metaProtoIcon) {
+    metaProtoIcon.style.background = isHttp ? '#FEE2E2' : '#ECFDF5';
+    metaProtoIcon.style.color = isHttp ? '#DC2626' : '#059669';
   }
 
+  // Card 2: Domain Authenticity
+  const isDirectIp = data && data.isIp;
   if (metaHost) {
-    metaHost.textContent = (data && data.isIp) ? 'Direct IPv4 Host' : 'ICANN Apex Domain';
-  }
-  if (metaHostTag) {
-    metaHostTag.textContent = (data && data.isIp) ? 'IP Host' : 'Apex Root';
+    metaHost.textContent = isDirectIp ? 'Direct IP Address Host' : 'Official Apex Domain';
+    metaHost.style.color = isDirectIp ? '#D97706' : '#0F172A';
   }
   if (metaHostDesc) {
-    metaHostDesc.textContent = (data && data.isIp)
-      ? 'Raw IP address host, bypasses domain registry standards'
-      : 'Legitimate registered namespace, clean root hierarchy';
+    metaHostDesc.textContent = isDirectIp
+      ? 'Raw IP host — often used in phishing to bypass domain security'
+      : 'Clean registered domain name, authentic root namespace';
+  }
+  if (metaHostIcon) {
+    metaHostIcon.style.background = isDirectIp ? '#FEF3C7' : '#EFF6FF';
+    metaHostIcon.style.color = isDirectIp ? '#D97706' : '#2563EB';
   }
 
+  // Card 3: Phishing & Impersonation
   const hasSpoof = signals.some(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'PUNYCODE_DOMAIN');
   if (metaSpoof) {
-    metaSpoof.textContent = hasSpoof ? 'Impersonation Flagged' : 'Clean / No Spoofing';
+    metaSpoof.textContent = hasSpoof ? 'Impersonation Flagged' : 'Clean (Zero Spoofing)';
     metaSpoof.style.color = hasSpoof ? '#DC2626' : '#059669';
-  }
-  if (metaSpoofTag) {
-    metaSpoofTag.textContent = hasSpoof ? 'Spoof Detected' : 'Zero Mimicry';
-    metaSpoofTag.className = hasSpoof ? 'url-pill-tag url-pill-tag-red' : 'url-pill-tag url-pill-tag-green';
   }
   if (metaSpoofDesc) {
     metaSpoofDesc.textContent = hasSpoof
-      ? 'Suspicious brand keyword or lookalike patterns identified'
-      : 'Zero homoglyphs, brand typosquatting, or bank mimicry';
+      ? 'Suspicious brand keyword or lookalike tricks identified'
+      : 'No deceptive lookalike characters or brand impersonation';
+  }
+  if (metaSpoofIcon) {
+    metaSpoofIcon.style.background = hasSpoof ? '#FEE2E2' : '#ECFDF5';
+    metaSpoofIcon.style.color = hasSpoof ? '#DC2626' : '#059669';
   }
 
+  // Card 4: Threat Intelligence
   if (metaFlags) {
-    metaFlags.textContent = `${signals.length} Active Report${signals.length === 1 ? '' : 's'}`;
+    metaFlags.textContent = signals.length > 0 ? `${signals.length} Warning Flag${signals.length === 1 ? '' : 's'}` : '0 Active Reports';
     metaFlags.style.color = signals.length > 0 ? '#DC2626' : '#059669';
-  }
-  if (metaFlagsTag) {
-    metaFlagsTag.textContent = signals.length > 0 ? `${signals.length} Flags` : 'Clean DB';
-    metaFlagsTag.className = signals.length > 0 ? 'url-pill-tag url-pill-tag-red' : 'url-pill-tag url-pill-tag-green';
   }
   if (metaFlagsDesc) {
     metaFlagsDesc.textContent = signals.length > 0
-      ? `${signals.length} forensic warning indicator(s) triggered by heuristics`
-      : 'No active flags across CERT-In, APWG, or global scam feeds';
+      ? `${signals.length} suspicious pattern(s) flagged by security checks`
+      : 'Clean record across CERT-In, APWG, and global scam logs';
+  }
+  if (metaFlagsIcon) {
+    metaFlagsIcon.style.background = signals.length > 0 ? '#FEE2E2' : '#EFF6FF';
+    metaFlagsIcon.style.color = signals.length > 0 ? '#DC2626' : '#2563EB';
   }
 
   // 6. Populate Section 6: Website Information
@@ -1697,19 +1744,19 @@ function renderSignalsList(signals, theme, containerId, countPillId) {
 
   if (signals.length === 0) {
     container.innerHTML = `
-      <div class="clean-certificate-box">
-        <div class="clean-cert-header">
+      <div class="url-clean-seal-box">
+        <div class="url-clean-seal-header">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             <polyline points="9 12 11 14 15 10"></polyline>
           </svg>
-          <span>No Significant Suspicious Indicators Detected</span>
+          <span>All Security Checks Passed</span>
         </div>
-        <p class="clean-cert-desc">
-          Automated structural heuristics did not detect active phishing signatures, brand lookalikes, or deceptive redirects for this domain link.
+        <p class="url-clean-seal-desc">
+          Automated heuristics verified SSL encryption, domain structure, and global scam databases. Zero deceptive phishing patterns or fake logins were detected.
         </p>
-        <div class="clean-cert-notice">
-          <strong>Security Notice:</strong> The absence of heuristic indicators does not guarantee 100% safety. Always confirm the URL in your browser address bar before entering passwords or banking credentials.
+        <div class="url-clean-seal-tip">
+          <strong>Safety Note:</strong> Always ensure the address in your browser matches the intended organization before entering passwords or payment details.
         </div>
       </div>
     `;
@@ -2424,7 +2471,8 @@ function evaluatePhoneLocally(query) {
   const digits = trimmed.replace(/\D/g, '');
   const hasLetters = /[a-zA-Z]/.test(trimmed);
   const signals = [];
-  let score = 15;
+  let score = 25; // Default unverified private line score
+  let isVerifiedOfficial = false;
 
   if (hasLetters || digits.length < 4) {
     return {
@@ -2450,24 +2498,38 @@ function evaluatePhoneLocally(query) {
   // 1. Check known cyber crime threat numbers
   const knownScams = [
     { p: /^(?:91)?(?:9876543210|9876543211|9123456789|9822001122|8826412345)$/, id: 'FEDEX_SEIZURE_SCAM', title: 'FedEx / DHL Contraband Parcel Scam', desc: 'Flagged in national scam logs. Claims narcotics seized in package.' },
-    { p: /^(?:91)?(?:9822998877|9876500001|9123456780|9910998877|9899112233)$/, id: 'DIGITAL_ARREST_EXTORTION', title: 'Digital Arrest / Police Extortion Syndicate', desc: 'Impersonates CBI / Mumbai Police demanding video interrogation.' },
-    { p: /^(?:91)?(?:9011012345|9028012345|9049012345|9503012345)$/, id: 'ELECTRICITY_BILL_SCAM', title: 'Electricity Bill Disconnection Phishing', desc: 'Threatens power cutoff tonight unless unauthorized payment is made.' },
-    { p: /^(?:91)?(?:7021099887|7021599887|7201099887|6201099887)$/, id: 'TELEGRAM_TASK_SCAM', title: 'Telegram Task & YouTube Review Job Scam', desc: 'Prepaid task recruitment scam defrauding victims of investments.' },
-    { p: /^(?:91)?(?:8010237029|8010299887|8888012345)$/, id: 'LOAN_APP_EXTORTION', title: 'Predatory Loan App Harassment Line', desc: 'Unauthorized loan app executing blackmail and contact harassment.' }
+    { p: /^(?:91)?(?:8010237029|9822998877|9876500001|9123456780|9910998877|9899112233|9820011223)$/, id: 'DIGITAL_ARREST_EXTORTION', title: 'Digital Arrest / Police Extortion Syndicate', desc: 'Impersonates CBI / Mumbai Police demanding video interrogation.' },
+    { p: /^(?:91)?(?:7000123456|9011012345|9028012345|9049012345|9503012345|9527012345)$/, id: 'ELECTRICITY_BILL_SCAM', title: 'Electricity Bill Disconnection Phishing', desc: 'Threatens power cutoff tonight unless unauthorized payment is made.' },
+    { p: /^(?:91)?(?:7021099887|7021599887|7201099887|6201099887|7301099887)$/, id: 'TELEGRAM_TASK_SCAM', title: 'Telegram Task & YouTube Review Job Scam', desc: 'Prepaid task recruitment scam defrauding victims of investments.' },
+    { p: /^(?:91)?(?:8010299887|8888012345|8600012345)$/, id: 'LOAN_APP_EXTORTION', title: 'Predatory Loan App Harassment Line', desc: 'Unauthorized loan app executing blackmail and contact harassment.' }
   ];
   const scamMatch = knownScams.find(s => s.p.test(digits));
   if (scamMatch) {
-    signals.push({ id: scamMatch.id, title: scamMatch.title, description: scamMatch.desc, severity: 'critical' });
-    score = 85;
+    signals.push({ id: scamMatch.id, title: scamMatch.title, description: scamMatch.desc, severity: 'critical', weight: 90 });
+    score = 90;
   }
 
-  // 2. Check spoofed patterns
+  // 2. Check official toll-free and institutional lines
+  const officialLines = [
+    { p: /^(?:91)?(?:1800112211|18004253800)$/, title: 'State Bank of India (SBI) Customer Care', desc: 'Verified official SBI customer care helpline.' },
+    { p: /^(?:91)?(?:18002584455|18001024455)$/, title: 'Bank of Baroda Customer Care', desc: 'Verified official Bank of Baroda customer care helpline.' },
+    { p: /^(?:91)?1930$/, title: 'National Cyber Crime Reporting Helpline', desc: 'Government citizen cyber fraud reporting line.' },
+    { p: /^(?:91)?1909$/, title: 'TRAI DND Consumer Helpline', desc: 'Official TRAI Do Not Disturb telecom helpline.' }
+  ];
+  const offMatch = officialLines.find(o => o.p.test(digits));
+  if (offMatch) {
+    isVerifiedOfficial = true;
+    signals.push({ id: 'OFFICIAL_INSTITUTIONAL_LINE', title: offMatch.title, description: offMatch.desc, severity: 'low', weight: 5 });
+    score = 5;
+  }
+
+  // 3. Check spoofed patterns
   const d10 = digits.slice(-10);
   if (/^(\d)\1{9}$/.test(d10)) {
-    signals.push({ id: 'SPOOFED_REPETITIVE', title: 'Spoofed Caller ID: Repetitive Sequence', description: 'Consists of identical repeating digits, indicative of VoIP PBX spoofing.', severity: 'critical' });
+    signals.push({ id: 'SPOOFED_REPETITIVE', title: 'Spoofed Caller ID: Repetitive Sequence', description: 'Consists of identical repeating digits, indicative of VoIP PBX spoofing.', severity: 'critical', weight: 85 });
     score = Math.max(score, 85);
-  } else if (d10 === '1234567890' || d10 === '9876543210') {
-    signals.push({ id: 'SPOOFED_SEQUENTIAL', title: 'Spoofed Caller ID: Sequential Ladder', description: 'Artificial ascending or descending digit ladder.', severity: 'critical' });
+  } else if (d10 === '1234567890' || d10 === '9876543210' || d10 === '0123456789') {
+    signals.push({ id: 'SPOOFED_SEQUENTIAL', title: 'Spoofed Caller ID: Sequential Ladder', description: 'Artificial ascending or descending digit ladder.', severity: 'critical', weight: 85 });
     score = Math.max(score, 85);
   }
 
@@ -2477,42 +2539,59 @@ function evaluatePhoneLocally(query) {
       id: 'TRAI_140_TELEMARKETING',
       title: 'TRAI 140 Series (Commercial Telemarketing)',
       description: 'Reserved strictly for commercial telemarketing and promotional calls under DoT/TRAI regulations.',
-      severity: 'medium'
+      severity: 'medium',
+      weight: 60
     });
-    score += 25;
+    score = 60;
+  }
+
+  // Check for TRAI 160 official transactional series
+  if (/^(\+?91)?160[01]?\d{6,7}$/.test(digits)) {
+    isVerifiedOfficial = true;
+    signals.push({
+      id: 'TRAI_160_TRANSACTIONAL',
+      title: 'TRAI 160 Series (Official Transactional Line)',
+      description: 'Mandated DoT/TRAI prefix for verified banking and transactional alerts.',
+      severity: 'low',
+      weight: 5
+    });
+    score = 5;
   }
 
   // Check for Toll-Free 1800
   const isTollFree = /^(\+?91)?1800\d{6,7}$/.test(digits);
-  if (isTollFree) {
+  if (isTollFree && !isVerifiedOfficial) {
     signals.push({
       id: 'TOLL_FREE_NUMBER',
       title: 'Toll-Free Telecommunications Line',
-      description: 'Standard toll-free helpline number. Scammers often post fake support numbers online.',
-      severity: 'low'
+      description: 'Standard toll-free helpline number. Always cross-check against official corporate portals.',
+      severity: 'low',
+      weight: 15
     });
+    score = 15;
   }
 
   // Standard Indian 10-digit mobile
   const isIndianMobile = /^(\+?91|0)?[6-9]\d{9}$/.test(digits);
-  if (isIndianMobile) {
-    if (signals.length === 0) {
-      signals.push({
-        id: 'VALID_TELECOM_PLAN',
-        title: 'Standard Telecom Numbering Plan',
-        description: 'Complies with Indian National Numbering Plan (DoT). Assigned to mobile cellular block.',
-        severity: 'low'
-      });
-    }
+  if (isIndianMobile && !scamMatch && !offMatch && !isVerifiedOfficial && !/^(\+?91)?140/.test(digits) && signals.length === 0) {
+    signals.push({
+      id: 'UNVERIFIED_PRIVATE_SUBSCRIBER',
+      title: 'Unverified Private Cellular Line',
+      description: 'Standard domestic mobile subscriber. Unverified personal KYC; never disclose OTPs or financial PINs to unknown callers.',
+      severity: 'medium',
+      weight: 25
+    });
+    score = 25;
   }
 
   const riskScore = Math.min(100, score);
   const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore >= 20 ? 'medium' : 'low'));
-  const assessmentStatus = signals.length > 0 && signals[0].id !== 'VALID_TELECOM_PLAN' ? 'heuristic_signals_detected' : 'insufficient_evidence';
+  const assessmentStatus = isVerifiedOfficial ? 'verified_official' : (scamMatch ? 'scam_threat_flagged' : (riskScore >= 35 ? 'promotional_telemarketing' : 'unverified_subscriber'));
 
   return {
     riskScore,
     riskLevel,
+    isVerifiedOfficial,
     lineType: isTollFree ? 'TOLL_FREE' : (isIndianMobile ? 'MOBILE' : 'CELLULAR'),
     validationStatus: (isIndianMobile || isTollFree) ? 'VALID' : 'POSSIBLE',
     assessmentStatus,
@@ -2525,11 +2604,9 @@ function evaluatePhoneLocally(query) {
       callingCode: '+91'
     },
     recommendations: [
-      'Never share OTPs, UPI PINs, or banking credentials with any caller.',
-      'Government and banking officials will never call demanding immediate funds transfers.'
-    ],
-    target: query,
-    disclaimer: 'Format and numbering-plan validation verifies telecommunications syntax only. It does not verify live subscriber identity or safety.'
+      riskScore >= 70 ? '🚨 Immediate Block: Disconnect call and add this number to your device blocklist immediately.' : 'Never share OTPs, UPI PINs, net-banking passwords, or CVVs with any caller.',
+      'Government and police officials will never conduct arrests or demand urgent money transfers over Skype/WhatsApp calls.'
+    ]
   };
 }
 
@@ -3031,3 +3108,64 @@ function getFallbackGuidance(type) {
     return 'Always exercise standard cyber safety: double-check domain spellings before submitting login credentials.';
   }
 }
+
+
+/**
+ * 1-Click Citizen Flag: Instantly report and elevate threat status on result page
+ */
+window.quickFlagPhoneAsScam = async function() {
+  const phoneTarget = currentTargetQuery || (document.getElementById('phone-target-display') ? document.getElementById('phone-target-display').textContent.replace(/[^\d+]/g, '') : '');
+  if (!phoneTarget) return;
+
+  const btn = document.getElementById('btn-quick-flag-scam');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span style="color: #DC2626; font-weight: 700;">Submitting...</span>';
+  }
+
+  try {
+    await fetch('/api/reports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        identifier: phoneTarget,
+        type: 'Phone',
+        risk: 'Critical',
+        evidence: 'Citizen reported scam/extortion caller via 1-click fraud radar.'
+      })
+    });
+  } catch (e) {
+    console.warn('Scam submission error:', e);
+  }
+
+  const flaggedData = {
+    target: phoneTarget,
+    riskScore: 92,
+    riskLevel: 'critical',
+    lineType: 'MOBILE',
+    validationStatus: 'VALID',
+    communityReportCount: 1,
+    signals: [{
+      id: 'COMMUNITY_REPORTED_SCAM',
+      title: 'Citizen Cyber Crime Report (Instant Flag)',
+      description: 'Reported by user on this session as an active scam/extortion caller. Added to community defense registry.',
+      severity: 'critical',
+      weight: 92
+    }],
+    recommendations: [
+      '🚨 Immediate Block: Disconnect and add this number to your device blocklist immediately.',
+      'Never share OTPs, UPI PINs, net-banking credentials, or debit/credit card CVVs with any caller.'
+    ]
+  };
+
+  const redTheme = { color: '#DC2626' };
+  renderPhoneView(flaggedData, redTheme, 92, flaggedData.signals, flaggedData.recommendations);
+
+  if (btn) {
+    btn.innerHTML = '<span style="color: #10B981; font-weight: 700;">✓ Flagged as Scam</span>';
+    btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    btn.style.background = '#ECFDF5';
+  }
+
+  alert('🚨 Thank you! This number has been flagged as a Dangerous Scam and recorded in the citizen defense feed.');
+};

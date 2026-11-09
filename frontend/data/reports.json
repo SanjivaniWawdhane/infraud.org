@@ -36,6 +36,30 @@
     "approvedAt": 1794224341763
   },
   {
+    "id": "phone-scam-digital-arrest",
+    "identifier": "+91 80102 37029",
+    "type": "Phone",
+    "risk": "Critical",
+    "evidence": "Digital Arrest Scam. Falsely poses as CBI / Mumbai Police demanding video interrogation and urgent funds transfer.",
+    "reporterName": "Sanjay Deshmukh (Nagpur)",
+    "reporterEmail": "",
+    "timestamp": 1794224341763,
+    "status": "approved",
+    "approvedAt": 1794224341763
+  },
+  {
+    "id": "phone-scam-electricity",
+    "identifier": "+91 70001 23456",
+    "type": "Phone",
+    "risk": "Critical",
+    "evidence": "Electricity Bill Disconnection SMS Scam. Threatens power disconnection tonight unless fraudulent number is called.",
+    "reporterName": "Pooja Kulkarni (Nashik)",
+    "reporterEmail": "",
+    "timestamp": 1794224341763,
+    "status": "approved",
+    "approvedAt": 1794224341763
+  },
+  {
     "id": "seed-5",
     "identifier": "paytm-kyc-verify@gmail.com",
     "type": "Email",

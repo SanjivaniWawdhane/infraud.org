@@ -15,6 +15,8 @@
  * - Never claims format validation proves active SIM status, subscriber identity, or total safety.
  */
 
+const fs = require('fs');
+const path = require('path');
 const { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber } = require('libphonenumber-js/max');
 
 // Native international region name resolver
@@ -124,7 +126,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 2. Digital Arrest & Police Extortion Syndicate
   {
-    numbers: ['9822998877', '9876500001', '9123456780', '9910998877', '9899112233', '9820011223'],
+    numbers: ['8010237029', '9822998877', '9876500001', '9123456780', '9910998877', '9899112233', '9820011223'],
     type: 'DIGITAL_ARREST_EXTORTION',
     title: 'Digital Arrest / Police Extortion Syndicate',
     description: 'Actively flagged in 1930 Cyber Crime registry. Impersonates CBI, Narcotics Control Bureau (NCB), or Mumbai Police demanding Skype video interrogation.',
@@ -134,12 +136,12 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 3. Urgent Electricity Bill Disconnection Alert
   {
-    numbers: ['9011012345', '9028012345', '9049012345', '9503012345', '9527012345'],
+    numbers: ['7000123456', '9011012345', '9028012345', '9049012345', '9503012345', '9527012345'],
     type: 'ELECTRICITY_BILL_SCAM',
     title: 'Electricity Bill Disconnection Phishing',
     description: 'Linked to coercive phishing SMS threatening power disconnection tonight unless an unauthorized officer is contacted immediately.',
-    severity: 'high',
-    weight: 78,
+    severity: 'critical',
+    weight: 88,
     tag: 'UTILITY_PHISHING'
   },
   // 4. Telegram Part-Time Task & YouTube Rating Job Scam
@@ -148,19 +150,65 @@ const KNOWN_SCAM_DATABASE = [
     type: 'TELEGRAM_TASK_SCAM',
     title: 'Telegram Task & YouTube Review Job Scam',
     description: 'Recruits victims on WhatsApp/Telegram with promises of Rs. 3,000 to Rs. 8,000 daily for liking YouTube videos, then freezes funds via prepaid tasks.',
-    severity: 'high',
-    weight: 80,
+    severity: 'critical',
+    weight: 85,
     tag: 'TASK_FRAUD'
   },
   // 5. Predatory Loan App Blackmail & APK Extortion
   {
-    numbers: ['8010237029', '8010299887', '8888012345', '8600012345'],
+    numbers: ['8010299887', '8888012345', '8600012345'],
     type: 'LOAN_APP_EXTORTION',
     title: 'Predatory Loan App Harassment Line',
     description: 'Linked to unauthorized micro-lending APKs executing contact-list harassment, morphed photo blackmail, and aggressive extortion.',
     severity: 'critical',
     weight: 88,
     tag: 'LOAN_EXTORTION'
+  }
+];
+
+/**
+ * Official Institutional Helplines and Regulatory Channels
+ */
+const KNOWN_OFFICIAL_DATABASE = [
+  {
+    numbers: ['1800112211', '18004253800'],
+    type: 'SBI_OFFICIAL_HELPLINE',
+    title: 'State Bank of India (SBI) Official Customer Care',
+    description: 'Verified official SBI customer care helpline. Official representatives will never ask for ATM PIN, CVV, or OTP.',
+    severity: 'low',
+    weight: 5
+  },
+  {
+    numbers: ['18002584455', '18001024455'],
+    type: 'BOB_OFFICIAL_HELPLINE',
+    title: 'Bank of Baroda Official Customer Care',
+    description: 'Verified official Bank of Baroda customer care helpline.',
+    severity: 'low',
+    weight: 5
+  },
+  {
+    numbers: ['18002094324', '1800224060'],
+    type: 'HDFC_OFFICIAL_HELPLINE',
+    title: 'HDFC Bank Official Customer Care',
+    description: 'Verified official HDFC Bank customer care helpline.',
+    severity: 'low',
+    weight: 5
+  },
+  {
+    numbers: ['1930'],
+    type: 'CYBER_CRIME_HELPLINE',
+    title: 'National Cyber Crime Reporting Portal Helpline (MHA)',
+    description: 'Official Government of India citizen cyber fraud emergency helpline.',
+    severity: 'low',
+    weight: 5
+  },
+  {
+    numbers: ['1909'],
+    type: 'TRAI_DND_HELPLINE',
+    title: 'TRAI National Do Not Disturb (DND) Helpline',
+    description: 'Official TRAI telecommunications consumer grievance helpline.',
+    severity: 'low',
+    weight: 5
   }
 ];
 
@@ -274,20 +322,22 @@ function checkCommunityReports(digits) {
       const d = String(digits || '').replace(/\D/g, '');
       const d10 = d.slice(-10);
 
-      const match = reports.find(r => {
+      const matches = reports.filter(r => {
         if (!r.identifier) return false;
         const rDigits = String(r.identifier).replace(/\D/g, '');
         const r10 = rDigits.slice(-10);
         return (d10 && r10 && d10 === r10) || (d.length >= 7 && rDigits.length >= 7 && (d.endsWith(rDigits) || rDigits.endsWith(d)));
       });
 
-      if (match) {
+      if (matches.length > 0) {
+        const match = matches[0];
         return {
           type: 'COMMUNITY_REPORTED_SCAM',
           title: 'Citizen Cyber Crime Report (Chakshu / 1930 Feed)',
           description: `Confirmed citizen scam report on file: "${match.evidence || 'Reported fraudulent caller'}" (Reported by: ${match.reporterName || 'Community User'})`,
           severity: 'critical',
-          weight: 90
+          weight: 90,
+          count: matches.length
         };
       }
     }
@@ -544,8 +594,10 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   // ----------------------------------------------------
   // Heuristic 0: Community Citizen Reports Database
   // ----------------------------------------------------
+  let communityReportCount = 0;
   const communitySignal = checkCommunityReports(nationalDigits);
   if (communitySignal) {
+    communityReportCount = communitySignal.count || 1;
     signals.push({
       id: communitySignal.type,
       title: communitySignal.title,
@@ -557,12 +609,30 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   }
 
   // ----------------------------------------------------
-  // Heuristic 1: Known Cyber Crime Scam Database
+  // Heuristic 0B: Known Official Institutions & Helplines
   // ----------------------------------------------------
   const cleanDigits = String(nationalDigits || '').replace(/\D/g, '');
   const d10 = cleanDigits.slice(-10);
+  const officialMatch = KNOWN_OFFICIAL_DATABASE.find(item => item.numbers.includes(d10) || item.numbers.includes(cleanDigits));
+  let isVerifiedOfficial = false;
+  if (officialMatch && !communitySignal) {
+    isVerifiedOfficial = true;
+    signals.push({
+      id: officialMatch.type,
+      title: officialMatch.title,
+      description: officialMatch.description,
+      severity: officialMatch.severity,
+      weight: officialMatch.weight
+    });
+    rawScore = officialMatch.weight; // 5%
+  }
+
+  // ----------------------------------------------------
+  // Heuristic 1: Known Cyber Crime Scam Database
+  // ----------------------------------------------------
   const scamMatch = KNOWN_SCAM_DATABASE.find(item => item.numbers.includes(d10) || item.numbers.includes(cleanDigits));
   if (scamMatch) {
+    isVerifiedOfficial = false;
     signals.push({
       id: scamMatch.type,
       title: scamMatch.title,
@@ -578,6 +648,7 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   // ----------------------------------------------------
   const spoofedSignal = checkSpoofedPattern(cleanDigits, country);
   if (spoofedSignal) {
+    isVerifiedOfficial = false;
     signals.push({
       id: spoofedSignal.type,
       title: spoofedSignal.title,
@@ -600,7 +671,13 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
       severity: traiSignal.severity,
       weight: traiSignal.weight
     });
-    rawScore = Math.max(rawScore, traiSignal.weight);
+    if (traiSignal.type === 'TRAI_160_TRANSACTIONAL') {
+      isVerifiedOfficial = true;
+      rawScore = 5;
+    } else {
+      isVerifiedOfficial = false;
+      rawScore = Math.max(rawScore, traiSignal.weight);
+    }
   }
 
   // ----------------------------------------------------
@@ -608,6 +685,7 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   // ----------------------------------------------------
   const intlSignal = checkInternationalFraudRisk(country, countryName, callingCode);
   if (intlSignal) {
+    isVerifiedOfficial = false;
     signals.push({
       id: intlSignal.type,
       title: intlSignal.title,
@@ -619,7 +697,7 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   }
 
   // ----------------------------------------------------
-  // Heuristic 2: Line Type Classification
+  // Heuristic 5: Line Type Classification
   // ----------------------------------------------------
   if (type === 'PREMIUM_RATE') {
     signals.push({
@@ -629,29 +707,29 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
       severity: 'high',
       weight: 40
     });
-    rawScore += 40;
-  } else if (type === 'TOLL_FREE') {
+    rawScore = Math.max(rawScore, 40);
+  } else if (type === 'TOLL_FREE' && !isVerifiedOfficial) {
     signals.push({
       id: 'TOLL_FREE_NUMBER',
       title: 'Toll-Free Telecommunications Line',
       description: 'This is a toll-free customer assistance line (e.g. 1800 series). Scammers frequently post fake toll-free helpline numbers on Google Maps and social media to impersonate banks, airlines, and courier services. Verify against the official corporate website.',
       severity: 'low',
-      weight: 5
+      weight: 15
     });
-    rawScore += 5;
+    rawScore = Math.max(rawScore, 15);
   } else if (type === 'VOIP') {
     signals.push({
       id: 'VOIP_VIRTUAL_NUMBER',
       title: 'Voice-over-IP (VoIP) Virtual Number',
       description: 'Identified as a virtual VoIP or cloud telephony line. While widely used by legitimate businesses, VoIP numbers can be procured remotely without physical SIM verification and are commonly used in impersonation scams.',
       severity: 'medium',
-      weight: 25
+      weight: 35
     });
-    rawScore += 25;
+    rawScore = Math.max(rawScore, 35);
   }
 
   // ----------------------------------------------------
-  // Heuristic 3: Validity vs Possibility Check
+  // Heuristic 6: Validity vs Possibility Check
   // ----------------------------------------------------
   let validationStatus = 'INVALID_FORMAT';
   if (isValid) {
@@ -665,7 +743,7 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
       severity: 'medium',
       weight: 30
     });
-    rawScore += 30;
+    rawScore = Math.max(rawScore, 30);
   } else {
     validationStatus = 'INVALID_FORMAT';
     signals.push({
@@ -675,23 +753,21 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
       severity: 'medium',
       weight: 35
     });
-    rawScore += 35;
+    rawScore = Math.max(rawScore, 35);
   }
 
-// (International check handled above)
-
   // ----------------------------------------------------
-  // Baseline Signal for Clean Valid Standard Mobile/Landline
+  // Baseline for Clean Valid Standard Mobile/Landline
   // ----------------------------------------------------
-  if (isValid && signals.length === 0) {
+  if (isValid && !isVerifiedOfficial && !scamMatch && !communitySignal && !spoofedSignal && !intlSignal && (!traiSignal || traiSignal.type !== 'TRAI_140_TELEMARKETING') && type !== 'PREMIUM_RATE' && type !== 'VOIP') {
     signals.push({
-      id: 'VALID_TELECOM_PLAN',
-      title: 'Standard Telecom Numbering Plan',
-      description: `Complies with ITU-T and national telecommunications numbering plans for ${countryName}. Assigned to ${type === 'FIXED_LINE' ? 'fixed-line (landline)' : 'mobile cellular'} block.`,
-      severity: 'low',
-      weight: 0
+      id: 'UNVERIFIED_PRIVATE_SUBSCRIBER',
+      title: 'Unverified Private Subscriber Line',
+      description: `Complies with numbering plan for ${countryName}. Assigned to private cellular mobile block. Unverified individual KYC; never disclose OTPs, banking PINs, or transfer money to unsolicited callers.`,
+      severity: 'medium',
+      weight: 25
     });
-    rawScore = 15; // Clean baseline
+    rawScore = Math.max(rawScore, 25);
   }
 
   // Calculate final bounded risk score (0 to 100)
@@ -710,8 +786,14 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
 
   // Determine assessment status
   let assessmentStatus;
-  if (isValid && (signals.length === 1 && signals[0].id === 'VALID_TELECOM_PLAN')) {
-    assessmentStatus = 'insufficient_evidence';
+  if (isVerifiedOfficial) {
+    assessmentStatus = 'verified_official';
+  } else if (scamMatch || communitySignal || spoofedSignal) {
+    assessmentStatus = 'scam_threat_flagged';
+  } else if (traiSignal && traiSignal.type === 'TRAI_140_TELEMARKETING') {
+    assessmentStatus = 'promotional_telemarketing';
+  } else if (signals.some(s => s.id === 'UNVERIFIED_PRIVATE_SUBSCRIBER')) {
+    assessmentStatus = 'unverified_subscriber';
   } else {
     assessmentStatus = 'heuristic_signals_detected';
   }
@@ -721,27 +803,35 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   // ----------------------------------------------------
   const recommendations = [];
 
-  recommendations.push('Never share OTPs, UPI PINs, net-banking credentials, or debit/credit card CVVs with any caller.');
-  recommendations.push('Government officers, Police, and RBI officials will never call demanding immediate funds transfers or Skype/WhatsApp video interrogations.');
-
-  if (traiSignal && traiSignal.type === 'TRAI_140_TELEMARKETING') {
-    recommendations.push('This is a promotional telemarketing channel. You can report unsolicited commercial calls via the TRAI DND (Do Not Disturb) 1909 helpline.');
+  if (riskScore >= 70) {
+    recommendations.push('🚨 Immediate Block: Disconnect call and add this number to your device blocklist immediately.');
+    recommendations.push('Government officers, Police, and RBI officials will never call demanding immediate funds transfers or Skype/WhatsApp video interrogations.');
+  } else if (traiSignal && traiSignal.type === 'TRAI_140_TELEMARKETING') {
+    recommendations.push('This is a promotional telemarketing channel under TRAI 140 series. You can report unsolicited commercial calls via the TRAI DND (Do Not Disturb) 1909 helpline.');
+    recommendations.push('Commercial telemarketers are never authorized to conduct banking, KYC verification, or official service communications.');
+  } else if (isVerifiedOfficial) {
+    recommendations.push('This line matches verified official communications channels. Official representatives will never ask for your ATM PIN, CVV, or OTP.');
+  } else {
+    recommendations.push('Exercise standard caution: This is an unverified private subscriber line. Never share OTPs, UPI PINs, net-banking passwords, or CVVs.');
+    recommendations.push('Scammers commonly acquire standard private mobile SIM cards to execute impersonation fraud. Always verify claims through official branch helplines.');
   }
 
   if (country !== 'IN') {
     recommendations.push('Exercise caution with unsolicited international incoming calls or job offers via WhatsApp from unknown overseas area codes.');
   }
 
-  if (type === 'TOLL_FREE') {
+  if (type === 'TOLL_FREE' && !isVerifiedOfficial) {
     recommendations.push('Always cross-verify customer support numbers from the company\'s official verified mobile app or website, never from search engine ads.');
   }
 
-    const carrierInfo = resolveTelecomCarrier(nationalDigits, country, countryName);
+  const carrierInfo = resolveTelecomCarrier(nationalDigits, country, countryName);
 
   return {
     success: true,
     target: input,
     carrier: carrierInfo,
+    communityReportCount,
+    isVerifiedOfficial,
     normalized: {
       e164: parsed.format('E.164'),
       international: parsed.formatInternational(),

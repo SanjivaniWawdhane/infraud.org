@@ -82,9 +82,29 @@ const SEED_DEFAULTS = [
     id: 'seed-4',
     identifier: '+91 98765 43210',
     type: 'Phone',
-    risk: 'High Risk',
-    evidence: 'FedEx parcel scam call. Threatens legal action.',
+    risk: 'Critical',
+    evidence: 'FedEx parcel scam call. Threatens legal action and fake contraband seizure.',
     reporterName: 'Amit Sharma',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-phone-digital-arrest',
+    identifier: '+91 80102 37029',
+    type: 'Phone',
+    risk: 'Critical',
+    evidence: 'Digital Arrest Scam. Falsely poses as CBI / Mumbai Police demanding video interrogation.',
+    reporterName: 'Sanjay Deshmukh',
+    reporterEmail: '',
+    status: 'approved'
+  },
+  {
+    id: 'seed-phone-electricity',
+    identifier: '+91 70001 23456',
+    type: 'Phone',
+    risk: 'Critical',
+    evidence: 'Electricity Bill Disconnection SMS Scam. Demands immediate payment to prevent power cutoff tonight.',
+    reporterName: 'Pooja Kulkarni',
     reporterEmail: '',
     status: 'approved'
   },
