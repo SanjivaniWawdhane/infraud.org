@@ -56,7 +56,7 @@ router.post('/url', (req, res, next) => {
  * Expected Request Body:
  * { "phone": "+919876543210" } or { "number": "9876543210" } or { "query": "..." }
  */
-router.post('/phone', (req, res, next) => {
+router.post('/phone', async (req, res, next) => {
   try {
     const body = req.body || {};
     const input = body.phone !== undefined ? body.phone : (body.number !== undefined ? body.number : body.query);
@@ -78,7 +78,7 @@ router.post('/phone', (req, res, next) => {
       });
     }
 
-    const result = analyzePhoneNumber(input, defaultCountry);
+    const result = await analyzePhoneNumber(input, defaultCountry);
 
     if (!result.success) {
       return res.status(result.statusCode || 400).json({

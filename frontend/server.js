@@ -333,7 +333,7 @@ async function handleRequest(req, res) {
       if (!phoneAnalyzerService) {
         return sendJson(res, 500, { success: false, message: 'Phone Analyzer service not loaded' });
       }
-      const result = phoneAnalyzerService.analyzePhoneNumber(targetPhone, data.country || 'IN');
+      const result = await phoneAnalyzerService.analyzePhoneNumber(targetPhone, data.country || 'IN');
       if (!result.success) {
         return sendJson(res, result.statusCode || 400, { success: false, message: result.error });
       }
