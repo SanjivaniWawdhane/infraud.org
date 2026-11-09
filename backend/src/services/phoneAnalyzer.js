@@ -113,6 +113,88 @@ function checkTraiSeries(nationalNumber, countryCode) {
  * @param {string} [defaultCountry='IN'] - Default country ISO code if not prefixed with '+'
  * @returns {object} Explainable evaluation result
  */
+
+/**
+ * Resolves Indian and international telecom service providers (TSPs)
+ * based on DoT National Numbering Plan (NNP) and ITU-T standards.
+ */
+function resolveTelecomCarrier(digits, country = 'IN', countryName = 'India') {
+  if (country !== 'IN') {
+    if (country === 'US' || country === 'CA') {
+      return { operator: 'North American Carrier', brand: 'AT&T / Verizon / T-Mobile', circle: 'North America', state: countryName };
+    } else if (country === 'GB') {
+      return { operator: 'UK Telecom Carrier', brand: 'Vodafone / EE / O2', circle: 'United Kingdom', state: countryName };
+    } else if (country === 'AE') {
+      return { operator: 'UAE Telecom Operator', brand: 'e& (Etisalat) / du', circle: 'United Arab Emirates', state: countryName };
+    }
+    return { operator: `${countryName} Telecom Operator`, brand: 'International Carrier', circle: countryName, state: countryName };
+  }
+
+  // Normalize Indian digits to 10 digits
+  let d = String(digits || '').replace(/\D/g, '');
+  if (d.startsWith('91') && d.length === 12) {
+    d = d.slice(2);
+  } else if (d.startsWith('0') && d.length === 11) {
+    d = d.slice(1);
+  }
+
+  if (d.length !== 10) {
+    return { operator: 'Indian Telecom Provider', brand: 'GSM/LTE Carrier', circle: 'Domestic Circle', state: 'India' };
+  }
+
+  const p2 = d.slice(0, 2);
+  const p3 = d.slice(0, 3);
+  const p4 = d.slice(0, 4);
+
+  // 1. BSNL / MTNL
+  if (p2 === '94') {
+    let circle = 'Maharashtra & Goa Circle';
+    if (['9403', '9404', '9405', '9420', '9421', '9422', '9423'].includes(p4)) circle = 'Maharashtra & Goa Circle';
+    else if (['9410', '9411', '9412', '9450', '9451'].includes(p4)) circle = 'Uttar Pradesh (West) Circle';
+    else if (['9414', '9413'].includes(p4)) circle = 'Rajasthan Circle';
+    else if (['9440', '9441'].includes(p4)) circle = 'Andhra Pradesh & Telangana';
+    else if (['9443', '9444'].includes(p4)) circle = 'Tamil Nadu & Chennai';
+    else if (['9445', '9446'].includes(p4)) circle = 'Kerala Circle';
+    else if (['9448', '9449'].includes(p4)) circle = 'Karnataka Circle';
+    return { operator: 'Bharat Sanchar Nigam Ltd (BSNL)', brand: 'BSNL Mobile', circle, state: 'National' };
+  }
+  if (['9868', '9968'].includes(p4)) return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Delhi NCR Circle', state: 'Delhi' };
+  if (['9869', '9969'].includes(p4)) return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Mumbai Circle', state: 'Maharashtra' };
+
+  // 2. Specific Operator Series in Maharashtra & Pan-India
+  if (['9673', '9890'].includes(p4)) {
+    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Maharashtra & Goa Circle', state: 'Maharashtra' };
+  }
+  if (['9822', '9823', '9762', '9763', '9764', '9765', '9766', '9767', '9921', '9922', '9923', '9011', '9028', '9049', '9096', '9503', '9527', '9545', '9552', '9561'].includes(p4)) {
+    return { operator: 'Vodafone Idea Ltd (Vi)', brand: 'Vodafone Idea (Vi)', circle: 'Maharashtra & Goa Circle', state: 'Maharashtra' };
+  }
+  if (['9820', '9821', '9819', '9833'].includes(p4)) {
+    return { operator: 'Vodafone Idea Ltd (Vi)', brand: 'Vodafone Idea (Vi)', circle: 'Mumbai Circle', state: 'Maharashtra' };
+  }
+  if (['9810', '9811', '9818', '9910', '9911', '9958', '9971'].includes(p4)) {
+    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Delhi NCR Circle', state: 'Delhi' };
+  }
+  if (['9845', '9844', '9880', '9886'].includes(p4)) {
+    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Karnataka Circle', state: 'Karnataka' };
+  }
+  if (['9840', '9841'].includes(p4)) {
+    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Tamil Nadu & Chennai', state: 'Tamil Nadu' };
+  }
+
+  // 3. Reliance Jio (6xxx, 70xx, 72xx, 79xx, 82xx, 83xx, 84xx, 85xx, 86xx, 87xx, 88xx, 89xx series)
+  const jioPrefixes3 = ['620', '626', '628', '629', '630', '635', '636', '637', '638', '639', '700', '701', '702', '705', '707', '708', '709', '720', '725', '729', '730', '735', '738', '739', '740', '745', '748', '749', '750', '755', '758', '759', '760', '765', '766', '767', '768', '769', '770', '771', '773', '775', '776', '777', '778', '779', '780', '785', '786', '787', '788', '789', '790', '797', '798', '799', '800', '805', '808', '809', '820', '821', '822', '823', '824', '825', '826', '827', '828', '829', '830', '835', '836', '837', '838', '839', '840', '845', '846', '847', '848', '849', '850', '853', '854', '857', '859', '860', '863', '865', '866', '867', '868', '869', '870', '874', '876', '877', '878', '879', '880', '881', '883', '885', '887', '889', '890', '892', '894', '896', '898', '910', '912', '913', '914', '915', '916', '917', '918', '919'];
+  if (jioPrefixes3.includes(p3) || d.startsWith('6')) {
+    return { operator: 'Reliance Jio Infocomm Ltd', brand: 'Reliance Jio', circle: 'India Domestic Circle', state: 'India' };
+  }
+
+  // 4. Common Airtel ranges
+  if (['98', '99', '97', '96', '95', '88', '85', '81', '70'].includes(p2)) {
+    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'India Domestic Circle', state: 'India' };
+  }
+
+  return { operator: 'Authorized Indian Telecom Provider', brand: 'Cellular Carrier', circle: 'Domestic Circle', state: 'India' };
+}
+
 function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   const validation = validatePhoneInput(rawPhone);
   if (!validation.valid) {
@@ -349,9 +431,12 @@ function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
     recommendations.push('Always cross-verify customer support numbers from the company\'s official verified mobile app or website, never from search engine ads.');
   }
 
+    const carrierInfo = resolveTelecomCarrier(nationalDigits, country, countryName);
+
   return {
     success: true,
     target: input,
+    carrier: carrierInfo,
     normalized: {
       e164: parsed.format('E.164'),
       international: parsed.formatInternational(),
