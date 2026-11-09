@@ -286,6 +286,133 @@
   color: #047857;
 }
 
+/* ── Circular Gauge & Risk Meter (Shared between URL and Phone views) ── */
+.verdict-gauge-wrap {
+  width: 170px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.gauge-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gauge-svg {
+  transform: rotate(-90deg);
+  width: 140px;
+  height: 140px;
+  display: block;
+}
+.gauge-bg-circle {
+  fill: none !important;
+  stroke: #E2E8F0;
+  stroke-width: 11;
+}
+.gauge-progress-circle {
+  fill: none !important;
+  stroke: #10B981;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-dasharray: 439.8;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+}
+.gauge-center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  width: 100%;
+}
+.gauge-score-num {
+  font-size: 2.75rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: #10B981;
+  transition: color 0.3s ease;
+}
+.gauge-score-denom {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #64748B;
+  margin-top: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 4-Stage Visual Risk Bar */
+.risk-meter-container {
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px solid #E2E8F0;
+}
+.risk-meter-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  gap: 3px;
+  background: transparent;
+}
+.meter-seg {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+}
+.seg-low { background: #10B981; }
+.seg-mod { background: #F59E0B; }
+.seg-high { background: #EA580C; }
+.seg-crit { background: #EF4444; }
+.risk-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.02em;
+}
+
+/* Right Column of Verdict Card */
+.verdict-info-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.risk-verdict-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  margin-bottom: 8px;
+  align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+
 /* 3. Showcase Split (Browser Sandbox on Left + 4 Attack Vectors on Right) */
 .url-split-showcase {
   display: grid;

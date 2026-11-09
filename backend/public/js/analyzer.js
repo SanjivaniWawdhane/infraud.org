@@ -419,22 +419,61 @@ function showLoadingState() {
   });
 
   if (type === 'phone') {
+    // Minimal View Elements
+    const phoneTargetDisplay = document.getElementById('phone-target-display');
+    if (phoneTargetDisplay) phoneTargetDisplay.textContent = 'Analyzing Caller...';
+    const phoneCanonicalDisplay = document.getElementById('phone-canonical-display');
+    if (phoneCanonicalDisplay) phoneCanonicalDisplay.textContent = currentTargetQuery || '+91 —';
+    const phoneHeaderPill = document.getElementById('phone-header-status-pill');
+    if (phoneHeaderPill) {
+      phoneHeaderPill.textContent = 'EVALUATING CALLER...';
+      phoneHeaderPill.className = 'url-tag-pill';
+    }
+    const phoneScoreDisplay = document.getElementById('phone-score-display');
+    if (phoneScoreDisplay) {
+      phoneScoreDisplay.innerHTML = `<span style="font-size: 2.25rem; opacity: 0.5;">...</span>`;
+      phoneScoreDisplay.style.color = 'var(--ink-500, #4B5570)';
+    }
+    const phoneGaugeCircle = document.getElementById('phone-gauge-circle');
+    if (phoneGaugeCircle) {
+      phoneGaugeCircle.style.strokeDashoffset = '439.8';
+      phoneGaugeCircle.style.stroke = '#2563EB';
+    }
+    const phoneRiskBadge = document.getElementById('phone-risk-badge');
+    if (phoneRiskBadge) {
+      phoneRiskBadge.textContent = 'EVALUATING CALLER...';
+      phoneRiskBadge.style.color = 'var(--ink-500, #4B5570)';
+      phoneRiskBadge.style.background = 'rgba(75, 85, 112, 0.08)';
+      phoneRiskBadge.style.borderColor = 'rgba(75, 85, 112, 0.2)';
+    }
+    const phoneRiskSummary = document.getElementById('phone-risk-summary');
+    if (phoneRiskSummary) {
+      phoneRiskSummary.textContent = 'Checking phone number against carrier databases, known Indian scam tactics, and active cyber crime complaints...';
+    }
+    const tileLine = document.getElementById('phone-tile-line');
+    if (tileLine) tileLine.textContent = 'Cellular Mobile';
+    const tileCarrier = document.getElementById('phone-tile-carrier');
+    if (tileCarrier) tileCarrier.textContent = 'Checking line allocation channel...';
+    const tileOrigin = document.getElementById('phone-tile-origin');
+    if (tileOrigin) tileOrigin.textContent = 'India (+91)';
+    const tileOriginSub = document.getElementById('phone-tile-origin-sub');
+    if (tileOriginSub) tileOriginSub.textContent = 'Standard domestic routing circle';
+    const tileTrai = document.getElementById('phone-tile-trai');
+    if (tileTrai) tileTrai.textContent = 'TRAI Check...';
+    const tileTraiSub = document.getElementById('phone-tile-trai-sub');
+    if (tileTraiSub) tileTraiSub.textContent = 'Checking 140 / 160 prefix series...';
+    const tileReports = document.getElementById('phone-tile-reports');
+    if (tileReports) tileReports.textContent = 'Scanning...';
+    const tileReportsSub = document.getElementById('phone-tile-reports-sub');
+    if (tileReportsSub) tileReportsSub.textContent = 'Cross-checking national scam logs...';
+
+    // Legacy backwards compatibility anchors
     const phoneVal = document.getElementById('phone-val-formatted');
     if (phoneVal) phoneVal.textContent = currentTargetQuery;
     const phonePill = document.getElementById('phone-category-pill');
     if (phonePill) phonePill.textContent = 'कॉलर तपासणी सुरू आहे...';
     const spamPct = document.getElementById('phone-spam-percent');
     if (spamPct) spamPct.textContent = '--%';
-    const tileLine = document.getElementById('phone-tile-line');
-    if (tileLine) tileLine.textContent = 'तपासत आहोत...';
-    const tileCarrier = document.getElementById('phone-tile-carrier');
-    if (tileCarrier) tileCarrier.textContent = 'टेलिकॉम चॅनेल शोधत आहोत...';
-    const tileOrigin = document.getElementById('phone-tile-origin');
-    if (tileOrigin) tileOrigin.textContent = 'स्थानिक सर्कल शोधत आहोत...';
-    const tileReports = document.getElementById('phone-tile-reports');
-    if (tileReports) tileReports.textContent = 'सायबर तक्रारी तपासत आहोत...';
-
-    // Reset Citizen Verdict Hero Card to loading state
     const phoneScoreNum = document.getElementById('phone-score-num');
     if (phoneScoreNum) phoneScoreNum.textContent = '--';
     const phoneScoreCircle = document.getElementById('phone-score-circle');
@@ -442,17 +481,6 @@ function showLoadingState() {
       phoneScoreCircle.style.strokeDashoffset = '439.8';
       phoneScoreCircle.style.stroke = 'var(--ink-400, #94A3B8)';
     }
-    const phoneVerdictPill = document.getElementById('phone-verdict-pill');
-    if (phoneVerdictPill) {
-      phoneVerdictPill.innerHTML = `<span>🔍</span> <span>कॉल तपासणी सुरू आहे... (EVALUATING CALLER)</span>`;
-      phoneVerdictPill.style.color = '#4B5570';
-      phoneVerdictPill.style.background = 'rgba(75, 85, 112, 0.1)';
-      phoneVerdictPill.style.borderColor = 'rgba(75, 85, 112, 0.2)';
-    }
-    const phoneVerdictTitle = document.getElementById('phone-verdict-title');
-    if (phoneVerdictTitle) phoneVerdictTitle.textContent = 'कॉलरची सुरक्षा आणि टेलिकॉम रेकॉर्ड तपासत आहोत...';
-    const phoneVerdictDesc = document.getElementById('phone-verdict-desc');
-    if (phoneVerdictDesc) phoneVerdictDesc.textContent = 'भारतीय टेलिकॉम ऑपरेटर डेटाबेस, सायबर पोलीस तक्रारी आणि ज्ञात फोन स्कॅम पॅटर्नविरुद्ध पडताळणी केली जात आहे.';
   } else if (type === 'upi') {
     const upiDisplay = document.getElementById('upi-display-handle');
     if (upiDisplay) upiDisplay.textContent = currentTargetQuery;
@@ -1303,13 +1331,18 @@ function renderUrlForensicsDeck(data, signals, target) {
 }
 
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
-  // 1. Animate SVG Gauge
+  // 1. Animate SVG Gauge (Full green circle when safe!)
   const gaugeCircle = document.getElementById('gauge-circle');
   if (gaugeCircle) {
     const circumference = 439.8; // 2 * PI * 70
-    const offset = circumference - (riskScore / 100) * circumference;
-    gaugeCircle.style.stroke = theme.color;
-    gaugeCircle.style.strokeDashoffset = offset;
+    if (riskScore === 0) {
+      gaugeCircle.style.stroke = '#10B981';
+      gaugeCircle.style.strokeDashoffset = '0';
+    } else {
+      const offset = circumference - (riskScore / 100) * circumference;
+      gaugeCircle.style.stroke = theme.color;
+      gaugeCircle.style.strokeDashoffset = offset;
+    }
   }
 
   // 2. Smooth Numerical Count-up
@@ -1319,18 +1352,63 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     animateCountUp(scoreDisplay, riskScore);
   }
 
-  // 3. Update Verdict Pill & Summary
-  const riskBadge = document.getElementById('risk-badge');
-  if (riskBadge) {
-    riskBadge.textContent = theme.label;
-    riskBadge.style.color = theme.color;
-    riskBadge.style.background = theme.bgPill;
-    riskBadge.style.borderColor = theme.borderPill;
-  }
+  // 3. Bilingual Citizen Verdict Pill & Clear Explanation
+  const verdictPillEl = document.getElementById('risk-badge');
+  const verdictTitleEl = document.getElementById('url-verdict-title');
+  const verdictDescEl = document.getElementById('risk-summary');
 
-  const riskSummary = document.getElementById('risk-summary');
-  if (riskSummary) {
-    riskSummary.textContent = theme.summary;
+  if (riskScore < 25) {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = '<span>✅</span> <span>सुरक्षित वेबसाईट • कोणतीही तक्रार नाही (SAFE TO BROWSE)</span>';
+      verdictPillEl.style.color = '#065F46';
+      verdictPillEl.style.background = 'rgba(16, 185, 129, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'ही वेबसाईट सुरक्षित व अस्सल वाटते (Likely Safe & Genuine)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'या वेबसाईटविरुद्ध CERT-In, APWG किंवा आमच्या सायबर डेटाबेसमध्ये कोणतीही फिशिंग किंवा फसवणुकीची तक्रार नाही. हे एक अधिकृत आणि सुरक्षित डोमेन आहे.';
+    }
+  } else if (riskScore < 50) {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = '<span>⚠️</span> <span>सावध राहा • संशयास्पद वैशिष्ट्ये (CAUTION ADVISED)</span>';
+      verdictPillEl.style.color = '#B45309';
+      verdictPillEl.style.background = 'rgba(245, 158, 11, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'सावधगिरी बाळगा: नवीन किंवा संशयास्पद लिंक (Exercise Caution)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'या लिंकमध्ये काही असामान्य किंवा नव्याने तयार केलेल्या डोमेनची लक्षणे आढळली आहेत. कोणतीही वैयक्तिक किंवा आर्थिक माहिती येथे देऊ नका.';
+    }
+  } else if (riskScore < 75) {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = '<span>🚨</span> <span>उच्च धोका • बनावट वेबसाईटची शक्यता (HIGH RISK / SUSPICIOUS)</span>';
+      verdictPillEl.style.color = '#C2410C';
+      verdictPillEl.style.background = 'rgba(234, 88, 12, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(234, 88, 12, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'धोकादायक: संशयास्पद किंवा बनावट लिंक (High Suspicion / Fraud)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'या लिंकमध्ये बँकिंग किंवा ब्रँडची नक्कल (Phishing) करण्याची चिन्हे दिसतात. ही लिंक लगेच बंद करा आणि कोणाशीही शेअर करू नका.';
+    }
+  } else {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = '<span>🛑</span> <span>अत्यंत धोकादायक • फसवणूक / फिशिंग लिंक (DANGEROUS SCAM)</span>';
+      verdictPillEl.style.color = '#DC2626';
+      verdictPillEl.style.background = 'rgba(239, 68, 68, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'अत्यंत गंभीर धोका: ही सक्रिय स्कॅम लिंक आहे (Critical Phishing Trap)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'सावधान! ही अधिकृत बँक किंवा सरकारी वेबसाईटची हुबेहूब खोटी प्रत (Phishing) असून युजर्सचे पैसे किंवा OTP चोरण्यासाठी तयार केली आहे. ताबडतोब ब्लॉक करा!';
+    }
   }
 
   const scoreSidebar = document.getElementById('score-sidebar');
