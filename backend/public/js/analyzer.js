@@ -1000,6 +1000,18 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   // 4. Populate Telemetry Tiles
   populateTelemetryTiles(data, target);
 
+  // Update Canonical Target and Sandbox URL Labels
+  const canonicalEl = document.getElementById("dossier-canonical");
+  if (canonicalEl) {
+    const formatted = target.startsWith("http") ? target : `https://${target}/`;
+    canonicalEl.textContent = formatted;
+  }
+  const sandboxUrlEl = document.getElementById("sandbox-url-label");
+  if (sandboxUrlEl) {
+    const formatted = target.startsWith("http") ? target : `https://${target}/`;
+    sandboxUrlEl.textContent = formatted;
+  }
+
   // 5. Populate Signals List or All-Clear Certificate
   renderSignalsList(signals, theme, 'signals-container', 'signals-count-pill');
 
