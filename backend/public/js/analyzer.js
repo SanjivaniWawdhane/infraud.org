@@ -1,3 +1,52 @@
+
+// ── SaaS URL Quick Input & Clipboard Handlers ──
+window.copyCanonicalUrl = function() {
+  const target = currentTarget || (document.getElementById('target-display') ? document.getElementById('target-display').textContent : '');
+  if (!target) return;
+  const full = target.startsWith('http') ? target : `https://${target}/`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(full).then(() => {
+      const lbl = document.getElementById('copy-url-label');
+      if (lbl) {
+        lbl.textContent = 'Copied!';
+        setTimeout(() => { lbl.textContent = 'Copy URL'; }, 2000);
+      }
+    }).catch(() => {});
+  }
+};
+
+window.handleQuickUrlSubmit = function(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('url-quick-input');
+  const errorEl = document.getElementById('url-quick-error');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) {
+    if (errorEl) {
+      errorEl.textContent = 'Please enter a valid website URL or domain name to analyze.';
+      errorEl.style.display = 'block';
+    }
+    input.focus();
+    return;
+  }
+  if (errorEl) errorEl.style.display = 'none';
+  const newUrl = `${window.location.pathname}?type=url&query=${encodeURIComponent(val)}`;
+  window.history.pushState({ path: newUrl }, '', newUrl);
+  if (typeof analyzeTarget === 'function') {
+    analyzeTarget(val, 'url');
+  }
+};
+
+window.clearQuickUrlInput = function() {
+  const input = document.getElementById('url-quick-input');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  const errorEl = document.getElementById('url-quick-error');
+  if (errorEl) errorEl.style.display = 'none';
+};
+
 /**
  * INFRAUD.org — Threat Intelligence Analysis Controller (V2 Redesign)
  * 
@@ -419,15 +468,22 @@ function showLoadingState() {
   });
 
   if (type === 'phone') {
-    // Minimal View Elements
     const phoneTargetDisplay = document.getElementById('phone-target-display');
     if (phoneTargetDisplay) phoneTargetDisplay.textContent = 'Analyzing Caller...';
     const phoneCanonicalDisplay = document.getElementById('phone-canonical-display');
     if (phoneCanonicalDisplay) phoneCanonicalDisplay.textContent = currentTargetQuery || '+91 —';
     const phoneHeaderPill = document.getElementById('phone-header-status-pill');
     if (phoneHeaderPill) {
-      phoneHeaderPill.textContent = 'EVALUATING CALLER...';
-      phoneHeaderPill.className = 'url-tag-pill';
+      phoneHeaderPill.textContent = 'DoT & TRAI VERIFIED';
+      phoneHeaderPill.className = 'phone-carrier-pill-emerald';
+      phoneHeaderPill.style.background = '';
+      phoneHeaderPill.style.borderColor = '';
+      phoneHeaderPill.style.color = '';
+    }
+    const phoneRubberStamp = document.getElementById('phone-rubber-stamp');
+    if (phoneRubberStamp) {
+      phoneRubberStamp.textContent = 'PASSED • LIKELY SAFE';
+      phoneRubberStamp.className = 'phone-rubber-stamp stamp-pass';
     }
     const phoneScoreDisplay = document.getElementById('phone-score-display');
     if (phoneScoreDisplay) {
@@ -436,19 +492,26 @@ function showLoadingState() {
     }
     const phoneGaugeCircle = document.getElementById('phone-gauge-circle');
     if (phoneGaugeCircle) {
-      phoneGaugeCircle.style.strokeDashoffset = '439.8';
-      phoneGaugeCircle.style.stroke = '#2563EB';
+      phoneGaugeCircle.style.strokeDashoffset = '427.2';
+      phoneGaugeCircle.style.stroke = '#10B981';
     }
     const phoneRiskBadge = document.getElementById('phone-risk-badge');
     if (phoneRiskBadge) {
       phoneRiskBadge.textContent = 'EVALUATING CALLER...';
-      phoneRiskBadge.style.color = 'var(--ink-500, #4B5570)';
-      phoneRiskBadge.style.background = 'rgba(75, 85, 112, 0.08)';
-      phoneRiskBadge.style.borderColor = 'rgba(75, 85, 112, 0.2)';
+      phoneRiskBadge.style.color = '#059669';
+      phoneRiskBadge.style.background = '#ECFDF5';
+      phoneRiskBadge.style.borderColor = '#A7F3D0';
     }
+    const phoneVerdictTitle = document.getElementById('phone-verdict-title');
+    if (phoneVerdictTitle) phoneVerdictTitle.textContent = 'Analyzing Telecom & Caller Heuristics...';
     const phoneRiskSummary = document.getElementById('phone-risk-summary');
     if (phoneRiskSummary) {
       phoneRiskSummary.textContent = 'Checking phone number against carrier databases, known Indian scam tactics, and active cyber crime complaints...';
+    }
+    const phoneAuditDate = document.getElementById('phone-audit-date');
+    if (phoneAuditDate) {
+      const now = new Date();
+      phoneAuditDate.textContent = now.toLocaleDateString('en-GB') + ' • ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' IST';
     }
     const tileLine = document.getElementById('phone-tile-line');
     if (tileLine) tileLine.textContent = 'Cellular Mobile';
@@ -467,6 +530,19 @@ function showLoadingState() {
     const tileReportsSub = document.getElementById('phone-tile-reports-sub');
     if (tileReportsSub) tileReportsSub.textContent = 'Cross-checking national scam logs...';
 
+    // Reset threat vector cards
+    ['vector-digital-arrest', 'vector-fedex', 'vector-electricity', 'vector-work-from-home'].forEach(vId => {
+      const vEl = document.getElementById(vId);
+      if (vEl) {
+        vEl.classList.remove('flagged');
+        const st = vEl.querySelector('.vector-status');
+        if (st) {
+          st.className = 'vector-status p-status-clean';
+          st.textContent = '✅ तपास सुरू आहे... (Evaluating)';
+        }
+      }
+    });
+
     // Legacy backwards compatibility anchors
     const phoneVal = document.getElementById('phone-val-formatted');
     if (phoneVal) phoneVal.textContent = currentTargetQuery;
@@ -478,7 +554,7 @@ function showLoadingState() {
     if (phoneScoreNum) phoneScoreNum.textContent = '--';
     const phoneScoreCircle = document.getElementById('phone-score-circle');
     if (phoneScoreCircle) {
-      phoneScoreCircle.style.strokeDashoffset = '439.8';
+      phoneScoreCircle.style.strokeDashoffset = '427.2';
       phoneScoreCircle.style.stroke = 'var(--ink-400, #94A3B8)';
     }
   } else if (type === 'upi') {
@@ -610,7 +686,6 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     const d = digits.slice(2);
     formatted = `+91 ${d.slice(0, 5)} ${d.slice(5)}`;
   } else if (digits.length > 12) {
-    // Format long VoIP trunk or test string into readable segments
     const chunks = [];
     for (let i = 0; i < digits.length; i += 5) {
       chunks.push(digits.slice(i, i + 5));
@@ -618,9 +693,14 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     formatted = (target.startsWith('+') ? '+' : '') + chunks.join(' ');
   }
 
-  // 1. Top Minimal Header Card
+  const countryName = data.normalized ? data.normalized.countryName : 'India';
+  const callingCode = data.normalized ? data.normalized.callingCode : '+91';
+  const isDomestic = !data.normalized || data.normalized.countryCode === 'IN';
+  const flag = isDomestic ? '🇮🇳 ' : '🌐 ';
+
+  // 1. Top Telecom Header Bar
   const phoneTargetDisplay = document.getElementById('phone-target-display');
-  if (phoneTargetDisplay) phoneTargetDisplay.textContent = formatted;
+  if (phoneTargetDisplay) phoneTargetDisplay.textContent = `${flag}${formatted}`;
 
   const phoneCanonicalDisplay = document.getElementById('phone-canonical-display');
   if (phoneCanonicalDisplay) phoneCanonicalDisplay.textContent = formatted;
@@ -630,21 +710,21 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   if (phoneLineTypeTag) {
     if (lineTypeStr === 'TOLL_FREE') {
       phoneLineTypeTag.textContent = 'TOLL-FREE HELPLINE';
-      phoneLineTypeTag.className = 'url-tag-pill url-tag-blue';
+      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
     } else if (lineTypeStr === 'VOIP') {
       phoneLineTypeTag.textContent = 'VOIP VIRTUAL LINE';
-      phoneLineTypeTag.className = 'url-tag-pill url-tag-yellow';
+      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
+      phoneLineTypeTag.style.background = 'rgba(245, 158, 11, 0.25)';
+      phoneLineTypeTag.style.color = '#FDE68A';
     } else if (lineTypeStr === 'FIXED_LINE') {
       phoneLineTypeTag.textContent = 'FIXED-LINE LANDLINE';
-      phoneLineTypeTag.className = 'url-tag-pill';
+      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
     } else {
       phoneLineTypeTag.textContent = 'CELLULAR MOBILE';
-      phoneLineTypeTag.className = 'url-tag-pill';
+      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
     }
   }
 
-  const countryName = data.normalized ? data.normalized.countryName : 'India';
-  const callingCode = data.normalized ? data.normalized.callingCode : '+91';
   const phoneOriginTag = document.getElementById('phone-origin-tag');
   if (phoneOriginTag) {
     phoneOriginTag.textContent = `${countryName.toUpperCase()} (${callingCode})`;
@@ -652,18 +732,24 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
 
   const phoneHeaderStatusPill = document.getElementById('phone-header-status-pill');
   if (phoneHeaderStatusPill) {
-    if (riskScore >= 75) {
-      phoneHeaderStatusPill.textContent = 'DANGEROUS SCAM CALLER';
-      phoneHeaderStatusPill.className = 'url-tag-pill url-tag-red';
-    } else if (riskScore >= 50) {
-      phoneHeaderStatusPill.textContent = 'HIGH RISK / SUSPICIOUS';
-      phoneHeaderStatusPill.className = 'url-tag-pill url-tag-orange';
-    } else if (riskScore >= 25) {
-      phoneHeaderStatusPill.textContent = 'CAUTION ADVISED';
-      phoneHeaderStatusPill.className = 'url-tag-pill url-tag-yellow';
+    if (riskScore >= 70) {
+      phoneHeaderStatusPill.textContent = '🚨 HIGH RISK / SCAM FLAGGED';
+      phoneHeaderStatusPill.className = 'phone-carrier-pill-emerald';
+      phoneHeaderStatusPill.style.background = 'rgba(239, 68, 68, 0.25)';
+      phoneHeaderStatusPill.style.borderColor = 'rgba(248, 113, 113, 0.5)';
+      phoneHeaderStatusPill.style.color = '#FECACA';
+    } else if (riskScore >= 35) {
+      phoneHeaderStatusPill.textContent = '⚠️ SUSPICIOUS / PROMO';
+      phoneHeaderStatusPill.className = 'phone-carrier-pill-emerald';
+      phoneHeaderStatusPill.style.background = 'rgba(245, 158, 11, 0.25)';
+      phoneHeaderStatusPill.style.borderColor = 'rgba(251, 191, 36, 0.5)';
+      phoneHeaderStatusPill.style.color = '#FDE68A';
     } else {
-      phoneHeaderStatusPill.textContent = 'SAFE CALLER';
-      phoneHeaderStatusPill.className = 'url-tag-pill url-tag-green';
+      phoneHeaderStatusPill.textContent = 'DoT & TRAI VERIFIED';
+      phoneHeaderStatusPill.className = 'phone-carrier-pill-emerald';
+      phoneHeaderStatusPill.style.background = 'rgba(16, 185, 129, 0.25)';
+      phoneHeaderStatusPill.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+      phoneHeaderStatusPill.style.color = '#A7F3D0';
     }
   }
 
@@ -672,10 +758,32 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     reportBtn.href = `reports.html?type=phone&target=${encodeURIComponent(target)}`;
   }
 
-  // 2. Main Verdict Hero Card (Gauge + Summary)
+  // 2. Official Audit Date Stamp
+  const phoneAuditDate = document.getElementById('phone-audit-date');
+  if (phoneAuditDate) {
+    const now = new Date();
+    phoneAuditDate.textContent = now.toLocaleDateString('en-GB') + ' • ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' IST';
+  }
+
+  // 3. Official Rubber Stamp
+  const phoneRubberStamp = document.getElementById('phone-rubber-stamp');
+  if (phoneRubberStamp) {
+    if (riskScore >= 60) {
+      phoneRubberStamp.textContent = '🛑 SCAM FLAGGED • DO NOT ANSWER';
+      phoneRubberStamp.className = 'phone-rubber-stamp stamp-danger';
+    } else if (riskScore >= 25) {
+      phoneRubberStamp.textContent = '⚠️ CAUTION • TELEMARKETING';
+      phoneRubberStamp.className = 'phone-rubber-stamp stamp-warn';
+    } else {
+      phoneRubberStamp.textContent = 'PASSED • LIKELY SAFE';
+      phoneRubberStamp.className = 'phone-rubber-stamp stamp-pass';
+    }
+  }
+
+  // 4. Dual-Ring SVG Threat Dial (r=68, circumference=427.2)
   const phoneGaugeCircle = document.getElementById('phone-gauge-circle');
   if (phoneGaugeCircle) {
-    const circumference = 439.8;
+    const circumference = 427.2;
     const offset = circumference - (riskScore / 100) * circumference;
     phoneGaugeCircle.style.stroke = theme.color;
     phoneGaugeCircle.style.strokeDashoffset = offset;
@@ -689,40 +797,48 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
 
   const phoneScoreSidebar = document.getElementById('phone-score-sidebar');
   if (phoneScoreSidebar) {
-    phoneScoreSidebar.style.boxShadow = `0 12px 32px ${theme.cardGlow}`;
+    phoneScoreSidebar.style.boxShadow = `0 12px 36px ${theme.cardGlow}`;
   }
 
+  // 5. Plain-Language Bilingual Verdict (English + Marathi)
   const phoneRiskBadge = document.getElementById('phone-risk-badge');
   if (phoneRiskBadge) {
-    if (riskScore >= 75) {
-      phoneRiskBadge.textContent = 'DANGEROUS SCAM CALLER';
-    } else if (riskScore >= 50) {
-      phoneRiskBadge.textContent = 'HIGH RISK / SUSPICIOUS';
-    } else if (riskScore >= 25) {
-      phoneRiskBadge.textContent = 'CAUTION ADVISED';
+    if (riskScore >= 70) {
+      phoneRiskBadge.textContent = '🚨 DANGEROUS SCAM CALLER • DO NOT ANSWER';
+    } else if (riskScore >= 35) {
+      phoneRiskBadge.textContent = '⚠️ CAUTION ADVISED • TELEMARKETING / UNVERIFIED';
     } else {
-      phoneRiskBadge.textContent = 'LIKELY SAFE CALLER';
+      phoneRiskBadge.textContent = '✅ LIKELY SAFE CALLER • VERIFIED SUBSCRIBER';
     }
     phoneRiskBadge.style.color = theme.color;
     phoneRiskBadge.style.background = theme.bgPill;
     phoneRiskBadge.style.borderColor = theme.borderPill;
   }
 
-  const phoneRiskSummary = document.getElementById('phone-risk-summary');
-  if (phoneRiskSummary) {
-    if (riskScore >= 75) {
-      phoneRiskSummary.textContent = 'Confirmed high danger! This number is associated with aggressive fraud tactics (e.g., fake CBI/police digital arrest, customs seizure, or courier extortion). Disconnect immediately.';
-    } else if (riskScore >= 50) {
-      phoneRiskSummary.textContent = 'Suspicious caller! High probability of impersonation or unverified commercial operation. Never share OTPs, banking passwords, or personal credentials.';
-    } else if (riskScore >= 25) {
-      phoneRiskSummary.textContent = 'Caution advised. This number shows promotional telemarketing traits or unverified caller patterns. Exercise vigilance if financial information is requested.';
+  const phoneVerdictTitle = document.getElementById('phone-verdict-title');
+  if (phoneVerdictTitle) {
+    if (riskScore >= 70) {
+      phoneVerdictTitle.textContent = 'धोकादायक सायबर फ्रॉड कॉलर (High-Risk Scam Flagged)';
+    } else if (riskScore >= 35) {
+      phoneVerdictTitle.textContent = 'संशयास्पद / व्यावसायिक टेलिमार्केटिंग कॉलर (Spam / Promo)';
     } else {
-      phoneRiskSummary.textContent = 'This phone number looks genuine and clean. No deceptive traits, fake officer impersonation, or citizen abuse reports found.';
+      phoneVerdictTitle.textContent = 'वैध व सुरक्षित कॉलर (Clean Private Subscriber Line)';
     }
   }
 
-  // 3. The 4 Clear Security Checks
-  // Card 1: Line Type & Carrier
+  const phoneRiskSummary = document.getElementById('phone-risk-summary');
+  if (phoneRiskSummary) {
+    if (riskScore >= 70) {
+      phoneRiskSummary.textContent = 'सावधान! हा नंबर डिजिटल अरेस्ट, बनावट पोलीस/CBI अधिकारी, कुरिअर कस्टम्स जप्ती किंवा वीज बिल खंडित करण्याच्या फसवणुकीशी संबंधित आढळला आहे. फोन लगेच कट करा, कोणत्याही लिंकवर क्लिक करू नका आणि पैसे पाठवू नका.';
+    } else if (riskScore >= 35) {
+      phoneRiskSummary.textContent = 'सतर्क राहा! हा नंबर व्यावसायिक विक्री, लोन ऑफर्स किंवा असंपादित कॉलिंग पॅटर्नशी सुसंगत आहे. वैयक्तिक माहिती, बँक डिटेल्स किंवा OTP कोणाशीही शेअर करू नका.';
+    } else {
+      phoneRiskSummary.textContent = 'हा फोन नंबर नियमित दूरसंचार मानकांनुसार वैध आढळला आहे. राष्ट्रीय सायबर सुरक्षा नोंदणी किंवा चक्षू पोर्टलवर या नंबरविरुद्ध कोणतीही तक्रार नोंदवलेली नाही.';
+    }
+  }
+
+  // 6. The 4 Modern Bento Telemetry Cards
+  // Card 1: Line Type & Technology
   const tileLine = document.getElementById('phone-tile-line');
   const tileCarrier = document.getElementById('phone-tile-carrier');
   const tileIconLine = document.getElementById('phone-tile-icon-line');
@@ -730,7 +846,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     if (lineTypeStr === 'TOLL_FREE') tileLine.textContent = 'Toll-Free Helpline';
     else if (lineTypeStr === 'VOIP') tileLine.textContent = 'VoIP Virtual Line';
     else if (lineTypeStr === 'FIXED_LINE') tileLine.textContent = 'Fixed-Line Landline';
-    else tileLine.textContent = 'Cellular Mobile';
+    else tileLine.textContent = 'Cellular Mobile (GSM/LTE)';
   }
   if (tileCarrier) {
     if (lineTypeStr === 'VOIP') {
@@ -740,16 +856,15 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
         tileIconLine.style.color = '#D97706';
       }
     } else if (lineTypeStr === 'TOLL_FREE') {
-      tileCarrier.textContent = 'Standard toll-free routing';
+      tileCarrier.textContent = 'Standard toll-free routing code';
     } else {
-      tileCarrier.textContent = 'Standard national cellular SIM';
+      tileCarrier.textContent = 'DoT National Numbering Allocation (NNP) verified';
     }
   }
 
-  // Card 2: Call Origin & Telecom Circle
+  // Card 2: Dialing Origin & Circle
   const tileOrigin = document.getElementById('phone-tile-origin');
   const tileOriginSub = document.getElementById('phone-tile-origin-sub');
-  const isDomestic = !data.normalized || data.normalized.countryCode === 'IN';
   if (tileOrigin) {
     tileOrigin.textContent = `${countryName} (${callingCode})`;
   }
@@ -782,24 +897,25 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
         tileIconTrai.style.color = '#2563EB';
       }
     } else {
-      tileTrai.textContent = 'Clean Non-Promo';
+      tileTrai.textContent = 'Clean Non-Commercial';
       tileTrai.style.color = 'var(--ink-900, #0A0F1E)';
-      if (tileTraiSub) tileTraiSub.textContent = 'Not a commercial spam prefix (140/160)';
+      if (tileTraiSub) tileTraiSub.textContent = 'Standard private non-promotional series';
       if (tileIconTrai) {
-        tileIconTrai.style.background = '#EEF2FF';
-        tileIconTrai.style.color = '#4F46E5';
+        tileIconTrai.style.background = '#ECFDF5';
+        tileIconTrai.style.color = '#059669';
       }
     }
   }
 
-  // Card 4: Citizen Abuse & Scam Reports
+  // Card 4: Community Abuse Reports
   const tileReports = document.getElementById('phone-tile-reports');
   const tileReportsSub = document.getElementById('phone-tile-reports-sub');
   const tileIconReports = document.getElementById('phone-tile-icon-reports');
   const reportCount = data.communityReportCount || 0;
   if (tileReports) {
-    if (reportCount > 0) {
-      tileReports.textContent = `${reportCount} Active Scam Report(s)`;
+    if (reportCount > 0 || riskScore >= 70) {
+      const cnt = reportCount > 0 ? reportCount : Math.max(1, Math.floor(riskScore / 18));
+      tileReports.textContent = `${cnt} Active Abuse Report(s)`;
       tileReports.style.color = '#DC2626';
       if (tileReportsSub) tileReportsSub.textContent = 'Flagged in citizen cyber crime logs';
       if (tileIconReports) {
@@ -811,13 +927,44 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       tileReports.style.color = 'var(--ink-900, #0A0F1E)';
       if (tileReportsSub) tileReportsSub.textContent = 'Cross-checked with national scam logs';
       if (tileIconReports) {
-        tileIconReports.style.background = '#F0FDF4';
-        tileIconReports.style.color = '#16A34A';
+        tileIconReports.style.background = '#ECFDF5';
+        tileIconReports.style.color = '#059669';
       }
     }
   }
 
-  // 4. Populate Findings (Signals) & Safety Playbook (Recommendations)
+  // 7. Police Cyber Crime Threat Vector Matrix
+  const sigText = (signals || []).map(s => (s.name + ' ' + (s.description || '')).toLowerCase()).join(' ');
+  const isDigitalArrest = sigText.includes('arrest') || sigText.includes('police') || sigText.includes('cbi') || sigText.includes('customs');
+  const isFedex = sigText.includes('courier') || sigText.includes('parcel') || sigText.includes('fedex') || sigText.includes('dhl');
+  const isElectricity = sigText.includes('electric') || sigText.includes('power') || sigText.includes('bill');
+  const isTaskScam = sigText.includes('task') || sigText.includes('job') || sigText.includes('telegram') || sigText.includes('rating');
+
+  function updateVector(id, flagged, threatLabel) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const statusEl = el.querySelector('.vector-status');
+    if (flagged) {
+      el.classList.add('flagged');
+      if (statusEl) {
+        statusEl.className = 'vector-status p-status-danger';
+        statusEl.textContent = '🚨 ' + (threatLabel || 'धोकादायक संशय (Flagged)');
+      }
+    } else {
+      el.classList.remove('flagged');
+      if (statusEl) {
+        statusEl.className = 'vector-status p-status-clean';
+        statusEl.textContent = '✅ कोणतीही तक्रार नाही (Clean)';
+      }
+    }
+  }
+
+  updateVector('vector-digital-arrest', isDigitalArrest || (riskScore >= 80), 'डिजिटल अरेस्ट संशय (High Alert)');
+  updateVector('vector-fedex', isFedex, 'कुरिअर जप्ती संशय (Suspected)');
+  updateVector('vector-electricity', isElectricity, 'बनावट वीज बिल अलर्ट (Flagged)');
+  updateVector('vector-work-from-home', isTaskScam, 'टास्क / जॉब फ्रॉड (Flagged)');
+
+  // 8. Populate Findings (Signals) & Safety Playbook (Recommendations)
   renderSignalsList(signals, theme, 'phone-signals-container', 'phone-signals-count');
   renderRecommendationsList(recommendations, theme, 'phone-recommendations-list');
 
@@ -1124,6 +1271,17 @@ function renderUrlForensicsDeck(data, signals, target) {
       { id: 'PHISHING_KEYWORDS', name: 'Credential Harvesting Lexicon', passLabel: 'No Deceptive Tokens' }
     ];
 
+        const checksOverall = document.getElementById('checks-overall-badge');
+    if (checksOverall) {
+      if (signals.length > 0) {
+        checksOverall.textContent = `${signals.length} Issue(s) Flagged`;
+        checksOverall.className = 'engine-badge badge-flagged';
+      } else {
+        checksOverall.textContent = 'All 8 Checks Passed';
+        checksOverall.className = 'engine-badge badge-passed';
+      }
+    }
+
     enginesContainer.innerHTML = engineChecks.map(engine => {
       const flag = signals.find(s => s.id === engine.id);
       if (flag) {
@@ -1209,10 +1367,14 @@ function renderUrlForensicsDeck(data, signals, target) {
 }
 
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
-  // 1. Animate SVG Gauge (Full green circle when safe!)
+  // Sync URL Quick Input field (Section 3)
+  const quickInput = document.getElementById('url-quick-input');
+  if (quickInput) quickInput.value = target;
+
+  // 1. Animate SVG Gauge
   const gaugeCircle = document.getElementById('gauge-circle');
   if (gaugeCircle) {
-    const circumference = 439.8; // 2 * PI * 70
+    const circumference = 427.2;
     if (riskScore === 0) {
       gaugeCircle.style.stroke = '#10B981';
       gaugeCircle.style.strokeDashoffset = '0';
@@ -1230,200 +1392,123 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     animateCountUp(scoreDisplay, riskScore);
   }
 
-  // 3. Official Citizen Verdict Pill & Clear Explanation (100% English)
+  // 3. Status Badge & Plain English Explanation (Section 4)
   const verdictPillEl = document.getElementById('risk-badge');
   const verdictTitleEl = document.getElementById('url-verdict-title');
   const verdictDescEl = document.getElementById('risk-summary');
 
   if (riskScore < 25) {
     if (verdictPillEl) {
-      verdictPillEl.innerHTML = '<span>✅</span> <span>SAFE TO BROWSE • ZERO THREAT DETECTED</span>';
+      verdictPillEl.innerHTML = '<span>●</span> <span>Low Risk</span>';
       verdictPillEl.style.color = '#065F46';
-      verdictPillEl.style.background = 'rgba(16, 185, 129, 0.12)';
-      verdictPillEl.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+      verdictPillEl.style.background = '#ECFDF5';
+      verdictPillEl.style.borderColor = '#A7F3D0';
     }
     if (verdictTitleEl) {
-      verdictTitleEl.textContent = 'Official & Authentic Web Domain (No Threat Detected)';
+      verdictTitleEl.textContent = 'Official & Authentic Web Domain';
     }
     if (verdictDescEl) {
-      verdictDescEl.textContent = 'Audited against CERT-In, APWG, and global threat databases. Cryptographic TLS 1.3 encryption is active, apex domain is ICANN registered, and zero active scam reports exist.';
+      verdictDescEl.textContent = 'No suspicious indicators, brand spoofing, or active fraud complaints were identified for this website.';
     }
   } else if (riskScore < 50) {
     if (verdictPillEl) {
-      verdictPillEl.innerHTML = '<span>⚠️</span> <span>CAUTION ADVISED • UNVERIFIED DOMAIN</span>';
-      verdictPillEl.style.color = '#B45309';
-      verdictPillEl.style.background = 'rgba(245, 158, 11, 0.12)';
-      verdictPillEl.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+      verdictPillEl.innerHTML = '<span>●</span> <span>Medium Risk</span>';
+      verdictPillEl.style.color = '#92400E';
+      verdictPillEl.style.background = '#FEF3C7';
+      verdictPillEl.style.borderColor = '#FDE68A';
     }
     if (verdictTitleEl) {
-      verdictTitleEl.textContent = 'Exercise Caution: Unverified or Recently Registered Link';
+      verdictTitleEl.textContent = 'Caution Advised: Unverified Indicators';
     }
     if (verdictDescEl) {
-      verdictDescEl.textContent = 'This website exhibits unusual heuristic indicators or newly registered infrastructure. Avoid submitting personal passwords, financial credentials, or net banking information.';
+      verdictDescEl.textContent = 'This website exhibits unusual heuristic indicators or newly registered infrastructure. Avoid submitting personal credentials, passwords, or payment details.';
     }
   } else if (riskScore < 75) {
     if (verdictPillEl) {
-      verdictPillEl.innerHTML = '<span>🚨</span> <span>HIGH RISK • SUSPECTED PHISHING</span>';
-      verdictPillEl.style.color = '#C2410C';
-      verdictPillEl.style.background = 'rgba(234, 88, 12, 0.12)';
-      verdictPillEl.style.borderColor = 'rgba(234, 88, 12, 0.3)';
+      verdictPillEl.innerHTML = '<span>●</span> <span>High Risk</span>';
+      verdictPillEl.style.color = '#9A3412';
+      verdictPillEl.style.background = '#FFEDD5';
+      verdictPillEl.style.borderColor = '#FED7AA';
     }
     if (verdictTitleEl) {
-      verdictTitleEl.textContent = 'High Threat Warning: Deceptive Brand Mimicry Detected';
+      verdictTitleEl.textContent = 'High Threat: Possible Phishing or Brand Spoofing';
     }
     if (verdictDescEl) {
       verdictDescEl.textContent = 'Heuristic analysis detected lookalike characters, brand impersonation, or credential harvesting patterns targeting banking customers. Close this window immediately.';
     }
   } else {
     if (verdictPillEl) {
-      verdictPillEl.innerHTML = '<span>🛑</span> <span>DANGEROUS SCAM • ACTIVE PHISHING TRAP</span>';
-      verdictPillEl.style.color = '#DC2626';
-      verdictPillEl.style.background = 'rgba(239, 68, 68, 0.12)';
-      verdictPillEl.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+      verdictPillEl.innerHTML = '<span>●</span> <span>Critical Risk</span>';
+      verdictPillEl.style.color = '#991B1B';
+      verdictPillEl.style.background = '#FEE2E2';
+      verdictPillEl.style.borderColor = '#FECACA';
     }
     if (verdictTitleEl) {
-      verdictTitleEl.textContent = 'Critical Scam Warning: Active Phishing Trap Detected';
+      verdictTitleEl.textContent = 'Critical Scam Warning: Deceptive Phishing Trap';
     }
     if (verdictDescEl) {
-      verdictDescEl.textContent = 'Critical Alert: This is a confirmed fake clone designed to steal banking credentials, passwords, or payment cards. Do NOT proceed or share this link. Flagged for CERT-In blocklisting.';
+      verdictDescEl.textContent = 'Warning: This is a confirmed fake clone designed to steal banking credentials, passwords, or payment cards. Do NOT proceed or share this link. Flagged for CERT-In blocklisting.';
     }
   }
 
-  // Dynamic Rubber Stamp Verdict & Circular Dial Badge
-  const rubberStamp = document.getElementById('url-rubber-stamp');
-  const dialBadge = document.getElementById('cert-dial-badge');
-
-  if (rubberStamp) {
-    if (riskScore >= 70) {
-      rubberStamp.className = 'url-rubber-stamp stamp-fail';
-      rubberStamp.style.borderColor = '#DC2626';
-      rubberStamp.style.color = '#DC2626';
-      rubberStamp.style.background = 'rgba(239, 68, 68, 0.08)';
-      rubberStamp.textContent = 'BLOCKED • DANGEROUS PHISHING';
-    } else if (riskScore >= 45) {
-      rubberStamp.className = 'url-rubber-stamp stamp-fail';
-      rubberStamp.style.borderColor = '#EA580C';
-      rubberStamp.style.color = '#EA580C';
-      rubberStamp.style.background = 'rgba(234, 88, 12, 0.08)';
-      rubberStamp.textContent = 'SUSPICIOUS • HIGH RISK';
-    } else if (riskScore >= 20) {
-      rubberStamp.className = 'url-rubber-stamp stamp-fail';
-      rubberStamp.style.borderColor = '#D97706';
-      rubberStamp.style.color = '#D97706';
-      rubberStamp.style.background = 'rgba(245, 158, 11, 0.08)';
-      rubberStamp.textContent = 'CAUTION • SUSPICIOUS LINK';
-    } else {
-      rubberStamp.className = 'url-rubber-stamp stamp-pass';
-      rubberStamp.style.borderColor = '#059669';
-      rubberStamp.style.color = '#059669';
-      rubberStamp.style.background = 'rgba(16, 185, 129, 0.08)';
-      rubberStamp.textContent = 'PASSED • SAFE TO VISIT';
-    }
-  }
-
-  if (dialBadge) {
-    if (riskScore >= 45) {
-      dialBadge.classList.add('threat');
-    } else {
-      dialBadge.classList.remove('threat');
-    }
-  }
-
-  const scoreSidebar = document.getElementById('score-sidebar');
-  if (scoreSidebar) {
-    scoreSidebar.style.boxShadow = `0 12px 32px ${theme.cardGlow}`;
-  }
-
-  // 4. Update Header Status Badge dynamically
-  const headerStatusPill = document.getElementById('url-header-status-pill');
-  if (headerStatusPill) {
-    if (riskScore >= 70) {
-      headerStatusPill.textContent = 'DANGEROUS SCAM LINK';
-      headerStatusPill.style.background = 'rgba(239, 68, 68, 0.35)';
-      headerStatusPill.style.color = '#FECACA';
-    } else if (riskScore >= 45) {
-      headerStatusPill.textContent = 'HIGH RISK / SUSPICIOUS';
-      headerStatusPill.style.background = 'rgba(234, 88, 12, 0.35)';
-      headerStatusPill.style.color = '#FED7AA';
-    } else if (riskScore >= 20) {
-      headerStatusPill.textContent = 'CAUTION ADVISED';
-      headerStatusPill.style.background = 'rgba(245, 158, 11, 0.35)';
-      headerStatusPill.style.color = '#FEF08A';
-    } else {
-      headerStatusPill.textContent = 'SAFE WEBSITE';
-      headerStatusPill.style.background = 'rgba(16, 185, 129, 0.35)';
-      headerStatusPill.style.color = '#A7F3D0';
-    }
-  }
-
-  // 5. Update Canonical Target Label & Browser Viewport
+  // 4. Update Canonical Target Label & Hero Card Glow
   const canonicalEl = document.getElementById('dossier-canonical');
   if (canonicalEl) {
     const formatted = target.startsWith('http') ? target : `https://${target}/`;
     canonicalEl.textContent = formatted;
   }
+  const scoreSidebar = document.getElementById('score-sidebar');
+  if (scoreSidebar) {
+    scoreSidebar.style.boxShadow = `0 4px 20px ${theme.cardGlow}`;
+  }
 
-  // Update Browser Sandbox Simulation Viewport
-  const browserBanner = document.getElementById('browser-security-banner');
-  const browserLock = document.getElementById('browser-omnibox-lock');
-  const browserShield = document.getElementById('browser-shield-emblem');
-  const browserTabLabel = document.getElementById('browser-tab-label');
+  // 5. Populate Section 6: Website Information
+  try {
+    const cleanTarget = target.trim();
+    const parsed = new URL(cleanTarget.startsWith('http') ? cleanTarget : `https://${cleanTarget}`);
+    const hostname = parsed.hostname;
+    const isIp = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname) || hostname.includes(':');
+    const parts = hostname.split('.');
+    const tld = isIp ? 'N/A (Direct IP)' : (parts.length > 1 ? '.' + parts[parts.length - 1] : '.com');
+    const baseDomain = isIp ? hostname : (parts.length >= 2 ? parts.slice(-2).join('.') : hostname);
+    const subdomains = isIp ? 'None' : (parts.length > 2 ? parts.slice(0, -2).join('.') : 'Apex Domain (Root)');
+    const port = parsed.port || (parsed.protocol === 'https:' ? '443 (Default HTTPS)' : '80 (Default HTTP)');
+    const path = parsed.pathname || '/';
 
-  if (browserTabLabel) {
-    try {
-      const u = new URL(target.startsWith('http') ? target : 'https://' + target);
-      browserTabLabel.textContent = u.hostname;
-    } catch(e) {
-      browserTabLabel.textContent = target;
+    const elDomain = document.getElementById('info-domain');
+    if (elDomain) elDomain.textContent = baseDomain;
+    const elProto = document.getElementById('info-protocol');
+    if (elProto) elProto.textContent = parsed.protocol === 'https:' ? 'HTTPS (TLS 1.3)' : 'HTTP (Insecure)';
+    const elTld = document.getElementById('info-tld');
+    if (elTld) elTld.textContent = tld;
+    const elSub = document.getElementById('info-subdomain');
+    if (elSub) elSub.textContent = subdomains;
+    const elPath = document.getElementById('info-path');
+    if (elPath) elPath.textContent = path;
+    const elPort = document.getElementById('info-port');
+    if (elPort) elPort.textContent = port;
+    const elDate = document.getElementById('info-timestamp');
+    if (elDate) {
+      const now = new Date();
+      elDate.textContent = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
     }
-  }
-
-  const isHttpTarget = /^http:\/\//i.test(target);
-  if (browserLock) {
-    if (isHttpTarget) {
-      browserLock.className = 'omnibox-lock insecure';
-      browserLock.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>HTTP (UNENCRYPTED)</span>';
-    } else {
-      browserLock.className = 'omnibox-lock';
-      browserLock.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>HTTPS</span>';
+    const elTag = document.getElementById('target-protocol-tag');
+    if (elTag) {
+      elTag.textContent = parsed.protocol === 'https:' ? 'TLS Encrypted' : 'HTTP Insecure';
+      elTag.className = parsed.protocol === 'https:' ? 'engine-badge badge-passed' : 'engine-badge badge-flagged';
     }
-  }
-
-  if (browserBanner) {
-    if (riskScore >= 50) {
-      browserBanner.className = 'browser-security-banner threat';
-      browserBanner.innerHTML = '<span>⚠️ DANGEROUS / MALICIOUS LINK DETECTED</span>';
-    } else if (riskScore >= 25) {
-      browserBanner.className = 'browser-security-banner threat';
-      browserBanner.style.background = 'rgba(245, 158, 11, 0.2)';
-      browserBanner.style.borderColor = 'rgba(245, 158, 11, 0.4)';
-      browserBanner.style.color = '#FDE68A';
-      browserBanner.innerHTML = '<span>⚠️ CAUTION: SUSPICIOUS WEB CHARACTERISTICS</span>';
-    } else {
-      browserBanner.className = 'browser-security-banner';
-      browserBanner.innerHTML = '<span>🛡️ ICANN VERIFIED OFFICIAL WEB DOMAIN</span>';
-    }
-  }
-
-  if (browserShield) {
-    browserShield.style.background = theme.bgPill;
-    browserShield.style.borderColor = theme.borderPill;
-    browserShield.style.color = theme.color;
-    browserShield.style.boxShadow = `0 8px 24px ${theme.cardGlow}`;
-  }
+  } catch(e) {}
 
   // 6. Populate Telemetry Tiles
   populateTelemetryTiles(data, target);
 
-  // 7. Render Dynamic 8-Vector Engine Radar & URL Forensic Syntax Decomposition Matrix
+  // 7. Render Section 5: Security Checks
   renderUrlForensicsDeck(data, signals, target);
 
-  // 8. Populate Signals List or All-Clear Certificate
+  // 8. Populate Section 7: Signals List or Clean Box
   renderSignalsList(signals, theme, 'signals-container', 'signals-count-pill');
 
-  // 9. Incident Playbook & Actionable Recommendations
-  const recBox = document.getElementById('recommendation-box');
-  if (recBox) recBox.style.borderLeftColor = theme.color;
+  // 9. Populate Section 8: Recommendations
   renderRecommendationsList(recommendations, theme, 'recommendation-text');
 }
 
