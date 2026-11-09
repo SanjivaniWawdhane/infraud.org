@@ -18,7 +18,8 @@ const path = require('path');
 // Curated list of high-abuse / low-barrier TLDs frequently abused in disposable phishing campaigns
 const SUSPICIOUS_TLDS = new Set([
   'tk', 'ml', 'ga', 'cf', 'gq', // Historical free ccTLDs
-  'top', 'xyz', 'icu', 'buzz', 'club', 'work', 'rest', 'fit', 'surf', 'click', 'link', 'online', 'site'
+  'top', 'xyz', 'icu', 'buzz', 'club', 'work', 'rest', 'fit', 'surf', 'click', 'link', 'online', 'site',
+  'app', 'vip', 'live', 'bid', 'win', 'space', 'cfd', 'cc', 'monster'
 ]);
 
 // Common phishing & credential-theft keywords
@@ -28,14 +29,21 @@ const PHISHING_KEYWORDS = [
   'secure', 'security', 'account', 'update',
   'kyc', 'refund', 'banking', 'wallet',
   'password', 'credential', 'support', 'helpdesk',
-  'claim', 'reward', 'bonus', 'free-gift'
+  'claim', 'reward', 'bonus', 'free-gift',
+  'challan', 'billpay', 'disconnection', 'power-cut',
+  'speedpost', 'tracking', 'customs', 'summons', 'warrant',
+  'lottery', 'lucky-draw', 'spin-wheel', 'instant-loan',
+  'parttime', 'crypto-vip', 'quickpay'
 ];
 
-// Brand names commonly targeted by homograph or subdomain impersonation
+// Brand & institutional names commonly targeted by homograph or subdomain impersonation
 const TARGETED_BRANDS = [
   'paypal', 'amazon', 'netflix', 'apple', 'microsoft',
   'google', 'facebook', 'instagram', 'whatsapp', 'telegram',
-  'paytm', 'phonepe', 'sbi', 'hdfc', 'icici', 'axisbank'
+  'paytm', 'phonepe', 'sbi', 'hdfc', 'icici', 'axisbank', 'pnb',
+  'indiapost', 'fedex', 'dhl', 'bluedart',
+  'msedcl', 'mahadiscom', 'bses', 'uppcl',
+  'parivahan', 'echallan', 'pmkisan', 'yono', 'meesho', 'kbc'
 ];
 
 /**
@@ -145,15 +153,33 @@ function checkCommunityUrlReports(targetUrl, hostname) {
     });
 
     if (matches.length > 0) {
-      return {
-        type: 'COMMUNITY_REPORTED_PHISHING',
-        title: `Community Cyber Threat Report (${matches.length} Flag${matches.length > 1 ? 's' : ''})`,
-        description: `This web domain is actively flagged in the INFRAUD community fraud database: "${matches[0].evidence || 'Reported phishing or fraudulent clone'}" (Reported by: ${matches[0].reporterName || 'Community User'})`,
-        severity: 'critical',
-        weight: 90,
-        count: matches.length,
-        match: matches[0]
-      };
+      const threatMatch = matches.find(r => r.risk && !r.risk.toLowerCase().includes('low') && !r.risk.toLowerCase().includes('safe'));
+      const safeMatch = matches.find(r => r.risk && (r.risk.toLowerCase().includes('low') || r.risk.toLowerCase().includes('safe')));
+
+      if (threatMatch) {
+        return {
+          isThreat: true,
+          type: 'COMMUNITY_REPORTED_PHISHING',
+          title: `Community Cyber Threat Report (${matches.length} Flag${matches.length > 1 ? 's' : ''})`,
+          description: `This web domain is actively flagged in the INFRAUD community fraud database: "${threatMatch.evidence || 'Reported phishing or fraudulent clone'}" (Reported by: ${threatMatch.reporterName || 'Community User'})`,
+          severity: 'critical',
+          weight: 90,
+          count: matches.length,
+          match: threatMatch
+        };
+      } else if (safeMatch) {
+        return {
+          isThreat: false,
+          isSafe: true,
+          type: 'COMMUNITY_VERIFIED_AUTHENTIC',
+          title: 'Official & Authentic Web Domain',
+          description: `Verified in the INFRAUD security database: "${safeMatch.evidence || 'Verified official domain'}"`,
+          severity: 'low',
+          weight: 0,
+          count: matches.length,
+          match: safeMatch
+        };
+      }
     }
   } catch (e) {}
   return null;
@@ -365,37 +391,39 @@ function analyzeUrl(rawUrl) {
 
   // ----------------------------------------------------
   // Scoring & Risk Level Computation
-  // Deterministic 0-100 score capped
   // ----------------------------------------------------
-  const riskScore = Math.min(100, Math.max(0, rawScore));
-
+  let riskScore = Math.min(100, Math.max(0, rawScore));
   let riskLevel;
-  if (riskScore >= 70) {
+  let assessmentStatus;
+  const recommendations = [];
+
+  if (communitySignal && communitySignal.isSafe) {
+    riskScore = 0;
+    riskLevel = 'low';
+    assessmentStatus = 'verified_official';
+    recommendations.push('This website address is verified as official and authentic. Always check that the domain name in your address bar matches exactly.');
+  } else if (communitySignal && communitySignal.isThreat) {
+    riskScore = Math.min(100, Math.max(90, rawScore));
     riskLevel = 'critical';
+    assessmentStatus = 'community_threat_flagged';
+    recommendations.push('This domain is actively flagged in community fraud reports. Do not enter passwords, OTPs, or financial information.');
+  } else if (riskScore >= 70) {
+    riskLevel = 'critical';
+    assessmentStatus = 'heuristic_signals_detected';
   } else if (riskScore >= 45) {
     riskLevel = 'high';
+    assessmentStatus = 'heuristic_signals_detected';
   } else if (riskScore >= 20) {
     riskLevel = 'medium';
+    assessmentStatus = 'heuristic_signals_detected';
   } else {
     riskLevel = 'low';
-  }
-
-  let assessmentStatus;
-  if (communitySignal) {
-    assessmentStatus = 'community_threat_flagged';
-  } else if (signals.length === 0) {
-    assessmentStatus = 'insufficient_evidence';
-  } else {
-    assessmentStatus = 'heuristic_signals_detected';
+    assessmentStatus = signals.length === 0 ? 'insufficient_evidence' : 'heuristic_signals_detected';
   }
 
   // ----------------------------------------------------
   // Contextual Recommendations
   // ----------------------------------------------------
-  const recommendations = [];
-  if (communitySignal) {
-    recommendations.push('This domain is actively flagged in community fraud reports. Do not enter passwords, OTPs, or financial information.');
-  }
   if (isIp) {
     recommendations.push('Do not enter passwords, credit card numbers, or private credentials on IP-based addresses.');
   }
@@ -405,7 +433,7 @@ function analyzeUrl(rawUrl) {
   if (signals.some(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'PHISHING_KEYWORDS')) {
     recommendations.push('Navigate to the intended service by directly typing their verified domain in your browser instead of following this link.');
   }
-  if (signals.length === 0) {
+  if (!communitySignal && signals.length === 0) {
     recommendations.push('This website address looks genuine and clean. However, always double-check the domain name before entering passwords or payment details.');
   } else if (!communitySignal) {
     recommendations.push('Verify the identity of the sender through a known, independent communication channel before taking action.');

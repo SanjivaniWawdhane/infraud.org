@@ -4491,8 +4491,19 @@
 
       if (!reports || reports.length === 0) return;
 
-      // 3. Render the top 5 approved live reports dynamically
-      const displayList = reports.slice(0, 5);
+      // 3. Render a diverse selection of approved live reports across categories
+      const types = ['Phone', 'Website', 'UPI ID', 'Email'];
+      const picked = [];
+      for (const t of types) {
+        const matching = reports.filter(r => (r.type || '').toLowerCase().includes(t.toLowerCase()) && !picked.includes(r));
+        if (matching.length > 0) picked.push(matching[0]);
+        if (matching.length > 1) picked.push(matching[1]);
+      }
+      for (const r of reports) {
+        if (picked.length >= 7) break;
+        if (!picked.includes(r)) picked.push(r);
+      }
+      const displayList = picked.length > 0 ? picked : reports.slice(0, 7);
       tbody.innerHTML = displayList.map(r => `
       <tr>
         <td class="t-mono" style="font-weight: 600;">

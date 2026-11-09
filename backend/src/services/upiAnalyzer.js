@@ -289,25 +289,39 @@ function analyzeUpi(rawInput, options = {}) {
   // Signal 5: Corroborated Community Reports
   // ----------------------------------------------------
   const matchedReports = findCommunityReports(normalizedUpi, options.mockReports);
-  if (matchedReports.length > 0) {
-    const count = matchedReports.length;
+  const threatReports = matchedReports.filter(r => r.risk && !r.risk.toLowerCase().includes('low') && !r.risk.toLowerCase().includes('safe'));
+  const safeReports = matchedReports.filter(r => r.risk && (r.risk.toLowerCase().includes('low') || r.risk.toLowerCase().includes('safe')));
+
+  if (threatReports.length > 0) {
+    const count = threatReports.length;
     signals.push({
       id: 'COMMUNITY_REPORTED_FRAUD',
-      title: 'Prior Fraud Reports Found',
-      description: `This exact UPI ID has ${count} confirmed report(s) in the community scam repository. Evidence indicates prior fraudulent activity.`,
+      title: 'Community Fraud Reports Found',
+      description: `This exact UPI ID has ${count} confirmed fraud report(s) in the community scam repository: "${threatReports[0].evidence || 'Prior fraudulent activity'}"`,
       severity: 'critical',
-      weight: 50
+      weight: 75
     });
-    rawScore += 50;
+    rawScore += 75;
+  } else if (safeReports.length > 0) {
+    signals.push({
+      id: 'COMMUNITY_VERIFIED_BENCHMARK',
+      title: 'Verified Merchant / Safe Benchmark Account',
+      description: `Verified in community records: "${safeReports[0].evidence || 'Verified merchant account'}"`,
+      severity: 'low',
+      weight: 0
+    });
   }
 
   // ----------------------------------------------------
   // Risk Score & Status Computation
   // ----------------------------------------------------
-  const riskScore = Math.min(100, Math.max(0, rawScore));
-
+  let riskScore = Math.min(100, Math.max(0, rawScore));
   let riskLevel;
-  if (riskScore >= 70) {
+
+  if (safeReports.length > 0 && threatReports.length === 0) {
+    riskScore = 0;
+    riskLevel = 'low';
+  } else if (riskScore >= 70) {
     riskLevel = 'critical';
   } else if (riskScore >= 45) {
     riskLevel = 'high';
@@ -318,8 +332,10 @@ function analyzeUpi(rawInput, options = {}) {
   }
 
   let assessmentStatus;
-  if (matchedReports.length > 0) {
+  if (threatReports.length > 0) {
     assessmentStatus = 'reputation_signals_detected';
+  } else if (safeReports.length > 0) {
+    assessmentStatus = 'verified_official';
   } else if (signals.length > 0) {
     assessmentStatus = 'heuristic_signals_detected';
   } else {

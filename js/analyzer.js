@@ -1849,7 +1849,7 @@ function renderRecommendationsList(recommendations, theme, listId) {
 
 async function enrichWithCommunityReports(resultData, query) {
   try {
-    const alreadyFlagged = (resultData.signals || []).some(s => s.id && s.id.startsWith('COMMUNITY_REPORTED'));
+    const alreadyFlagged = (resultData.signals || []).some(s => s.id && s.id.startsWith('COMMUNITY_'));
 
     const res = await fetch('/api/reports');
     if (!res.ok) return resultData;
@@ -1890,22 +1890,41 @@ async function enrichWithCommunityReports(resultData, query) {
 
     if (matchingReports.length > 0) {
       resultData.communityReportCount = matchingReports.length;
-      resultData.riskScore = Math.max(resultData.riskScore || 0, 90);
-      resultData.riskLevel = 'critical';
+
+      const threatMatch = matchingReports.find(r => r.risk && !r.risk.toLowerCase().includes('low') && !r.risk.toLowerCase().includes('safe'));
+      const safeMatch = matchingReports.find(r => r.risk && (r.risk.toLowerCase().includes('low') || r.risk.toLowerCase().includes('safe')));
 
       resultData.signals = resultData.signals || [];
-      if (!alreadyFlagged) {
-        resultData.signals.unshift({
-          id: 'COMMUNITY_REPORTED',
-          title: `Community Cyber Threat Flag (${matchingReports.length} Active Report${matchingReports.length > 1 ? 's' : ''})`,
-          description: `This target is actively flagged in the INFRAUD community database: "${matchingReports[0].evidence || 'Reported scam activity'}" (Reported by: ${matchingReports[0].reporterName || 'Community User'})`,
-          severity: 'critical'
-        });
-      }
-
       resultData.recommendations = resultData.recommendations || [];
-      if (!resultData.recommendations.some(r => r.includes('community fraud reports'))) {
-        resultData.recommendations.unshift('This target is currently flagged in community fraud reports. Do not engage, transact, or disclose credentials.');
+
+      if (threatMatch) {
+        resultData.riskScore = Math.max(resultData.riskScore || 0, 90);
+        resultData.riskLevel = 'critical';
+
+        if (!alreadyFlagged) {
+          resultData.signals.unshift({
+            id: 'COMMUNITY_REPORTED',
+            title: `Community Cyber Threat Flag (${matchingReports.length} Active Report${matchingReports.length > 1 ? 's' : ''})`,
+            description: `This target is actively flagged in the INFRAUD community database: "${threatMatch.evidence || 'Reported scam activity'}" (Reported by: ${threatMatch.reporterName || 'Community User'})`,
+            severity: 'critical'
+          });
+        }
+
+        if (!resultData.recommendations.some(r => r.includes('community fraud reports'))) {
+          resultData.recommendations.unshift('This target is currently flagged in community fraud reports. Do not engage, transact, or disclose credentials.');
+        }
+      } else if (safeMatch && !threatMatch) {
+        resultData.riskScore = 0;
+        resultData.riskLevel = 'low';
+
+        if (!alreadyFlagged) {
+          resultData.signals.unshift({
+            id: 'COMMUNITY_VERIFIED_AUTHENTIC',
+            title: 'Official & Verified Authentic Target',
+            description: `Verified in the INFRAUD registry: "${safeMatch.evidence || 'Verified official domain/helpline'}"`,
+            severity: 'low'
+          });
+        }
       }
     }
   } catch (e) {

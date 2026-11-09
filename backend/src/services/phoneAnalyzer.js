@@ -698,15 +698,31 @@ function checkCommunityReports(digits) {
       });
 
       if (matches.length > 0) {
-        const match = matches[0];
-        return {
-          type: 'COMMUNITY_REPORTED_SCAM',
-          title: 'Citizen Cyber Crime Report (Chakshu / 1930 Feed)',
-          description: `Confirmed citizen scam report on file: "${match.evidence || 'Reported fraudulent caller'}" (Reported by: ${match.reporterName || 'Community User'})`,
-          severity: 'critical',
-          weight: 90,
-          count: matches.length
-        };
+        const threatMatch = matches.find(r => r.risk && !r.risk.toLowerCase().includes('low') && !r.risk.toLowerCase().includes('safe'));
+        const safeMatch = matches.find(r => r.risk && (r.risk.toLowerCase().includes('low') || r.risk.toLowerCase().includes('safe')));
+
+        if (threatMatch) {
+          return {
+            isThreat: true,
+            type: 'COMMUNITY_REPORTED_SCAM',
+            title: 'Citizen Cyber Crime Report (Chakshu / 1930 Feed)',
+            description: `Confirmed citizen scam report on file: "${threatMatch.evidence || 'Reported fraudulent caller'}" (Reported by: ${threatMatch.reporterName || 'Community User'})`,
+            severity: 'critical',
+            weight: 90,
+            count: matches.length
+          };
+        } else if (safeMatch) {
+          return {
+            isThreat: false,
+            isSafe: true,
+            type: 'COMMUNITY_VERIFIED_AUTHENTIC',
+            title: 'Official Helpline & Citizen Verification',
+            description: `Verified in official registry: "${safeMatch.evidence || 'Verified official helpline'}"`,
+            severity: 'low',
+            weight: 5,
+            count: matches.length
+          };
+        }
       }
     }
   } catch (e) {}
@@ -1082,6 +1098,7 @@ async function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   // ----------------------------------------------------
   // Heuristic 0: Community Citizen Reports Database (Disk)
   // ----------------------------------------------------
+  let isVerifiedOfficial = false;
   let communityReportCount = 0;
   const communitySignal = checkCommunityReports(nationalDigits);
   if (communitySignal) {
@@ -1093,7 +1110,12 @@ async function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
       severity: communitySignal.severity,
       weight: communitySignal.weight
     });
-    rawScore = Math.max(rawScore, communitySignal.weight);
+    if (communitySignal.isSafe) {
+      isVerifiedOfficial = true;
+      rawScore = 5;
+    } else {
+      rawScore = Math.max(rawScore, communitySignal.weight);
+    }
   }
 
   // ----------------------------------------------------
@@ -1102,16 +1124,17 @@ async function analyzePhoneNumber(rawPhone, defaultCountry = 'IN') {
   const cleanDigits = String(nationalDigits || '').replace(/\D/g, '');
   const d10 = cleanDigits.slice(-10);
   const officialMatch = KNOWN_OFFICIAL_DATABASE.find(item => item.numbers.includes(d10) || item.numbers.includes(cleanDigits));
-  let isVerifiedOfficial = false;
-  if (officialMatch && !communitySignal) {
+  if (officialMatch && (!communitySignal || communitySignal.isSafe)) {
     isVerifiedOfficial = true;
-    signals.push({
-      id: officialMatch.type,
-      title: officialMatch.title,
-      description: officialMatch.description,
-      severity: officialMatch.severity,
-      weight: officialMatch.weight
-    });
+    if (!signals.some(s => s.id === officialMatch.type)) {
+      signals.push({
+        id: officialMatch.type,
+        title: officialMatch.title,
+        description: officialMatch.description,
+        severity: officialMatch.severity,
+        weight: officialMatch.weight
+      });
+    }
     rawScore = officialMatch.weight; // 5%
   }
 
