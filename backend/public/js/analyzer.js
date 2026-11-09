@@ -590,6 +590,84 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     formatted = (target.startsWith('+') ? '+' : '') + chunks.join(' ');
   }
 
+  // Update target title in top header bar
+  const phoneTargetTitle = document.querySelector('.phone-target-title');
+  if (phoneTargetTitle) phoneTargetTitle.textContent = formatted;
+
+  // 1. Plain-Language Citizen Verdict Hero Banner
+  const scoreNumEl = document.getElementById('phone-score-num');
+  if (scoreNumEl) {
+    scoreNumEl.textContent = `${riskScore}%`;
+    scoreNumEl.style.color = theme.color;
+  }
+
+  const scoreCircleEl = document.getElementById('phone-score-circle');
+  if (scoreCircleEl) {
+    const circumference = 439.8;
+    const offset = circumference - (circumference * Math.min(100, Math.max(0, riskScore))) / 100;
+    scoreCircleEl.style.strokeDashoffset = offset;
+    scoreCircleEl.style.stroke = theme.color;
+  }
+
+  const verdictPillEl = document.getElementById('phone-verdict-pill');
+  const verdictTitleEl = document.getElementById('phone-verdict-title');
+  const verdictDescEl = document.getElementById('phone-verdict-desc');
+
+  if (riskScore < 25) {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = `<span>✅</span> <span>सुरक्षित नंबर • कोणतीही तक्रार नाही (LIKELY SAFE)</span>`;
+      verdictPillEl.style.color = '#065F46';
+      verdictPillEl.style.background = 'rgba(16, 185, 129, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'हा नंबर सामान्य आणि सुरक्षित दिसतोय (Likely Safe Number)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'या नंबरविरुद्ध राष्ट्रीय सायबर गुन्हे पोर्टल (Cybercrime.gov.in) किंवा DoT चक्षू डेटाबेसमध्ये कोणतीही फसवणुकीची तक्रार नाही. हा एक सामान्य वैध मोबाईल नंबर वाटतो.';
+    }
+  } else if (riskScore < 50) {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = `<span>⚠️</span> <span>सावध राहा • जाहिरात किंवा संशयास्पद कॉलर (CAUTION)</span>`;
+      verdictPillEl.style.color = '#B45309';
+      verdictPillEl.style.background = 'rgba(245, 158, 11, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'सावधगिरी बाळगा: जाहिरात किंवा अनोळखी कॉलर (Exercise Caution)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'हा नंबर जाहिरात (Telemarketing) किंवा अनोळखी ऑपरेटरवरून आलेला असू शकतो. बोलताना सावध राहा व कोणतीही वैयक्तिक माहिती देऊ नका.';
+    }
+  } else if (riskScore < 75) {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = `<span>🚨</span> <span>उच्च धोका • संशयास्पद हालचाली (HIGH RISK)</span>`;
+      verdictPillEl.style.color = '#C2410C';
+      verdictPillEl.style.background = 'rgba(234, 88, 12, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(234, 88, 12, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'धोकादायक कॉलर: संशयास्पद हालचालींची नोंद (High Risk Caller)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'या नंबरशी संबंधित संशयास्पद कॉलिंग पॅटर्न आढळले आहेत. हा कॉल कट करा आणि कोणतीही वैयक्तिक माहिती देऊ नका किंवा ॲप डाऊनलोड करू नका.';
+    }
+  } else {
+    if (verdictPillEl) {
+      verdictPillEl.innerHTML = `<span>🛑</span> <span>फसवणूक / फ्रॉड कॉल • ब्लॉक करा (CONFIRMED SCAM)</span>`;
+      verdictPillEl.style.color = '#DC2626';
+      verdictPillEl.style.background = 'rgba(239, 68, 68, 0.12)';
+      verdictPillEl.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+    }
+    if (verdictTitleEl) {
+      verdictTitleEl.textContent = 'सावधान! हा फसवणूक करणारा फ्रॉड कॉल आहे (Scam / Extortion Alert)';
+    }
+    if (verdictDescEl) {
+      verdictDescEl.textContent = 'हा नंबर सक्रिय सायबर गुन्ह्यांमध्ये (उदा. डिजिटल अरेस्ट, बनावट पोलीस किंवा कुरिअर खंडणी) वापरला गेल्याची नोंद आहे. हा नंबर त्वरित ब्लॉक करा आणि १९३० वर तक्रार नोंदवा!';
+    }
+  }
+
+  // 2. Smartphone Handset View Elements
   const phoneFormattedEl = document.getElementById('phone-val-formatted');
   if (phoneFormattedEl) phoneFormattedEl.textContent = formatted;
 
@@ -601,7 +679,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
 
   const phoneCatPill = document.getElementById('phone-category-pill');
   if (phoneCatPill) {
-    phoneCatPill.textContent = data.lineType === 'TOLL_FREE' ? 'TOLL-FREE HELPLINE' : (data.lineType === 'VOIP' ? 'VOIP CLOUD LINE' : 'CELLULAR MOBILE LINE');
+    phoneCatPill.textContent = data.lineType === 'TOLL_FREE' ? 'टोल-फ्री हेल्पलाईन (Toll-Free)' : (data.lineType === 'VOIP' ? 'इंटरनेट VoIP व्हर्च्युअल कॉल' : 'सामान्य मोबाईल नंबर (Cellular SIM)');
     phoneCatPill.style.color = theme.color;
     phoneCatPill.style.background = theme.bgPill;
   }
@@ -612,7 +690,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     phoneSpamPercent.style.color = theme.color;
   }
 
-  // Update spam segments
+  // Update spam segments in handset
   const seg1 = document.getElementById('phone-seg-1');
   const seg2 = document.getElementById('phone-seg-2');
   const seg3 = document.getElementById('phone-seg-3');
@@ -630,12 +708,12 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const trai140Pill = document.getElementById('trai-140-pill');
   if (trai140Pill) {
     if (isTrai140) {
-      trai140Pill.innerHTML = `<span>⚠️</span><span>TRAI 140: <strong>Telemarketing</strong></span>`;
+      trai140Pill.innerHTML = `<span>⚠️</span><span>TRAI 140: <strong>टेलिमार्केटिंग / जाहिरात</strong></span>`;
       trai140Pill.style.borderColor = 'rgba(245, 158, 11, 0.4)';
       trai140Pill.style.background = 'rgba(254, 243, 199, 0.6)';
       trai140Pill.style.color = '#B45309';
     } else {
-      trai140Pill.innerHTML = `<span>✅</span><span>TRAI 140: <strong>Clean Non-Promo</strong></span>`;
+      trai140Pill.innerHTML = `<span>✅</span><span>TRAI 140: <strong>जाहिरात नंबर नाही</strong></span>`;
       trai140Pill.style.borderColor = 'rgba(16, 185, 129, 0.25)';
       trai140Pill.style.background = 'rgba(209, 250, 229, 0.3)';
       trai140Pill.style.color = '#065F46';
@@ -645,31 +723,31 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const trai160Pill = document.getElementById('trai-160-pill');
   if (trai160Pill) {
     if (isTrai160) {
-      trai160Pill.innerHTML = `<span>🏦</span><span>TRAI 160: <strong>Govt/Bank Entity</strong></span>`;
+      trai160Pill.innerHTML = `<span>🏦</span><span>TRAI 160: <strong>बँक / सरकारी संस्था</strong></span>`;
       trai160Pill.style.borderColor = 'rgba(37, 99, 235, 0.3)';
       trai160Pill.style.background = 'rgba(219, 234, 254, 0.4)';
       trai160Pill.style.color = '#1E40AF';
     } else {
-      trai160Pill.innerHTML = `<span>ℹ️</span><span>TRAI 160: <strong>Standard Number</strong></span>`;
+      trai160Pill.innerHTML = `<span>ℹ️</span><span>TRAI 160: <strong>सामान्य ग्राहक नंबर</strong></span>`;
       trai160Pill.style.borderColor = 'var(--ink-100, #E2E8F0)';
       trai160Pill.style.background = '#FFFFFF';
       trai160Pill.style.color = 'var(--ink-700, #1E2742)';
     }
   }
 
-  // 3 Metric Tiles
+  // 3 Bento Metric Tiles with friendly bilingual content
   const tileLine = document.getElementById('phone-tile-line');
   const tileCarrier = document.getElementById('phone-tile-carrier');
   if (tileLine) {
-    tileLine.textContent = data.lineType === 'TOLL_FREE' ? 'Toll-Free Helpline' : (data.lineType === 'VOIP' ? 'VoIP Cloud Number' : 'Cellular Mobile');
+    tileLine.textContent = data.lineType === 'TOLL_FREE' ? 'टोल-फ्री हेल्पलाईन (Toll-Free)' : (data.lineType === 'VOIP' ? 'इंटरनेट / VoIP व्हर्च्युअल कॉल' : 'सामान्य मोबाईल सिम (Mobile SIM)');
   }
   if (tileCarrier) {
-    tileCarrier.textContent = `Carrier channel: ${data.lineType || 'MOBILE'}`;
+    tileCarrier.textContent = `${data.lineType === 'VOIP' ? 'व्हर्च्युअल इंटरनेट ऑपरेटर' : 'अधिकृत भारतीय सिम कार्ड'}`;
   }
 
   const tileOrigin = document.getElementById('phone-tile-origin');
   if (tileOrigin) {
-    const countryName = data.normalized ? data.normalized.countryName : 'India';
+    const countryName = data.normalized ? data.normalized.countryName : 'भारत (India)';
     const callingCode = data.normalized ? data.normalized.callingCode : '+91';
     tileOrigin.textContent = `${countryName} (${callingCode})`;
   }
@@ -677,8 +755,8 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const tileReports = document.getElementById('phone-tile-reports');
   if (tileReports) {
     const reportCount = data.communityReportCount || 0;
-    tileReports.textContent = reportCount > 0 ? `${reportCount} Active Scam Report(s)` : '0 Active Reports';
-    tileReports.style.color = reportCount > 0 ? '#EF4444' : 'var(--ink-900, #0A0F1E)';
+    tileReports.textContent = reportCount > 0 ? `🚨 ${reportCount} फसवणुकीच्या तक्रारी` : '✅ 0 तक्रारी (स्वच्छ रेकॉर्ड)';
+    tileReports.style.color = reportCount > 0 ? '#EF4444' : '#059669';
   }
 
   // Scam Vector Checklist
@@ -698,13 +776,13 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     if (isThreat) {
       cardEl.className = 'scam-vector-card threat';
       if (statusEl) {
-        statusEl.textContent = 'HIGH THREAT INDICATOR DETECTED';
+        statusEl.innerHTML = '🚨 फसवणुकीची शक्यता (Threat Detected)';
         statusEl.style.color = '#DC2626';
       }
     } else {
       cardEl.className = 'scam-vector-card clean';
       if (statusEl) {
-        statusEl.textContent = 'NO ACTIVE REPORT';
+        statusEl.innerHTML = '✅ कोणतीही तक्रार नाही (Clean)';
         statusEl.style.color = '#059669';
       }
     }
@@ -738,24 +816,24 @@ window.simulateCallAction = function(action) {
       callSeconds = 0;
       if (oledScreen) oledScreen.classList.add('call-active');
       if (waveform) waveform.classList.add('speech-active');
-      if (btnDeclineLbl) btnDeclineLbl.textContent = 'End Call';
+      if (btnDeclineLbl) btnDeclineLbl.textContent = 'कॉल संपवा';
 
       clearInterval(callTimerInterval);
       callTimerInterval = setInterval(() => {
         callSeconds++;
         const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
         const secs = String(callSeconds % 60).padStart(2, '0');
-        if (statusText) statusText.innerHTML = `Active Call • ${mins}:${secs}`;
+        if (statusText) statusText.innerHTML = `📞 संभाषण सुरू • ${mins}:${secs}`;
       }, 1000);
 
-      if (statusText) statusText.innerHTML = `Connected • 00:00`;
+      if (statusText) statusText.innerHTML = `📞 कॉल कनेक्ट झाला • 00:00`;
       if (fb) {
-        fb.innerHTML = '<span style="color: #34D399;">📞 Voice Connection Active • Real-Time Anti-Fraud Telemetry Running</span>';
+        fb.innerHTML = '<span style="color: #34D399;">📞 संभाषण सुरू झाले • रिअल-टाइम सायबर सुरक्षा तपासणी ॲक्टिव्ह आहे</span>';
         fb.classList.add('show');
       }
     } else {
       if (fb) {
-        fb.innerHTML = '<span style="color: #38BDF8;">🎙️ Voice Channel Encrypted (Opus HD 48kHz Audio Stream)</span>';
+        fb.innerHTML = '<span style="color: #38BDF8;">🎙️ व्हॉईस चॅनेल सुरक्षित आहे (HD Audio Analysis Active)</span>';
         fb.classList.add('show');
       }
     }
@@ -765,27 +843,27 @@ window.simulateCallAction = function(action) {
       clearInterval(callTimerInterval);
       if (oledScreen) oledScreen.classList.remove('call-active');
       if (waveform) waveform.classList.remove('speech-active');
-      if (btnDeclineLbl) btnDeclineLbl.textContent = 'Decline';
-      if (statusText) statusText.textContent = `Call Terminated (${callSeconds}s)`;
+      if (btnDeclineLbl) btnDeclineLbl.textContent = 'कट करा';
+      if (statusText) statusText.textContent = `कॉल कट केला (${callSeconds}s)`;
       if (fb) {
-        fb.innerHTML = `<span style="color: #F87171;">📴 Call Terminated (${callSeconds}s) • Audio Telemetry Session Closed</span>`;
+        fb.innerHTML = `<span style="color: #F87171;">📴 कॉल कट केला (${callSeconds}s) • सुरक्षितता नोंद जतन केली</span>`;
         fb.classList.add('show');
       }
       setTimeout(() => {
-        if (!isCallActive && statusText) statusText.textContent = 'Incoming Voice Call';
+        if (!isCallActive && statusText) statusText.textContent = 'येणारा व्हॉईस कॉल (Incoming Call)';
       }, 3500);
     } else {
       if (phoneHw) {
         phoneHw.classList.add('vibrate-once');
         setTimeout(() => phoneHw.classList.remove('vibrate-once'), 400);
       }
-      if (statusText) statusText.textContent = 'Call Rejected';
+      if (statusText) statusText.textContent = 'कॉल कट केला';
       if (fb) {
-        fb.innerHTML = '<span style="color: #F87171;">📴 Call Rejected • Number Logged in Security Ledger</span>';
+        fb.innerHTML = '<span style="color: #F87171;">📴 कॉल कट केला • नंबर सुरक्षा नोंदवहीत जतन केला</span>';
         fb.classList.add('show');
       }
       setTimeout(() => {
-        if (!isCallActive && statusText) statusText.textContent = 'Incoming Voice Call';
+        if (!isCallActive && statusText) statusText.textContent = 'येणारा व्हॉईस कॉल (Incoming Call)';
       }, 3000);
     }
   } else if (action === 'block') {
@@ -794,19 +872,19 @@ window.simulateCallAction = function(action) {
       clearInterval(callTimerInterval);
       if (oledScreen) oledScreen.classList.remove('call-active');
       if (waveform) waveform.classList.remove('speech-active');
-      if (btnDeclineLbl) btnDeclineLbl.textContent = 'Decline';
+      if (btnDeclineLbl) btnDeclineLbl.textContent = 'कट करा';
     }
     if (phoneHw) {
       phoneHw.classList.add('vibrate-once');
       setTimeout(() => phoneHw.classList.remove('vibrate-once'), 400);
     }
-    if (statusText) statusText.textContent = 'Number Blocked';
+    if (statusText) statusText.textContent = 'नंबर ब्लॉक केला';
     if (fb) {
-      fb.innerHTML = '<span style="color: #FBBF24;">🛡️ Number Blocked on Device • Dispatched to Chakshu / DND Registry</span>';
+      fb.innerHTML = '<span style="color: #FBBF24;">🛡️ नंबर ब्लॉक केला • DoT चक्षू आणि DND पोर्टलकडे नोंद पाठवली</span>';
       fb.classList.add('show');
     }
     setTimeout(() => {
-      if (!isCallActive && statusText) statusText.textContent = 'Incoming Voice Call';
+      if (!isCallActive && statusText) statusText.textContent = 'येणारा व्हॉईस कॉल (Incoming Call)';
     }, 4000);
   }
 
