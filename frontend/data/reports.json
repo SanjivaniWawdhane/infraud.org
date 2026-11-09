@@ -1,5 +1,27 @@
 [
   {
+    "id": "rep_1794233149417_qez35",
+    "identifier": "+91 1800343424",
+    "type": "Phone",
+    "risk": "Critical",
+    "evidence": "Citizen reported scam/extortion caller via 1-click fraud radar.",
+    "reporterName": "Anonymous",
+    "reporterEmail": "",
+    "timestamp": 1794233149417,
+    "status": "pending"
+  },
+  {
+    "id": "rep_1794233116991_8p3qu",
+    "identifier": "+91 1800343424",
+    "type": "Phone",
+    "risk": "Critical",
+    "evidence": "Citizen reported scam/extortion caller via 1-click fraud radar.",
+    "reporterName": "Anonymous",
+    "reporterEmail": "",
+    "timestamp": 1794233116992,
+    "status": "pending"
+  },
+  {
     "id": "seed-digital-arrest-1",
     "identifier": "+91 80102 37029",
     "type": "Phone",

@@ -1132,6 +1132,103 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
+  
+  // ── Luxury Smartphone Simulator & Hardware SIM Synchronization ──
+  const hudNum = document.getElementById('phone-hud-display-number');
+  if (hudNum) hudNum.textContent = formatted;
+
+  const hudSubtitle = document.getElementById('phone-hud-carrier-subtitle');
+  if (hudSubtitle) hudSubtitle.textContent = `${operatorName} • ${circleName}`;
+
+  const simCarrier = document.getElementById('phone-sim-carrier-name');
+  if (simCarrier) simCarrier.textContent = `${operatorName.toUpperCase()} 5G+`;
+
+  const simCircle = document.getElementById('phone-sim-circle-name');
+  if (simCircle) simCircle.textContent = `${circleName} • DoT UASL Band 78 (5G SA)`;
+
+  const simStatusTag = document.getElementById('phone-sim-status-tag');
+  if (simStatusTag) {
+    if (riskScore >= 70) {
+      simStatusTag.textContent = '● SCAM SUSPECT (BLOCKED)';
+      simStatusTag.style.background = 'rgba(220, 38, 38, 0.2)';
+      simStatusTag.style.color = '#F87171';
+      simStatusTag.style.borderColor = 'rgba(220, 38, 38, 0.4)';
+    } else if (riskScore <= 10) {
+      simStatusTag.textContent = '● OFFICIAL VERIFIED USIM';
+      simStatusTag.style.background = 'rgba(16, 185, 129, 0.2)';
+      simStatusTag.style.color = '#34D399';
+      simStatusTag.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    } else {
+      simStatusTag.textContent = '● ACTIVE 5G SA USIM';
+      simStatusTag.style.background = 'rgba(16, 185, 129, 0.15)';
+      simStatusTag.style.color = '#34D399';
+      simStatusTag.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+    }
+  }
+
+  const islandStatus = document.getElementById('phone-island-status');
+  const islandDot = document.getElementById('phone-island-dot');
+  if (islandStatus) {
+    if (riskScore >= 70) {
+      islandStatus.textContent = 'LIVE RADAR: HIGH THREAT';
+      islandStatus.style.color = '#F87171';
+      if (islandDot) {
+        islandDot.style.background = '#EF4444';
+        islandDot.style.boxShadow = '0 0 10px #EF4444';
+      }
+    } else if (riskScore <= 10) {
+      islandStatus.textContent = 'OFFICIAL INSTITUTIONAL LINE';
+      islandStatus.style.color = '#34D399';
+      if (islandDot) {
+        islandDot.style.background = '#10B981';
+        islandDot.style.boxShadow = '0 0 10px #10B981';
+      }
+    } else {
+      islandStatus.textContent = 'LIVE TELECOM RADAR';
+      islandStatus.style.color = '#34D399';
+      if (islandDot) {
+        islandDot.style.background = '#10B981';
+        islandDot.style.boxShadow = '0 0 10px #10B981';
+      }
+    }
+  }
+
+  // Soundwave equalization bars dynamic styling
+  const soundwaveBars = document.querySelectorAll('.soundwave-bar');
+  soundwaveBars.forEach(bar => {
+    if (riskScore >= 70) {
+      bar.style.background = 'linear-gradient(180deg, #EF4444, #991B1B)';
+    } else if (riskScore >= 35) {
+      bar.style.background = 'linear-gradient(180deg, #F59E0B, #B45309)';
+    } else {
+      bar.style.background = 'linear-gradient(180deg, #10B981, #047857)';
+    }
+  });
+
+  // Smartphone HUD Avatar styling
+  const hudAvatar = document.getElementById('phone-hud-avatar-icon');
+  if (hudAvatar) {
+    if (riskScore >= 70) {
+      hudAvatar.style.background = 'rgba(220, 38, 38, 0.15)';
+      hudAvatar.style.borderColor = 'rgba(220, 38, 38, 0.5)';
+      hudAvatar.style.color = '#EF4444';
+    } else if (riskScore <= 10) {
+      hudAvatar.style.background = 'rgba(16, 185, 129, 0.15)';
+      hudAvatar.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+      hudAvatar.style.color = '#10B981';
+    } else {
+      hudAvatar.style.background = 'rgba(59, 130, 246, 0.15)';
+      hudAvatar.style.borderColor = 'rgba(59, 130, 246, 0.4)';
+      hudAvatar.style.color = '#60A5FA';
+    }
+  }
+
+  // Also pre-fill the quick search input with the current number
+  const quickInput = document.getElementById('phone-quick-input');
+  if (quickInput && !quickInput.value) {
+    quickInput.value = digits.length === 10 ? digits : target;
+  }
+
   const reportBtn = document.getElementById('btn-report-phone');
   if (reportBtn) {
     reportBtn.href = `reports.html?type=phone&target=${encodeURIComponent(target)}`;
