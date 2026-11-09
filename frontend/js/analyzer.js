@@ -665,71 +665,152 @@ function renderAnalysisResult(data) {
 function resolveTelecomCarrier(digits, country = 'IN', countryName = 'India') {
   if (country !== 'IN') {
     if (country === 'US' || country === 'CA') {
-      return { operator: 'North American Carrier', brand: 'AT&T / Verizon', circle: 'North America', state: countryName };
+      return { operator: 'North American Carrier', brand: 'AT&T / Verizon / T-Mobile', circle: 'North America', state: countryName };
     } else if (country === 'GB') {
       return { operator: 'UK Telecom Carrier', brand: 'Vodafone / EE / O2', circle: 'United Kingdom', state: countryName };
     } else if (country === 'AE') {
       return { operator: 'UAE Telecom Operator', brand: 'e& (Etisalat) / du', circle: 'United Arab Emirates', state: countryName };
     }
-    return { operator: countryName + ' Telecom Operator', brand: 'International Carrier', circle: countryName, state: countryName };
+    return { operator: `${countryName} Telecom Operator`, brand: 'International Carrier', circle: countryName, state: countryName };
   }
 
+  // Normalize Indian digits to 10 digits
   let d = String(digits || '').replace(/\D/g, '');
-  if (d.startsWith('91') && d.length === 12) d = d.slice(2);
-  else if (d.startsWith('0') && d.length === 11) d = d.slice(1);
+  if (d.startsWith('91') && d.length === 12) {
+    d = d.slice(2);
+  } else if (d.startsWith('0') && d.length === 11) {
+    d = d.slice(1);
+  }
 
   if (d.length !== 10) {
-    return { operator: 'Indian Telecom Provider', brand: 'Cellular Carrier', circle: 'Domestic Circle', state: 'India' };
+    return { operator: 'Indian Telecom Provider', brand: 'GSM/LTE Carrier', circle: 'Domestic Circle', state: 'India' };
   }
 
   const p2 = d.slice(0, 2);
   const p3 = d.slice(0, 3);
   const p4 = d.slice(0, 4);
 
-  // 1. BSNL / MTNL
+  // ── 1. BSNL & MTNL GOVT TELECOM ──
   if (p2 === '94') {
     let circle = 'Maharashtra & Goa Circle';
     if (['9403', '9404', '9405', '9420', '9421', '9422', '9423'].includes(p4)) circle = 'Maharashtra & Goa Circle';
     else if (['9410', '9411', '9412', '9450', '9451'].includes(p4)) circle = 'Uttar Pradesh Circle';
     else if (['9414', '9413'].includes(p4)) circle = 'Rajasthan Circle';
     else if (['9440', '9441'].includes(p4)) circle = 'Andhra Pradesh & Telangana';
-    else if (['9443', '9444'].includes(p4)) circle = 'Tamil Nadu Circle';
+    else if (['9443', '9444'].includes(p4)) circle = 'Tamil Nadu & Chennai';
     else if (['9445', '9446'].includes(p4)) circle = 'Kerala Circle';
     else if (['9448', '9449'].includes(p4)) circle = 'Karnataka Circle';
     return { operator: 'Bharat Sanchar Nigam Ltd (BSNL)', brand: 'BSNL Mobile', circle, state: 'National' };
   }
-  if (['9868', '9968'].includes(p4)) return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Delhi NCR Circle', state: 'Delhi' };
-  if (['9869', '9969'].includes(p4)) return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Mumbai Circle', state: 'Maharashtra' };
-
-  // 2. Airtel / Vi in Maharashtra & Specific Series
-  if (['9673', '9890'].includes(p4)) {
-    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Maharashtra & Goa Circle', state: 'Maharashtra' };
+  if (['9868', '9968'].includes(p4)) {
+    return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Delhi NCR Circle', state: 'Delhi' };
   }
-  if (['9822', '9823', '9762', '9763', '9764', '9765', '9766', '9767', '9921', '9922', '9923', '9011', '9028', '9049', '9096', '9503', '9527', '9545', '9552', '9561'].includes(p4)) {
-    return { operator: 'Vodafone Idea Ltd (Vi)', brand: 'Vodafone Idea (Vi)', circle: 'Maharashtra & Goa Circle', state: 'Maharashtra' };
-  }
-  if (['9820', '9821', '9819', '9833'].includes(p4)) {
-    return { operator: 'Vodafone Idea Ltd (Vi)', brand: 'Vodafone Idea (Vi)', circle: 'Mumbai Circle', state: 'Maharashtra' };
-  }
-  if (['9810', '9811', '9818', '9910', '9911', '9958', '9971'].includes(p4)) {
-    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Delhi NCR Circle', state: 'Delhi' };
-  }
-  if (['9845', '9844', '9880', '9886'].includes(p4)) {
-    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Karnataka Circle', state: 'Karnataka' };
-  }
-  if (['9840', '9841'].includes(p4)) {
-    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'Tamil Nadu & Chennai', state: 'Tamil Nadu' };
+  if (['9869', '9969'].includes(p4)) {
+    return { operator: 'Mahanagar Telephone Nigam Ltd (MTNL)', brand: 'MTNL Dolphin', circle: 'Mumbai Circle', state: 'Maharashtra' };
   }
 
-  // 3. Reliance Jio (6xxx, 70xx, 72xx, 79xx, 82xx, 83xx, 84xx, 85xx, 86xx, 87xx, 88xx, 89xx series)
-  const jioPrefixes3 = ['620', '626', '628', '629', '630', '635', '636', '637', '638', '639', '700', '701', '702', '705', '707', '708', '709', '720', '725', '729', '730', '735', '738', '739', '740', '745', '748', '749', '750', '755', '758', '759', '760', '765', '766', '767', '768', '769', '770', '771', '773', '775', '776', '777', '778', '779', '780', '785', '786', '787', '788', '789', '790', '797', '798', '799', '800', '805', '808', '809', '820', '821', '822', '823', '824', '825', '826', '827', '828', '829', '830', '835', '836', '837', '838', '839', '840', '845', '846', '847', '848', '849', '850', '853', '854', '857', '859', '860', '863', '865', '866', '867', '868', '869', '870', '874', '876', '877', '878', '879', '880', '881', '883', '885', '887', '889', '890', '892', '894', '896', '898', '910', '912', '913', '914', '915', '916', '917', '918', '919'];
-  if (jioPrefixes3.includes(p3) || d.startsWith('6')) {
-    return { operator: 'Reliance Jio Infocomm Ltd', brand: 'Reliance Jio', circle: 'India Domestic Circle', state: 'India' };
+  // ── 2. RELIANCE JIO INFODOM ──
+  // Jio 6-series (all 60, 62, 63 etc)
+  if (d.startsWith('6')) {
+    return { operator: 'Reliance Jio Infocomm Ltd', brand: 'Reliance Jio', circle: 'India 4G/5G Circle', state: 'India' };
+  }
+  // Jio 7-series (700-709, 720-739, 740-799)
+  const jioPrefixes3 = [
+    '700', '701', '702', '703', '704', '705', '706', '707', '708', '709',
+    '720', '721', '722', '723', '724', '725', '726', '727', '728', '729',
+    '730', '731', '732', '733', '734', '735', '736', '737', '738', '739',
+    '740', '741', '742', '743', '744', '745', '746', '747', '748', '749',
+    '750', '751', '752', '753', '754', '755', '756', '757', '758', '759',
+    '760', '761', '762', '763', '764', '765', '766', '767', '768', '769',
+    '770', '771', '772', '773', '774', '775', '776', '777', '778', '779',
+    '780', '781', '782', '783', '784', '785', '786', '787', '788', '789',
+    '790', '791', '792', '793', '794', '795', '796', '797', '798', '799',
+    '800', '801', '805', '808', '809', '810', '812', '814', '816', '817',
+    '820', '821', '822', '823', '824', '825', '826', '827', '828', '829',
+    '830', '831', '832', '834', '835', '836', '837', '838', '839',
+    '840', '841', '842', '843', '844', '845', '846', '847', '848', '849',
+    '850', '851', '852', '853', '854', '855', '856', '857', '858', '859',
+    '860', '861', '862', '863', '864', '865', '866', '867', '868', '869',
+    '870', '871', '872', '873', '874', '875', '876', '877', '878', '879',
+    '880', '881', '882', '883', '884', '885', '886', '887', '888', '889',
+    '890', '891', '892', '893', '894', '895', '896', '897', '898', '899',
+    '910', '912', '913', '914', '915', '916', '917', '918', '919',
+    '920', '921', '922', '923', '924', '925', '926', '927', '928', '929',
+    '930', '931', '932', '933', '934', '935', '936', '937', '938', '939'
+  ];
+
+  // Specific Vi (Vodafone Idea) 4-digit prefixes in Maharashtra & Pan-India
+  const viPrefixes = [
+    // Maharashtra & Goa Vi (Idea & Vodafone)
+    '9822', '9823', '9860', '9921', '9922', '9960', '9970', '9975',
+    '9762', '9763', '9764', '9765', '9011', '9028', '9049', '9096',
+    '9503', '9527', '9545', '9561', '9604', '9623', '9637', '9657',
+    '9665', '9689', '9730', '9158', '9175', '8888', '8600', '8408',
+    '8007', '7798', '7774', '7709', '7385', '7387',
+    // Mumbai Vi
+    '9820', '9821', '9819', '9833', '9892', '9920', '9930', '9987',
+    '9702', '9004', '9022', '9167', '8879', '8080', '7506',
+    // Gujarat Vi
+    '9824', '9825', '9898', '9909', '9924', '9925', '9974', '9978',
+    '9979', '9712', '9724', '9725', '9726', '9727',
+    // Delhi NCR Vi
+    '9811', '9891', '9911', '9953', '9999', '9711', '9871', '9873',
+    // Karnataka Vi
+    '9845', '9886', '9901', '9986',
+    // Andhra Vi
+    '9848', '9885', '9948', '9966', '9700', '9000',
+    // UP Vi
+    '9839', '9838', '9935', '9936', '9415'
+  ];
+
+  // Specific Airtel 4-digit prefixes
+  const airtelPrefixes = [
+    // Maharashtra & Goa Airtel
+    '9673', '9890', '9850', '9881', '9552', '9766', '9767', '9923',
+    // Delhi NCR Airtel
+    '9810', '9818', '9910', '9958', '9971', '9899', '9717', '9650', '9654',
+    // Mumbai Airtel
+    '9867', '9967', '9769', '9892',
+    // Karnataka Airtel
+    '9844', '9880', '9900', '9945', '9980', '9740', '9741', '9742',
+    // Tamil Nadu & Chennai Airtel
+    '9840', '9841', '9842', '9843', '9884', '9894', '9940', '9941', '9942', '9943', '9944', '9952',
+    // Andhra Pradesh & Telangana Airtel
+    '9849', '9949', '9951', '9959', '9985', '9989', '9701', '9703', '9704', '9705',
+    // Kolkata & West Bengal Airtel
+    '9830', '9831', '9832', '9836', '9874', '9903', '9932', '9933',
+    // Gujarat Airtel
+    '9879', '9898', '9904', '9925', '9979'
+  ];
+
+  // 1. Check Vi first if matches Vi prefixes
+  if (viPrefixes.includes(p4)) {
+    let circle = 'Maharashtra & Goa Circle';
+    if (['9820', '9821', '9819', '9833', '9892', '9920', '9930', '9987', '9702', '9004', '9022', '9167', '8879', '8080', '7506'].includes(p4)) circle = 'Mumbai Circle';
+    else if (['9811', '9891', '9911', '9953', '9999', '9711', '9871', '9873'].includes(p4)) circle = 'Delhi NCR Circle';
+    else if (['9824', '9825', '9898', '9909', '9924', '9925', '9974', '9978', '9979', '9712', '9724', '9725', '9726', '9727'].includes(p4)) circle = 'Gujarat Circle';
+    return { operator: 'Vodafone Idea Ltd (Vi)', brand: 'Vodafone Idea (Vi)', circle, state: 'India' };
   }
 
-  // 4. Default Airtel Series
-  if (['98', '99', '97', '96', '95', '88', '85', '81', '70'].includes(p2)) {
-    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle: 'India Domestic Circle', state: 'India' };
+  // 2. Check Airtel if matches Airtel prefixes
+  if (airtelPrefixes.includes(p4)) {
+    let circle = 'Maharashtra & Goa Circle';
+    if (['9810', '9818', '9910', '9958', '9971', '9899', '9717', '9650', '9654'].includes(p4)) circle = 'Delhi NCR Circle';
+    else if (['9867', '9967', '9769'].includes(p4)) circle = 'Mumbai Circle';
+    else if (['9844', '9880', '9900', '9945', '9980', '9740', '9741', '9742'].includes(p4)) circle = 'Karnataka Circle';
+    else if (['9840', '9841', '9842', '9843', '9884', '9894', '9940', '9941', '9942', '9943', '9944', '9952'].includes(p4)) circle = 'Tamil Nadu & Chennai';
+    else if (['9849', '9949', '9951', '9959', '9985', '9989', '9701', '9703', '9704', '9705'].includes(p4)) circle = 'Andhra Pradesh & Telangana';
+    return { operator: 'Bharti Airtel Ltd', brand: 'Bharti Airtel', circle, state: 'India' };
+  }
+
+  // 3. Check Jio prefixes
+  if (jioPrefixes3.includes(p3)) {
+    return { operator: 'Reliance Jio Infocomm Ltd', brand: 'Reliance Jio', circle: 'India 4G/5G Circle', state: 'India' };
+  }
+
+  // 4. Clean fallback without hardcoded Airtel bias!
+  if (['98', '99', '97', '96', '95', '91', '90', '88', '85', '81', '70'].includes(p2)) {
+    return { operator: 'Indian Cellular Operator', brand: 'Cellular Mobile (GSM/LTE)', circle: 'India Domestic Circle', state: 'India' };
   }
 
   return { operator: 'Authorized Indian Telecom Provider', brand: 'Cellular Carrier', circle: 'Domestic Circle', state: 'India' };
