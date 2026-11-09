@@ -1289,6 +1289,46 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     }
   }
 
+  // Dynamic Rubber Stamp Verdict & Circular Dial Badge
+  const rubberStamp = document.getElementById('url-rubber-stamp');
+  const dialBadge = document.getElementById('cert-dial-badge');
+
+  if (rubberStamp) {
+    if (riskScore >= 70) {
+      rubberStamp.className = 'url-rubber-stamp stamp-fail';
+      rubberStamp.style.borderColor = '#DC2626';
+      rubberStamp.style.color = '#DC2626';
+      rubberStamp.style.background = 'rgba(239, 68, 68, 0.08)';
+      rubberStamp.textContent = 'BLOCKED • DANGEROUS PHISHING';
+    } else if (riskScore >= 45) {
+      rubberStamp.className = 'url-rubber-stamp stamp-fail';
+      rubberStamp.style.borderColor = '#EA580C';
+      rubberStamp.style.color = '#EA580C';
+      rubberStamp.style.background = 'rgba(234, 88, 12, 0.08)';
+      rubberStamp.textContent = 'SUSPICIOUS • HIGH RISK';
+    } else if (riskScore >= 20) {
+      rubberStamp.className = 'url-rubber-stamp stamp-fail';
+      rubberStamp.style.borderColor = '#D97706';
+      rubberStamp.style.color = '#D97706';
+      rubberStamp.style.background = 'rgba(245, 158, 11, 0.08)';
+      rubberStamp.textContent = 'CAUTION • SUSPICIOUS LINK';
+    } else {
+      rubberStamp.className = 'url-rubber-stamp stamp-pass';
+      rubberStamp.style.borderColor = '#059669';
+      rubberStamp.style.color = '#059669';
+      rubberStamp.style.background = 'rgba(16, 185, 129, 0.08)';
+      rubberStamp.textContent = 'PASSED • SAFE TO VISIT';
+    }
+  }
+
+  if (dialBadge) {
+    if (riskScore >= 45) {
+      dialBadge.classList.add('threat');
+    } else {
+      dialBadge.classList.remove('threat');
+    }
+  }
+
   const scoreSidebar = document.getElementById('score-sidebar');
   if (scoreSidebar) {
     scoreSidebar.style.boxShadow = `0 12px 32px ${theme.cardGlow}`;
