@@ -961,6 +961,108 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
 /**
  * 4. Dedicated Renderer for Web URLs (Cyber Domain Sandbox)
  */
+/**
+ * Production-Grade Dynamic 8-Vector Heuristic Radar & URL Forensic Decomposition
+ */
+function renderUrlForensicsDeck(data, signals, target) {
+  // 1. Dynamic 8-Vector Live Engine Radar
+  const enginesContainer = document.getElementById('url-engines-container');
+  if (enginesContainer) {
+    const engineChecks = [
+      { id: 'INSECURE_PROTOCOL', name: 'Transport Protocol (TLS 1.3 / HTTPS)', passLabel: 'TLS Encrypted' },
+      { id: 'IP_HOST', name: 'Host Architecture (FQDN vs IP)', passLabel: 'Standard FQDN' },
+      { id: 'MISLEADING_AT_SYMBOL', name: 'Authority Sniffing (@ Syntax)', passLabel: 'Clean Authority' },
+      { id: 'PUNYCODE_DOMAIN', name: 'IDN Homograph / Punycode (xn--)', passLabel: 'Standard ASCII' },
+      { id: 'SUSPICIOUS_TLD', name: 'Namespace / High-Abuse TLD', passLabel: 'Trusted TLD' },
+      { id: 'EXCESSIVE_SUBDOMAINS', name: 'Subdomain Hierarchy Depth', passLabel: 'Nominal Depth' },
+      { id: 'BRAND_IMPERSONATION', name: 'Corporate Brand Impersonation', passLabel: 'Zero Mimicry' },
+      { id: 'PHISHING_KEYWORDS', name: 'Credential Harvesting Lexicon', passLabel: 'No Deceptive Tokens' }
+    ];
+
+    enginesContainer.innerHTML = engineChecks.map(engine => {
+      const flag = signals.find(s => s.id === engine.id);
+      if (flag) {
+        return `
+          <div class="cockpit-engine-row flagged">
+            <div class="engine-info">
+              <span class="engine-status-dot dot-flagged"></span>
+              <span class="engine-name">${escapeHtml(engine.name)}</span>
+            </div>
+            <span class="engine-badge badge-flagged">+${flag.weight} Pts (Flagged)</span>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="cockpit-engine-row passed">
+            <div class="engine-info">
+              <span class="engine-status-dot dot-passed"></span>
+              <span class="engine-name">${escapeHtml(engine.name)}</span>
+            </div>
+            <span class="engine-badge badge-passed">Passed (${escapeHtml(engine.passLabel)})</span>
+          </div>
+        `;
+      }
+    }).join('');
+  }
+
+  // 2. URL Forensic Syntax Decomposition Matrix
+  const decompGrid = document.getElementById('url-decomp-grid');
+  const rawUrlChip = document.getElementById('decomp-raw-url');
+  if (decompGrid) {
+    try {
+      const cleanTarget = target.trim();
+      const parsed = new URL(cleanTarget.startsWith('http') ? cleanTarget : `https://${cleanTarget}`);
+      const hostname = parsed.hostname;
+      const isIp = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname) || hostname.includes(':');
+      const parts = hostname.split('.');
+      const tld = isIp ? 'N/A (Direct IP Host)' : (parts.length > 1 ? '.' + parts[parts.length - 1] : 'Apex Domain');
+      const baseDomain = isIp ? hostname : (parts.length >= 2 ? parts.slice(-2).join('.') : hostname);
+      const subdomains = isIp ? 'None (Direct IP Address)' : (parts.length > 2 ? parts.slice(0, -2).join('.') : 'None (Apex Root)');
+      const port = parsed.port || (parsed.protocol === 'https:' ? '443 (Default HTTPS)' : '80 (Default HTTP)');
+      const path = parsed.pathname || '/';
+      const hasKeywords = signals.some(s => s.id === 'PHISHING_KEYWORDS');
+      const isHttp = parsed.protocol === 'http:';
+
+      if (rawUrlChip) rawUrlChip.textContent = cleanTarget;
+
+      decompGrid.innerHTML = `
+        <div class="decomp-cell ${isHttp ? 'cell-warn' : 'cell-pass'}">
+          <div class="decomp-lbl">PROTOCOL / SCHEME</div>
+          <div class="decomp-val">${escapeHtml(parsed.protocol)}//</div>
+          <div class="decomp-status">${isHttp ? '⚠️ Unencrypted (Plaintext)' : '✓ Valid Cryptographic TLS'}</div>
+        </div>
+        <div class="decomp-cell ${isIp ? 'cell-warn' : 'cell-pass'}">
+          <div class="decomp-lbl">BASE REGISTERED DOMAIN</div>
+          <div class="decomp-val">${escapeHtml(baseDomain)}</div>
+          <div class="decomp-status">${isIp ? '⚠️ Direct IP Host (Non-FQDN)' : '✓ Registered Domain Name'}</div>
+        </div>
+        <div class="decomp-cell ${subdomains !== 'None (Apex Root)' ? (signals.some(s => s.id === 'BRAND_IMPERSONATION' || s.id === 'EXCESSIVE_SUBDOMAINS') ? 'cell-warn' : 'cell-pass') : 'cell-pass'}">
+          <div class="decomp-lbl">SUBDOMAIN HIERARCHY</div>
+          <div class="decomp-val">${escapeHtml(subdomains)}</div>
+          <div class="decomp-status">${subdomains === 'None (Apex Root)' ? '✓ Clean Apex Structure' : (signals.some(s => s.id === 'BRAND_IMPERSONATION') ? '⚠️ Suspected Brand Mimicry' : 'ℹ️ Multi-label Subdomain')}</div>
+        </div>
+        <div class="decomp-cell ${signals.some(s => s.id === 'SUSPICIOUS_TLD') ? 'cell-warn' : 'cell-pass'}">
+          <div class="decomp-lbl">TLD NAMESPACE</div>
+          <div class="decomp-val">${escapeHtml(tld)}</div>
+          <div class="decomp-status">${signals.some(s => s.id === 'SUSPICIOUS_TLD') ? '⚠️ High-Abuse TLD Namespace' : '✓ Standard Namespace'}</div>
+        </div>
+        <div class="decomp-cell ${hasKeywords ? 'cell-warn' : 'cell-pass'}">
+          <div class="decomp-lbl">RESOURCE PATH</div>
+          <div class="decomp-val">${escapeHtml(path)}</div>
+          <div class="decomp-status">${hasKeywords ? '⚠️ Sensitive Keywords Flagged' : '✓ Standard Path Anatomy'}</div>
+        </div>
+        <div class="decomp-cell ${parsed.port && !['80','443','8080','8443'].includes(parsed.port) ? 'cell-warn' : 'cell-pass'}">
+          <div class="decomp-lbl">NETWORK PORT</div>
+          <div class="decomp-val">${escapeHtml(port)}</div>
+          <div class="decomp-status">${parsed.port && !['80','443','8080','8443'].includes(parsed.port) ? '⚠️ Non-Standard Web Port' : '✓ Standard Web Port'}</div>
+        </div>
+      `;
+    } catch (e) {
+      console.warn('URL parsing error in decomposition:', e);
+    }
+  }
+}
+
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
   // 1. Animate SVG Gauge
   const gaugeCircle = document.getElementById('gauge-circle');
@@ -997,33 +1099,50 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     scoreSidebar.style.boxShadow = `0 12px 32px ${theme.cardGlow}`;
   }
 
-  // 4. Populate Telemetry Tiles
-  populateTelemetryTiles(data, target);
+  // 4. Update Header Status Badge dynamically
+  const headerStatusPill = document.getElementById('url-header-status-pill');
+  if (headerStatusPill) {
+    if (riskScore >= 70) {
+      headerStatusPill.textContent = 'CRITICAL PHISHING THREAT';
+      headerStatusPill.style.background = 'rgba(239, 68, 68, 0.35)';
+      headerStatusPill.style.color = '#FECACA';
+    } else if (riskScore >= 45) {
+      headerStatusPill.textContent = 'HIGH SUSPICION / DECEPTION';
+      headerStatusPill.style.background = 'rgba(234, 88, 12, 0.35)';
+      headerStatusPill.style.color = '#FED7AA';
+    } else if (riskScore >= 20) {
+      headerStatusPill.textContent = 'ELEVATED STRUCTURAL RISK';
+      headerStatusPill.style.background = 'rgba(245, 158, 11, 0.35)';
+      headerStatusPill.style.color = '#FEF08A';
+    } else {
+      headerStatusPill.textContent = 'VERIFIED STRUCTURAL PROFILE';
+      headerStatusPill.style.background = 'rgba(16, 185, 129, 0.35)';
+      headerStatusPill.style.color = '#A7F3D0';
+    }
+  }
 
-  // Update Canonical Target and Sandbox URL Labels
-  const canonicalEl = document.getElementById("dossier-canonical");
+  // 5. Update Canonical Target Label
+  const canonicalEl = document.getElementById('dossier-canonical');
   if (canonicalEl) {
-    const formatted = target.startsWith("http") ? target : `https://${target}/`;
+    const formatted = target.startsWith('http') ? target : `https://${target}/`;
     canonicalEl.textContent = formatted;
   }
-  const sandboxUrlEl = document.getElementById("sandbox-url-label");
-  if (sandboxUrlEl) {
-    const formatted = target.startsWith("http") ? target : `https://${target}/`;
-    sandboxUrlEl.textContent = formatted;
-  }
 
-  // 5. Populate Signals List or All-Clear Certificate
+  // 6. Populate Telemetry Tiles
+  populateTelemetryTiles(data, target);
+
+  // 7. Render Dynamic 8-Vector Engine Radar & URL Forensic Syntax Decomposition Matrix
+  renderUrlForensicsDeck(data, signals, target);
+
+  // 8. Populate Signals List or All-Clear Certificate
   renderSignalsList(signals, theme, 'signals-container', 'signals-count-pill');
 
-  // 6. Incident Playbook & Actionable Recommendations
+  // 9. Incident Playbook & Actionable Recommendations
   const recBox = document.getElementById('recommendation-box');
   if (recBox) recBox.style.borderLeftColor = theme.color;
   renderRecommendationsList(recommendations, theme, 'recommendation-text');
 }
 
-/**
- * Shared Helper to render heuristic signals list or clean certificate
- */
 function renderSignalsList(signals, theme, containerId, countPillId) {
   const countPill = document.getElementById(countPillId);
   if (countPill) {
