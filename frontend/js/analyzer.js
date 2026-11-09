@@ -1,3 +1,51 @@
+// ── SaaS Phone Quick Input & Clipboard Handlers ──
+window.copyCanonicalPhone = function() {
+  const el = document.getElementById('phone-target-display');
+  const target = currentTargetQuery || (el ? el.textContent.replace(/^[^0-9+]+/, '') : '');
+  if (!target) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(target).then(() => {
+      const lbl = document.getElementById('copy-phone-label');
+      if (lbl) {
+        lbl.textContent = 'Copied!';
+        setTimeout(() => { lbl.textContent = 'Copy'; }, 2000);
+      }
+    }).catch(() => {});
+  }
+};
+
+window.handleQuickPhoneSubmit = function(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('phone-quick-input');
+  const errorEl = document.getElementById('phone-quick-error');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) {
+    if (errorEl) {
+      errorEl.textContent = 'Please enter a valid phone or helpline number to analyze.';
+      errorEl.style.display = 'block';
+    }
+    input.focus();
+    return;
+  }
+  if (errorEl) errorEl.style.display = 'none';
+  const newUrl = `${window.location.pathname}?type=phone&query=${encodeURIComponent(val)}`;
+  window.history.pushState({ path: newUrl }, '', newUrl);
+  if (typeof analyzeTarget === 'function') {
+    analyzeTarget(val, 'phone');
+  }
+};
+
+window.clearQuickPhoneInput = function() {
+  const input = document.getElementById('phone-quick-input');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  const errorEl = document.getElementById('phone-quick-error');
+  if (errorEl) errorEl.style.display = 'none';
+};
+
 
 // ── SaaS URL Quick Input & Clipboard Handlers ──
 window.copyCanonicalUrl = function() {
