@@ -542,64 +542,101 @@
 
 /* ── TOOL 2: TELECOM CALLER DOSSIER & SMARTPHONE UI (PHONE SCANNER) ── */
       .phone-telecom-header-bar {
-        background: linear-gradient(135deg, #064E3B 0%, #065F46 60%, #047857 100%);
-        border: 1px solid rgba(16, 185, 129, 0.45);
-        border-radius: 20px;
-        padding: 24px 28px;
-        box-shadow: 0 12px 36px rgba(6, 78, 59, 0.25);
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(120% 140% at 0% 0%, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.98) 55%), #0A0F1E;
+        border: 1px solid rgba(52, 211, 153, 0.28);
+        border-radius: 24px;
+        padding: 26px 32px;
+        box-shadow: 0 20px 50px -12px rgba(6, 78, 59, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.12);
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 22px;
         margin-bottom: 28px;
         color: #FFFFFF;
+      }
+      .phone-telecom-header-bar::before {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 220px; height: 220px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+        pointer-events: none;
       }
       .telecom-badge-left {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 18px;
+        position: relative;
+        z-index: 1;
       }
       .telecom-seal-icon {
-        width: 48px; height: 48px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        width: 52px; height: 52px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.08) 100%);
+        border: 1px solid rgba(52, 211, 153, 0.4);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #34D399;
         flex-shrink: 0;
+        box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease;
+      }
+      .telecom-seal-icon:hover {
+        transform: rotate(6deg) scale(1.05);
       }
       .telecom-header-sub {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: 8px;
         font-size: 0.75rem;
         font-weight: 700;
         color: #A7F3D0;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
+        letter-spacing: 0.06em;
+        margin-bottom: 6px;
+      }
+      .live-dot-pulse {
+        display: inline-block;
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: #10B981;
+        box-shadow: 0 0 10px #10B981;
+        animation: liveDotBlink 1.8s ease-in-out infinite;
+      }
+      @keyframes liveDotBlink {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.8); }
       }
       .carrier-pill-emerald {
-        background: rgba(255, 255, 255, 0.2);
-        color: #FFFFFF;
-        padding: 2px 8px;
+        background: rgba(16, 185, 129, 0.18);
+        border: 1px solid rgba(52, 211, 153, 0.35);
+        color: #6EE7B7;
+        padding: 3px 10px;
         border-radius: 100px;
         font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
       }
       .phone-target-title {
         color: #FFFFFF !important;
         font-family: var(--mono, 'JetBrains Mono', monospace);
-        font-size: 1.875rem;
+        font-size: 2rem;
         font-weight: 800;
         margin: 0;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.03em;
+        text-shadow: 0 2px 14px rgba(16, 185, 129, 0.25);
       }
       .telecom-header-actions {
         display: flex;
-        gap: 10px;
+        gap: 12px;
         flex-wrap: wrap;
+        align-items: center;
+        position: relative;
+        z-index: 1;
       }
       .telecom-btn-pill {
         display: inline-flex;
@@ -607,104 +644,265 @@
         gap: 8px;
         font-size: 0.8125rem;
         font-weight: 700;
-        color: #FFFFFF;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        padding: 9px 18px;
-        border-radius: 10px;
+        color: #F1F5F9;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        padding: 10px 18px;
+        border-radius: 12px;
         cursor: pointer;
         text-decoration: none;
-        transition: all 0.2s ease;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .telecom-btn-pill:hover {
-        background: rgba(255, 255, 255, 0.22);
-        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.25);
       }
       .btn-telecom-report {
-        background: rgba(239, 68, 68, 0.3);
-        border-color: rgba(239, 68, 68, 0.5);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(220, 38, 38, 0.12) 100%);
+        border-color: rgba(239, 68, 68, 0.4);
         color: #FCA5A5;
       }
       .btn-telecom-report:hover {
-        background: rgba(239, 68, 68, 0.5);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(220, 38, 38, 0.25) 100%);
+        border-color: rgba(239, 68, 68, 0.6);
         color: #FFFFFF;
+        box-shadow: 0 8px 24px -4px rgba(239, 68, 68, 0.35);
       }
 
       /* Phone Split Showcase: Handset + Dossier */
       .phone-split-showcase {
         display: grid;
-        grid-template-columns: 380px 1fr;
-        gap: 28px;
-        margin-bottom: 28px;
+        grid-template-columns: 390px 1fr;
+        gap: 32px;
+        margin-bottom: 32px;
         align-items: start;
       }
-      @media (max-width: 960px) {
+      @media (max-width: 1024px) {
         .phone-split-showcase { grid-template-columns: 1fr; }
       }
 
-      /* Realistic Smartphone Frame */
+      /* Ultra-Modern Flagship Smartphone Frame with Hardware Accents */
       .phone-handset-card {
-        background: #FFFFFF;
+        background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%);
         border: 1px solid #E2E8F0;
-        border-radius: 36px;
-        padding: 16px;
-        box-shadow: 0 16px 40px rgba(10, 15, 30, 0.08);
+        border-radius: 48px;
+        padding: 14px;
+        box-shadow: 0 24px 60px -15px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.04);
+        position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
+      .phone-handset-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 32px 70px -16px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(16, 185, 129, 0.2);
+      }
+      .phone-handset-card.vibrate-once {
+        animation: phoneVibe 0.4s ease-in-out;
+      }
+      @keyframes phoneVibe {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-4px) rotate(-1deg); }
+        40% { transform: translateX(4px) rotate(1deg); }
+        60% { transform: translateX(-3px); }
+        80% { transform: translateX(3px); }
+      }
+
+      /* Physical Hardware Buttons on Chassis */
+      .phone-hw-btn {
+        position: absolute;
+        background: linear-gradient(180deg, #94A3B8 0%, #64748B 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: transform 0.15s ease;
+      }
+      .phone-hw-btn:active {
+        transform: scale(0.92);
+      }
+      .btn-vol-up {
+        left: -3.5px;
+        top: 105px;
+        width: 3.5px;
+        height: 38px;
+        border-radius: 3px 0 0 3px;
+      }
+      .btn-vol-down {
+        left: -3.5px;
+        top: 155px;
+        width: 3.5px;
+        height: 38px;
+        border-radius: 3px 0 0 3px;
+      }
+      .btn-power {
+        right: -3.5px;
+        top: 125px;
+        width: 3.5px;
+        height: 52px;
+        border-radius: 0 3px 3px 0;
+      }
+
       .phone-bezel-frame {
-        background: #0F172A;
-        border-radius: 28px;
-        padding: 14px 14px 20px;
-        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+        background: radial-gradient(120% 120% at 50% 0%, #1E293B 0%, #0A0F1D 60%, #030712 100%);
+        border-radius: 38px;
+        padding: 14px 14px 22px;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.08), 0 12px 32px rgba(0, 0, 0, 0.5);
+        position: relative;
       }
-      .phone-speaker-slit {
-        width: 50px; height: 5px;
-        background: #334155;
-        border-radius: 10px;
-        margin: 0 auto 12px;
-      }
-      .phone-screen-glass {
-        background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+
+      /* Dynamic Island with micro camera & sensor */
+      .phone-dynamic-island {
+        width: 105px;
+        height: 24px;
+        background: #000000;
         border-radius: 20px;
-        padding: 18px 16px;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 12px;
+        gap: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+        cursor: pointer;
+        transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .phone-dynamic-island:hover {
+        width: 125px;
+      }
+      .island-camera {
+        width: 9px; height: 9px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #1E293B 30%, #090D16 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 0 3px rgba(37, 99, 235, 0.6);
+      }
+      .island-sensor {
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: #059669;
+        box-shadow: 0 0 6px #10B981;
+        animation: sensorGlow 2.5s ease-in-out infinite;
+      }
+      @keyframes sensorGlow {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 0.3; transform: scale(0.85); }
+      }
+
+      /* OLED Call Screen Glass with Optical Glare */
+      .phone-screen-glass {
+        background: radial-gradient(140% 100% at 50% 0%, #111C33 0%, #0A0F1D 55%, #050811 100%);
+        border-radius: 28px;
+        padding: 16px 14px 20px;
         text-align: center;
+        color: #FFFFFF;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: background 0.4s ease;
+      }
+      .phone-screen-glass.call-active {
+        background: radial-gradient(140% 100% at 50% 0%, #064E3B 0%, #0A192F 55%, #030712 100%);
+      }
+      .phone-screen-glare {
+        position: absolute;
+        top: -60%; right: -50%;
+        width: 130%; height: 130%;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 50%);
+        pointer-events: none;
+        border-radius: 50%;
+        transform: rotate(-30deg);
       }
       .phone-screen-status {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 0.6875rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        color: #64748B;
-        margin-bottom: 16px;
+        color: #94A3B8;
+        margin-bottom: 14px;
+        padding: 0 4px;
+        position: relative;
+        z-index: 2;
       }
       .phone-status-icons {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
+        font-size: 0.6875rem;
+        letter-spacing: 0.04em;
+        color: #CBD5E1;
       }
+      .phone-incoming-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #6EE7B7;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(52, 211, 153, 0.25);
+        padding: 4px 12px;
+        border-radius: 100px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+      }
+      .incoming-live-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #10B981;
+        box-shadow: 0 0 8px #10B981;
+        animation: liveDotBlink 1.2s ease-in-out infinite;
+      }
+
+      /* Animated Avatar & Radar Wave */
       .phone-avatar-pulse-wrap {
         position: relative;
-        width: 84px; height: 84px;
+        width: 86px; height: 86px;
         margin: 0 auto 14px;
       }
       .phone-avatar-ring {
         position: absolute;
-        inset: -6px;
+        inset: -8px;
         border-radius: 50%;
-        border: 2px dashed rgba(16, 185, 129, 0.4);
-        animation: rotateSlow 12s linear infinite;
+        border: 2px dashed rgba(52, 211, 153, 0.45);
+        animation: rotateSlow 14s linear infinite;
+      }
+      .phone-avatar-ripple {
+        position: absolute;
+        inset: -14px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(16, 185, 129, 0.25);
+        animation: rippleRadar 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+        pointer-events: none;
+      }
+      .phone-avatar-ripple.r2 {
+        animation-delay: 1.2s;
+      }
+      @keyframes rippleRadar {
+        0% { transform: scale(0.85); opacity: 0.8; }
+        100% { transform: scale(1.35); opacity: 0; }
       }
       @keyframes rotateSlow { to { transform: rotate(360deg); } }
       .phone-avatar-inner {
         width: 100%; height: 100%;
         border-radius: 50%;
-        background: linear-gradient(135deg, #10B981, #059669);
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #FFFFFF;
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+        box-shadow: 0 10px 25px -4px rgba(16, 185, 129, 0.45), inset 0 2px 2px rgba(255, 255, 255, 0.35);
+        position: relative;
+        z-index: 2;
       }
+
+      /* Dynamic Equalizer Waveform */
       .voice-waveform {
         display: flex;
         justify-content: center;
@@ -715,245 +913,562 @@
       }
       .vbar {
         width: 3.5px;
-        background: #10B981;
+        background: linear-gradient(180deg, #34D399 0%, #059669 100%);
         border-radius: 4px;
-        animation: soundWave 1.2s ease-in-out infinite;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        animation: soundWave 1.4s ease-in-out infinite;
       }
-      .vbar:nth-child(2) { animation-delay: 0.1s; }
-      .vbar:nth-child(3) { animation-delay: 0.2s; }
-      .vbar:nth-child(4) { animation-delay: 0.3s; }
-      .vbar:nth-child(5) { animation-delay: 0.4s; }
-      .vbar:nth-child(6) { animation-delay: 0.3s; }
-      .vbar:nth-child(7) { animation-delay: 0.2s; }
-      .vbar:nth-child(8) { animation-delay: 0.1s; }
+      .vbar:nth-child(2) { animation-delay: 0.12s; }
+      .vbar:nth-child(3) { animation-delay: 0.24s; }
+      .vbar:nth-child(4) { animation-delay: 0.36s; }
+      .vbar:nth-child(5) { animation-delay: 0.48s; }
+      .vbar:nth-child(6) { animation-delay: 0.36s; }
+      .vbar:nth-child(7) { animation-delay: 0.24s; }
+      .vbar:nth-child(8) { animation-delay: 0.12s; }
       .vbar:nth-child(9) { animation-delay: 0.2s; }
       @keyframes soundWave {
         0%, 100% { height: 6px; }
         50% { height: 26px; }
       }
+
+      /* Caller Number & Identity */
       .phone-caller-number {
         font-family: var(--mono, 'JetBrains Mono', monospace);
-        font-size: 1.25rem;
+        font-size: 1.35rem;
         font-weight: 800;
-        color: #0F172A;
-        margin-bottom: 4px;
+        color: #F8FAFC;
+        margin-bottom: 6px;
+        letter-spacing: 0.02em;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        word-break: break-all;
       }
       .phone-caller-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         font-size: 0.6875rem;
-        font-weight: 700;
-        color: #047857;
-        background: #ECFDF5;
-        border: 1px solid #A7F3D0;
-        padding: 3px 10px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: #34D399;
+        background: rgba(16, 185, 129, 0.14);
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        padding: 4px 12px;
         border-radius: 100px;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
       }
       .phone-carrier-name {
         font-size: 0.75rem;
-        color: #64748B;
-        margin-bottom: 18px;
+        color: #94A3B8;
+        margin-bottom: 16px;
+        line-height: 1.4;
       }
 
-      /* Phone Spam Meter */
+      /* Minimal Modern Spam Meter Card */
       .phone-spam-meter-card {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 14px;
-        padding: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 14px;
         margin-bottom: 14px;
         text-align: left;
       }
       .spam-meter-header {
         display: flex;
         justify-content: space-between;
-        font-size: 0.75rem;
-        color: #475569;
-        margin-bottom: 6px;
+        align-items: center;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        color: #94A3B8;
+        margin-bottom: 8px;
+        text-transform: uppercase;
       }
-      .spam-meter-header strong { color: #059669; font-size: 0.875rem; }
+      .spam-meter-header strong {
+        color: #34D399;
+        font-size: 0.9375rem;
+        font-family: var(--mono, 'JetBrains Mono', monospace);
+        font-weight: 800;
+      }
       .spam-meter-bar {
         display: flex;
-        gap: 3px;
+        gap: 4px;
         height: 6px;
-        border-radius: 4px;
+        border-radius: 6px;
         overflow: hidden;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
       }
       .spam-meter-bar span {
         flex: 1;
-        background: #E2E8F0;
-        transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 4px;
+        transition: all 0.35s ease;
       }
-      .spam-meter-bar span.active:nth-child(1) { background: #10B981; }
-      .spam-meter-bar span.active:nth-child(2) { background: #F59E0B; }
-      .spam-meter-bar span.active:nth-child(3) { background: #EA580C; }
-      .spam-meter-bar span.active:nth-child(4) { background: #EF4444; }
+      .spam-meter-bar span.active:nth-child(1) { background: #10B981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+      .spam-meter-bar span.active:nth-child(2) { background: #F59E0B; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+      .spam-meter-bar span.active:nth-child(3) { background: #EA580C; box-shadow: 0 0 8px rgba(234, 88, 12, 0.5); }
+      .spam-meter-bar span.active:nth-child(4) { background: #EF4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
       .spam-meter-labels {
         display: flex;
         justify-content: space-between;
         font-size: 0.625rem;
-        color: #94A3B8;
+        font-weight: 600;
+        color: #64748B;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
       }
+
+      /* TRAI Regulatory Indicators */
       .phone-trai-indicators {
         display: flex;
-        gap: 6px;
+        gap: 8px;
         justify-content: center;
+        flex-wrap: wrap;
         margin-bottom: 18px;
       }
       .trai-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         font-size: 0.6875rem;
-        font-weight: 600;
-        padding: 3px 8px;
-        border-radius: 6px;
+        font-weight: 700;
+        padding: 5px 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #CBD5E1;
+        transition: all 0.2s ease;
       }
-      .trai-pill.safe { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
-      .trai-pill.neutral { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+      .trai-pill.safe {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6EE7B7;
+        border-color: rgba(52, 211, 153, 0.3);
+      }
+      .trai-pill.neutral {
+        background: rgba(59, 130, 246, 0.15);
+        color: #93C5FD;
+        border-color: rgba(96, 165, 250, 0.3);
+      }
 
+      /* Modern Call Actions Simulation */
       .phone-call-actions-sim {
         display: flex;
         justify-content: center;
-        gap: 18px;
-        padding-top: 8px;
+        gap: 24px;
+        padding-top: 6px;
+      }
+      .sim-action-btn-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
       }
       .sim-btn {
-        width: 44px; height: 44px;
+        width: 48px; height: 48px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #FFFFFF;
         cursor: pointer;
-        transition: transform 0.2s;
+        border: none;
+        outline: none;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
       }
-      .sim-btn:hover { transform: scale(1.08); }
-      .sim-decline { background: #EF4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
-      .sim-block { background: #64748B; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
-      .sim-accept { background: #10B981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
+      .sim-btn:hover {
+        transform: scale(1.1) translateY(-2px);
+      }
+      .sim-btn-lbl {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        color: #94A3B8;
+        letter-spacing: 0.02em;
+      }
+      .sim-decline {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        box-shadow: 0 8px 20px -3px rgba(239, 68, 68, 0.5);
+      }
+      .sim-block {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.3);
+        color: #CBD5E1;
+      }
+      .sim-accept {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        box-shadow: 0 8px 20px -3px rgba(16, 185, 129, 0.5);
+      }
+      .sim-call-feedback {
+        min-height: 24px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-top: 10px;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+      }
+      .sim-call-feedback.show {
+        opacity: 1;
+      }
 
-      /* Phone Dossier Strips (Right Column) */
+      /* Phone Dossier Strips (Right Column) - Bento Grid */
       .telecom-dossier-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 16px;
         margin-bottom: 24px;
       }
-      @media (max-width: 768px) {
+      @media (max-width: 840px) {
         .telecom-dossier-grid { grid-template-columns: 1fr; }
       }
       .telecom-strip-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 16px;
+        border-radius: 20px;
+        padding: 20px 18px;
         display: flex;
         gap: 14px;
         align-items: flex-start;
-        box-shadow: 0 4px 16px rgba(10, 15, 30, 0.03);
+        box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.04);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .telecom-strip-card:hover {
+        transform: translateY(-2px);
+        border-color: #CBD5E1;
+        box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
       }
       .strip-icon-box {
-        width: 40px; height: 40px;
-        border-radius: 10px;
-        background: #ECFDF5;
-        border: 1px solid #A7F3D0;
-        color: #059669;
+        width: 44px; height: 44px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
       }
+      .icon-box-emerald {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        color: #059669;
+      }
+      .icon-box-sky {
+        background: rgba(14, 165, 233, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: #0284C7;
+      }
+      .icon-box-rose {
+        background: rgba(244, 63, 94, 0.1);
+        border: 1px solid rgba(251, 113, 133, 0.3);
+        color: #E11D48;
+      }
       .strip-label {
         font-size: 0.6875rem;
-        font-weight: 700;
+        font-weight: 800;
         color: #64748B;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: 3px;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
       }
       .strip-val {
-        font-size: 0.9375rem;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 800;
         color: #0F172A;
-        margin-bottom: 2px;
+        margin-bottom: 3px;
+        line-height: 1.3;
       }
-      .strip-sub { font-size: 0.75rem; color: #94A3B8; }
+      .strip-sub {
+        font-size: 0.75rem;
+        color: #94A3B8;
+        line-height: 1.35;
+      }
 
-      /* Police Modus Operandi Matrix (2x2) */
+      /* Bento Cards Status Micro-chips */
+      .mini-signal-bars {
+        display: inline-flex;
+        align-items: flex-end;
+        gap: 2.5px;
+        height: 14px;
+        margin-top: 4px;
+      }
+      .mini-signal-bars .bar {
+        width: 3px;
+        background: #10B981;
+        border-radius: 2px;
+      }
+      .mini-signal-bars .b1 { height: 4px; }
+      .mini-signal-bars .b2 { height: 7px; }
+      .mini-signal-bars .b3 { height: 11px; }
+      .mini-signal-bars .b4 { height: 14px; }
+
+      .circle-code-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        color: #0284C7;
+        background: #F0F9FF;
+        border: 1px solid #BAE6FD;
+        padding: 2px 7px;
+        border-radius: 6px;
+        margin-top: 4px;
+      }
+      .threat-status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 6px;
+        margin-top: 4px;
+      }
+      .threat-status-chip.clean {
+        color: #059669;
+        background: #ECFDF5;
+        border: 1px solid #A7F3D0;
+      }
+      .threat-status-chip.warn {
+        color: #DC2626;
+        background: #FEF2F2;
+        border: 1px solid #FECACA;
+      }
+
+      /* Police Cyber Crime Threat Vector Matrix (2x2) */
       .police-matrix-panel {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 22px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 8px 30px -6px rgba(15, 23, 42, 0.05);
       }
       .police-matrix-header {
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 0.875rem;
-        font-weight: 700;
-        color: #064E3B;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
         border-bottom: 1px solid #F1F5F9;
+      }
+      .police-matrix-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9375rem;
+        font-weight: 800;
+        color: #0F172A;
+        letter-spacing: -0.01em;
+      }
+      .police-matrix-title-wrap svg {
+        color: #059669;
+      }
+      .matrix-verified-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #059669;
+        background: #ECFDF5;
+        border: 1px solid #A7F3D0;
+        padding: 3px 10px;
+        border-radius: 100px;
+      }
+      .badge-dot-live {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #10B981;
+        box-shadow: 0 0 6px #10B981;
       }
       .police-vectors-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 14px;
+        gap: 16px;
       }
-      @media (max-width: 640px) {
+      @media (max-width: 680px) {
         .police-vectors-grid { grid-template-columns: 1fr; }
       }
       .scam-vector-card {
-        border-radius: 14px;
-        padding: 14px;
+        border-radius: 18px;
+        padding: 18px;
         display: flex;
+        flex-direction: column;
         gap: 12px;
-        align-items: flex-start;
         border: 1.5px solid #E2E8F0;
-        background: #F8FAFC;
-        transition: all 0.2s;
+        background: #FAFAFA;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .scam-vector-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.06);
       }
       .scam-vector-card.clean {
         border-color: #E2E8F0;
-        background: #FAFAF9;
+        background: #FAFAFA;
       }
       .scam-vector-card.threat {
         border-color: #EF4444;
         background: #FEF2F2;
+        box-shadow: 0 8px 24px -4px rgba(239, 68, 68, 0.15);
       }
-      .vector-avatar { font-size: 1.5rem; }
-      .vector-title { font-size: 0.8125rem; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
-      .vector-desc { font-size: 0.75rem; color: #64748B; margin-bottom: 6px; }
-      .vector-status { font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.04em; color: #059669; }
+      .vector-card-top {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .vector-avatar-badge {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 1.35rem;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .vector-title {
+        font-size: 0.875rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 4px;
+        line-height: 1.3;
+      }
+      .vector-desc {
+        font-size: 0.78125rem;
+        color: #64748B;
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+      .vector-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: #059669;
+        background: #ECFDF5;
+        border: 1px solid #A7F3D0;
+        padding: 3px 8px;
+        border-radius: 6px;
+      }
+      .scam-vector-card.threat .vector-status {
+        color: #DC2626;
+        background: #FEE2E2;
+        border-color: #FECACA;
+      }
+
+      /* Vector Expand Button & Modus Operandi Drawer */
+      .btn-vector-expand {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 6px 10px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 8px;
+        font-size: 0.71875rem;
+        font-weight: 700;
+        color: #475569;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .btn-vector-expand:hover {
+        background: rgba(0, 0, 0, 0.06);
+        color: #0F172A;
+      }
+      .btn-vector-expand svg {
+        transition: transform 0.25s ease;
+      }
+      .btn-vector-expand.open svg {
+        transform: rotate(180deg);
+      }
+      .vector-details-drawer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        opacity: 0;
+      }
+      .vector-details-drawer.open {
+        max-height: 250px;
+        opacity: 1;
+      }
+      .drawer-inner {
+        padding-top: 10px;
+        border-top: 1px dashed #E2E8F0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.75rem;
+        line-height: 1.45;
+      }
+      .drawer-sec {
+        background: #FFFFFF;
+        border-radius: 8px;
+        padding: 8px 10px;
+        border: 1px solid #F1F5F9;
+      }
+      .drawer-sec.defense {
+        background: #F0FDF4;
+        border-color: #DCFCE7;
+      }
+      .drawer-sec strong {
+        display: block;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        margin-bottom: 2px;
+      }
+      .drawer-sec p {
+        margin: 0;
+        color: #475569;
+      }
+      .drawer-sec.defense p {
+        color: #166534;
+      }
+
+      /* Active Call State Equalizer */
+      .voice-waveform.speech-active .vbar {
+        animation-duration: 0.6s !important;
+        background: linear-gradient(180deg, #38BDF8 0%, #10B981 100%) !important;
+      }
 
       /* Phone Guidance Deck */
       .phone-guidance-deck {
         display: grid;
-        grid-template-columns: 1.3fr 1fr;
-        gap: 24px;
+        grid-template-columns: 1.25fr 1fr;
+        gap: 28px;
       }
-      @media (max-width: 860px) {
+      @media (max-width: 900px) {
         .phone-guidance-deck { grid-template-columns: 1fr; }
       }
       .phone-signals-block, .phone-actions-block {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+        border-radius: 24px;
+        padding: 26px;
+        box-shadow: 0 8px 30px -6px rgba(15, 23, 42, 0.04);
       }
       .block-header {
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 0.875rem;
-        font-weight: 700;
-        color: #064E3B;
-        margin-bottom: 18px;
-        padding-bottom: 12px;
+        font-size: 0.9375rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
         border-bottom: 1px solid #F1F5F9;
+      }
+      .block-header svg {
+        color: #059669;
       }
 
       /* ── TOOL 3: NPCI BANKING CHEQUE & PASSBOOK LEDGER (UPI SCANNER) ── */
@@ -1576,9 +2091,413 @@
 <body>
 
   <!-- ── NAVBAR (EDGE GLASS ARCHITECTURE) ── -->
-                      <!-- ═══════════════════════════════════════════════
-           TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE SCANNER
-           Minimalist, User-Friendly, Easy-to-Understand Layout
+          <!-- ═══════════════════════════════════════════
+       PREMIUM EDGE-TO-EDGE NAV V3
+  ════════════════════════════════════════════ -->
+  <header class="nav-edge">
+    <div class="container nav-edge-inner">
+      
+      <!-- Logo -->
+      <a href="index.html" class="nav-edge-logo">
+        <img src="assets/logo.jpg" alt="INFRAUD logo" />
+        <span>INFRAUD</span>
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-edge-menu">
+        <a href="index.html" >Home</a>
+        <a href="check.html" >Check</a>
+        <a href="reports.html" >Reports</a>
+        <a href="blog.html" >Blog</a>
+        <a href="learn.html" >Learn</a>
+        <a href="about.html" >About</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="nav-edge-actions">
+        <!-- Live GitHub Star Badge -->
+        <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="nav-edge-github" title="Star on GitHub">
+          <svg class="nav-gh-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="nav-gh-divider"></span>
+          <span class="nav-gh-star-icon">★</span>
+          <span class="nav-gh-count" id="nav-gh-count">2</span>
+        </a>
+
+        <a href="login.html" class="nav-edge-login">Login</a>
+        <a href="index.html#analyzer-section" class="nav-edge-signup" onclick="setTimeout(() => document.getElementById('hero-search-input')?.focus(), 100)">
+          Get Started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        
+        <button class="nav-edge-hamburger" aria-label="Toggle Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <style>
+      .nav-edge {
+        position: sticky; top: 0; z-index: 500; width: 100%; height: 72px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid rgba(10, 15, 30, 0.08); transition: background 0.3s, box-shadow 0.3s;
+      }
+      .nav-edge.scrolled { background: rgba(255, 255, 255, 0.96); box-shadow: 0 4px 20px -6px rgba(10, 15, 30, 0.08); }
+      
+      .nav-edge .container {
+        max-width: 1320px;
+        width: 100%;
+        padding: 0 24px;
+      }
+
+      .nav-edge-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        gap: 16px;
+      }
+      
+      /* Logo */
+      .nav-edge-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .nav-edge-logo img {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-logo:hover img { transform: scale(1.08) rotate(-3deg); }
+      .nav-edge-logo span {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--ink-900, #0A0F1E);
+      }
+      
+      /* Menu - Flex center, NO absolute overlap bug! */
+      .nav-edge-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex: 1;
+        margin: 0 16px;
+      }
+      .nav-edge-menu a {
+        position: relative;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--ink-500, #4B5570);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-menu a:hover {
+        color: var(--ink-900, #0A0F1E);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-menu a.active {
+        color: var(--blue-600, #2563EB);
+        font-weight: 600;
+      }
+      .nav-edge-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        height: 2px;
+        background: var(--blue-600, #2563EB);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-edge-menu a:hover::after,
+      .nav-edge-menu a.active::after {
+        transform: scaleX(1);
+      }
+      
+      /* Actions */
+      .nav-edge-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      /* GitHub Star Pill Badge */
+      .nav-edge-github {
+        display: inline-flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 12px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        text-decoration: none;
+        color: #334155;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .nav-edge-github:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+      .nav-gh-icon {
+        width: 16px;
+        height: 16px;
+        fill: #334155;
+        display: block;
+        transition: transform 0.2s, fill 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-icon {
+        transform: scale(1.08);
+        fill: #0f172a;
+      }
+      .nav-gh-divider {
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background: #cbd5e1;
+        margin: 0 8px;
+      }
+      .nav-gh-star-icon {
+        color: #334155;
+        font-size: 0.875rem;
+        margin-right: 4px;
+        transition: color 0.2s, transform 0.2s;
+        display: inline-block;
+        line-height: 1;
+      }
+      .nav-edge-github:hover .nav-gh-star-icon {
+        color: #f59e0b;
+        transform: scale(1.18);
+      }
+      .nav-gh-count {
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #334155;
+        transition: color 0.2s;
+      }
+      .nav-edge-github:hover .nav-gh-count {
+        color: #0f172a;
+      }
+
+      .nav-edge-login {
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--ink-700, #1E2742);
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-login:hover {
+        color: var(--blue-600, #2563EB);
+        background: rgba(10, 15, 30, 0.04);
+      }
+      .nav-edge-signup {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--blue-600, #2563EB);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 8px 18px;
+        height: 36px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-edge-signup svg { width: 14px; height: 14px; transition: transform 0.2s; }
+      .nav-edge-signup:hover {
+        background: var(--blue-700, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+      }
+      .nav-edge-signup:hover svg { transform: translateX(2px); }
+      
+      /* Hamburger (Mobile) */
+      .nav-edge-hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--ink-900, #0A0F1E);
+        padding: 4px;
+        border-radius: 6px;
+      }
+      
+      @media (max-width: 992px) {
+        .nav-edge-menu {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 72px;
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          padding: 16px;
+          box-shadow: 0 12px 32px rgba(10, 15, 30, 0.1);
+          border-bottom: 1px solid rgba(10, 15, 30, 0.08);
+          gap: 6px;
+          margin: 0;
+        }
+        .nav-edge.mobile-open .nav-edge-menu { display: flex; }
+        .nav-edge-menu a {
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          font-size: 0.9375rem;
+        }
+        .nav-edge-menu a::after { display: none; }
+        .nav-edge-actions .nav-edge-login,
+        .nav-edge-actions .nav-edge-signup {
+          display: none;
+        }
+        .nav-edge-github { height: 32px; padding: 0 10px; font-size: 0.75rem; }
+        .nav-edge-hamburger { display: flex; align-items: center; justify-content: center; }
+      }
+    </style>
+    <script>
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-edge');
+        if(nav) {
+            if(window.scrollY > 20) {
+              nav.classList.add('scrolled');
+            } else {
+              nav.classList.remove('scrolled');
+            }
+        }
+      }, { passive: true });
+
+      // Mobile Hamburger Toggle
+      const hambBtn = document.querySelector('.nav-edge-hamburger');
+      if (hambBtn) {
+        hambBtn.addEventListener('click', () => {
+          const nav = document.querySelector('.nav-edge');
+          if (nav) nav.classList.toggle('mobile-open');
+        });
+      }
+
+      // Real-time Live GitHub Stars Fetcher (Instant & Always Live)
+      (function() {
+        const countEl = document.getElementById('nav-gh-count');
+        if (!countEl) return;
+
+        function formatStars(n) {
+          const num = Number(n);
+          if (isNaN(num)) return n;
+          if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return num.toString();
+        }
+
+        // Apply cached count instantly if available
+        const cached = localStorage.getItem('gh_stars_infraud');
+        if (cached !== null) {
+          countEl.textContent = formatStars(cached);
+        }
+
+        function fetchLiveStars() {
+          fetch('https://api.github.com/repos/SanjivaniWawdhane/infraud.org?_t=' + Date.now(), {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+            cache: 'no-store'
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (data && typeof data.stargazers_count === 'number') {
+              const freshCount = formatStars(data.stargazers_count);
+              if (countEl.textContent !== freshCount) {
+                countEl.textContent = freshCount;
+                countEl.style.transition = 'transform 0.3s ease, color 0.3s ease';
+                countEl.style.transform = 'scale(1.25)';
+                countEl.style.color = '#f59e0b';
+                setTimeout(() => {
+                  countEl.style.transform = 'scale(1)';
+                  countEl.style.color = '';
+                }, 350);
+              }
+              localStorage.setItem('gh_stars_infraud', data.stargazers_count.toString());
+            }
+          })
+          .catch(err => {
+            console.debug('[GitHub Stars Notice]:', err.message);
+          });
+        }
+
+        // 1. Fetch immediately on every page visit/refresh
+        fetchLiveStars();
+
+        // 2. Automatically re-fetch whenever user switches back to this tab
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            fetchLiveStars();
+          }
+        });
+      })();
+    </script>
+  </header>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main>
+    <div class="result-wrapper">
+      
+      <!-- Breadcrumb & Top Bar -->
+      <div class="result-header-bar">
+        <div class="breadcrumb-group">
+          <a href="check.html" class="btn-back-scanner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Check Scanner
+          </a>
+          <span>/</span>
+          <span id="audit-breadcrumb-tag">Security Threat Audit</span>
+        </div>
+
+        <div class="scan-meta-pill" id="scan-meta">
+          <span class="pulse-dot"></span>
+          Scan ID: INFR-8892-A • Oct 11, 2026, 05:15 PM IST
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE (CYBER SOC COMMAND DECK)
+           Full-width 3-tier horizontal SecOps architecture
+           ═══════════════════════════════════════════════ -->
+                                    <!-- ═══════════════════════════════════════════════
+           TOOL 1: HUMAN-CRAFTED CYBER SECURITY & DOMAIN FORENSICS DOSSIER
+           Bespoke 4-Tier Architecture for Web & Phishing Inspection
            ═══════════════════════════════════════════════ -->
       <div id="view-url" class="tool-result-view">
 
@@ -1750,14 +2669,15 @@
         <!-- 1. Telecom Regulatory Authority Clearance Header -->
         <div class="phone-telecom-header-bar">
           <div class="telecom-badge-left">
-            <div class="telecom-seal-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
+            <div class="telecom-seal-icon" title="TRAI TCCCPR Telecom Regulatory Compliance">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
             </div>
             <div>
               <div class="telecom-header-sub">
-                <span>TRAI NATIONAL TCCCPR REGULATORY CLEARANCE</span>
-                <span>•</span>
-                <span class="carrier-pill-emerald">E.164 VALIDATED</span>
+                <span class="live-dot-pulse"></span>
+                <span>🇮🇳 भारत सरकार टेलिकॉम व सायबर पडताळणी</span>
+                <span style="opacity: 0.4;">•</span>
+                <span class="carrier-pill-emerald">DoT & TRAI VERIFIED</span>
               </div>
               <h1 class="phone-target-title target-display-value">Analyzing Caller...</h1>
             </div>
@@ -1765,55 +2685,127 @@
           <div class="telecom-header-actions">
             <button class="telecom-btn-pill" onclick="rescanTarget()" title="Rescan telecom route">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              Re-query Carrier
+              <span>पुन्हा तपासा</span>
             </button>
             <button class="telecom-btn-pill" onclick="copyResultLink()" title="Copy shareable dossier">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              Share Dossier
+              <span>शेअर करा</span>
             </button>
-            <a href="reports.html" class="telecom-btn-pill btn-telecom-report" title="Report scam caller">
+            <button class="telecom-btn-pill" onclick="window.print()" title="Print / Export Dossier">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span>प्रिंट (Export)</span>
+            </button>
+            <a href="reports.html" class="telecom-btn-pill btn-telecom-report" title="Report scam caller to Chakshu (DoT)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              Report to Chakshu
+              <span>🚨 चक्षू वर तक्रार करा</span>
             </a>
           </div>
         </div>
 
-        <!-- 2. Centered Smartphone Handset & Telecom Signals Split -->
+        <!-- 2. Plain-Language Citizen Verdict Hero Banner (नागरिकांसाठी साधा सोपा निकाल) -->
+        <div class="phone-verdict-card" id="phone-verdict-hero">
+          <!-- Left: Circular Threat Score Gauge -->
+          <div class="verdict-gauge-wrap">
+            <div class="gauge-wrap">
+              <svg class="gauge-svg" viewBox="0 0 160 160" width="140" height="140">
+                <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#F1F5F9" stroke-width="11"></circle>
+                <circle class="gauge-progress-circle" id="phone-score-circle" cx="80" cy="80" r="70" fill="none" stroke="#10B981" stroke-width="11" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="373.8"></circle>
+              </svg>
+              <div class="gauge-center-content">
+                <div class="gauge-score-num" id="phone-score-num">--</div>
+                <div class="gauge-score-denom">धोका पातळी (THREAT)</div>
+              </div>
+            </div>
+            <div class="risk-meter-container">
+              <div class="risk-meter-bar">
+                <div class="meter-seg seg-low" title="Safe"></div>
+                <div class="meter-seg seg-mod" title="Caution"></div>
+                <div class="meter-seg seg-high" title="Risky"></div>
+                <div class="meter-seg seg-crit" title="Danger"></div>
+              </div>
+              <div class="risk-meter-labels">
+                <span>सुरक्षित</span><span>सावधान</span><span>धोकादायक</span><span>फ्रॉड</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Plain-Language Verdict Explanation -->
+          <div class="verdict-info-col">
+            <div class="risk-verdict-pill" id="phone-verdict-pill">
+              <span>🔍</span> <span>कॉल तपासणी सुरू आहे... (EVALUATING CALLER)</span>
+            </div>
+            <h2 class="phone-verdict-title" id="phone-verdict-title">
+              कॉलरची सुरक्षा आणि टेलिकॉम रेकॉर्ड तपासत आहोत...
+            </h2>
+            <p class="phone-verdict-desc" id="phone-verdict-desc">
+              भारतीय टेलिकॉम ऑपरेटर डेटाबेस, सायबर पोलीस तक्रारी आणि ज्ञात फोन स्कॅम पॅटर्नविरुद्ध पडताळणी केली जात आहे.
+            </p>
+            <div class="phone-golden-rule-tip">
+              <span style="font-size: 1.3rem;">💡</span>
+              <div>
+                <strong>सुवर्ण नियम (Golden Safety Tip):</strong> कॉलरने स्वतःला पोलीस, बँक मॅनेजर किंवा कुरिअर एजंट सांगितले तरी आपला OTP, UPI PIN किंवा बँक माहिती कोणालाही देऊ नका. बँक किंवा पोलीस कधीही फोनवर पैसे ट्रान्सफर करायला सांगत नाहीत.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Centered Smartphone Handset & Telecom Signals Split -->
         <div class="phone-split-showcase">
-          <!-- Left: Realistic Smartphone Handset Screen -->
-          <div class="phone-handset-card">
+          <!-- Left: Realistic Flagship Smartphone Handset Screen -->
+          <div class="phone-handset-card" id="phone-hardware-device">
+            <!-- Hardware Edge Buttons -->
+            <div class="phone-hw-btn btn-vol-up" onclick="simulateHwClick('vol-up')" title="Volume Up"></div>
+            <div class="phone-hw-btn btn-vol-down" onclick="simulateHwClick('vol-down')" title="Volume Down"></div>
+            <div class="phone-hw-btn btn-power" onclick="simulateHwClick('power')" title="Side Button"></div>
+
             <div class="phone-bezel-frame">
-              <div class="phone-speaker-slit"></div>
-              <div class="phone-screen-glass">
+              <!-- Dynamic Island Notch -->
+              <div class="phone-dynamic-island" onclick="simulateHwClick('island')" title="Dynamic Island: Active Telemetry">
+                <span class="island-camera"></span>
+                <span class="island-sensor"></span>
+              </div>
+
+              <!-- OLED Screen Glass -->
+              <div class="phone-screen-glass" id="phone-oled-screen">
+                <div class="phone-screen-glare"></div>
                 <div class="phone-screen-status">
-                  <span>9:41 AM</span>
+                  <span>9:41</span>
                   <div class="phone-status-icons">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h20v4H2zM6 13h12v2H6zM10 9h4v2h-4z"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.57 10.57 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
                     <span>5G</span>
-                    <span style="font-size:0.75rem;">100%</span>
+                    <span style="font-size:0.75rem; font-weight:800;">100%</span>
                   </div>
+                </div>
+
+                <div class="phone-incoming-indicator" id="phone-call-status-indicator">
+                  <span class="incoming-live-dot"></span>
+                  <span id="call-status-text">येणारा व्हॉईस कॉल (Incoming Call)</span>
                 </div>
 
                 <div class="phone-avatar-pulse-wrap" id="phone-avatar-wrap">
+                  <div class="phone-avatar-ripple r1"></div>
+                  <div class="phone-avatar-ripple r2"></div>
                   <div class="phone-avatar-ring"></div>
                   <div class="phone-avatar-inner">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                   </div>
                 </div>
 
-                <div class="voice-waveform">
+                <!-- Live Soundwave Equalizer -->
+                <div class="voice-waveform" id="phone-voice-waveform">
                   <span class="vbar"></span><span class="vbar"></span><span class="vbar"></span>
                   <span class="vbar"></span><span class="vbar"></span><span class="vbar"></span>
                   <span class="vbar"></span><span class="vbar"></span><span class="vbar"></span>
                 </div>
 
                 <div class="phone-caller-number" id="phone-val-formatted">+91 80102 37029</div>
-                <div class="phone-caller-badge" id="phone-category-pill">CELLULAR MOBILE LINE</div>
+                <div class="phone-caller-badge" id="phone-category-pill">सामान्य मोबाईल नंबर (Mobile Line)</div>
                 <div class="phone-carrier-name" id="phone-tile-carrier">Reliance Jio Infocomm • Maharashtra Circle</div>
 
+                <!-- Minimalist Modern Spam Meter -->
                 <div class="phone-spam-meter-card">
                   <div class="spam-meter-header">
-                    <span>SPAM PROBABILITY</span>
+                    <span>स्पॅम व फ्रॉड धोका (Risk Level)</span>
                     <strong id="phone-spam-percent">15%</strong>
                   </div>
                   <div class="spam-meter-bar">
@@ -1823,107 +2815,218 @@
                     <span id="phone-seg-4"></span>
                   </div>
                   <div class="spam-meter-labels">
-                    <span>Clean Personal</span>
-                    <span>Commercial</span>
-                    <span>Suspected</span>
-                    <span>Fraud</span>
+                    <span>सुरक्षित</span>
+                    <span>जाहिरात</span>
+                    <span>संशयास्पद</span>
+                    <span>फ्रॉड</span>
                   </div>
                 </div>
 
+                <!-- TRAI Series Badges -->
                 <div class="phone-trai-indicators">
-                  <span id="trai-140-pill" class="trai-pill safe">TRAI 140: Clean Non-Promo</span>
-                  <span id="trai-160-pill" class="trai-pill neutral">TRAI 160: Standard Number</span>
+                  <span id="trai-140-pill" class="trai-pill safe">TRAI 140: जाहिरात नंबर नाही</span>
+                  <span id="trai-160-pill" class="trai-pill neutral">TRAI 160: सामान्य ग्राहक नंबर</span>
                 </div>
 
+                <!-- Incoming Call Interactive Action Dock -->
                 <div class="phone-call-actions-sim">
-                  <div class="sim-btn sim-decline" title="Simulated Decline">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg>
+                  <div class="sim-action-btn-wrap">
+                    <button class="sim-btn sim-decline" id="sim-btn-decline" onclick="simulateCallAction('decline')" title="Simulated Decline">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg>
+                    </button>
+                    <span class="sim-btn-lbl" id="sim-lbl-decline">कट करा</span>
                   </div>
-                  <div class="sim-btn sim-block" title="Simulated Block & Report">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                  <div class="sim-action-btn-wrap">
+                    <button class="sim-btn sim-block" id="sim-btn-block" onclick="simulateCallAction('block')" title="Simulated Block & Report">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                    </button>
+                    <span class="sim-btn-lbl">ब्लॉक करा</span>
                   </div>
-                  <div class="sim-btn sim-accept" title="Simulated Accept">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  <div class="sim-action-btn-wrap">
+                    <button class="sim-btn sim-accept" id="sim-btn-accept" onclick="simulateCallAction('accept')" title="Simulated Accept">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </button>
+                    <span class="sim-btn-lbl">कॉल उचला</span>
                   </div>
                 </div>
+                <div id="sim-call-feedback" class="sim-call-feedback"></div>
               </div>
             </div>
           </div>
 
-          <!-- Right: Telecom Routing Dossier Cards -->
+          <!-- Right: Telecom Routing Dossier Cards (Bento Style) -->
           <div class="phone-dossier-column">
             <div class="telecom-dossier-grid">
               <div class="telecom-strip-card">
-                <div class="strip-icon-box">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                <div class="strip-icon-box icon-box-emerald">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
                 </div>
                 <div>
-                  <div class="strip-label">LINE ALLOCATION & CHANNEL</div>
+                  <div class="strip-label">फोनचा प्रकार (Line Type)</div>
                   <div class="strip-val" id="phone-tile-line">Cellular Mobile (Prepaid)</div>
-                  <div class="strip-sub">National numbering allocation code verified</div>
+                  <div class="strip-sub">अधिकृत भारतीय टेलिकॉम सिम कार्ड</div>
+                  <div class="mini-signal-bars" title="Channel Signal Quality: 99.8%">
+                    <span class="bar b1"></span><span class="bar b2"></span><span class="bar b3"></span><span class="bar b4"></span>
+                  </div>
                 </div>
               </div>
 
               <div class="telecom-strip-card">
-                <div class="strip-icon-box">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <div class="strip-icon-box icon-box-sky">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
                 <div>
-                  <div class="strip-label">DIALING ORIGIN & CIRCLE</div>
+                  <div class="strip-label">कॉल कुठून आला? (Origin Circle)</div>
                   <div class="strip-val" id="phone-tile-origin">India (+91) Domestic</div>
-                  <div class="strip-sub">Standard ITU-T domestic routing circle</div>
+                  <div class="strip-sub">भारतातून आलेला स्थानिक कॉल</div>
+                  <div><span class="circle-code-chip">🇮🇳 स्थानिक कॉलर (Domestic)</span></div>
                 </div>
               </div>
 
               <div class="telecom-strip-card">
-                <div class="strip-icon-box">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                <div class="strip-icon-box icon-box-rose">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
                 </div>
                 <div>
-                  <div class="strip-label">COMMUNITY ABUSE REPORTS</div>
+                  <div class="strip-label">सायबर क्राईम तक्रारी (Scam Reports)</div>
                   <div class="strip-val" id="phone-tile-reports">0 Active Reports</div>
-                  <div class="strip-sub">Cross-checked with national scam logs</div>
+                  <div class="strip-sub">सायबर क्राईम व चक्षू डेटाबेस पडताळणी</div>
+                  <div><span class="threat-status-chip clean">✅ तक्रार नाही (Clean)</span></div>
                 </div>
               </div>
             </div>
 
-            <!-- Police Cyber Crime Threat Vector Matrix (2x2) -->
+            <!-- Police Cyber Crime Threat Vector Matrix (2x2 with Interactive Modus Operandi Drawers) -->
             <div class="police-matrix-panel">
               <div class="police-matrix-header">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Police Cyber Crime Threat Vector Matrix</span>
+                <div class="police-matrix-title-wrap">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
+                  <span>सायबर पोलीस फ्रॉड तपासणी (Common Phone Scams Audit)</span>
+                </div>
+                <div class="matrix-verified-badge">
+                  <span class="badge-dot-live"></span>
+                  <span>४ प्रमुख पद्धती तपासल्या</span>
+                </div>
               </div>
+
               <div class="police-vectors-grid">
+                <!-- Vector 1: Digital Arrest -->
                 <div class="scam-vector-card clean" id="vector-digital-arrest">
-                  <div class="vector-avatar">👮‍♂️</div>
-                  <div class="vector-meta">
-                    <div class="vector-title">Digital Arrest / Police Extortion</div>
-                    <div class="vector-desc">Fake summons claiming CBI / Customs video warrant</div>
-                    <div class="vector-status">NO ACTIVE REPORT</div>
+                  <div class="vector-card-top">
+                    <div class="vector-avatar-badge" title="Police & Law Enforcement Extortion">
+                      👮‍♂️
+                    </div>
+                    <div class="vector-meta">
+                      <div class="vector-title">डिजिटल अरेस्ट / बनावट पोलीस (Digital Arrest)</div>
+                      <div class="vector-desc">CBI, ED किंवा कस्टम्स अधिकाऱ्याचा बनावट व्हिडिओ कॉल करून पैशांची मागणी</div>
+                      <div class="vector-status">✅ कोणतीही तक्रार नाही (Clean)</div>
+                    </div>
+                  </div>
+                  <button class="btn-vector-expand" onclick="toggleVectorDetail('vector-digital-arrest')">
+                    <span>तपशील आणि बचाव कसा करावा? (Details & Defense)</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="vector-details-drawer" id="drawer-vector-digital-arrest">
+                    <div class="drawer-inner">
+                      <div class="drawer-sec">
+                        <strong>⚠️ फसवणुकीची पद्धत (Scam Pattern):</strong>
+                        <p>स्कॅमर पोलीस किंवा सीबीआय गणवेश घालून स्काईप/व्हॉट्सॲपवर व्हिडिओ कॉल करतात. तुमच्यावर केस झाली आहे किंवा अरेस्ट वॉरंट निघाले आहे अशी खोटी भीती दाखवून पैसे ट्रान्सफर करण्यास भाग पाडतात.</p>
+                      </div>
+                      <div class="drawer-sec defense">
+                        <strong>🛡️ कायदेशीर सत्य व बचाव (Legal Fact & Action):</strong>
+                        <p>भारतीय कायद्यात "डिजिटल अरेस्ट" नावाची कोणतीही कायदेशीर पद्धत नाही! पोलीस कधीही व्हिडिओ कॉलवर अटक किंवा चौकशी करत नाहीत किंवा जामीन रक्कम फोनवर मागत नाहीत. असा कॉल आल्यास त्वरित कट करा व १९३० वर तक्रार करा.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Vector 2: Courier Parcel -->
                 <div class="scam-vector-card clean" id="vector-fedex">
-                  <div class="vector-avatar">📦</div>
-                  <div class="vector-meta">
-                    <div class="vector-title">Courier / Parcel Seizure Scam</div>
-                    <div class="vector-desc">Fake FedEx / DHL package seized with contraband</div>
-                    <div class="vector-status">NO ACTIVE REPORT</div>
+                  <div class="vector-card-top">
+                    <div class="vector-avatar-badge" title="Courier Contraband Seizure">
+                      📦
+                    </div>
+                    <div class="vector-meta">
+                      <div class="vector-title">बनावट कुरिअर / पार्सल जप्ती (Parcel Drugs Scam)</div>
+                      <div class="vector-desc">पार्सलमध्ये अमली पदार्थ (Drugs) किंवा बनावट पासपोर्ट सापडल्याची भीती दाखवणे</div>
+                      <div class="vector-status">✅ कोणतीही तक्रार नाही (Clean)</div>
+                    </div>
+                  </div>
+                  <button class="btn-vector-expand" onclick="toggleVectorDetail('vector-fedex')">
+                    <span>तपशील आणि बचाव कसा करावा? (Details & Defense)</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="vector-details-drawer" id="drawer-vector-fedex">
+                    <div class="drawer-inner">
+                      <div class="drawer-sec">
+                        <strong>⚠️ फसवणुकीची पद्धत (Scam Pattern):</strong>
+                        <p>FedEx, DHL किंवा कस्टम्सच्या नावाने कॉल येतो व सांगतात की तुमच्या आधार क्रमांकावर तैवान किंवा दुबईला पाठवलेल्या पार्सलमध्ये ड्रग्स किंवा संशयास्पद वस्तू सापडल्या आहेत. कारवाई टाळण्यासाठी खात्यावर पैसे भरावे लागतील अशी धमकी दिली जाते.</p>
+                      </div>
+                      <div class="drawer-sec defense">
+                        <strong>🛡️ कायदेशीर सत्य व बचाव (Legal Fact & Action):</strong>
+                        <p>कुरिअर कंपन्या कधीही गुन्हेगारी केसेससाठी फोनवर वैयक्तिक खात्यावर पैसे मागत नाहीत. कोणतीही भीती न बाळगता त्वरित जवळच्या पोलीस ठाण्यात किंवा cybercrime.gov.in वर तक्रार नोंदवा.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Vector 3: Power Disconnection -->
                 <div class="scam-vector-card clean" id="vector-electricity">
-                  <div class="vector-avatar">⚡</div>
-                  <div class="vector-meta">
-                    <div class="vector-title">Power Cut Disconnection Alert</div>
-                    <div class="vector-desc">Fake MSEDCL / BSES disconnection notice tonight</div>
-                    <div class="vector-status">NO ACTIVE REPORT</div>
+                  <div class="vector-card-top">
+                    <div class="vector-avatar-badge" title="Utility Power Disconnection Alert">
+                      ⚡
+                    </div>
+                    <div class="vector-meta">
+                      <div class="vector-title">वीज बिल थकबाकी धमकी (Power Cut Tonight Scam)</div>
+                      <div class="vector-desc">आज रात्री ९:३० वाजता वीज कापली जाईल असा खोटा एसएमएस किंवा धमकी कॉल</div>
+                      <div class="vector-status">✅ कोणतीही तक्रार नाही (Clean)</div>
+                    </div>
+                  </div>
+                  <button class="btn-vector-expand" onclick="toggleVectorDetail('vector-electricity')">
+                    <span>तपशील आणि बचाव कसा करावा? (Details & Defense)</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="vector-details-drawer" id="drawer-vector-electricity">
+                    <div class="drawer-inner">
+                      <div class="drawer-sec">
+                        <strong>⚠️ फसवणुकीची पद्धत (Scam Pattern):</strong>
+                        <p>एसएमएस पाठवला जातो: "तुमचे मागील बिल अपडेट नाही, आज रात्री ९:३० वाजता वीज कापली जाईल. त्वरित दिलेल्या १० अंकी नंबरवर संपर्क करा." कॉल केल्यावर फोनमध्ये AnyDesk किंवा TeamViewer डाऊनलोड करायला लावून बँक खाते रिकामे केले जाते.</p>
+                      </div>
+                      <div class="drawer-sec defense">
+                        <strong>🛡️ कायदेशीर सत्य व बचाव (Legal Fact & Action):</strong>
+                        <p>महावितरण (MSEDCL) किंवा कोणतीही वीज कंपनी वैयक्तिक १० अंकी मोबाईल नंबरवरून वीज तोडण्याचे मेसेज पाठवत नाही. बिल नेहमी अधिकृत महावितरण ॲप किंवा अधिकृत केंद्रात जाऊनच भरा.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Vector 4: Telegram Task -->
                 <div class="scam-vector-card clean" id="vector-work-from-home">
-                  <div class="vector-avatar">💼</div>
-                  <div class="vector-meta">
-                    <div class="vector-title">Telegram Task / Rating Job Scam</div>
-                    <div class="vector-desc">Paid YouTube likes, rating tasks, prepaid returns</div>
-                    <div class="vector-status">NO ACTIVE REPORT</div>
+                  <div class="vector-card-top">
+                    <div class="vector-avatar-badge" title="Work From Home / Rating Job Extortion">
+                      💼
+                    </div>
+                    <div class="vector-meta">
+                      <div class="vector-title">वर्क फ्रॉम होम / टेलिग्राम टास्क फ्रॉड (Rating Job Scam)</div>
+                      <div class="vector-desc">यूट्यूब व्हिडिओ लाईक करा किंवा गुगल रिव्ह्यू देऊन दररोज ₹३,००० कमवण्याचे आमिष</div>
+                      <div class="vector-status">✅ कोणतीही तक्रार नाही (Clean)</div>
+                    </div>
+                  </div>
+                  <button class="btn-vector-expand" onclick="toggleVectorDetail('vector-work-from-home')">
+                    <span>तपशील आणि बचाव कसा करावा? (Details & Defense)</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="vector-details-drawer" id="drawer-vector-work-from-home">
+                    <div class="drawer-inner">
+                      <div class="drawer-sec">
+                        <strong>⚠️ फसवणुकीची पद्धत (Scam Pattern):</strong>
+                        <p>व्हॉट्सॲप किंवा टेलिग्रामवर घरबसल्या कमाईचे मेसेज येतात. सुरुवातीला १-२ व्हिडिओ लाईक केल्यावर ₹१५०-₹२०० खात्यावर पाठवून विश्वास संपादन करतात. नंतर 'प्रिपेड टास्क'च्या नावाखाली ₹१०,००० ते ₹५,००,००० गुंतवायला लावून फसवणूक करतात.</p>
+                      </div>
+                      <div class="drawer-sec defense">
+                        <strong>🛡️ कायदेशीर सत्य व बचाव (Legal Fact & Action):</strong>
+                        <p>कोणतीही खरी कंपनी काम देण्यासाठी अगोदर पैसे भरण्यास सांगत नाही. अशा टेलिग्राम चॅनेल्स किंवा व्हॉट्सॲप ग्रुप्समधून त्वरित बाहेर पडा आणि पैसे गेले असल्यास त्वरित १९३० वर तक्रार नोंदवा.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1935,20 +3038,35 @@
         <div class="phone-guidance-deck">
           <div class="phone-signals-block">
             <div class="block-header">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              <span>Telecom Forensic Signals (<span id="phone-signals-count">1</span>)</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>टेलिकॉम तांत्रिक तपासणी पुरावे (Forensic Signals) (<span id="phone-signals-count">1</span>)</span>
             </div>
             <div id="phone-signals-container"></div>
           </div>
           <div class="phone-actions-block">
             <div class="block-header">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>National Citizen Cyber Safeguard Playbook</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>नागरिकांसाठी सुरक्षितता सल्ला (Citizen Safety Playbook)</span>
             </div>
             <div id="phone-recommendations-list"></div>
+            <!-- Quick Action Helpline Card -->
+            <div style="margin-top: 18px; padding: 14px 16px; background: #FEF2F2; border: 1px dashed #FCA5A5; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">🚨</span>
+                <div>
+                  <div style="font-size: 0.875rem; font-weight: 800; color: #991B1B;">पैसे कापले गेले किंवा धमकावले असल्यास? (Lost Money or Facing Extortion?)</div>
+                  <div style="font-size: 0.75rem; color: #7F1D1D;">त्वरित राष्ट्रीय सायबर क्राईम हेल्पलाइन किंवा DoT चक्षू वर संपर्क साधा</div>
+                </div>
+              </div>
+              <a href="tel:1930" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: #DC2626; color: #FFF; font-weight: 800; font-size: 0.8125rem; border-radius: 10px; text-decoration: none; box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35); transition: transform 0.2s ease;">
+                📞 1930 वर कॉल करा
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
+
 
       <!-- ═══════════════════════════════════════════════
            TOOL-SPECIFIC RESULT VIEW 3: UPI PAYMENT RAIL

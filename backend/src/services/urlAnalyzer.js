@@ -336,7 +336,7 @@ function analyzeUrl(rawUrl) {
     recommendations.push('Navigate to the intended service by directly typing their verified domain in your browser instead of following this link.');
   }
   if (signals.length === 0) {
-    recommendations.push('No obvious heuristic anomalies were detected in the URL structure. However, always exercise caution with unfamiliar links.');
+    recommendations.push('This website address looks genuine and clean. However, always double-check the domain name before entering passwords or payment details.');
   } else {
     recommendations.push('Verify the identity of the sender through a known, independent communication channel before taking action.');
   }
