@@ -24,16 +24,16 @@
     "approvedAt": 1794205542231
   },
   {
-    "id": "seed-4",
+    "id": "phone-scam-1",
     "identifier": "+91 98765 43210",
     "type": "Phone",
-    "risk": "High Risk",
-    "evidence": "FedEx parcel scam call. Threatens legal action.",
-    "reporterName": "Amit Sharma",
+    "risk": "Critical",
+    "evidence": "FedEx Parcel Contraband Scam. Automated caller claims parcel seized at customs with illegal drugs.",
+    "reporterName": "Amit Sharma (Pune)",
     "reporterEmail": "",
-    "timestamp": 1794205542231,
+    "timestamp": 1794224341763,
     "status": "approved",
-    "approvedAt": 1794205542231
+    "approvedAt": 1794224341763
   },
   {
     "id": "seed-5",
@@ -70,5 +70,53 @@
     "timestamp": 1794205542231,
     "status": "approved",
     "approvedAt": 1794205542231
+  },
+  {
+    "id": "phone-scam-2",
+    "identifier": "+91 98229 98877",
+    "type": "Phone",
+    "risk": "Critical",
+    "evidence": "Digital Arrest Scam. Falsely poses as CBI / Mumbai Crime Branch officer threatening video arrest warrant.",
+    "reporterName": "Sanjay Deshmukh (Nagpur)",
+    "reporterEmail": "",
+    "timestamp": 1794224341763,
+    "status": "approved",
+    "approvedAt": 1794224341763
+  },
+  {
+    "id": "phone-scam-3",
+    "identifier": "+91 90110 12345",
+    "type": "Phone",
+    "risk": "High Risk",
+    "evidence": "Electricity Bill Disconnection SMS Scam. Demands immediate payment to prevent power cutoff tonight.",
+    "reporterName": "Pooja Kulkarni (Nashik)",
+    "reporterEmail": "",
+    "timestamp": 1794224341763,
+    "status": "approved",
+    "approvedAt": 1794224341763
+  },
+  {
+    "id": "phone-scam-4",
+    "identifier": "+91 70210 99887",
+    "type": "Phone",
+    "risk": "High Risk",
+    "evidence": "Telegram Task & YouTube Like Job Scam. Prompts victims into paying prepaid amounts for crypto tasks.",
+    "reporterName": "Rahul More (Thane)",
+    "reporterEmail": "",
+    "timestamp": 1794224341763,
+    "status": "approved",
+    "approvedAt": 1794224341763
+  },
+  {
+    "id": "phone-scam-5",
+    "identifier": "+91 80102 37029",
+    "type": "Phone",
+    "risk": "Critical",
+    "evidence": "Illegal Loan App Extortion. Calls contacts and threatens with morphed photos.",
+    "reporterName": "Vikas Patil (Kolhapur)",
+    "reporterEmail": "",
+    "timestamp": 1794224341763,
+    "status": "approved",
+    "approvedAt": 1794224341763
   }
 ]

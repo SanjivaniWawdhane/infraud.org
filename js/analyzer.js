@@ -2447,6 +2447,30 @@ function evaluatePhoneLocally(query) {
     };
   }
 
+  // 1. Check known cyber crime threat numbers
+  const knownScams = [
+    { p: /^(?:91)?(?:9876543210|9876543211|9123456789|9822001122|8826412345)$/, id: 'FEDEX_SEIZURE_SCAM', title: 'FedEx / DHL Contraband Parcel Scam', desc: 'Flagged in national scam logs. Claims narcotics seized in package.' },
+    { p: /^(?:91)?(?:9822998877|9876500001|9123456780|9910998877|9899112233)$/, id: 'DIGITAL_ARREST_EXTORTION', title: 'Digital Arrest / Police Extortion Syndicate', desc: 'Impersonates CBI / Mumbai Police demanding video interrogation.' },
+    { p: /^(?:91)?(?:9011012345|9028012345|9049012345|9503012345)$/, id: 'ELECTRICITY_BILL_SCAM', title: 'Electricity Bill Disconnection Phishing', desc: 'Threatens power cutoff tonight unless unauthorized payment is made.' },
+    { p: /^(?:91)?(?:7021099887|7021599887|7201099887|6201099887)$/, id: 'TELEGRAM_TASK_SCAM', title: 'Telegram Task & YouTube Review Job Scam', desc: 'Prepaid task recruitment scam defrauding victims of investments.' },
+    { p: /^(?:91)?(?:8010237029|8010299887|8888012345)$/, id: 'LOAN_APP_EXTORTION', title: 'Predatory Loan App Harassment Line', desc: 'Unauthorized loan app executing blackmail and contact harassment.' }
+  ];
+  const scamMatch = knownScams.find(s => s.p.test(digits));
+  if (scamMatch) {
+    signals.push({ id: scamMatch.id, title: scamMatch.title, description: scamMatch.desc, severity: 'critical' });
+    score = 85;
+  }
+
+  // 2. Check spoofed patterns
+  const d10 = digits.slice(-10);
+  if (/^(\d)\1{9}$/.test(d10)) {
+    signals.push({ id: 'SPOOFED_REPETITIVE', title: 'Spoofed Caller ID: Repetitive Sequence', description: 'Consists of identical repeating digits, indicative of VoIP PBX spoofing.', severity: 'critical' });
+    score = Math.max(score, 85);
+  } else if (d10 === '1234567890' || d10 === '9876543210') {
+    signals.push({ id: 'SPOOFED_SEQUENTIAL', title: 'Spoofed Caller ID: Sequential Ladder', description: 'Artificial ascending or descending digit ladder.', severity: 'critical' });
+    score = Math.max(score, 85);
+  }
+
   // Check for TRAI 140 commercial telemarketing
   if (/^(\+?91)?140\d{7}$/.test(digits)) {
     signals.push({
