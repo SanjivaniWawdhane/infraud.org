@@ -112,35 +112,11 @@
    Professional, minimalist, user-friendly SaaS cybersecurity interface
    ═══════════════════════════════════════════════════════════════ */
 
-/* Section 3: URL Input Card */
-.saas-input-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 24px 28px;
-  margin-bottom: 24px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-}
-.saas-input-header {
-  margin-bottom: 16px;
-}
-.saas-input-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 4px;
-  letter-spacing: -0.02em;
-}
-.saas-input-desc {
-  font-size: 0.875rem;
-  color: #64748B;
-  margin: 0;
-  line-height: 1.45;
-}
-.saas-search-form {
+/* Quick Search Bar */
+.saas-quick-search-strip {
   display: flex;
   gap: 10px;
-  position: relative;
+  margin-bottom: 24px;
 }
 .saas-search-input-wrap {
   position: relative;
@@ -163,7 +139,7 @@
   font-size: 0.9375rem;
   font-family: var(--mono, 'JetBrains Mono', monospace);
   color: #0F172A;
-  background: #F8FAFC;
+  background: #FFFFFF;
   border: 1px solid #CBD5E1;
   border-radius: 10px;
   transition: all 0.2s ease;
@@ -172,7 +148,6 @@
 .saas-search-input:focus {
   outline: none;
   border-color: #2563EB;
-  background: #FFFFFF;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 .saas-search-clear {
@@ -193,7 +168,7 @@
 }
 .saas-search-btn {
   height: 46px;
-  padding: 0 24px;
+  padding: 0 22px;
   background: #2563EB;
   color: #FFFFFF;
   border: none;
@@ -211,24 +186,16 @@
 .saas-search-btn:hover {
   background: #1D4ED8;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
-}
-.saas-input-error {
-  font-size: 0.8125rem;
-  color: #DC2626;
-  margin-top: 8px;
-  display: none;
 }
 
-/* Section 4: Main Result Hero Card */
+/* Hero Priority Result Card */
 .saas-hero-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 16px;
-  padding: 28px 32px;
+  padding: 26px 30px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-  position: relative;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 .saas-hero-top {
   display: flex;
@@ -248,8 +215,8 @@
   min-width: 0;
 }
 .saas-url-icon {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
   background: #EFF6FF;
   color: #2563EB;
@@ -268,38 +235,40 @@
   color: #64748B;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 .saas-url-canonical {
   font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0F172A;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0F172A !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 500px;
+  max-width: 520px;
   display: inline-block;
   vertical-align: middle;
 }
 .saas-btn-copy-url {
   background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  color: #475569;
+  border: 1px solid #CBD5E1;
+  color: #334155;
   border-radius: 6px;
   padding: 4px 10px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  margin-left: 8px;
+  gap: 5px;
+  margin-left: 10px;
   transition: all 0.15s ease;
+  vertical-align: middle;
 }
 .saas-btn-copy-url:hover {
   background: #F1F5F9;
   color: #0F172A;
+  border-color: #94A3B8;
 }
 .saas-actions-bar {
   display: flex;
@@ -339,19 +308,12 @@
   color: #B91C1C;
 }
 
-/* Hero Main Row */
+/* Hero Main Grid */
 .saas-hero-main {
   display: grid;
   grid-template-columns: 160px 1fr;
   gap: 36px;
   align-items: center;
-}
-.saas-verdict-heading {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 8px;
-  line-height: 1.25;
 }
 @media (max-width: 768px) {
   .saas-hero-main {
@@ -360,10 +322,146 @@
   }
 }
 
-/* Sections 5, 6, 7, 8: Two-Column Grids */
+/* ── CIRCULAR GAUGE & 4-STAGE METER BAR ── */
+.verdict-gauge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.gauge-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.gauge-svg {
+  width: 140px;
+  height: 140px;
+  transform: rotate(-90deg);
+}
+.gauge-bg-circle {
+  stroke: #F1F5F9;
+  stroke-width: 10;
+}
+.gauge-progress-circle {
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.4s ease;
+}
+.gauge-center-content {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.gauge-score-num {
+  font-size: 2.75rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #0F172A;
+  letter-spacing: -0.04em;
+}
+.gauge-score-denom {
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-top: 4px;
+}
+.risk-meter-container {
+  width: 140px;
+  margin: 12px auto 0;
+}
+.risk-meter-bar {
+  display: flex;
+  height: 5px;
+  border-radius: 99px;
+  overflow: hidden;
+  gap: 2px;
+}
+.meter-seg {
+  flex: 1;
+  height: 100%;
+}
+.meter-seg.seg-low { background: #10B981; }
+.meter-seg.seg-mod { background: #F59E0B; }
+.meter-seg.seg-high { background: #EA580C; }
+.meter-seg.seg-crit { background: #EF4444; }
+.risk-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94A3B8;
+  margin-top: 5px;
+}
+
+/* Verdict Info Column */
+.verdict-info-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+@media (max-width: 768px) {
+  .verdict-info-col {
+    align-items: center;
+    text-align: center;
+  }
+}
+.risk-verdict-pill {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 5px 14px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+}
+.saas-verdict-heading {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 8px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.risk-explanation-text {
+  font-size: 0.9375rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  max-width: 680px;
+}
+.verdict-trust-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #047857;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  padding: 6px 14px;
+  border-radius: 8px;
+}
+
+/* Two-Column Layouts */
 .saas-two-col {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1.25fr 1fr;
   gap: 24px;
   margin-bottom: 24px;
 }
@@ -398,7 +496,7 @@
   gap: 8px;
 }
 
-/* Section 5: Security Checks Table / List */
+/* Security Checks List */
 .saas-checks-list {
   display: flex;
   flex-direction: column;
@@ -454,7 +552,7 @@
   border: 1px solid #FECACA;
 }
 
-/* Section 6: Website Info Table */
+/* Website Info Table */
 .saas-info-table {
   width: 100%;
   border-collapse: collapse;
@@ -482,7 +580,66 @@
   font-family: var(--mono, 'JetBrains Mono', monospace);
 }
 
-/* Section 9: Cybercrime Helpline Card */
+/* Playbook & Signals */
+.playbook-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.playbook-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.55;
+  font-weight: 500;
+}
+.clean-certificate-box {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.clean-cert-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #10B981;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+.signal-item-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.signal-title-text {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 2px;
+}
+.signal-desc-text {
+  font-size: 0.8125rem;
+  color: #64748B;
+  line-height: 1.45;
+}
+
+/* Cybercrime Helpline Card */
 .saas-helpline-card {
   background: linear-gradient(135deg, #FEF2F2 0%, #FFF5F5 100%);
   border: 1px solid #FECACA;
@@ -543,7 +700,6 @@
 }
 .saas-btn-dial:hover {
   background: #B91C1C;
-  transform: translateY(-1px);
 }
 .saas-btn-portal {
   background: #FFFFFF;
@@ -570,360 +726,229 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════════
-   TOOL 2: UNIQUE BESPOKE NATIONAL TELECOM & CALLER CLEARANCE DOSSIER
-   Modern, Attractive, High-Clarity Architecture Matching InFraud Theme
+   TOOL 2: PRODUCTION-READY MODERN TELECOM & CALLER CLEARANCE TERMINAL
+   Clean, Apple/Stripe-Grade Architecture Matching InFraud Theme
    ═══════════════════════════════════════════════════════════════ */
 
-/* 1. Official Telecom Regulatory Clearance Header Bar */
-.phone-telecom-header-bar {
-  background: linear-gradient(135deg, #022C22 0%, #064E3B 48%, #0A1E3F 100%);
-  border: 1px solid rgba(16, 185, 129, 0.45);
+/* 1. Executive Top Header Card */
+.phone-exec-header {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   border-radius: 20px;
-  padding: 24px 28px;
-  box-shadow: 0 12px 36px rgba(4, 44, 34, 0.35);
+  padding: 22px 28px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 18px;
   margin-bottom: 24px;
-  color: #FFFFFF;
-  position: relative;
-  overflow: hidden;
 }
-.phone-telecom-header-bar::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.28) 0%, transparent 70%);
-  pointer-events: none;
-}
-.phone-telecom-badge-left {
+.phone-header-meta {
   display: flex;
   align-items: center;
   gap: 16px;
-  position: relative;
-  z-index: 1;
 }
-.phone-telecom-seal-icon {
-  width: 50px; height: 50px;
+.phone-shield-badge {
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #34D399;
   flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  transition: transform 0.25s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.12);
 }
-.phone-telecom-seal-icon:hover {
-  transform: scale(1.05) rotate(4deg);
+.phone-title-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.phone-telecom-header-sub {
+.phone-kicker-row {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 8px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #A7F3D0;
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
-}
-.phone-live-dot-pulse {
-  display: inline-block;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 10px #10B981;
-  animation: liveDotBlink 1.8s ease-in-out infinite;
-}
-@keyframes liveDotBlink {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(0.85); }
-}
-.phone-carrier-pill-emerald {
-  background: rgba(16, 185, 129, 0.25);
-  border: 1px solid rgba(52, 211, 153, 0.4);
-  color: #A7F3D0;
-  padding: 2px 8px;
-  border-radius: 100px;
-  font-size: 0.6875rem;
-  font-weight: 800;
+  color: #059669;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.phone-target-headline {
-  color: #FFFFFF !important;
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 1.875rem;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  word-break: break-all;
+.phone-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  animation: pulseDot 2s infinite ease-in-out;
 }
-.phone-telecom-actions {
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.85); opacity: 0.4; }
+}
+.phone-title-row {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
   align-items: center;
-  position: relative;
-  z-index: 1;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-.phone-telecom-btn {
+.phone-clean-title {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  margin: 0;
+}
+.phone-tag-pill {
   display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+.phone-tag-green {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+.phone-tag-yellow {
+  background: #FEF3C7;
+  color: #D97706;
+  border: 1px solid #FDE68A;
+}
+.phone-tag-orange {
+  background: #FFEDD5;
+  color: #EA580C;
+  border: 1px solid #FED7AA;
+}
+.phone-tag-red {
+  background: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+.phone-sub-meta {
+  display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.8125rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 9px 16px;
+  color: #64748B;
+  flex-wrap: wrap;
+}
+.phone-hdr-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phone-action-btn {
+  height: 38px;
+  padding: 0 16px;
   border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
-.phone-telecom-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.35);
+.phone-action-btn:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #0F172A;
   transform: translateY(-1px);
 }
-.btn-phone-danger-report {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(220, 38, 38, 0.5) 100%) !important;
-  border-color: rgba(248, 113, 113, 0.6) !important;
-  color: #FECACA !important;
+.phone-btn-report {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #DC2626;
 }
-.btn-phone-danger-report:hover {
-  background: #DC2626 !important;
-  color: #FFFFFF !important;
+.phone-btn-report:hover {
+  background: #FEE2E2;
+  border-color: #F87171;
+  color: #B91C1C;
 }
 
-/* 2. Full-Width Golden Rule Warning Banner */
+/* 2. Golden Rule Warning Banner (सुवर्ण नियम) */
 .phone-golden-rule-banner {
   background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
   border: 1px solid #FCD34D;
   border-left: 6px solid #D97706;
   border-radius: 16px;
-  padding: 16px 22px;
+  padding: 18px 24px;
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 24px;
   box-shadow: 0 4px 16px rgba(217, 119, 6, 0.08);
 }
-.phone-alert-icon {
+.phone-golden-icon {
   font-size: 2rem;
   flex-shrink: 0;
   line-height: 1;
 }
-.phone-alert-title {
+.phone-golden-title {
   font-size: 0.8125rem;
   font-weight: 800;
   color: #92400E;
   letter-spacing: 0.05em;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   text-transform: uppercase;
 }
-.phone-alert-text {
+.phone-golden-text {
   font-size: 0.875rem;
   color: #78350F;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-/* 3. Official Digital Telecom Clearance Dossier Leaf */
-.phone-dossier-leaf {
+/* 3. Master Verdict Hero Card (Obvious, Friendly, Clear) */
+.phone-verdict-card {
   background: #FFFFFF;
-  border: 2px solid #E2E8F0;
+  border: 1px solid #E2E8F0;
   border-radius: 20px;
-  padding: 28px 32px;
+  padding: 32px 36px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 36px;
+  align-items: center;
+  margin-bottom: 24px;
   position: relative;
-  box-shadow: 0 12px 36px -8px rgba(15, 23, 42, 0.08);
-  margin-bottom: 28px;
   overflow: hidden;
   transition: box-shadow 0.3s ease;
 }
-.phone-dossier-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-18deg);
-  font-size: 3.8rem;
-  font-weight: 900;
-  color: rgba(15, 23, 42, 0.025);
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  letter-spacing: 0.18em;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-}
-.phone-dossier-top-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 18px;
-  border-bottom: 1.5px dashed #E2E8F0;
-  margin-bottom: 22px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.phone-protocol-badge {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.phone-protocol-emblem {
-  width: 42px; height: 42px;
-  border-radius: 11px;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #059669;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
-}
-.phone-protocol-title {
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: #065F46;
-  text-transform: uppercase;
-}
-.phone-protocol-sub {
-  font-size: 0.7rem;
-  color: #64748B;
-  font-weight: 600;
-}
-.phone-dossier-date-box {
-  text-align: right;
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-}
-.phone-meta-lbl {
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #94A3B8;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  display: block;
-}
-.phone-meta-val {
-  font-size: 0.8125rem;
-  font-weight: 800;
-  color: #0F172A;
-}
-
-/* Rubber Stamp Verdict Effect */
-.phone-rubber-stamp {
-  position: absolute;
-  right: 14px;
-  top: 0;
-  font-family: var(--mono, monospace);
-  font-size: 0.9375rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 8px 18px;
-  border: 3px double;
-  border-radius: 8px;
-  transform: rotate(-3deg);
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0.94;
-  transition: all 0.3s ease;
-}
-.phone-rubber-stamp.stamp-pass {
-  color: #059669;
-  border-color: #059669;
-  background: rgba(236, 253, 245, 0.75);
-  box-shadow: 0 0 0 1px rgba(5, 150, 105, 0.15);
-}
-.phone-rubber-stamp.stamp-warn {
-  color: #D97706;
-  border-color: #D97706;
-  background: rgba(254, 243, 199, 0.75);
-  transform: rotate(2deg);
-}
-.phone-rubber-stamp.stamp-danger {
-  color: #DC2626;
-  border-color: #DC2626;
-  background: rgba(254, 226, 226, 0.8);
-  transform: rotate(4deg);
-}
-
-.phone-target-id-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 22px;
-  flex-wrap: wrap;
-}
-.phone-id-lbl {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #64748B;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.phone-id-val-stack {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.phone-canonical-link {
-  font-family: var(--mono, monospace);
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #0F172A;
-}
-.phone-tag-badge {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  padding: 3px 9px;
-  border-radius: 6px;
-  background: #F1F5F9;
-  color: #475569;
-  border: 1px solid #E2E8F0;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* Verdict Box & Circular Dial */
-.phone-dossier-verdict-box {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 32px;
-  align-items: center;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-.phone-dial-container {
+.phone-gauge-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
-.phone-gauge-wrap {
+.phone-gauge-container {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
 }
 .phone-gauge-svg {
   transform: rotate(-90deg);
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
 }
-.phone-gauge-bar {
+.phone-gauge-progress {
   transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.4s ease;
 }
 .phone-gauge-center {
@@ -934,26 +959,26 @@
   align-items: center;
   justify-content: center;
 }
-.phone-dial-score {
-  font-size: 2.25rem;
+.phone-gauge-score {
+  font-size: 2.35rem;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.04em;
   color: #0F172A;
   font-family: var(--font, sans-serif);
 }
-.phone-dial-denom {
+.phone-gauge-label {
   font-size: 0.625rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #94A3B8;
-  margin-top: 4px;
+  margin-top: 5px;
 }
-.phone-meter-wrap {
+.phone-meter-container {
   width: 100%;
-  max-width: 140px;
-  margin-top: 12px;
+  max-width: 150px;
+  margin-top: 14px;
 }
 .phone-meter-bar {
   display: flex;
@@ -962,15 +987,15 @@
   overflow: hidden;
   gap: 3px;
 }
-.p-meter-seg {
+.p-seg {
   flex: 1;
   height: 100%;
   border-radius: 2px;
 }
-.p-seg-safe { background: #10B981; }
-.p-seg-caution { background: #F59E0B; }
-.p-seg-risk { background: #EA580C; }
-.p-seg-danger { background: #EF4444; }
+.p-seg.seg-safe { background: #10B981; }
+.p-seg.seg-caution { background: #F59E0B; }
+.p-seg.seg-risky { background: #EA580C; }
+.p-seg.seg-danger { background: #EF4444; }
 
 .phone-meter-labels {
   display: flex;
@@ -980,158 +1005,173 @@
   color: #94A3B8;
   margin-top: 4px;
 }
-.phone-verdict-info {
+.phone-verdict-col {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
-.phone-verdict-badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8125rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  padding: 5px 14px;
-  border-radius: 100px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-.phone-verdict-h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0F172A;
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
-  line-height: 1.3;
-}
-.phone-verdict-desc-p {
-  font-size: 0.9375rem;
-  color: #475569;
-  line-height: 1.6;
-  margin-bottom: 14px;
-  max-width: 680px;
-}
-.phone-trust-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #047857;
-  background: #ECFDF5;
-  padding: 5px 12px;
-  border-radius: 6px;
-  border: 1px solid #A7F3D0;
-}
-
-/* 4. Telemetry Bento Strip */
-.phone-telemetry-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-.phone-tile-item {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-}
-.phone-tile-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
-  background: #FFFFFF;
-  border-color: #CBD5E1;
-}
-.phone-tile-top {
+.phone-verdict-top-badges {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
-.phone-tile-icon {
-  width: 36px; height: 36px;
+.phone-rubber-stamp {
+  font-family: var(--mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1.5px dashed;
+  transform: rotate(-1.5deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.stamp-pass {
+  color: #059669;
+  border-color: #059669;
+  background: rgba(16, 185, 129, 0.08);
+}
+.stamp-warn {
+  color: #D97706;
+  border-color: #D97706;
+  background: rgba(245, 158, 11, 0.08);
+}
+.stamp-danger {
+  color: #DC2626;
+  border-color: #DC2626;
+  background: rgba(239, 68, 68, 0.08);
+}
+.phone-audit-timestamp {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.phone-verdict-heading {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+.phone-risk-explanation {
+  font-size: 0.9375rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+.phone-citizen-advice-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8125rem;
+  color: #334155;
+  line-height: 1.45;
+  width: 100%;
+}
+.phone-citizen-advice-box strong {
+  color: #0F172A;
+}
+
+/* 4. The 4 Modern Bento Telemetry Cards */
+.phone-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.phone-bento-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.phone-bento-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  border-color: #CBD5E1;
+}
+.phone-bento-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.phone-bento-icon {
+  width: 38px;
+  height: 38px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
-.icon-emerald { background: #ECFDF5; color: #059669; }
-.icon-teal { background: #F0FDFA; color: #0D9488; }
-.icon-indigo { background: #EEF2FF; color: #4F46E5; }
-.icon-rose { background: #FFF1F2; color: #E11D48; }
-.phone-tile-lbl {
-  font-size: 0.72rem;
+.phone-bento-label {
+  font-size: 0.75rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-.phone-tile-val {
+.phone-bento-val {
   font-size: 1.05rem;
   font-weight: 800;
   color: #0F172A;
-  margin-bottom: 3px;
-  line-height: 1.3;
+  margin-bottom: 4px;
+  line-height: 1.25;
 }
-.phone-tile-sub {
-  font-size: 0.78rem;
+.phone-bento-sub {
+  font-size: 0.75rem;
   color: #64748B;
   line-height: 1.4;
 }
 
-/* 5. Police Cyber Crime Threat Vector Matrix */
-.phone-matrix-card {
+/* 5. Indian Cyber Crime Threat Vector Matrix Card */
+.phone-vectors-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 20px;
   padding: 24px 28px;
-  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
   margin-bottom: 24px;
 }
-.phone-matrix-header {
+.phone-vectors-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
   margin-bottom: 18px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #F1F5F9;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.phone-matrix-title {
+.phone-vectors-title-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.9375rem;
+}
+.phone-vectors-title-text {
+  font-size: 1rem;
   font-weight: 800;
   color: #0F172A;
+  margin: 0;
 }
-.phone-matrix-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #047857;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  padding: 3px 10px;
-  border-radius: 100px;
-}
-.phone-matrix-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #10B981;
-  animation: liveDotBlink 1.8s infinite;
+.phone-vectors-subtext {
+  font-size: 0.78rem;
+  color: #64748B;
 }
 .phone-vectors-grid {
   display: grid;
@@ -1140,94 +1180,115 @@
 }
 .phone-vector-box {
   background: #F8FAFC;
-  border: 1.5px solid #E2E8F0;
+  border: 1px solid #E2E8F0;
   border-radius: 14px;
-  padding: 16px;
+  padding: 16px 18px;
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
 }
 .phone-vector-box:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06);
-}
-.phone-vector-box.threat {
-  background: #FEF2F2;
-  border-color: #F87171;
-}
-.p-vector-top {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-.p-vector-badge {
-  width: 38px; height: 38px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
   background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  flex-shrink: 0;
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
 }
-.p-vector-title {
+.phone-vector-box.flagged {
+  background: #FEF2F2 !important;
+  border-color: #FECACA !important;
+}
+.phone-vector-top-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.phone-vector-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.phone-vector-name {
   font-size: 0.875rem;
   font-weight: 800;
   color: #0F172A;
   margin-bottom: 3px;
 }
-.p-vector-desc {
+.phone-vector-desc {
   font-size: 0.78rem;
   color: #64748B;
-  margin-bottom: 8px;
   line-height: 1.4;
+  margin-bottom: 10px;
 }
-.p-status-clean {
+.phone-vector-status {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.6875rem;
+  gap: 6px;
+  font-size: 0.72rem;
   font-weight: 800;
-  color: #059669;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  align-self: flex-start;
 }
-.phone-vector-box.threat .vector-status {
-  color: #DC2626;
+.p-status-clean {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+.p-status-danger {
   background: #FEE2E2;
-  border-color: #FECACA;
+  color: #DC2626;
+  border: 1px solid #FECACA;
 }
 
-/* 6. Side-by-Side Signals & Guidance Panels */
+/* 6. Guidance Deck: Security Signals & Safeguard Playbook */
 .phone-details-split {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
-  margin-bottom: 28px;
 }
 .phone-panel-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 26px 28px;
-  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
 }
-.phone-panel-title {
+.phone-panel-section-title {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 800;
   color: #0F172A;
-  letter-spacing: -0.01em;
   margin-bottom: 20px;
   padding-bottom: 14px;
   border-bottom: 1px solid #F1F5F9;
 }
+.phone-panel-section-title svg {
+  color: #059669;
+}
 .phone-playbook-panel {
   background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%);
+}
+.phone-playbook-panel .phone-panel-section-title svg {
+  color: #059669;
+}
+.phone-playbook-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.phone-playbook-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.55;
+  font-weight: 500;
 }
 .phone-helpline-box {
   margin-top: 20px;
@@ -1241,31 +1302,32 @@
   gap: 12px;
   flex-wrap: wrap;
 }
-.helpline-left {
+.p-help-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.helpline-emoji {
+.p-help-emoji {
   font-size: 1.5rem;
+  line-height: 1;
 }
-.helpline-title {
+.p-help-title {
   font-size: 0.8125rem;
   font-weight: 800;
   color: #991B1B;
   margin-bottom: 2px;
 }
-.helpline-desc {
+.p-help-desc {
   font-size: 0.72rem;
   color: #7F1D1D;
 }
-.btn-dial-1930 {
+.p-btn-dial-1930 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
   background: #DC2626;
-  color: #FFF;
+  color: #FFFFFF;
   font-weight: 800;
   font-size: 0.78rem;
   border-radius: 8px;
@@ -1273,116 +1335,21 @@
   box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28);
   transition: all 0.2s;
 }
-.btn-dial-1930:hover {
+.p-btn-dial-1930:hover {
   background: #B91C1C;
   transform: translateY(-1px);
 }
 
-/* 7. Shared Signal Row Items & Clean Certificate */
-.clean-certificate-box {
-  background: linear-gradient(180deg, #F0FDF4 0%, #ECFDF5 100%);
-  border: 1px solid #A7F3D0;
-  border-radius: 16px;
-  padding: 32px 24px;
-  text-align: center;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.06);
-}
-.clean-cert-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #10B981;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-}
-.signal-item-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 16px;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
-  transition: all 0.2s ease;
-}
-.signal-item-row:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-}
-.signal-item-left {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.signal-status-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.signal-status-clean {
-  background: #ECFDF5;
-  color: #059669;
-}
-.signal-status-warn {
-  background: #FEF3C7;
-  color: #D97706;
-}
-.signal-status-crit {
-  background: #FEE2E2;
-  color: #DC2626;
-}
-.signal-title-text {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #0F172A;
-  margin-bottom: 3px;
-  line-height: 1.35;
-}
-.signal-desc-text {
-  font-size: 0.8125rem;
-  color: #64748B;
-  line-height: 1.45;
-}
-.playbook-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.playbook-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 0.875rem;
-  color: #334155;
-  line-height: 1.55;
-  font-weight: 500;
-}
-
 @media (max-width: 1024px) {
-  .phone-dossier-verdict-box {
+  .phone-verdict-card {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  .phone-verdict-info {
+  .phone-verdict-col {
     align-items: center;
     text-align: center;
   }
-  .phone-telemetry-grid {
+  .phone-bento-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .phone-vectors-grid {
@@ -1393,19 +1360,19 @@
   }
 }
 @media (max-width: 640px) {
-  .phone-telecom-header-bar {
+  .phone-exec-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  .phone-telecom-actions {
+  .phone-hdr-actions {
     width: 100%;
     justify-content: flex-start;
   }
-  .phone-telemetry-grid {
+  .phone-bento-grid {
     grid-template-columns: 1fr;
   }
-  .phone-target-headline {
-    font-size: 1.5rem;
+  .phone-clean-title {
+    font-size: 1.35rem;
   }
 }
 
@@ -2457,36 +2424,31 @@
            TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE ANALYZER
            Modern, Minimalist Cybersecurity SaaS Platform Architecture
            ═══════════════════════════════════════════════ -->
+            <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE ANALYZER
+           Modern, Minimalist Cybersecurity SaaS Platform Architecture
+           ═══════════════════════════════════════════════ -->
       <div id="view-url" class="tool-result-view">
 
-        <!-- Section 3: URL Analyzer Input Section -->
-        <div class="saas-input-card">
-          <div class="saas-input-header">
-            <h2 class="saas-input-title">URL Security Check</h2>
-            <p class="saas-input-desc">
-              Inspect any website address for phishing signatures, fake brand mimicry, unencrypted transport, and community fraud flags.
-            </p>
-          </div>
-          <form class="saas-search-form" onsubmit="handleQuickUrlSubmit(event)">
-            <div class="saas-search-input-wrap">
-              <span class="saas-search-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="2" y1="12" x2="22" y2="12"></line>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-              </span>
-              <input type="text" id="url-quick-input" class="saas-search-input" placeholder="Enter website URL or domain (e.g., https://example.com)" spellcheck="false" autocomplete="off" />
-              <button type="button" class="saas-search-clear" onclick="clearQuickUrlInput()" title="Clear input">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </button>
-            </div>
-            <button type="submit" class="saas-search-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>Analyze URL</span>
+        <!-- Section 3: URL Analyzer Quick Input Section -->
+        <div class="saas-quick-search-strip">
+          <div class="saas-search-input-wrap">
+            <span class="saas-search-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </span>
+            <input type="text" id="url-quick-input" class="saas-search-input" placeholder="Enter website URL or domain to analyze (e.g., https://example.com)" spellcheck="false" autocomplete="off" />
+            <button type="button" class="saas-search-clear" onclick="clearQuickUrlInput()" title="Clear input">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-          </form>
-          <div id="url-quick-error" class="saas-input-error"></div>
+          </div>
+          <button type="button" class="saas-search-btn" onclick="handleQuickUrlSubmit()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Analyze URL</span>
+          </button>
         </div>
 
         <!-- Section 4: Main Analysis Result (Hero Card) -->
@@ -2501,8 +2463,8 @@
                 </svg>
               </div>
               <div class="saas-url-title-stack">
-                <div class="saas-url-label">ANALYZED URL TARGET:</div>
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="saas-url-label">ANALYZED TARGET URL:</div>
+                <div>
                   <span class="saas-url-canonical target-display-value" id="target-display">Analyzing...</span>
                   <button type="button" class="saas-btn-copy-url" onclick="copyCanonicalUrl()" title="Copy analyzed URL to clipboard">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -2537,9 +2499,9 @@
             <!-- Left: Clean Risk Score Gauge -->
             <div class="verdict-gauge-wrap">
               <div class="gauge-wrap">
-                <svg class="gauge-svg" viewBox="0 0 160 160" width="136" height="136">
-                  <circle class="gauge-bg-circle" cx="80" cy="80" r="68" fill="none" stroke="#F1F5F9" stroke-width="10"></circle>
-                  <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="10" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2"></circle>
+                <svg class="gauge-svg" viewBox="0 0 160 160">
+                  <circle class="gauge-bg-circle" cx="80" cy="80" r="68" fill="none"></circle>
+                  <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-dasharray="427.2" stroke-dashoffset="427.2"></circle>
                 </svg>
                 <div class="gauge-center-content">
                   <div class="gauge-score-num" id="score-display">0</div>
@@ -2716,296 +2678,263 @@
 
 <div id="view-phone" class="tool-result-view">
 
-        <!-- 1. Official Telecom Regulatory Clearance Header Bar -->
-        <div class="phone-telecom-header-bar">
-          <div class="phone-telecom-badge-left">
-            <div class="phone-telecom-seal-icon" title="TRAI TCCCPR Telecom Regulatory Compliance">
+        <!-- 1. Executive Top Header Card -->
+        <div class="phone-exec-header">
+          <div class="phone-header-meta">
+            <div class="phone-shield-badge">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <polyline points="9 11 12 14 22 4"/>
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
               </svg>
             </div>
-            <div>
-              <div class="phone-telecom-header-sub">
-                <span class="phone-live-dot-pulse"></span>
-                <span>🇮🇳 भारत सरकार टेलिकॉम व सायबर पडताळणी</span>
+            <div class="phone-title-stack">
+              <div class="phone-kicker-row">
+                <span class="phone-live-dot"></span>
+                <span>DoT & TRAI Telecom Intelligence</span>
                 <span style="opacity: 0.4;">•</span>
-                <span class="phone-carrier-pill-emerald" id="phone-header-status-pill">DoT & TRAI VERIFIED</span>
+                <span id="phone-header-status-pill" class="phone-tag-pill phone-tag-green">DoT & TRAI VERIFIED</span>
               </div>
-              <h1 class="phone-target-headline target-display-value" id="phone-target-display">Analyzing Caller...</h1>
+              <div class="phone-title-row">
+                <h1 class="phone-clean-title target-display-value" id="phone-target-display">Analyzing Caller...</h1>
+              </div>
+              <div class="phone-sub-meta">
+                <span>Phone: <strong id="phone-canonical-display">+91 —</strong></span>
+                <span>•</span>
+                <span id="phone-line-type-tag" class="phone-tag-pill">CELLULAR MOBILE</span>
+                <span id="phone-origin-tag" class="phone-tag-pill">INDIA (+91)</span>
+              </div>
             </div>
           </div>
-          <div class="phone-telecom-actions">
-            <button class="phone-telecom-btn" onclick="rescanTarget()" title="Rescan telecom route">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>पुन्हा तपासा</span>
+          <div class="phone-hdr-actions">
+            <button class="phone-action-btn" onclick="rescanTarget()" title="Re-check this phone number">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Re-check</span>
             </button>
-            <button class="phone-telecom-btn" onclick="copyResultLink()" title="Copy shareable dossier">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>शेअर करा</span>
+            <button class="phone-action-btn" onclick="copyResultLink()" title="Copy shareable link">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Share</span>
             </button>
-            <button class="phone-telecom-btn" onclick="window.print()" title="Print / Export Dossier">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-              <span>प्रिंट (Export)</span>
+            <button class="phone-action-btn" onclick="window.print()" title="Print / Export Dossier">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span>Print</span>
             </button>
-            <a href="reports.html" class="phone-telecom-btn btn-phone-danger-report" id="btn-report-phone" title="Report scam caller to Chakshu (DoT)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>🚨 चक्षू वर तक्रार करा</span>
+            <a href="reports.html" class="phone-action-btn phone-btn-report" id="btn-report-phone" title="Report scam caller">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Report Scam</span>
             </a>
           </div>
         </div>
 
-        <!-- 2. Full-Width Golden Rule Warning Banner (सुवर्ण नियम) -->
+        <!-- 2. Golden Rule Warning Banner (नागरिक सुवर्ण नियम) -->
         <div class="phone-golden-rule-banner">
-          <div class="phone-alert-icon">⚠️</div>
+          <div class="phone-golden-icon">🛡️</div>
           <div>
-            <div class="phone-alert-title">CRITICAL GOLDEN RULE OF TELECOM SECURITY (कॉलर सुरक्षिततेचा सुवर्ण नियम)</div>
-            <div class="phone-alert-text">
-              पोलीस (CBI/ED), कस्टम्स किंवा बँक अधिकारी <strong>कधीही WhatsApp किंवा Skype वरून डिजिटल अरेस्ट (Digital Arrest) करत नाहीत</strong> किंवा वॉरंट रद्द करण्यासाठी पैशांची मागणी करत नाहीत. अनोळखी कॉलरला कधीही आपला <strong>OTP, बँक खात्याची माहिती किंवा AnyDesk/TeamViewer सारख्या ॲपचे ॲक्सेस देऊ नका!</strong>
+            <div class="phone-golden-title">CRITICAL CITIZEN ADVISORY (कॉलर सुरक्षिततेचा सुवर्ण नियम)</div>
+            <div class="phone-golden-text">
+              पोलीस (CBI/ED), कस्टम्स किंवा बँक अधिकारी <strong>कधीही WhatsApp किंवा Skype वरून 'डिजिटल अरेस्ट' (Digital Arrest) करत नाहीत</strong> किंवा केस मिटवण्यासाठी पैशांची मागणी करत नाहीत. अनोळखी कॉलरला कधीही आपला <strong>OTP, बँक खात्याची माहिती किंवा AnyDesk/TeamViewer सारख्या ॲपचा ॲक्सेस देऊ नका!</strong>
             </div>
           </div>
         </div>
 
-        <!-- 3. Official Digital Telecom Clearance Dossier Leaf -->
-        <div class="phone-dossier-leaf" id="phone-score-sidebar">
-          <div class="phone-dossier-watermark">TRAI • CHAKSHU • 1930 RAIL</div>
-
-          <!-- Top Security Protocol Strip -->
-          <div class="phone-dossier-top-strip">
-            <div class="phone-protocol-badge">
-              <div class="phone-protocol-emblem">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                </svg>
+        <!-- 3. The Main Verdict Hero Card (Obvious, Friendly, Clear) -->
+        <div class="phone-verdict-card" id="phone-score-sidebar">
+          <!-- Left: Big Circular Gauge -->
+          <div class="phone-gauge-wrap">
+            <div class="phone-gauge-container">
+              <svg class="phone-gauge-svg" viewBox="0 0 160 160" width="140" height="140">
+                <circle cx="80" cy="80" r="68" fill="none" stroke="#F1F5F9" stroke-width="11"></circle>
+                <circle class="phone-gauge-progress" id="phone-gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="11" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2"></circle>
+              </svg>
+              <div class="phone-gauge-center">
+                <div class="phone-gauge-score" id="phone-score-display">--</div>
+                <div class="phone-gauge-label">THREAT SCORE</div>
               </div>
+            </div>
+            <div class="phone-meter-container">
+              <div class="phone-meter-bar">
+                <div class="p-seg seg-safe" title="Safe"></div>
+                <div class="p-seg seg-caution" title="Caution"></div>
+                <div class="p-seg seg-risky" title="Risky"></div>
+                <div class="p-seg seg-danger" title="Danger"></div>
+              </div>
+              <div class="phone-meter-labels">
+                <span>Safe</span><span>Caution</span><span>Risky</span><span>Danger</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Plain-Language Verdict Explanation -->
+          <div class="phone-verdict-col">
+            <div class="phone-verdict-top-badges">
+              <div class="phone-tag-pill phone-tag-green" id="phone-risk-badge">SAFE CALLER • ZERO THREAT DETECTED</div>
+              <div class="phone-rubber-stamp stamp-pass" id="phone-rubber-stamp">PASSED • LIKELY SAFE</div>
+              <span class="phone-audit-timestamp">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span id="phone-audit-date">Verified on 09/11/2026, 14:35 IST</span>
+              </span>
+            </div>
+            <h2 class="phone-verdict-heading" id="phone-verdict-title">
+              वैध व सुरक्षित कॉलर (Clean Private Subscriber Line)
+            </h2>
+            <p class="phone-risk-explanation" id="phone-risk-summary">
+              हा फोन नंबर नियमित दूरसंचार मानकांनुसार वैध आढळला आहे. राष्ट्रीय सायबर सुरक्षा नोंदणी किंवा चक्षू पोर्टलवर या नंबरविरुद्ध कोणतीही तक्रार नोंदवलेली नाही.
+            </p>
+            <div class="phone-citizen-advice-box">
+              <span style="font-size: 1.1rem;">💡</span>
               <div>
-                <div class="phone-protocol-title">TRAI TCCCPR & NATIONAL NUMBERING PLAN AUDIT</div>
-                <div class="phone-protocol-sub">Department of Telecommunications (DoT) National Clearance Rail</div>
+                <strong>जलद सल्ला:</strong> जर कोणीही फोनवर स्वतःला पोलीस, बँक मॅनेजर किंवा कुरिअर अधिकारी सांगून पैसे मागत असेल, तर तत्काळ फोन कट करा.
               </div>
-            </div>
-
-            <div class="phone-dossier-date-box">
-              <span class="phone-meta-lbl">DATE OF AUDIT</span>
-              <span class="phone-meta-val" id="phone-audit-date">09-11-2026</span>
-            </div>
-          </div>
-
-          <!-- Middle Body: Caller Identity & Rubber Stamp Verdict -->
-          <div class="phone-dossier-middle">
-            <!-- Rubber Stamp Verdict Effect -->
-            <div class="phone-rubber-stamp stamp-pass" id="phone-rubber-stamp">
-              PASSED • LIKELY SAFE
-            </div>
-
-            <div class="phone-target-id-row">
-              <div class="phone-id-lbl">VERIFIED CALLER NUMBER:</div>
-              <div class="phone-id-val-stack">
-                <span class="phone-canonical-link" id="phone-canonical-display">+91 —</span>
-                <span id="phone-line-type-tag" class="phone-tag-badge">CELLULAR MOBILE</span>
-                <span id="phone-origin-tag" class="phone-tag-badge">INDIA (+91)</span>
-              </div>
-            </div>
-
-            <!-- Threat Score & Human Verdict Bar -->
-            <div class="phone-dossier-verdict-box">
-              <!-- Left: Circular Gauge with 4-Color Segment Meter -->
-              <div class="phone-dial-container">
-                <div class="phone-gauge-wrap">
-                  <svg class="phone-gauge-svg" viewBox="0 0 160 160" width="130" height="130">
-                    <circle class="phone-gauge-bg" cx="80" cy="80" r="68" fill="none" stroke="#F1F5F9" stroke-width="11"></circle>
-                    <circle class="phone-gauge-bar" id="phone-gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="11" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2"></circle>
-                  </svg>
-                  <div class="phone-gauge-center">
-                    <div class="phone-dial-score" id="phone-score-display">0</div>
-                    <div class="phone-dial-denom">THREAT SCORE</div>
-                  </div>
-                </div>
-
-                <!-- 4-Stage Meter -->
-                <div class="phone-meter-wrap">
-                  <div class="phone-meter-bar">
-                    <div class="p-meter-seg p-seg-safe" title="Safe"></div>
-                    <div class="p-meter-seg p-seg-caution" title="Caution"></div>
-                    <div class="p-meter-seg p-seg-risk" title="Risky"></div>
-                    <div class="p-meter-seg p-seg-danger" title="Danger"></div>
-                  </div>
-                  <div class="phone-meter-labels">
-                    <span>सुरक्षित</span><span>सावधान</span><span>धोकादायक</span><span>फ्रॉड</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right: Verdict Info -->
-              <div class="phone-verdict-info">
-                <div class="phone-verdict-badge-pill" id="phone-risk-badge">
-                  SAFE TO ANSWER
-                </div>
-                <h2 class="phone-verdict-h2" id="phone-verdict-title">
-                  हा नंबर सामान्य आणि सुरक्षित दिसतोय (Likely Safe Number)
-                </h2>
-                <p class="phone-verdict-desc-p" id="phone-risk-summary">
-                  या नंबरविरुद्ध राष्ट्रीय सायबर गुन्हे पोर्टल (Cybercrime.gov.in) किंवा DoT चक्षू डेटाबेसमध्ये कोणतीही फसवणुकीची तक्रार नाही. हा एक सामान्य वैध मोबाईल नंबर वाटतो.
-                </p>
-                <div class="phone-trust-tag">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
-                  <span>Real-time Indian telecom clearance verified against TRAI TCCCPR & National Cybercrime logs</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4 Telemetry Bento Strip (Integrated inside Dossier Leaf) -->
-          <div class="phone-telemetry-grid">
-            <!-- Tile 1 -->
-            <div class="phone-tile-item">
-              <div class="phone-tile-top">
-                <div class="phone-tile-icon icon-emerald" id="phone-tile-icon-line">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-                </div>
-                <span class="phone-tile-lbl">Line Allocation</span>
-              </div>
-              <div class="phone-tile-val" id="phone-tile-line">Cellular Mobile</div>
-              <div class="phone-tile-sub" id="phone-tile-carrier">Standard national cellular line</div>
-            </div>
-
-            <!-- Tile 2 -->
-            <div class="phone-tile-item">
-              <div class="phone-tile-top">
-                <div class="phone-tile-icon icon-teal" id="phone-tile-icon-origin">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                </div>
-                <span class="phone-tile-lbl">Origin & Circle</span>
-              </div>
-              <div class="phone-tile-val" id="phone-tile-origin">India (+91)</div>
-              <div class="phone-tile-sub" id="phone-tile-origin-sub">Standard domestic routing circle</div>
-            </div>
-
-            <!-- Tile 3 -->
-            <div class="phone-tile-item">
-              <div class="phone-tile-top">
-                <div class="phone-tile-icon icon-indigo" id="phone-tile-icon-trai">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <span class="phone-tile-lbl">TRAI Compliance</span>
-              </div>
-              <div class="phone-tile-val" id="phone-tile-trai">Clean Non-Promo</div>
-              <div class="phone-tile-sub" id="phone-tile-trai-sub">Not a commercial spam prefix (140/160)</div>
-            </div>
-
-            <!-- Tile 4 -->
-            <div class="phone-tile-item">
-              <div class="phone-tile-top">
-                <div class="phone-tile-icon icon-rose" id="phone-tile-icon-reports">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                </div>
-                <span class="phone-tile-lbl">Abuse Reports</span>
-              </div>
-              <div class="phone-tile-val" id="phone-tile-reports">0 Active Reports</div>
-              <div class="phone-tile-sub" id="phone-tile-reports-sub">Cross-checked with national scam logs</div>
             </div>
           </div>
         </div>
 
-        <!-- 4. Police Cyber Threat Vector Matrix (Real-World Indian Scam Tactics) -->
-        <div class="phone-matrix-card">
-          <div class="phone-matrix-header">
-            <div class="phone-matrix-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>Police Cyber Crime Threat Vector Matrix (भारतीय सायबर पोलीस स्कॅम पॅटर्न)</span>
+        <!-- 4. The 4 Clear Security Checks (Bento Grid) -->
+        <div class="phone-bento-grid">
+          <!-- Card 1: Line Allocation -->
+          <div class="phone-bento-card">
+            <div class="phone-bento-top">
+              <div class="phone-bento-icon" id="phone-tile-icon-line" style="background: #ECFDF5; color: #059669;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              </div>
+              <span class="phone-bento-label">Line Allocation</span>
             </div>
-            <span class="phone-matrix-badge">
-              <span class="phone-matrix-dot"></span>
-              LIVE TACTIC RADAR
-            </span>
+            <div class="phone-bento-val" id="phone-tile-line">Cellular Mobile</div>
+            <div class="phone-bento-sub" id="phone-tile-carrier">Standard national cellular SIM</div>
+          </div>
+
+          <!-- Card 2: Dialing Origin & Circle -->
+          <div class="phone-bento-card">
+            <div class="phone-bento-top">
+              <div class="phone-bento-icon" id="phone-tile-icon-origin" style="background: #EFF6FF; color: #2563EB;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              </div>
+              <span class="phone-bento-label">Origin & Circle</span>
+            </div>
+            <div class="phone-bento-val" id="phone-tile-origin">India (+91)</div>
+            <div class="phone-bento-sub" id="phone-tile-origin-sub">Standard domestic routing circle</div>
+          </div>
+
+          <!-- Card 3: TRAI Regulatory Status -->
+          <div class="phone-bento-card">
+            <div class="phone-bento-top">
+              <div class="phone-bento-icon" id="phone-tile-icon-trai" style="background: #EEF2FF; color: #4F46E5;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <span class="phone-bento-label">TRAI Clearance</span>
+            </div>
+            <div class="phone-bento-val" id="phone-tile-trai">Clean Non-Commercial</div>
+            <div class="phone-bento-sub" id="phone-tile-trai-sub">Not a commercial spam prefix (140/160)</div>
+          </div>
+
+          <!-- Card 4: Citizen Abuse & Scam Reports -->
+          <div class="phone-bento-card">
+            <div class="phone-bento-top">
+              <div class="phone-bento-icon" id="phone-tile-icon-reports" style="background: #F0FDF4; color: #16A34A;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <span class="phone-bento-label">Abuse Reports</span>
+            </div>
+            <div class="phone-bento-val" id="phone-tile-reports">0 Active Reports</div>
+            <div class="phone-bento-sub" id="phone-tile-reports-sub">Cross-checked with national scam logs</div>
+          </div>
+        </div>
+
+        <!-- 5. Indian Cyber Crime Threat Vector Matrix Card -->
+        <div class="phone-vectors-card">
+          <div class="phone-vectors-header">
+            <div class="phone-vectors-title-row">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <h3 class="phone-vectors-title-text">Indian Cyber Crime Threat Vector Matrix (सायबर फसवणूक पडताळणी)</h3>
+            </div>
+            <span class="phone-vectors-subtext">Active cross-check against India's most notorious caller scam tactics</span>
           </div>
 
           <div class="phone-vectors-grid">
             <!-- Vector 1: Digital Arrest -->
             <div class="phone-vector-box" id="vector-digital-arrest">
-              <div class="p-vector-top">
-                <div class="p-vector-badge badge-police">👮</div>
-                <div style="flex:1;">
-                  <div class="p-vector-title">Digital Arrest & Police Extortion</div>
-                  <div class="p-vector-desc">Fake summons claiming CBI, ED, Police, or Customs video arrest warrant</div>
-                  <div class="vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
+              <div class="phone-vector-top-row">
+                <span class="phone-vector-emoji">👮</span>
+                <div>
+                  <div class="phone-vector-name">Digital Arrest & Police Extortion</div>
+                  <div class="phone-vector-desc">Fake summons claiming CBI, ED, Police, or Customs video arrest warrant</div>
                 </div>
               </div>
+              <div class="phone-vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
             </div>
 
             <!-- Vector 2: Courier Scam -->
             <div class="phone-vector-box" id="vector-fedex">
-              <div class="p-vector-top">
-                <div class="p-vector-badge badge-courier">📦</div>
-                <div style="flex:1;">
-                  <div class="p-vector-title">Courier & Parcel Seizure Scam</div>
-                  <div class="p-vector-desc">Fake FedEx/DHL package seized with contraband/drugs extortion</div>
-                  <div class="vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
+              <div class="phone-vector-top-row">
+                <span class="phone-vector-emoji">📦</span>
+                <div>
+                  <div class="phone-vector-name">Courier & Parcel Seizure Scam</div>
+                  <div class="phone-vector-desc">Fake FedEx/DHL package seized with contraband or illegal drugs</div>
                 </div>
               </div>
+              <div class="phone-vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
             </div>
 
             <!-- Vector 3: Power Cut Scam -->
             <div class="phone-vector-box" id="vector-electricity">
-              <div class="p-vector-top">
-                <div class="p-vector-badge badge-power">⚡</div>
-                <div style="flex:1;">
-                  <div class="p-vector-title">Power Cut Disconnection Alert</div>
-                  <div class="p-vector-desc">Fake MSEDCL / BSES disconnection notice demanding urgent bill payment</div>
-                  <div class="vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
+              <div class="phone-vector-top-row">
+                <span class="phone-vector-emoji">⚡</span>
+                <div>
+                  <div class="phone-vector-name">Power Cut Disconnection Alert</div>
+                  <div class="phone-vector-desc">Fake electricity board notice claiming urgent power cut tonight at 9:30 PM</div>
                 </div>
               </div>
+              <div class="phone-vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
             </div>
 
             <!-- Vector 4: Job Scam -->
             <div class="phone-vector-box" id="vector-work-from-home">
-              <div class="p-vector-top">
-                <div class="p-vector-badge badge-job">💼</div>
-                <div style="flex:1;">
-                  <div class="p-vector-title">Telegram Task & Part-Time Job Scam</div>
-                  <div class="p-vector-desc">Paid YouTube likes, hotel reviews, and crypto prepaid rating traps</div>
-                  <div class="vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
+              <div class="phone-vector-top-row">
+                <span class="phone-vector-emoji">💼</span>
+                <div>
+                  <div class="phone-vector-name">Telegram Task & Part-Time Job Scam</div>
+                  <div class="phone-vector-desc">Paid YouTube likes, hotel rating tasks, and crypto prepaid deposit traps</div>
                 </div>
               </div>
+              <div class="phone-vector-status p-status-clean">✅ कोणतीही तक्रार नाही (Clean)</div>
             </div>
           </div>
         </div>
 
-        <!-- 5. Findings & Safety Steps (Two Clear Panels) -->
+        <!-- 6. Guidance Deck: Security Signals & Safeguard Playbook -->
         <div class="phone-details-split">
-          <!-- Panel 1: Security Findings -->
+          <!-- Panel 1: Security Signals -->
           <div class="phone-panel-card">
-            <div class="phone-panel-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              <span>Telecom & Regulatory Signals</span>
+            <div class="phone-panel-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>Telecom & Regulatory Signals (<span id="phone-signals-count">0</span>)</span>
             </div>
             <div id="phone-signals-container"></div>
           </div>
 
-          <!-- Panel 2: What Should You Do? (Safety Guide) -->
+          <!-- Panel 2: National Citizen Safeguard Playbook -->
           <div class="phone-panel-card phone-playbook-panel">
-            <div class="phone-panel-title" style="color: #065F46;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>What Should You Do? (Safety Guide)</span>
+            <div class="phone-panel-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>What Should You Do? (नागरिक सुरक्षा मार्गदर्शक)</span>
             </div>
-            <ul class="playbook-list" id="phone-recommendations-list"></ul>
+            <ul class="phone-playbook-list" id="phone-recommendations-list"></ul>
 
-            <!-- Quick Action Helpline Card -->
+            <!-- Quick Action Helpline Box -->
             <div class="phone-helpline-box">
-              <div class="helpline-left">
-                <span class="helpline-emoji">🚨</span>
+              <div class="p-help-left">
+                <span class="p-help-emoji">🚨</span>
                 <div>
-                  <div class="helpline-title">पैसे कापले गेले किंवा धमकावले असल्यास? (Facing Extortion?)</div>
-                  <div class="helpline-desc">त्वरित राष्ट्रीय सायबर क्राईम हेल्पलाइन किंवा DoT चक्षू वर संपर्क साधा</div>
+                  <div class="p-help-title">पैसे कापले गेले किंवा धमकावले असल्यास? (Facing Extortion?)</div>
+                  <div class="p-help-desc">त्वरित राष्ट्रीय सायबर क्राईम हेल्पलाइन किंवा DoT चक्षू वर संपर्क साधा</div>
                 </div>
               </div>
-              <a href="tel:1930" class="btn-dial-1930">
+              <a href="tel:1930" class="p-btn-dial-1930">
                 📞 1930 वर कॉल करा
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Hidden container for JS backwards compatibility -->
+        <!-- Hidden Compatibility Anchors for analyzer.js -->
         <div style="display: none;" aria-hidden="true">
           <span id="phone-val-formatted"></span>
           <span id="phone-category-pill"></span>
@@ -3015,9 +2944,7 @@
           <span id="phone-score-num"></span>
           <circle id="phone-score-circle"></circle>
           <span id="phone-verdict-pill"></span>
-          <span id="phone-verdict-title"></span>
           <span id="phone-verdict-desc"></span>
-          <span id="phone-signals-count"></span>
         </div>
 
       </div>

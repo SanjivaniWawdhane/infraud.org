@@ -326,7 +326,7 @@ function updateTargetTypeVisuals(query, type) {
       const preview = query.length > 70 ? query.substring(0, 68) + '...' : query;
       el.innerHTML = `<span style="color: #FFFFFF;">"${escapeHtml(preview)}"</span>`;
     } else {
-      el.innerHTML = `<span style="color: #FFFFFF; font-family: var(--mono);">${escapeHtml(query)}</span>`;
+      el.innerHTML = `<span style="color: #0F172A; font-family: var(--mono); font-weight: 800;">${escapeHtml(query)}</span>`;
     }
   });
   const heroCard = document.querySelector('.target-hero-card');
@@ -475,10 +475,7 @@ function showLoadingState() {
     const phoneHeaderPill = document.getElementById('phone-header-status-pill');
     if (phoneHeaderPill) {
       phoneHeaderPill.textContent = 'DoT & TRAI VERIFIED';
-      phoneHeaderPill.className = 'phone-carrier-pill-emerald';
-      phoneHeaderPill.style.background = '';
-      phoneHeaderPill.style.borderColor = '';
-      phoneHeaderPill.style.color = '';
+      phoneHeaderPill.className = 'phone-tag-pill phone-tag-green';
     }
     const phoneRubberStamp = document.getElementById('phone-rubber-stamp');
     if (phoneRubberStamp) {
@@ -498,9 +495,7 @@ function showLoadingState() {
     const phoneRiskBadge = document.getElementById('phone-risk-badge');
     if (phoneRiskBadge) {
       phoneRiskBadge.textContent = 'EVALUATING CALLER...';
-      phoneRiskBadge.style.color = '#059669';
-      phoneRiskBadge.style.background = '#ECFDF5';
-      phoneRiskBadge.style.borderColor = '#A7F3D0';
+      phoneRiskBadge.className = 'phone-tag-pill phone-tag-green';
     }
     const phoneVerdictTitle = document.getElementById('phone-verdict-title');
     if (phoneVerdictTitle) phoneVerdictTitle.textContent = 'Analyzing Telecom & Caller Heuristics...';
@@ -511,7 +506,7 @@ function showLoadingState() {
     const phoneAuditDate = document.getElementById('phone-audit-date');
     if (phoneAuditDate) {
       const now = new Date();
-      phoneAuditDate.textContent = now.toLocaleDateString('en-GB') + ' • ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' IST';
+      phoneAuditDate.textContent = 'Verified on ' + now.toLocaleDateString('en-GB') + ', ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' IST';
     }
     const tileLine = document.getElementById('phone-tile-line');
     if (tileLine) tileLine.textContent = 'Cellular Mobile';
@@ -535,9 +530,9 @@ function showLoadingState() {
       const vEl = document.getElementById(vId);
       if (vEl) {
         vEl.classList.remove('flagged');
-        const st = vEl.querySelector('.vector-status');
+        const st = vEl.querySelector('.phone-vector-status');
         if (st) {
-          st.className = 'vector-status p-status-clean';
+          st.className = 'phone-vector-status p-status-clean';
           st.textContent = '✅ तपास सुरू आहे... (Evaluating)';
         }
       }
@@ -698,7 +693,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const isDomestic = !data.normalized || data.normalized.countryCode === 'IN';
   const flag = isDomestic ? '🇮🇳 ' : '🌐 ';
 
-  // 1. Top Telecom Header Bar
+  // 1. Top Executive Header Bar
   const phoneTargetDisplay = document.getElementById('phone-target-display');
   if (phoneTargetDisplay) phoneTargetDisplay.textContent = `${flag}${formatted}`;
 
@@ -710,18 +705,16 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   if (phoneLineTypeTag) {
     if (lineTypeStr === 'TOLL_FREE') {
       phoneLineTypeTag.textContent = 'TOLL-FREE HELPLINE';
-      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
+      phoneLineTypeTag.className = 'phone-tag-pill phone-tag-blue';
     } else if (lineTypeStr === 'VOIP') {
       phoneLineTypeTag.textContent = 'VOIP VIRTUAL LINE';
-      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
-      phoneLineTypeTag.style.background = 'rgba(245, 158, 11, 0.25)';
-      phoneLineTypeTag.style.color = '#FDE68A';
+      phoneLineTypeTag.className = 'phone-tag-pill phone-tag-yellow';
     } else if (lineTypeStr === 'FIXED_LINE') {
       phoneLineTypeTag.textContent = 'FIXED-LINE LANDLINE';
-      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
+      phoneLineTypeTag.className = 'phone-tag-pill';
     } else {
       phoneLineTypeTag.textContent = 'CELLULAR MOBILE';
-      phoneLineTypeTag.className = 'phone-carrier-pill-emerald';
+      phoneLineTypeTag.className = 'phone-tag-pill';
     }
   }
 
@@ -734,22 +727,13 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   if (phoneHeaderStatusPill) {
     if (riskScore >= 70) {
       phoneHeaderStatusPill.textContent = '🚨 HIGH RISK / SCAM FLAGGED';
-      phoneHeaderStatusPill.className = 'phone-carrier-pill-emerald';
-      phoneHeaderStatusPill.style.background = 'rgba(239, 68, 68, 0.25)';
-      phoneHeaderStatusPill.style.borderColor = 'rgba(248, 113, 113, 0.5)';
-      phoneHeaderStatusPill.style.color = '#FECACA';
+      phoneHeaderStatusPill.className = 'phone-tag-pill phone-tag-red';
     } else if (riskScore >= 35) {
       phoneHeaderStatusPill.textContent = '⚠️ SUSPICIOUS / PROMO';
-      phoneHeaderStatusPill.className = 'phone-carrier-pill-emerald';
-      phoneHeaderStatusPill.style.background = 'rgba(245, 158, 11, 0.25)';
-      phoneHeaderStatusPill.style.borderColor = 'rgba(251, 191, 36, 0.5)';
-      phoneHeaderStatusPill.style.color = '#FDE68A';
+      phoneHeaderStatusPill.className = 'phone-tag-pill phone-tag-yellow';
     } else {
       phoneHeaderStatusPill.textContent = 'DoT & TRAI VERIFIED';
-      phoneHeaderStatusPill.className = 'phone-carrier-pill-emerald';
-      phoneHeaderStatusPill.style.background = 'rgba(16, 185, 129, 0.25)';
-      phoneHeaderStatusPill.style.borderColor = 'rgba(52, 211, 153, 0.4)';
-      phoneHeaderStatusPill.style.color = '#A7F3D0';
+      phoneHeaderStatusPill.className = 'phone-tag-pill phone-tag-green';
     }
   }
 
@@ -762,7 +746,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const phoneAuditDate = document.getElementById('phone-audit-date');
   if (phoneAuditDate) {
     const now = new Date();
-    phoneAuditDate.textContent = now.toLocaleDateString('en-GB') + ' • ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' IST';
+    phoneAuditDate.textContent = 'Verified on ' + now.toLocaleDateString('en-GB') + ', ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' IST';
   }
 
   // 3. Official Rubber Stamp
@@ -797,7 +781,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
 
   const phoneScoreSidebar = document.getElementById('phone-score-sidebar');
   if (phoneScoreSidebar) {
-    phoneScoreSidebar.style.boxShadow = `0 12px 36px ${theme.cardGlow}`;
+    phoneScoreSidebar.style.boxShadow = `0 12px 32px ${theme.cardGlow}`;
   }
 
   // 5. Plain-Language Bilingual Verdict (English + Marathi)
@@ -805,14 +789,14 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   if (phoneRiskBadge) {
     if (riskScore >= 70) {
       phoneRiskBadge.textContent = '🚨 DANGEROUS SCAM CALLER • DO NOT ANSWER';
+      phoneRiskBadge.className = 'phone-tag-pill phone-tag-red';
     } else if (riskScore >= 35) {
       phoneRiskBadge.textContent = '⚠️ CAUTION ADVISED • TELEMARKETING / UNVERIFIED';
+      phoneRiskBadge.className = 'phone-tag-pill phone-tag-yellow';
     } else {
-      phoneRiskBadge.textContent = '✅ LIKELY SAFE CALLER • VERIFIED SUBSCRIBER';
+      phoneRiskBadge.textContent = 'SAFE CALLER • ZERO THREAT DETECTED';
+      phoneRiskBadge.className = 'phone-tag-pill phone-tag-green';
     }
-    phoneRiskBadge.style.color = theme.color;
-    phoneRiskBadge.style.background = theme.bgPill;
-    phoneRiskBadge.style.borderColor = theme.borderPill;
   }
 
   const phoneVerdictTitle = document.getElementById('phone-verdict-title');
@@ -943,17 +927,17 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   function updateVector(id, flagged, threatLabel) {
     const el = document.getElementById(id);
     if (!el) return;
-    const statusEl = el.querySelector('.vector-status');
+    const statusEl = el.querySelector('.phone-vector-status');
     if (flagged) {
       el.classList.add('flagged');
       if (statusEl) {
-        statusEl.className = 'vector-status p-status-danger';
+        statusEl.className = 'phone-vector-status p-status-danger';
         statusEl.textContent = '🚨 ' + (threatLabel || 'धोकादायक संशय (Flagged)');
       }
     } else {
       el.classList.remove('flagged');
       if (statusEl) {
-        statusEl.className = 'vector-status p-status-clean';
+        statusEl.className = 'phone-vector-status p-status-clean';
         statusEl.textContent = '✅ कोणतीही तक्रार नाही (Clean)';
       }
     }
