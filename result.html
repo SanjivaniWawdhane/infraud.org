@@ -107,466 +107,10 @@
    Clean, intuitive, high-clarity design for everyday users
    ═══════════════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════
-   TOOL 1: SCRATCH REDESIGNED URL & DOMAIN CYBER CLEARANCE
-   Matches the Perforated Cheque & Digital Passport Heritage
-   ═══════════════════════════════════════════════ */
-
-/* 1. Official Cyber Clearance Header Bar */
-.url-cyber-header-bar {
-  background: linear-gradient(135deg, #0A1E3F 0%, #112852 50%, #0F172A 100%);
-  border: 1px solid rgba(59, 130, 246, 0.4);
-  border-radius: 20px;
-  padding: 24px 28px;
-  box-shadow: 0 12px 36px rgba(10, 30, 63, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 24px;
-  color: #FFFFFF;
-  position: relative;
-  overflow: hidden;
-}
-.url-cyber-header-bar::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 180px; height: 180px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
-  pointer-events: none;
-}
-.url-cyber-badge-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-  z-index: 1;
-}
-.url-cyber-seal-icon {
-  width: 48px; height: 48px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #60A5FA;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-}
-.url-cyber-header-sub {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #93C5FD;
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
-}
-.url-cyber-pill-blue {
-  background: rgba(37, 99, 235, 0.25);
-  border: 1px solid rgba(96, 165, 250, 0.4);
-  color: #BFDBFE;
-  padding: 2px 8px;
-  border-radius: 100px;
-  font-size: 0.6875rem;
-  font-weight: 800;
-}
-.url-target-headline {
-  color: #FFFFFF !important;
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 1.875rem;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  word-break: break-all;
-}
-.url-cyber-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
-.url-cyber-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 9px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-.url-cyber-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-1px);
-}
-.btn-url-danger-report {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.45) 100%) !important;
-  border-color: rgba(248, 113, 113, 0.5) !important;
-  color: #FECACA !important;
-}
-.btn-url-danger-report:hover {
-  background: #DC2626 !important;
-  color: #FFFFFF !important;
-}
-
-/* 2. Full-Width Golden Rule Warning Banner */
-.url-golden-rule-banner {
-  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-  border: 1px solid #FCD34D;
-  border-left: 6px solid #D97706;
-  border-radius: 16px;
-  padding: 16px 22px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.08);
-}
-.url-alert-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
-  line-height: 1;
-}
-.url-alert-title {
-  font-size: 0.8125rem;
-  font-weight: 800;
-  color: #92400E;
-  letter-spacing: 0.05em;
-  margin-bottom: 3px;
-  text-transform: uppercase;
-}
-.url-alert-text {
-  font-size: 0.875rem;
-  color: #78350F;
-  line-height: 1.5;
-}
-
-/* 3. Official Digital Cyber Security Passport & Clearance Leaf */
-.url-cert-container {
-  background: #FFFFFF;
-  border: 2px solid #E2E8F0;
-  border-radius: 20px;
-  padding: 28px 32px;
-  position: relative;
-  box-shadow: 0 12px 36px -8px rgba(15, 23, 42, 0.08);
-  margin-bottom: 28px;
-  overflow: hidden;
-}
-.url-cert-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-20deg);
-  font-size: 4.5rem;
-  font-weight: 900;
-  color: rgba(15, 23, 42, 0.025);
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  letter-spacing: 0.2em;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Certificate Top Security Strip */
-.url-cert-top-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 18px;
-  border-bottom: 1.5px dashed #E2E8F0;
-  margin-bottom: 22px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.url-cert-protocol-badge {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.url-cert-emblem {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #2563EB;
-}
-.url-protocol-title {
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: #1E3A8A;
-  text-transform: uppercase;
-}
-.url-protocol-sub {
-  font-size: 0.7rem;
-  color: #64748B;
-  font-weight: 600;
-}
-.url-cert-date-box {
-  text-align: right;
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-}
-.url-meta-lbl {
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #94A3B8;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  display: block;
-}
-.url-meta-val {
-  font-size: 0.8125rem;
-  font-weight: 800;
-  color: #0F172A;
-}
-
-/* Certificate Middle Body */
-.url-cert-middle {
-  position: relative;
-  margin-bottom: 24px;
-}
-
-/* Rubber Stamp Verdict Effect */
-.url-rubber-stamp {
-  position: absolute;
-  right: 10px;
-  top: 0;
-  transform: rotate(-7deg);
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 1.1rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 3.5px dashed;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
-}
-.stamp-pass {
-  color: #059669;
-  border-color: #059669;
-  background: rgba(16, 185, 129, 0.08);
-}
-.stamp-fail {
-  color: #DC2626;
-  border-color: #DC2626;
-  background: rgba(239, 68, 68, 0.08);
-}
-@media (max-width: 768px) {
-  .url-rubber-stamp {
-    position: static;
-    display: inline-block;
-    margin-bottom: 16px;
-    transform: none;
-  }
-}
-
-.url-cert-target-row {
-  margin-bottom: 12px;
-}
-.url-cert-lbl {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: #64748B;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-}
-.url-cert-canonical-link {
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #0F172A;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  word-break: break-all;
-}
-
-/* Threat Score & Human Verdict Bar */
-.url-cert-verdict-box {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 18px 22px;
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  margin-top: 16px;
-}
-@media (max-width: 768px) {
-  .url-cert-verdict-box {
-    flex-direction: column;
-    text-align: center;
-    gap: 14px;
-  }
-}
-
-.url-cert-dial-badge {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background: #ECFDF5;
-  border: 4px solid #10B981;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
-  transition: all 0.3s ease;
-}
-.url-cert-dial-badge.threat {
-  background: #FEF2F2;
-  border-color: #EF4444;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.2);
-}
-.cert-dial-score {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: #059669;
-  line-height: 1;
-}
-.url-cert-dial-badge.threat .cert-dial-score {
-  color: #DC2626;
-}
-.cert-dial-denom {
-  font-size: 0.55rem;
-  font-weight: 800;
-  color: #64748B;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-.url-cert-verdict-info {
-  flex: 1;
-  min-width: 0;
-}
-.url-cert-verdict-title {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 4px;
-}
-.url-cert-verdict-desc {
-  font-size: 0.875rem;
-  color: #475569;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Bottom 4 Security Tiles Strip */
-.url-cert-tiles-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 20px;
-}
-@media (max-width: 900px) {
-  .url-cert-tiles-strip { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 500px) {
-  .url-cert-tiles-strip { grid-template-columns: 1fr; }
-}
-
-.cert-tile-item {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.2s ease;
-}
-.cert-tile-item:hover {
-  background: #FFFFFF;
-  border-color: #CBD5E1;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
-}
-.cert-tile-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.cert-tile-icon {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  flex-shrink: 0;
-}
-.cert-tile-lbl {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.cert-tile-val {
-  font-size: 0.9375rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin-bottom: 2px;
-}
-.cert-tile-sub {
-  font-size: 0.72rem;
-  color: #64748B;
-  line-height: 1.4;
-}
-
-/* Micro-Encoding Bar */
-.url-cert-micr-bar {
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  text-align: center;
-  letter-spacing: 0.2em;
-  font-size: 0.8125rem;
-  color: #94A3B8;
-  padding-top: 14px;
-  border-top: 1px dashed #E2E8F0;
-}
-
-/* 4. Guidance Deck */
-.url-guidance-deck {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 24px;
-}
-@media (max-width: 860px) {
-  .url-guidance-deck { grid-template-columns: 1fr; }
-}
-.url-signals-block, .url-actions-block {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
-}
+/* ═══════════════════════════════════════════════════════════════
+   TOOLS 1 & 2: UNIFIED MINIMALIST PRODUCTION-READY ARCHITECTURE
+   Clean, High-Clarity Design for URL & Phone Checkers
+   ═══════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════════
    TOOL 2: PRODUCTION-READY MINIMALIST PHONE & CALLS CHECKER
@@ -2097,194 +1641,170 @@
            TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE CYBER CLEARANCE
            Official Digital Security Clearance Certificate & Passport
            ═══════════════════════════════════════════════ -->
+            <!-- ═══════════════════════════════════════════════
+           TOOL-SPECIFIC RESULT VIEW 1: URL / WEBSITE SCANNER
+           Production-Ready Clean Minimal Architecture
+           ═══════════════════════════════════════════════ -->
       <div id="view-url" class="tool-result-view">
 
-        <!-- 1. Official Cyber Clearance Header Bar -->
-        <div class="url-cyber-header-bar">
-          <div class="url-cyber-badge-left">
-            <div class="url-cyber-seal-icon" title="CERT-In & APWG Anti-Phishing Clearance">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <!-- 1. Clean Top Header Card -->
+        <div class="url-minimal-header">
+          <div class="url-header-meta">
+            <div class="url-shield-badge" style="background: #EFF6FF; color: #2563EB; border-color: #BFDBFE;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="2" y1="12" x2="22" y2="12"></line>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
               </svg>
             </div>
-            <div>
-              <div class="url-cyber-header-sub">
-                <span class="live-dot-pulse"></span>
-                <span>NATIONAL CYBER DEFENSE & CERT-IN AUDIT</span>
-                <span style="opacity: 0.4;">•</span>
-                <span class="url-cyber-pill-blue">APWG GLOBAL RAIL</span>
+            <div class="url-title-stack">
+              <div class="url-title-row">
+                <h1 class="url-clean-title target-display-value" id="target-display">Analyzing URL...</h1>
+                <span class="url-tag-pill url-tag-green" id="url-header-status-pill">EVALUATING LINK...</span>
               </div>
-              <h1 class="url-target-headline target-display-value" id="target-display">Analyzing URL...</h1>
+              <div class="url-sub-meta">
+                <span>Canonical: <strong id="dossier-canonical">https://...</strong></span>
+                <span>•</span>
+                <span id="target-protocol-tag" class="url-tag-pill">HTTPS (TLS 1.3)</span>
+                <span id="target-category-tag" class="url-tag-pill">ICANN APEX ROOT</span>
+              </div>
             </div>
           </div>
-          <div class="url-cyber-actions">
-            <button class="url-cyber-btn" onclick="rescanTarget()" title="Rescan domain route">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>Verify Route</span>
+          <div class="url-hdr-actions">
+            <button class="url-action-btn" onclick="rescanTarget()" title="Re-check this website URL">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Re-check
             </button>
-            <button class="url-cyber-btn" onclick="copyResultLink()" title="Copy shareable clearance dossier">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>Share Dossier</span>
+            <button class="url-action-btn" onclick="copyResultLink()" title="Copy shareable link">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Share
             </button>
-            <button class="url-cyber-btn" onclick="window.print()" title="Print / Export Official Dossier (PDF)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-              <span>Export Audit</span>
-            </button>
-            <a href="reports.html" class="url-cyber-btn btn-url-danger-report" id="btn-report-target" title="Report fraudulent website to National Cyber Crime Reporting Portal">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>🚨 Freeze Scam Link (1930)</span>
+            <a href="reports.html" class="url-action-btn url-btn-report" id="btn-report-target" title="Report scam website to CERT-In">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              Report Scam
             </a>
           </div>
         </div>
 
-        <!-- 2. Full-Width Golden Rule Warning Banner (English) -->
-        <div class="url-golden-rule-banner">
-          <div class="url-alert-icon">⚠️</div>
-          <div>
-            <div class="url-alert-title">CRITICAL GOLDEN RULE OF WEB BROWSING & LINK SAFETY</div>
-            <div class="url-alert-text">
-              Legitimate banks, government portals, and utility providers will <strong>NEVER send links via SMS or WhatsApp</strong> asking you to update KYC, unblock electricity, or claim lottery rewards. <strong>Never submit passwords, ATM PINs, or OTPs on unverified links!</strong>
+        <!-- 2. The Main Verdict Hero Card (Obvious, Friendly, Clear) -->
+        <div class="url-verdict-card" id="score-sidebar">
+          <!-- Left: Big Circular Gauge -->
+          <div class="verdict-gauge-wrap">
+            <div class="gauge-wrap">
+              <svg class="gauge-svg" viewBox="0 0 160 160" width="140" height="140">
+                <circle class="gauge-bg-circle" cx="80" cy="80" r="70" fill="none" stroke="#F1F5F9" stroke-width="11"></circle>
+                <circle class="gauge-progress-circle" id="gauge-circle" cx="80" cy="80" r="70" fill="none" stroke="#10B981" stroke-width="11" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
+              </svg>
+              <div class="gauge-center-content">
+                <div class="gauge-score-num" id="score-display">--</div>
+                <div class="gauge-score-denom">THREAT SCORE</div>
+              </div>
+            </div>
+            <div class="risk-meter-container">
+              <div class="risk-meter-bar">
+                <div class="meter-seg seg-low" title="Safe"></div>
+                <div class="meter-seg seg-mod" title="Caution"></div>
+                <div class="meter-seg seg-high" title="Risky"></div>
+                <div class="meter-seg seg-crit" title="Danger"></div>
+              </div>
+              <div class="risk-meter-labels">
+                <span>Safe</span><span>Caution</span><span>Risky</span><span>Danger</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Plain-Language Verdict Explanation -->
+          <div class="verdict-info-col">
+            <div class="risk-verdict-pill" id="risk-badge">SAFE TO BROWSE • ZERO THREAT DETECTED</div>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: #0F172A; margin: 0 0 8px; line-height: 1.25;" id="url-verdict-title">
+              Official & Authentic Web Domain (No Threat Detected)
+            </h2>
+            <p class="risk-explanation-text" id="risk-summary">
+              Audited against CERT-In, APWG, and global threat databases. Cryptographic TLS 1.3 encryption is active, apex domain is ICANN registered, and zero active scam reports exist.
+            </p>
+            <div class="verdict-trust-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+              <span>Instant web intelligence cross-referenced against ICANN & APWG global phishing logs</span>
             </div>
           </div>
         </div>
 
-        <!-- 3. Official Digital Cyber Security Passport & Clearance Leaf -->
-        <div class="url-cert-container" id="score-sidebar">
-          <div class="url-cert-watermark">APWG • CERT-IN SECURITY RAIL</div>
-
-          <!-- Top Security Protocol Strip -->
-          <div class="url-cert-top-strip">
-            <div class="url-cert-protocol-badge">
-              <div class="url-cert-emblem">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  <polyline points="9 12 11 14 15 10"></polyline>
-                </svg>
+        <!-- 3. The 4 Clear Security Checks (Simple Cards in 1 Row) -->
+        <div class="url-checks-grid">
+          <!-- Card 1: Connection Security -->
+          <div class="check-item-card">
+            <div class="check-card-top">
+              <div class="check-icon-circle" id="tile-icon-protocol" style="background: #EFF6FF; color: #2563EB;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
-              <div>
-                <div class="url-protocol-title">ICANN & APWG DOMAIN SECURITY AUDIT</div>
-                <div class="url-protocol-sub">Global Anti-Phishing & DNS Infrastructure Clearance</div>
-              </div>
+              <span class="check-title-lbl" id="tile-lbl-protocol">Connection Security</span>
             </div>
-
-            <div class="url-cert-date-box">
-              <span class="url-meta-lbl">DATE OF AUDIT</span>
-              <span class="url-meta-val" id="url-cert-audit-date">09-NOV-2026</span>
-            </div>
+            <div class="check-main-val" id="tile-val-protocol">Secure (HTTPS)</div>
+            <div class="check-sub-info" id="tile-sub-protocol">Protected with TLS 1.3 encryption</div>
           </div>
 
-          <!-- Middle Body: Domain Identity & Rubber Stamp Verdict -->
-          <div class="url-cert-middle">
-            <!-- Rubber Stamp Verdict Effect -->
-            <div class="url-rubber-stamp stamp-pass" id="url-rubber-stamp">
-              PASSED • SAFE TO VISIT
-            </div>
-
-            <div class="url-cert-target-row">
-              <div class="url-cert-lbl">VERIFIED WEB TARGET:</div>
-              <div class="url-cert-canonical-link">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                <span id="dossier-canonical">https://x.com/</span>
+          <!-- Card 2: Domain Namespace -->
+          <div class="check-item-card">
+            <div class="check-card-top">
+              <div class="check-icon-circle" id="tile-icon-tld" style="background: #ECFDF5; color: #059669;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
               </div>
+              <span class="check-title-lbl" id="tile-lbl-tld">Domain Extension</span>
             </div>
-
-            <!-- Threat Score & Human Verdict Bar -->
-            <div class="url-cert-verdict-box">
-              <div class="url-cert-dial-badge" id="cert-dial-badge">
-                <div class="cert-dial-score" id="score-display">0</div>
-                <div class="cert-dial-denom">THREAT SCORE</div>
-              </div>
-
-              <div class="url-cert-verdict-info">
-                <div class="risk-verdict-pill" id="risk-badge" style="margin-bottom: 6px;">
-                  SAFE TO BROWSE • ZERO THREAT DETECTED
-                </div>
-                <h2 class="url-cert-verdict-title" id="url-verdict-title">
-                  Official & Authentic Web Domain (No Threat Detected)
-                </h2>
-                <p class="url-cert-verdict-desc" id="risk-summary">
-                  Audited against CERT-In, APWG, and global threat databases. Cryptographic TLS 1.3 encryption is active, apex domain is ICANN registered, and zero active scam reports exist.
-                </p>
-              </div>
-            </div>
+            <div class="check-main-val" id="tile-val-tld">Official (.COM)</div>
+            <div class="check-sub-info" id="tile-sub-tld">ICANN recognized apex namespace</div>
           </div>
 
-          <!-- Bottom 4 Security Verification Tiles Strip -->
-          <div class="url-cert-tiles-strip">
-            <!-- Tile 1: Connection Security -->
-            <div class="cert-tile-item">
-              <div class="cert-tile-top">
-                <div class="cert-tile-icon" id="tile-icon-protocol">🔒</div>
-                <div class="cert-tile-lbl" id="tile-lbl-protocol">Connection Security</div>
+          <!-- Card 3: Brand Identity -->
+          <div class="check-item-card">
+            <div class="check-card-top">
+              <div class="check-icon-circle" id="tile-icon-brand" style="background: #EEF2FF; color: #4F46E5;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               </div>
-              <div class="cert-tile-val" id="tile-val-protocol">Secure (TLS 1.3 / HTTPS)</div>
-              <div class="cert-tile-sub" id="tile-sub-protocol">End-to-end encrypted transport</div>
+              <span class="check-title-lbl" id="tile-lbl-brand">Website Identity</span>
             </div>
-
-            <!-- Tile 2: Domain Extension -->
-            <div class="cert-tile-item">
-              <div class="cert-tile-top">
-                <div class="cert-tile-icon" id="tile-icon-tld">🌐</div>
-                <div class="cert-tile-lbl" id="tile-lbl-tld">Domain Extension</div>
-              </div>
-              <div class="cert-tile-val" id="tile-val-tld">Official (.COM)</div>
-              <div class="cert-tile-sub" id="tile-sub-tld">ICANN recognized apex namespace</div>
-            </div>
-
-            <!-- Tile 3: Website Identity -->
-            <div class="cert-tile-item">
-              <div class="cert-tile-top">
-                <div class="cert-tile-icon" id="tile-icon-brand">🏷️</div>
-                <div class="cert-tile-lbl" id="tile-lbl-brand">Website Identity</div>
-              </div>
-              <div class="cert-tile-val" id="tile-val-brand">Genuine & Verified</div>
-              <div class="cert-tile-sub" id="tile-sub-brand">No brand mimicry or fake spoofing</div>
-            </div>
-
-            <!-- Tile 4: Scam Database -->
-            <div class="cert-tile-item">
-              <div class="cert-tile-top">
-                <div class="cert-tile-icon" id="tile-icon-db">🛡️</div>
-                <div class="cert-tile-lbl" id="tile-lbl-db">Scam Database</div>
-              </div>
-              <div class="cert-tile-val" id="tile-val-db">Zero Scam Reports</div>
-              <div class="cert-tile-sub" id="tile-sub-db">Clean record across national databases</div>
-            </div>
+            <div class="check-main-val" id="tile-val-brand">Genuine / Original</div>
+            <div class="check-sub-info" id="tile-sub-brand">No brand mimicry or fake spoofing</div>
           </div>
 
-          <!-- Bottom Micro-Encoding Bar -->
-          <div class="url-cert-micr-bar">
-            ║█║▌║█ CERT-IN & APWG GLOBAL ANTI-PHISHING VERIFICATION AUDIT #INFR-8892 ║▌║█║▌
+          <!-- Card 4: Community Scam Radar -->
+          <div class="check-item-card">
+            <div class="check-card-top">
+              <div class="check-icon-circle" id="tile-icon-db" style="background: #F5F3FF; color: #7C3AED;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <span class="check-title-lbl" id="tile-lbl-db">Scam Database</span>
+            </div>
+            <div class="check-main-val" id="tile-val-db">Zero Scam Reports</div>
+            <div class="check-sub-info" id="tile-sub-db">Clean record across national databases</div>
           </div>
         </div>
 
-        <!-- 4. Web Security Findings & National Citizen Web Safeguard Playbook Split -->
-        <div class="url-guidance-deck">
-          <div class="url-signals-block">
-            <div class="block-header" style="display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 700; color: #0A1E3F; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F1F5F9;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <!-- 4. Guidance Deck: Security Signals & Safeguard Playbook -->
+        <div class="url-details-split">
+          <div class="details-panel-card">
+            <div class="panel-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               <span>Security Inspection Signals (<span id="signals-count-pill">0</span>)</span>
             </div>
             <div id="signals-container"></div>
           </div>
-          <div class="url-actions-block">
-            <div class="block-header" style="display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 700; color: #0A1E3F; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F1F5F9;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="details-panel-card playbook-panel">
+            <div class="panel-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <span>National Citizen Web Safeguard Playbook</span>
             </div>
-            <ul id="recommendation-text" class="recommendation-list" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px;"></ul>
+            <ul id="recommendation-text" class="playbook-list"></ul>
             <!-- Quick Action Helpline Card -->
-            <div style="margin-top: 18px; padding: 14px 16px; background: #FEF2F2; border: 1px dashed #FECACA; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="margin-top: 20px; padding: 14px 16px; background: #FEF2F2; border: 1px dashed #FECACA; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 1.3rem;">🚨</span>
                 <div>
-                  <div style="font-size: 0.8125rem; font-weight: 800; color: #991B1B;">Under Financial Threat or Fake Banking Trap?</div>
+                  <div style="font-size: 0.8125rem; font-weight: 800; color: #991B1B;">Suspect Financial Fraud or Phishing?</div>
                   <div style="font-size: 0.72rem; color: #7F1D1D;">Dial National Cyber Crime Helpline or report to cybercrime.gov.in</div>
                 </div>
               </div>
-              <a href="tel:1930" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: #DC2626; color: #FFF; font-weight: 800; font-size: 0.75rem; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);">
+              <a href="tel:1930" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; background: #DC2626; color: #FFF; font-weight: 800; font-size: 0.75rem; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);">
                 Dial 1930
               </a>
             </div>
@@ -2293,16 +1813,15 @@
 
         <!-- Hidden Compatibility Anchors for analyzer.js -->
         <div style="display: none;" aria-hidden="true">
-          <svg viewBox="0 0 160 160"><circle id="gauge-circle"></circle></svg>
           <div id="url-decomp-grid"></div>
           <div id="url-engines-container"></div>
           <div id="decomp-raw-url"></div>
-          <span id="url-header-status-pill"></span>
-          <span id="target-category-tag"></span>
-          <span id="target-protocol-tag"></span>
           <div id="recommendation-box"></div>
+          <div id="url-rubber-stamp"></div>
+          <div id="cert-dial-badge"></div>
         </div>
       </div>
+
 
 <div id="view-phone" class="tool-result-view">
 
