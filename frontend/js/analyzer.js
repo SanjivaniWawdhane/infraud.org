@@ -558,9 +558,16 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   let formatted = target;
   if (digits.length === 10) {
     formatted = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
-  } else if (digits.length > 10 && digits.startsWith('91')) {
+  } else if (digits.length === 12 && digits.startsWith('91')) {
     const d = digits.slice(2);
     formatted = `+91 ${d.slice(0, 5)} ${d.slice(5)}`;
+  } else if (digits.length > 12) {
+    // Format long VoIP trunk or test string into readable segments
+    const chunks = [];
+    for (let i = 0; i < digits.length; i += 5) {
+      chunks.push(digits.slice(i, i + 5));
+    }
+    formatted = (target.startsWith('+') ? '+' : '') + chunks.join(' ');
   }
 
   const phoneFormattedEl = document.getElementById('phone-val-formatted');
@@ -693,23 +700,136 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
 /**
  * Interactive simulated call action feedback for the modern smartphone handset
  */
-function simulateCallAction(action) {
+let callTimerInterval = null;
+let callSeconds = 0;
+let isCallActive = false;
+
+window.simulateCallAction = function(action) {
   const fb = document.getElementById('sim-call-feedback');
-  if (!fb) return;
-  
-  if (action === 'decline') {
-    fb.innerHTML = '<span style="color: #F87171;">📴 Call Rejected & Logged</span>';
+  const statusText = document.getElementById('call-status-text');
+  const waveform = document.getElementById('phone-voice-waveform');
+  const oledScreen = document.getElementById('phone-oled-screen');
+  const phoneHw = document.getElementById('phone-hardware-device');
+  const btnDeclineLbl = document.getElementById('sim-lbl-decline');
+
+  if (action === 'accept') {
+    if (!isCallActive) {
+      isCallActive = true;
+      callSeconds = 0;
+      if (oledScreen) oledScreen.classList.add('call-active');
+      if (waveform) waveform.classList.add('speech-active');
+      if (btnDeclineLbl) btnDeclineLbl.textContent = 'End Call';
+
+      clearInterval(callTimerInterval);
+      callTimerInterval = setInterval(() => {
+        callSeconds++;
+        const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+        const secs = String(callSeconds % 60).padStart(2, '0');
+        if (statusText) statusText.innerHTML = `Active Call • ${mins}:${secs}`;
+      }, 1000);
+
+      if (statusText) statusText.innerHTML = `Connected • 00:00`;
+      if (fb) {
+        fb.innerHTML = '<span style="color: #34D399;">📞 Voice Connection Active • Real-Time Anti-Fraud Telemetry Running</span>';
+        fb.classList.add('show');
+      }
+    } else {
+      if (fb) {
+        fb.innerHTML = '<span style="color: #38BDF8;">🎙️ Voice Channel Encrypted (Opus HD 48kHz Audio Stream)</span>';
+        fb.classList.add('show');
+      }
+    }
+  } else if (action === 'decline') {
+    if (isCallActive) {
+      isCallActive = false;
+      clearInterval(callTimerInterval);
+      if (oledScreen) oledScreen.classList.remove('call-active');
+      if (waveform) waveform.classList.remove('speech-active');
+      if (btnDeclineLbl) btnDeclineLbl.textContent = 'Decline';
+      if (statusText) statusText.textContent = `Call Terminated (${callSeconds}s)`;
+      if (fb) {
+        fb.innerHTML = `<span style="color: #F87171;">📴 Call Terminated (${callSeconds}s) • Audio Telemetry Session Closed</span>`;
+        fb.classList.add('show');
+      }
+      setTimeout(() => {
+        if (!isCallActive && statusText) statusText.textContent = 'Incoming Voice Call';
+      }, 3500);
+    } else {
+      if (phoneHw) {
+        phoneHw.classList.add('vibrate-once');
+        setTimeout(() => phoneHw.classList.remove('vibrate-once'), 400);
+      }
+      if (statusText) statusText.textContent = 'Call Rejected';
+      if (fb) {
+        fb.innerHTML = '<span style="color: #F87171;">📴 Call Rejected • Number Logged in Security Ledger</span>';
+        fb.classList.add('show');
+      }
+      setTimeout(() => {
+        if (!isCallActive && statusText) statusText.textContent = 'Incoming Voice Call';
+      }, 3000);
+    }
   } else if (action === 'block') {
-    fb.innerHTML = '<span style="color: #FBBF24;">🛡️ Number Marked Blocked (Audit Trail Active)</span>';
-  } else if (action === 'accept') {
-    fb.innerHTML = '<span style="color: #34D399;">📞 Call Connected (Real-Time Voice Radar Active)</span>';
+    if (isCallActive) {
+      isCallActive = false;
+      clearInterval(callTimerInterval);
+      if (oledScreen) oledScreen.classList.remove('call-active');
+      if (waveform) waveform.classList.remove('speech-active');
+      if (btnDeclineLbl) btnDeclineLbl.textContent = 'Decline';
+    }
+    if (phoneHw) {
+      phoneHw.classList.add('vibrate-once');
+      setTimeout(() => phoneHw.classList.remove('vibrate-once'), 400);
+    }
+    if (statusText) statusText.textContent = 'Number Blocked';
+    if (fb) {
+      fb.innerHTML = '<span style="color: #FBBF24;">🛡️ Number Blocked on Device • Dispatched to Chakshu / DND Registry</span>';
+      fb.classList.add('show');
+    }
+    setTimeout(() => {
+      if (!isCallActive && statusText) statusText.textContent = 'Incoming Voice Call';
+    }, 4000);
   }
+
+  clearTimeout(window.__callActionTimer);
+  window.__callActionTimer = setTimeout(() => {
+    if (fb) fb.classList.remove('show');
+  }, 3500);
+};
+
+window.simulateHwClick = function(btn) {
+  const phoneHw = document.getElementById('phone-hardware-device');
+  const fb = document.getElementById('sim-call-feedback');
+  if (phoneHw) {
+    phoneHw.classList.add('vibrate-once');
+    setTimeout(() => phoneHw.classList.remove('vibrate-once'), 300);
+  }
+  if (!fb) return;
+  if (btn === 'vol-up') fb.innerHTML = '<span style="color: #CBD5E1;">🔊 Volume: 85%</span>';
+  else if (btn === 'vol-down') fb.innerHTML = '<span style="color: #CBD5E1;">🔉 Volume: 50%</span>';
+  else if (btn === 'power') fb.innerHTML = '<span style="color: #CBD5E1;">🔒 Display Standby / Power Button Toggled</span>';
+  else if (btn === 'island') fb.innerHTML = '<span style="color: #34D399;">🏝️ Dynamic Island: Carrier Radio 5G SA Active</span>';
   fb.classList.add('show');
   clearTimeout(window.__callActionTimer);
   window.__callActionTimer = setTimeout(() => {
-    fb.classList.remove('show');
-  }, 2800);
-}
+    if (fb) fb.classList.remove('show');
+  }, 2200);
+};
+
+window.toggleVectorDetail = function(vectorId) {
+  const card = document.getElementById(vectorId);
+  if (!card) return;
+  const drawer = document.getElementById('drawer-' + vectorId);
+  const btn = card.querySelector('.btn-vector-expand');
+  if (!drawer) return;
+  const isOpen = drawer.classList.contains('open');
+  if (isOpen) {
+    drawer.classList.remove('open');
+    if (btn) btn.classList.remove('open');
+  } else {
+    drawer.classList.add('open');
+    if (btn) btn.classList.add('open');
+  }
+};
 
 /**
  * 2. Dedicated Renderer for UPI IDs (Fintech Payment Terminal & Receipt)
