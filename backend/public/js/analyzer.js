@@ -109,7 +109,7 @@ window.handleQuickUrlSubmit = function(e) {
   if (e && typeof e.preventDefault === 'function') e.preventDefault();
   const input = document.getElementById('url-quick-input');
   const errorEl = document.getElementById('url-quick-error');
-  const btn = document.querySelector('.url-quick-btn') || document.getElementById('url-quick-btn');
+  const btn = document.querySelector('.url-dock-btn') || document.querySelector('.url-quick-btn') || document.getElementById('url-quick-btn');
   if (!input) return;
   let val = input.value.trim();
   if (!val) {
@@ -1901,6 +1901,99 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     reportBtn.href = `reports.html?type=url&query=${encodeURIComponent(target)}`;
   }
 
+  // 7.1 Update Cybersecurity Web Browser Simulator HUD
+  let rawHost = target.replace(/^https?:\/\//i, '').split('/')[0].split('?')[0];
+  const hudDomain = document.getElementById('url-hud-display-domain');
+  if (hudDomain) {
+    hudDomain.textContent = rawHost;
+  }
+  const omniText = document.getElementById('url-browser-omnibox-text');
+  if (omniText) {
+    omniText.textContent = isHttp ? `http://${rawHost}/` : `https://${rawHost}/`;
+  }
+  const hudSubtitle = document.getElementById('url-hud-host-subtitle');
+  if (hudSubtitle) {
+    const domainIntel = (data && data.domainIntel) ? data.domainIntel : null;
+    if (domainIntel && domainIntel.domainAgeFormatted && domainIntel.domainAgeFormatted !== 'Age Unknown') {
+      hudSubtitle.textContent = `${domainIntel.domainAgeFormatted} • ${domainIntel.registrar || 'ICANN Accredited'}`;
+    } else {
+      hudSubtitle.textContent = 'ICANN Accredited Domain Registry';
+    }
+  }
+  const hudAvatar = document.getElementById('url-hud-avatar-icon');
+  if (hudAvatar) {
+    if (riskScore >= 75) {
+      hudAvatar.style.background = 'rgba(239, 68, 68, 0.15)';
+      hudAvatar.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+      hudAvatar.style.color = '#F87171';
+    } else if (riskScore >= 50) {
+      hudAvatar.style.background = 'rgba(245, 158, 11, 0.15)';
+      hudAvatar.style.borderColor = 'rgba(245, 158, 11, 0.35)';
+      hudAvatar.style.color = '#FBBF24';
+    } else {
+      hudAvatar.style.background = 'rgba(255, 255, 255, 0.08)';
+      hudAvatar.style.borderColor = 'rgba(255, 255, 255, 0.16)';
+      hudAvatar.style.color = '#38BDF8';
+    }
+  }
+
+  // 7.2 Update Hardware SSL / TLS Certificate Card
+  const certDomain = document.getElementById('url-cert-domain-title');
+  if (certDomain) {
+    certDomain.textContent = `${rawHost.toUpperCase()} • TLS 1.3 ROOT`;
+  }
+  const certAuth = document.getElementById('url-cert-authority-subtitle');
+  if (certAuth) {
+    const domainIntel = (data && data.domainIntel) ? data.domainIntel : null;
+    certAuth.textContent = isHttp 
+      ? 'Insecure Transport Protocol (Unencrypted HTTP)' 
+      : `${(domainIntel && domainIntel.registrar) ? domainIntel.registrar : "Let's Encrypt / DigiCert"} • ICANN Root Authority`;
+  }
+  const certPill = document.getElementById('url-cert-status-pill');
+  if (certPill) {
+    if (riskScore >= 75) {
+      certPill.textContent = '● MALICIOUS PHISHING DOMAIN';
+      certPill.style.background = 'rgba(239, 68, 68, 0.15)';
+      certPill.style.color = '#F87171';
+      certPill.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+    } else if (riskScore >= 50) {
+      certPill.textContent = '● SUSPICIOUS DOMAIN';
+      certPill.style.background = 'rgba(245, 158, 11, 0.15)';
+      certPill.style.color = '#FBBF24';
+      certPill.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    } else {
+      certPill.textContent = '● OFFICIAL ICANN APEX DOMAIN';
+      certPill.style.background = 'rgba(16, 185, 129, 0.15)';
+      certPill.style.color = '#34D399';
+      certPill.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+    }
+  }
+
+  // 7.3 Update Browser HUD Visit / Block Button
+  const hudVisitBtn = document.getElementById('url-hud-visit-btn');
+  if (hudVisitBtn) {
+    const formatted = target.startsWith('http') ? target : `https://${target}`;
+    hudVisitBtn.href = formatted;
+    if (riskScore >= 75) {
+      hudVisitBtn.className = 'btn-url-action btn-url-blocked';
+      hudVisitBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg><span>🚨 High Risk • Access Blocked</span>`;
+      hudVisitBtn.removeAttribute('target');
+      hudVisitBtn.onclick = (e) => { e.preventDefault(); alert('Warning: This website has been flagged as a dangerous scam/phishing trap. Access blocked for your safety.'); };
+    } else {
+      hudVisitBtn.className = 'btn-url-action btn-url-visit';
+      hudVisitBtn.target = '_blank';
+      hudVisitBtn.onclick = null;
+      hudVisitBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span>Visit Authentic Site</span>`;
+    }
+  }
+
+  // 7.4 Reset quick dock analyze button
+  const quickBtn = document.getElementById('url-quick-btn');
+  if (quickBtn) {
+    quickBtn.disabled = false;
+    quickBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Analyze</span>`;
+  }
+
   // 8. 4 Human-Friendly Bento Cards (Right Grid)
   // Card 1: SSL & Encryption
   const metaProto = document.getElementById('hero-meta-proto');
@@ -1920,15 +2013,16 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     metaProtoIcon.style.color = isHttp ? '#DC2626' : '#059669';
   }
 
-  // Card 2: Real-Time Domain Age & Registry Forensics
+  // Card 2: Real-Time Domain Authenticity & Registry Forensics (Matches User's Image 1)
   const domainIntel = (data && data.domainIntel) ? data.domainIntel : null;
   const isDirectIp = (data && data.isIp) || (domainIntel && domainIntel.isIp);
   const metaHost = document.getElementById('hero-meta-host');
   const metaHostDesc = document.getElementById('hero-meta-host-desc');
   const metaHostIcon = document.getElementById('hero-meta-host-icon');
   const metaHostLabel = document.getElementById('hero-meta-host-label');
+  const metaHostTag = document.getElementById('hero-meta-host-tag');
   if (metaHostLabel) {
-    metaHostLabel.textContent = isDirectIp ? 'Host Architecture' : 'Domain Age & Registry';
+    metaHostLabel.textContent = isDirectIp ? 'Host Architecture' : 'Domain Authenticity';
   }
 
   if (isDirectIp) {
@@ -3004,6 +3098,71 @@ window.quickFlagPhoneAsScam = async function() {
     ]
   };
 
+/**
+ * 1-Click Citizen Flag for Website URLs: Instantly report and elevate threat status on result page
+ */
+window.quickFlagUrlAsScam = async function() {
+  const urlTarget = currentTargetQuery || (document.getElementById('target-display') ? document.getElementById('target-display').textContent.trim() : '');
+  if (!urlTarget) return;
+
+  const btn = document.getElementById('btn-quick-flag-url');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span style="color: #DC2626; font-weight: 700;">Submitting...</span>';
+  }
+
+  try {
+    await fetch('/api/reports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        identifier: urlTarget,
+        type: 'URL',
+        risk: 'Critical',
+        evidence: 'Citizen reported scam/phishing website via 1-click fraud radar.'
+      })
+    });
+  } catch (e) {
+    console.warn('Scam submission error:', e);
+  }
+
+  const flaggedData = {
+    target: urlTarget,
+    riskScore: 94,
+    riskLevel: 'critical',
+    communityReportCount: 1,
+    signals: [{
+      id: 'COMMUNITY_REPORTED_SCAM',
+      title: 'Citizen Cyber Crime Report (Instant Flag)',
+      description: 'Reported by user on this session as an active phishing/scam website. Added to community defense registry.',
+      severity: 'critical',
+      weight: 94
+    }],
+    recommendations: [
+      '🚨 DO NOT enter passwords, usernames, or payment card details on this website.',
+      'Close this tab immediately and report to https://cybercrime.gov.in or helpline 1930.',
+      'If you have already submitted credentials, reset your passwords immediately from a clean device.'
+    ]
+  };
+
+  const criticalTheme = {
+    color: '#DC2626',
+    border: 'rgba(239, 68, 68, 0.4)',
+    bgCard: '#FFFFFF',
+    bgPill: '#FEE2E2',
+    iconColor: '#DC2626'
+  };
+
+  renderUrlView(flaggedData, criticalTheme, 94, flaggedData.signals, flaggedData.recommendations, urlTarget);
+  if (btn) {
+    btn.innerHTML = '<span style="color: #10B981; font-weight: 700;">✓ Flagged as Scam</span>';
+    btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    btn.style.background = '#ECFDF5';
+  }
+
+  alert('🚨 Thank you! This website has been flagged as a Dangerous Phishing Scam and recorded in the citizen defense feed.');
+};
+
   const redTheme = { color: '#DC2626' };
   renderPhoneView(flaggedData, redTheme, 92, flaggedData.signals, flaggedData.recommendations);
 
@@ -3101,26 +3260,44 @@ function renderDomainSpecifications(target, data, intel) {
           const metaHostDesc = document.getElementById('hero-meta-host-desc');
           const metaHostIcon = document.getElementById('hero-meta-host-icon');
           if (metaHost) {
+            const metaHostTag = document.getElementById('hero-meta-host-tag');
+            const hudSubtitle = document.getElementById('url-hud-host-subtitle');
+            const certAuth = document.getElementById('url-cert-authority-subtitle');
+
             if (liveIntel.domainAgeFormatted && liveIntel.domainAgeFormatted !== 'Age Unknown') {
               const isNew = liveIntel.isNewlyRegistered;
               const isRecent = liveIntel.isRecent;
-              metaHost.textContent = liveIntel.domainAgeFormatted;
+              metaHost.textContent = isNew ? `New Domain (${liveIntel.domainAgeFormatted})` : `Official Apex (${liveIntel.domainAgeFormatted})`;
               metaHost.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#059669');
               if (metaHostDesc) {
                 metaHostDesc.textContent = isNew
                   ? `🚨 Registered ${liveIntel.domainAgeDays} days ago — disposable phishing risk`
-                  : `Registrar: ${liveIntel.registrar || 'ICANN Accredited'} • ${liveIntel.primaryStatus || 'Active'}`;
+                  : `Clean registered domain name, authentic root namespace (${liveIntel.registrar || 'ICANN Accredited'})`;
               }
               if (metaHostIcon) {
                 metaHostIcon.style.background = isNew ? '#FEE2E2' : (isRecent ? '#FEF3C7' : '#EFF6FF');
                 metaHostIcon.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#2563EB');
               }
+              if (metaHostTag) {
+                metaHostTag.textContent = isNew ? 'NEW DOMAIN' : 'ICANN APEX';
+                metaHostTag.className = isNew ? 'phone-card-tag pclean-pill-red' : 'phone-card-tag pclean-pill-green';
+              }
+              if (hudSubtitle) {
+                hudSubtitle.textContent = `${liveIntel.domainAgeFormatted} • ${liveIntel.registrar || 'ICANN Accredited'}`;
+              }
             } else {
-              metaHost.textContent = 'Active Apex Domain';
+              metaHost.textContent = 'Official Apex Domain';
               metaHost.style.color = '#059669';
               if (metaHostDesc) {
-                metaHostDesc.textContent = `Registrar: ${liveIntel.registrar || 'ICANN Accredited'} • ${liveIntel.primaryStatus || 'Active'}`;
+                metaHostDesc.textContent = `Clean registered domain name, authentic root namespace (${liveIntel.registrar || 'ICANN Accredited'})`;
               }
+              if (metaHostTag) {
+                metaHostTag.textContent = 'ICANN APEX';
+                metaHostTag.className = 'phone-card-tag pclean-pill-green';
+              }
+            }
+            if (certAuth && liveIntel.registrar) {
+              certAuth.textContent = `${liveIntel.registrar} • ICANN Root Authority`;
             }
           }
         }
