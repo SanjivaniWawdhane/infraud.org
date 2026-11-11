@@ -795,10 +795,33 @@ async function handleRequest(req, res) {
       if (!validation.valid) {
         return sendJson(res, validation.statusCode || 400, { success: false, message: validation.error });
       }
-      const result = urlAnalyzerService.analyzeUrl(targetUrl);
+      const result = urlAnalyzerService.analyzeUrlAsync ? await urlAnalyzerService.analyzeUrlAsync(targetUrl) : urlAnalyzerService.analyzeUrl(targetUrl);
       return sendJson(res, 200, result);
     } catch (err) {
       return sendJson(res, 500, { success: false, message: err.message });
+    }
+  }
+
+  // GET / POST /api/analyze/domain (RDAP & DNS Real-Time Domain Forensics)
+  if ((pathname === '/api/analyze/domain' || pathname === '/api/domain') && (method === 'GET' || method === 'POST')) {
+    try {
+      let domainParam = '';
+      if (method === 'GET') {
+        const u = new URL(req.url, 'http://localhost');
+        domainParam = u.searchParams.get('domain') || u.searchParams.get('query') || u.searchParams.get('url') || '';
+      } else {
+        const body = await parseRequestBody(req);
+        domainParam = body.domain || body.query || body.url || '';
+      }
+      let domainLookupService = null;
+      try { domainLookupService = require('../backend/src/services/domainLookupService'); } catch(e) {}
+      if (!domainLookupService) {
+        return sendJson(res, 500, { success: false, message: 'Domain lookup service not available' });
+      }
+      const intel = await domainLookupService.lookupDomain(domainParam);
+      return sendJson(res, 200, intel);
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
     }
   }
 

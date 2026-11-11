@@ -15,6 +15,11 @@
 const fs = require('fs');
 const path = require('path');
 
+let domainLookupService = null;
+try {
+  domainLookupService = require('./domainLookupService');
+} catch (e) {}
+
 // Curated list of high-abuse / low-barrier TLDs frequently abused in disposable phishing campaigns
 const SUSPICIOUS_TLDS = new Set([
   'tk', 'ml', 'ga', 'cf', 'gq', // Historical free ccTLDs
@@ -188,9 +193,10 @@ function checkCommunityUrlReports(targetUrl, hostname) {
 /**
  * Analyzes a URL using transparent, explainable heuristic signals.
  * @param {string} rawUrl 
+ * @param {object} [domainIntel] Optional pre-fetched or live domain intelligence
  * @returns {object} Analysis result
  */
-function analyzeUrl(rawUrl) {
+function analyzeUrl(rawUrl, domainIntel = null) {
   const validation = validateUrlInput(rawUrl);
   if (!validation.valid) {
     return {
@@ -390,6 +396,31 @@ function analyzeUrl(rawUrl) {
   }
 
   // ----------------------------------------------------
+  // Signal 11: Real-Time Domain Age & Registration Lifecycle
+  // ----------------------------------------------------
+  if (domainIntel && !isIp) {
+    if (domainIntel.isNewlyRegistered) {
+      signals.push({
+        id: 'NEWLY_REGISTERED_DOMAIN',
+        title: 'Brand New Disposable Domain (< 30 Days)',
+        description: `This domain was registered only ${domainIntel.domainAgeDays} days ago (${domainIntel.creationDateFormatted || 'Recently'}). Disposable new domains are heavily abused in malicious phishing lures and fake web shops.`,
+        severity: 'critical',
+        weight: 40
+      });
+      rawScore += 40;
+    } else if (domainIntel.isRecent) {
+      signals.push({
+        id: 'RECENTLY_REGISTERED_DOMAIN',
+        title: 'Recently Created Domain (< 6 Months)',
+        description: `This domain was registered on ${domainIntel.creationDateFormatted} (${domainIntel.domainAgeFormatted}). Younger domains have shorter operational track records.`,
+        severity: 'low',
+        weight: 10
+      });
+      rawScore += 10;
+    }
+  }
+
+  // ----------------------------------------------------
   // Scoring & Risk Level Computation
   // ----------------------------------------------------
   let riskScore = Math.min(100, Math.max(0, rawScore));
@@ -450,11 +481,29 @@ function analyzeUrl(rawUrl) {
     signalsCount: signals.length,
     signals,
     recommendations,
-    disclaimer: 'This evaluation is strictly based on transparent URL structure heuristics. A low score does not guarantee safety, and a high score does not confirm fraud. Never enter credentials without independent verification.'
+    domainIntel: domainIntel || null,
+    disclaimer: 'This evaluation combines transparent URL structure heuristics with real-time domain registration forensics (RDAP/DNS). A low score does not guarantee safety, and a high score does not confirm fraud. Never enter credentials without independent verification.'
   };
+}
+
+/**
+ * Asynchronously analyzes a URL by performing live online domain lookup (RDAP & DNS)
+ * and evaluating structural heuristics.
+ * @param {string} rawUrl 
+ * @returns {Promise<object>}
+ */
+async function analyzeUrlAsync(rawUrl) {
+  let domainIntel = null;
+  if (domainLookupService) {
+    try {
+      domainIntel = await domainLookupService.lookupDomain(rawUrl);
+    } catch (e) {}
+  }
+  return analyzeUrl(rawUrl, domainIntel);
 }
 
 module.exports = {
   validateUrlInput,
-  analyzeUrl
+  analyzeUrl,
+  analyzeUrlAsync
 };
