@@ -117,7 +117,7 @@ function checkTraiSeries(nationalNumber, countryCode) {
 const KNOWN_SCAM_DATABASE = [
   // 1. FedEx / DHL Contraband Courier Seizure Scam
   {
-    numbers: ['9876543210', '9876543211', '9123456789', '9822001122', '8826412345', '9871122334', '9811223344', '9821122334', '9911223344'],
+    numbers: ['9876543210'],
     type: 'FEDEX_SEIZURE_SCAM',
     title: 'FedEx / DHL Contraband Parcel Scam',
     description: 'Flagged in national cyber cell alerts. Automated IVR claiming a parcel containing narcotics, expired passports, or contraband in your name was seized at customs.',
@@ -127,7 +127,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 2. Digital Arrest & Police Extortion Syndicate
   {
-    numbers: ['8010237029', '9822998877', '9876500001', '9123456780', '9910998877', '9899112233', '9820011223', '8800112233', '7890123456', '9818812345', '9810112233'],
+    numbers: ['9999900001'],
     type: 'DIGITAL_ARREST_EXTORTION',
     title: 'Digital Arrest / Police Extortion Syndicate',
     description: 'Actively flagged in 1930 Cyber Crime registry. Impersonates CBI, Narcotics Control Bureau (NCB), Enforcement Directorate (ED), or Police demanding Skype/WhatsApp video interrogation.',
@@ -137,7 +137,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 3. Urgent Electricity Bill Disconnection Alert
   {
-    numbers: ['7000123456', '9011012345', '9028012345', '9049012345', '9503012345', '9527012345', '8002012345', '7400123456', '7300123456'],
+    numbers: ['7000123456'],
     type: 'ELECTRICITY_BILL_SCAM',
     title: 'Electricity Bill Disconnection Phishing',
     description: 'Linked to coercive phishing SMS threatening power disconnection tonight at 9:30 PM unless an unauthorized officer is contacted immediately.',
@@ -147,7 +147,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 4. Telegram Part-Time Task & YouTube Rating Job Scam
   {
-    numbers: ['7021099887', '7021599887', '7201099887', '6201099887', '7301099887', '6001099887', '8001099887'],
+    numbers: ['9999900004'],
     type: 'TELEGRAM_TASK_SCAM',
     title: 'Telegram Task & YouTube Review Job Scam',
     description: 'Recruits victims on WhatsApp/Telegram with promises of Rs. 3,000 to Rs. 8,000 daily for liking YouTube videos, then freezes funds via prepaid tasks.',
@@ -157,7 +157,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 5. Predatory Loan App Blackmail & APK Extortion
   {
-    numbers: ['8010299887', '8888012345', '8600012345', '7777012345', '9999012345'],
+    numbers: ['9999900002'],
     type: 'LOAN_APP_EXTORTION',
     title: 'Predatory Loan App Harassment Line',
     description: 'Linked to unauthorized micro-lending APKs executing contact-list harassment, morphed photo blackmail, and aggressive extortion.',
@@ -167,7 +167,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 6. Bank KYC Update & APK Phishing Racket
   {
-    numbers: ['9900112233', '9800112233', '9700112233', '9600112233', '9500112233'],
+    numbers: ['9999900003'],
     type: 'BANK_KYC_PHISHING',
     title: 'Bank KYC Deactivation / APK Phishing Scam',
     description: 'Sends mass SMS claiming your bank account or NetBanking will be suspended today unless a malicious APK is downloaded or OTP shared.',
@@ -177,7 +177,7 @@ const KNOWN_SCAM_DATABASE = [
   },
   // 7. Lottery & KBC Lucky Draw Fraud
   {
-    numbers: ['9876000000', '9123000000', '9230011223'],
+    numbers: ['9999900005'],
     type: 'KBC_LOTTERY_FRAUD',
     title: 'KBC Lottery & Prize Claim Fraud',
     description: 'Pretends victim won Rs. 25 Lakhs in Kaun Banega Crorepati (KBC) lottery and coerces payment of government tax and processing fees.',

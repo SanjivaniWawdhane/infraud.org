@@ -26,7 +26,7 @@ function getReportsFilePath() {
 const SEED_DEFAULTS = [
   {
     "id": "seed-digital-arrest-1",
-    "identifier": "+91 80102 37029",
+    "identifier": "+91 99999 00001",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "Digital Arrest Scam. Falsely poses as CBI / Mumbai Police demanding Skype video interrogation and urgent funds transfer to RBI verification pool.",
@@ -36,7 +36,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-digital-arrest-2",
-    "identifier": "+91 98229 98877",
+    "identifier": "+91 99999 00006",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "Digital Arrest Scam. Fake Crime Branch officer threatening urgent video arrest warrant for alleged money laundering via Jet Airways account.",
@@ -46,7 +46,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-digital-arrest-3",
-    "identifier": "+91 98765 00001",
+    "identifier": "+91 99999 00007",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "Enforcement Directorate (ED) Impersonation. Automated IVR claiming financial crimes case and freeze on all PAN-linked bank accounts.",
@@ -56,7 +56,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-digital-arrest-4",
-    "identifier": "+91 91234 56780",
+    "identifier": "+91 99999 00008",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "Narcotics Control Bureau (NCB) scam call claiming 250g MDMA was seized with victim Aadhaar photocopy.",
@@ -96,7 +96,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-fedex-scam-2",
-    "identifier": "+91 98765 43211",
+    "identifier": "+91 99999 00019",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "DHL Express customs clearance extortion. Demands ₹48,000 bank deposit into private account to cancel police case.",
@@ -106,7 +106,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-fedex-scam-3",
-    "identifier": "+91 88264 12345",
+    "identifier": "+91 99999 00018",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "India Post SpeedPost address failure SMS caller directing victims to pay ₹25 re-delivery fee on phishing URL.",
@@ -156,7 +156,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-electricity-scam-2",
-    "identifier": "+91 90110 12345",
+    "identifier": "+91 99999 00010",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "MSEDCL urgent notice caller claiming previous month payment not updated in system, demanding remote app install.",
@@ -166,7 +166,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-electricity-scam-3",
-    "identifier": "+91 90280 12345",
+    "identifier": "+91 99999 00011",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "BSES Yamuna electricity disconnection threat. Poses as power billing desk officer.",
@@ -306,7 +306,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-bank-scam-11",
-    "identifier": "+91 98112 23344",
+    "identifier": "+91 99999 00012",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "Caller poses as SBI branch manager insisting on urgent PAN linkage over WhatsApp.",
@@ -346,7 +346,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-ecom-scam-4",
-    "identifier": "+91 98711 99881",
+    "identifier": "+91 99999 00013",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "Fake Meesho prize caller claiming lottery win and demanding processing charges.",
@@ -356,7 +356,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-ecom-scam-5",
-    "identifier": "+91 98991 12233",
+    "identifier": "+91 99999 00014",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "KBC 25 Lakh Lottery Fraud. Fake WhatsApp audio note claiming Kaun Banega Crorepati cash prize.",
@@ -366,7 +366,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-loan-scam-1",
-    "identifier": "+91 80102 37030",
+    "identifier": "+91 99999 00002",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "Predatory Loan App Blackmail. Calls family contacts and threatens with morphed objectionable photos.",
@@ -376,7 +376,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-loan-scam-2",
-    "identifier": "+91 98229 98800",
+    "identifier": "+91 99999 00009",
     "type": "Phone",
     "risk": "Critical",
     "evidence": "CashBean fake recovery agent threatening physical visit and public defamation for non-existent loan.",
@@ -406,7 +406,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-task-scam-1",
-    "identifier": "+91 70210 99887",
+    "identifier": "+91 99999 00015",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "Telegram Task & YouTube Like Job Scam. Prompts victims into paying prepaid deposits for fake crypto tasks.",
@@ -416,7 +416,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-task-scam-2",
-    "identifier": "+91 70215 99887",
+    "identifier": "+91 99999 00016",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "Google Maps review rating scam. Offers ₹150 per review, then traps victims in VIP prepaid merchant tasks.",
@@ -496,7 +496,7 @@ const SEED_DEFAULTS = [
   },
   {
     "id": "seed-gov-scam-5",
-    "identifier": "+91 90110 99882",
+    "identifier": "+91 99999 00017",
     "type": "Phone",
     "risk": "High Risk",
     "evidence": "Automated call pretending to be Parivahan Sewa demanding court appearance for pending challan.",

@@ -84,7 +84,7 @@ async function runTests() {
 
   // 9. Digital Arrest Scam Sample
   console.log('\nTest 9: Digital Arrest Extortion Scam');
-  const r9 = await analyzePhoneNumber('+91 80102 37029');
+  const r9 = await analyzePhoneNumber('+91 99999 00001');
   assert(r9.success === true, 'Analyzes Digital Arrest scam sample');
   assert(r9.riskScore >= 90, 'Assigns Critical threat score (>=90%) for Digital Arrest scam');
   assert(r9.signals.some(s => s.id === 'DIGITAL_ARREST_EXTORTION' || s.id === 'COMMUNITY_REPORTED_SCAM'), 'Identifies Digital Arrest extortion signal');

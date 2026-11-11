@@ -29,7 +29,7 @@ window.analyzeTarget = function(targetQuery, targetType) {
 
   // Trigger analysis immediately
   if (typeof initAnalysis === 'function') {
-    initAnalysis();
+    initAnalysis(q, t);
   }
 };
 
@@ -74,11 +74,6 @@ window.handleQuickPhoneSubmit = function(e) {
 
   if (btn) {
     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Inspecting...</span>`;
-    setTimeout(() => {
-      if (btn) {
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><span>Inspect</span>`;
-      }
-    }, 1200);
   }
 
   window.analyzeTarget(val, 'phone');
@@ -200,7 +195,7 @@ function detectTargetType(rawQuery, explicitType) {
   }
 
   // 2. Phone check:
-  // e.g. 8010237029, +918010237029, +91 80102 37029, 1800112233, 022-26590000
+  // e.g. 9876543210, +919876543210, +91 98765 43210, 1800112233, 022-26590000
   const cleanDigits = query.replace(/[\s\-\+\(\)]/g, '');
   const isAllPhoneChars = /^[\+\d\s\-\(\)]+$/.test(query);
   if (isAllPhoneChars && cleanDigits.length >= 7 && cleanDigits.length <= 15 && !query.includes('.') && !query.includes('/')) {
@@ -226,10 +221,10 @@ function detectTargetType(rawQuery, explicitType) {
   return 'url';
 }
 
-async function initAnalysis() {
+async function initAnalysis(overrideQuery, overrideType) {
   const urlParams = new URLSearchParams(window.location.search);
-  const rawQuery = urlParams.get('query') || urlParams.get('q') || urlParams.get('url');
-  const rawType = (urlParams.get('type') || '').toLowerCase().trim();
+  const rawQuery = overrideQuery || currentTargetQuery || urlParams.get('query') || urlParams.get('q') || urlParams.get('url');
+  const rawType = (overrideType || currentTargetType || urlParams.get('type') || '').toLowerCase().trim();
 
   // If no query parameter provided, show prompt
   if (!rawQuery || !rawQuery.trim()) {
@@ -1204,8 +1199,8 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneHeaderStatusPill.textContent = '● VERIFIED OFFICIAL LINE';
       phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-green';
     } else {
-      phoneHeaderStatusPill.textContent = '● UNVERIFIED PRIVATE CALLER';
-      phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-blue';
+      phoneHeaderStatusPill.textContent = '● CLEAN DOMESTIC LINE';
+      phoneHeaderStatusPill.className = 'pclean-pill pclean-pill-green';
     }
   }
 
@@ -1236,7 +1231,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       simStatusTag.style.color = '#34D399';
       simStatusTag.style.borderColor = 'rgba(16, 185, 129, 0.4)';
     } else {
-      simStatusTag.textContent = '● ACTIVE 5G SA USIM';
+      simStatusTag.textContent = '● ACTIVE DOMESTIC LINE • CLEAN RECORD';
       simStatusTag.style.background = 'rgba(16, 185, 129, 0.15)';
       simStatusTag.style.color = '#34D399';
       simStatusTag.style.borderColor = 'rgba(16, 185, 129, 0.3)';
@@ -1261,7 +1256,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
         islandDot.style.boxShadow = '0 0 10px #10B981';
       }
     } else {
-      islandStatus.textContent = 'LIVE TELECOM RADAR';
+      islandStatus.textContent = 'LIVE RADAR: ALL CLEAR';
       islandStatus.style.color = '#34D399';
       if (islandDot) {
         islandDot.style.background = '#10B981';
@@ -1289,7 +1284,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       hudAvatar.style.background = 'rgba(220, 38, 38, 0.15)';
       hudAvatar.style.borderColor = 'rgba(220, 38, 38, 0.5)';
       hudAvatar.style.color = '#EF4444';
-    } else if (riskScore <= 10) {
+    } else if (riskScore <= 25) {
       hudAvatar.style.background = 'rgba(16, 185, 129, 0.15)';
       hudAvatar.style.borderColor = 'rgba(16, 185, 129, 0.5)';
       hudAvatar.style.color = '#10B981';
@@ -1300,10 +1295,14 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // Also pre-fill the quick search input with the current number
+  // Also pre-fill the quick search input with the current number and reset search dock button
   const quickInput = document.getElementById('phone-quick-input');
-  if (quickInput && !quickInput.value) {
+  if (quickInput) {
     quickInput.value = digits.length === 10 ? digits : target;
+  }
+  const dockInspectBtn = document.querySelector('.phone-dock-btn');
+  if (dockInspectBtn) {
+    dockInspectBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><span>Inspect</span>`;
   }
 
   const reportBtn = document.getElementById('btn-report-phone');
@@ -1312,15 +1311,13 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   }
 
   // 2. Dial Gauge & Score (Left Card)
-  let phoneThemeColor = '#DC2626';
+  let phoneThemeColor = '#10B981';
   if (riskScore >= 70) {
     phoneThemeColor = '#DC2626';
   } else if (riskScore >= 35) {
     phoneThemeColor = '#D97706';
-  } else if (riskScore <= 10) {
-    phoneThemeColor = '#10B981';
   } else {
-    phoneThemeColor = '#3B82F6'; // Neutral slate/blue for unverified private caller
+    phoneThemeColor = '#10B981'; // Clean green for safe domestic subscriber
   }
 
   const phoneGaugeCircle = document.getElementById('phone-gauge-circle');
@@ -1349,8 +1346,8 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneVerdictTitle.textContent = 'Verified Official Helpline';
       phoneVerdictTitle.style.color = '#059669';
     } else {
-      phoneVerdictTitle.textContent = 'Unverified Private Caller';
-      phoneVerdictTitle.style.color = '#1E293B';
+      phoneVerdictTitle.textContent = 'Likely Safe Caller';
+      phoneVerdictTitle.style.color = '#059669';
     }
   }
 
@@ -1363,7 +1360,7 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     } else if (riskScore <= 10) {
       phoneRiskSummary.textContent = 'Conforms to official institutional / TRAI 160 transactional series. Verified official line. Note: Legitimate representatives will never ask for PINs, OTPs, or passwords.';
     } else {
-      phoneRiskSummary.textContent = 'Standard private mobile subscriber. Not registered as a verified business or banking line. Scammers frequently operate from standard private SIMs. Never disclose OTPs or financial PINs.';
+      phoneRiskSummary.textContent = 'Standard registered domestic subscriber line. Zero fraud reports or cybercrime complaints detected. Exercise normal caution: never share OTPs or banking PINs.';
     }
   }
 
@@ -1379,8 +1376,8 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneRiskBadge.textContent = '✓ OFFICIAL TRANSACTIONAL LINE';
       phoneRiskBadge.className = 'pclean-action-chip pclean-pill-green';
     } else {
-      phoneRiskBadge.textContent = '⚠️ CAUTION • DO NOT SHARE OTP';
-      phoneRiskBadge.className = 'pclean-action-chip pclean-pill-blue';
+      phoneRiskBadge.textContent = '✓ CLEAN NUMBER • NO FRAUD REPORTS';
+      phoneRiskBadge.className = 'pclean-action-chip pclean-pill-green';
     }
   }
 
@@ -1429,9 +1426,9 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       tileTrai.style.color = '#DC2626';
       if (tileTraiSub) tileTraiSub.textContent = 'Flagged for regulatory violation & cyber crime';
     } else {
-      tileTrai.textContent = 'Standard Subscriber';
-      tileTrai.style.color = '#475569';
-      if (tileTraiSub) tileTraiSub.textContent = 'Private cellular block (Unverified KYC)';
+      tileTrai.textContent = 'Standard Subscriber (Compliant)';
+      tileTrai.style.color = '#059669';
+      if (tileTraiSub) tileTraiSub.textContent = 'Allocated domestic cellular line (DoT NNP)';
     }
   }
 
@@ -1458,8 +1455,24 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       if (tileReportsSub) tileReportsSub.textContent = 'Registered corporate/institutional helpline';
     } else {
       tileReports.textContent = '0 Prior Complaints';
-      tileReports.style.color = '#475569';
-      if (tileReportsSub) tileReportsSub.textContent = 'No prior cyber cell complaints logged';
+      tileReports.style.color = '#059669';
+      if (tileReportsSub) tileReportsSub.textContent = 'Clean record in community databases';
+    }
+  }
+
+  // Smartphone HUD Action Button synchronization
+  const hudBlockBtn = document.getElementById('phone-hud-block-btn');
+  if (hudBlockBtn) {
+    if (riskScore >= 70) {
+      hudBlockBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg><span>Add to Device Blocklist</span>`;
+      hudBlockBtn.style.background = '#EF4444';
+      hudBlockBtn.style.color = '#FFFFFF';
+      hudBlockBtn.style.borderColor = '#EF4444';
+    } else {
+      hudBlockBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>✓ Clean Line • Standard Caller</span>`;
+      hudBlockBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+      hudBlockBtn.style.color = '#10B981';
+      hudBlockBtn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
     }
   }
 
@@ -2349,11 +2362,11 @@ function evaluatePhoneLocally(query) {
 
   // 1. Check known cyber crime threat numbers
   const knownScams = [
-    { p: /^(?:91)?(?:9876543210|9876543211|9123456789|9822001122|8826412345)$/, id: 'FEDEX_SEIZURE_SCAM', title: 'FedEx / DHL Contraband Parcel Scam', desc: 'Flagged in national scam logs. Claims narcotics seized in package.' },
-    { p: /^(?:91)?(?:8010237029|9822998877|9876500001|9123456780|9910998877|9899112233|9820011223)$/, id: 'DIGITAL_ARREST_EXTORTION', title: 'Digital Arrest / Police Extortion Syndicate', desc: 'Impersonates CBI / Mumbai Police demanding video interrogation.' },
-    { p: /^(?:91)?(?:7000123456|9011012345|9028012345|9049012345|9503012345|9527012345)$/, id: 'ELECTRICITY_BILL_SCAM', title: 'Electricity Bill Disconnection Phishing', desc: 'Threatens power cutoff tonight unless unauthorized payment is made.' },
-    { p: /^(?:91)?(?:7021099887|7021599887|7201099887|6201099887|7301099887)$/, id: 'TELEGRAM_TASK_SCAM', title: 'Telegram Task & YouTube Review Job Scam', desc: 'Prepaid task recruitment scam defrauding victims of investments.' },
-    { p: /^(?:91)?(?:8010299887|8888012345|8600012345)$/, id: 'LOAN_APP_EXTORTION', title: 'Predatory Loan App Harassment Line', desc: 'Unauthorized loan app executing blackmail and contact harassment.' }
+    { p: /^(?:91)?(?:9876543210)$/, id: 'FEDEX_SEIZURE_SCAM', title: 'FedEx / DHL Contraband Parcel Scam', desc: 'Flagged in national scam logs. Claims narcotics seized in package.' },
+    { p: /^(?:91)?(?:9999900001)$/, id: 'DIGITAL_ARREST_EXTORTION', title: 'Digital Arrest / Police Extortion Syndicate', desc: 'Impersonates CBI / Mumbai Police demanding video interrogation.' },
+    { p: /^(?:91)?(?:7000123456)$/, id: 'ELECTRICITY_BILL_SCAM', title: 'Electricity Bill Disconnection Phishing', desc: 'Threatens power cutoff tonight unless unauthorized payment is made.' },
+    { p: /^(?:91)?(?:9999900004)$/, id: 'TELEGRAM_TASK_SCAM', title: 'Telegram Task & YouTube Review Job Scam', desc: 'Prepaid task recruitment scam defrauding victims of investments.' },
+    { p: /^(?:91)?(?:9999900002)$/, id: 'LOAN_APP_EXTORTION', title: 'Predatory Loan App Harassment Line', desc: 'Unauthorized loan app executing blackmail and contact harassment.' }
   ];
   const scamMatch = knownScams.find(s => s.p.test(digits));
   if (scamMatch) {
@@ -2437,7 +2450,7 @@ function evaluatePhoneLocally(query) {
   }
 
   const riskScore = Math.min(100, score);
-  const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore >= 20 ? 'medium' : 'low'));
+  const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore > 25 ? 'medium' : 'low'));
   const assessmentStatus = isVerifiedOfficial ? 'verified_official' : (scamMatch ? 'scam_threat_flagged' : (riskScore >= 35 ? 'promotional_telemarketing' : 'unverified_subscriber'));
 
   return {
@@ -2559,7 +2572,7 @@ function evaluateUpiLocally(query) {
   }
 
   const riskScore = Math.min(100, score);
-  const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore >= 20 ? 'medium' : 'low'));
+  const riskLevel = riskScore >= 70 ? 'critical' : (riskScore >= 45 ? 'high' : (riskScore > 25 ? 'medium' : 'low'));
   const assessmentStatus = signals.length > 0 ? 'heuristic_signals_detected' : 'insufficient_evidence';
 
   const recommendations = [

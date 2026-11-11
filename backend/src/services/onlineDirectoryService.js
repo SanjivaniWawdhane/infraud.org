@@ -76,14 +76,24 @@ function queryTellowsIndia(tenDigits) {
           const commentsMatch = data.match(/(\d+)\s*comments?/i);
           const commentsCount = commentsMatch ? parseInt(commentsMatch[1], 10) : 0;
 
-          // Spam / Scam categorization from Tellows tags
-          const lower = data.toLowerCase();
+          // Extract comments & caller type sections only (avoiding static form HTML like dropdown options)
+          let commentsBlock = '';
+          const commentsContainer = data.match(/<div[^>]*id=["']comments["'][^>]*>([\s\S]*?)<\/div>/i) ||
+                                    data.match(/<div[^>]*class=["'][^"']*comment[^"']*["'][^>]*>([\s\S]*?)<\/div>/i) ||
+                                    data.match(/<div[^>]*id=["']callertypes["'][^>]*>([\s\S]*?)<\/div>/i);
+          if (commentsContainer) {
+            commentsBlock = commentsContainer[1].toLowerCase();
+          }
+
           const detectedSpamKeywords = [];
-          if (lower.includes('debt collection')) detectedSpamKeywords.push('Debt Collection');
-          if (lower.includes('cost trap')) detectedSpamKeywords.push('Cost Trap');
-          if (lower.includes('harassment')) detectedSpamKeywords.push('Harassment');
-          if (lower.includes('telemarketing')) detectedSpamKeywords.push('Telemarketing');
-          if (lower.includes('sweepstake') || lower.includes('lottery scam')) detectedSpamKeywords.push('Lottery Scam');
+          // Only evaluate spam keywords if there are actual user ratings/comments and score indicates spam
+          if ((commentsCount > 0 || ratingsCount > 0 || score >= 6) && commentsBlock) {
+            if (commentsBlock.includes('debt collection')) detectedSpamKeywords.push('Debt Collection');
+            if (commentsBlock.includes('cost trap')) detectedSpamKeywords.push('Cost Trap');
+            if (commentsBlock.includes('harassment')) detectedSpamKeywords.push('Harassment');
+            if (commentsBlock.includes('telemarketing')) detectedSpamKeywords.push('Telemarketing');
+            if (commentsBlock.includes('sweepstake') || commentsBlock.includes('lottery scam')) detectedSpamKeywords.push('Lottery Scam');
+          }
 
           resolve({
             source: 'Tellows India Registry',
@@ -232,7 +242,7 @@ async function fetchOnlinePhoneIntelligence(nationalNumber) {
     } else if (tellowsScore >= 7) {
       hasOnlineThreatReports = true;
       threatReason = `High spam score (${tellowsScore}/9) reported in Tellows India community database`;
-    } else if (detectedSpamKeywords.length > 0 && searches > 50) {
+    } else if (detectedSpamKeywords.length > 0 && tellowsScore >= 6 && (ratingsCount > 0 || commentsCount > 0)) {
       hasOnlineThreatReports = true;
       threatReason = `Flagged for suspicious patterns in directory: ${detectedSpamKeywords.join(', ')}`;
     }
