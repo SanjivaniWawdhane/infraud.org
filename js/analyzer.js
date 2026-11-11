@@ -1,3 +1,44 @@
+// ── SaaS Target Analysis Dispatcher & History Controller ──
+window.analyzeTarget = function(targetQuery, targetType) {
+  if (!targetQuery || !targetQuery.trim()) return;
+  const q = targetQuery.trim();
+  const t = targetType || (typeof detectTargetType === 'function' ? detectTargetType(q) : 'url');
+
+  currentTargetQuery = q;
+  currentTargetType = t;
+
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('type', t);
+    url.searchParams.set('query', q);
+    window.history.pushState({ type: t, query: q }, '', url.toString());
+  } catch (e) {
+    const newUrl = `${window.location.pathname}?type=${encodeURIComponent(t)}&query=${encodeURIComponent(q)}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  }
+
+  // Pre-fill quick inputs immediately so user sees their input active
+  const urlInput = document.getElementById('url-quick-input');
+  if (urlInput) {
+    urlInput.value = q.replace(/^https?:\/\//i, '');
+  }
+  const phoneInput = document.getElementById('phone-quick-input');
+  if (phoneInput && (t === 'phone' || /^\+?\d[\d\s-]{7,}/.test(q))) {
+    phoneInput.value = q;
+  }
+
+  // Trigger analysis immediately
+  if (typeof initAnalysis === 'function') {
+    initAnalysis();
+  }
+};
+
+window.addEventListener('popstate', () => {
+  if (typeof initAnalysis === 'function') {
+    initAnalysis();
+  }
+});
+
 // ── SaaS Phone Quick Input & Clipboard Handlers ──
 window.copyCanonicalPhone = function() {
   const el = document.getElementById('phone-target-display');
@@ -15,9 +56,10 @@ window.copyCanonicalPhone = function() {
 };
 
 window.handleQuickPhoneSubmit = function(e) {
-  if (e) e.preventDefault();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
   const input = document.getElementById('phone-quick-input');
   const errorEl = document.getElementById('phone-quick-error');
+  const btn = document.querySelector('.phone-dock-btn');
   if (!input) return;
   const val = input.value.trim();
   if (!val) {
@@ -29,11 +71,17 @@ window.handleQuickPhoneSubmit = function(e) {
     return;
   }
   if (errorEl) errorEl.style.display = 'none';
-  const newUrl = `${window.location.pathname}?type=phone&query=${encodeURIComponent(val)}`;
-  window.history.pushState({ path: newUrl }, '', newUrl);
-  if (typeof analyzeTarget === 'function') {
-    analyzeTarget(val, 'phone');
+
+  if (btn) {
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Inspecting...</span>`;
+    setTimeout(() => {
+      if (btn) {
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><span>Inspect</span>`;
+      }
+    }, 1200);
   }
+
+  window.analyzeTarget(val, 'phone');
 };
 
 window.clearQuickPhoneInput = function() {
@@ -46,10 +94,9 @@ window.clearQuickPhoneInput = function() {
   if (errorEl) errorEl.style.display = 'none';
 };
 
-
 // ── SaaS URL Quick Input & Clipboard Handlers ──
 window.copyCanonicalUrl = function() {
-  const target = currentTarget || (document.getElementById('target-display') ? document.getElementById('target-display').textContent : '');
+  const target = currentTargetQuery || (document.getElementById('target-display') ? document.getElementById('target-display').textContent : '');
   if (!target) return;
   const full = target.startsWith('http') ? target : `https://${target}/`;
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -64,11 +111,12 @@ window.copyCanonicalUrl = function() {
 };
 
 window.handleQuickUrlSubmit = function(e) {
-  if (e) e.preventDefault();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
   const input = document.getElementById('url-quick-input');
   const errorEl = document.getElementById('url-quick-error');
+  const btn = document.querySelector('.url-quick-btn') || document.getElementById('url-quick-btn');
   if (!input) return;
-  const val = input.value.trim();
+  let val = input.value.trim();
   if (!val) {
     if (errorEl) {
       errorEl.textContent = 'Please enter a valid website URL or domain name to analyze.';
@@ -78,11 +126,30 @@ window.handleQuickUrlSubmit = function(e) {
     return;
   }
   if (errorEl) errorEl.style.display = 'none';
-  const newUrl = `${window.location.pathname}?type=url&query=${encodeURIComponent(val)}`;
-  window.history.pushState({ path: newUrl }, '', newUrl);
-  if (typeof analyzeTarget === 'function') {
-    analyzeTarget(val, 'url');
+
+  // Strip accidental protocol if entered
+  val = val.replace(/^https?:\/\//i, '').trim();
+  if (!val) {
+    if (errorEl) {
+      errorEl.textContent = 'Please enter a valid website URL or domain name.';
+      errorEl.style.display = 'block';
+    }
+    input.focus();
+    return;
   }
+
+  input.value = val;
+
+  if (btn) {
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Analyzing...</span>`;
+    setTimeout(() => {
+      if (btn) {
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Analyze</span>`;
+      }
+    }, 1500);
+  }
+
+  window.analyzeTarget(val, 'url');
 };
 
 window.clearQuickUrlInput = function() {
@@ -172,6 +239,16 @@ async function initAnalysis() {
 
   const query = rawQuery.trim();
   currentTargetQuery = query;
+
+  // Immediately populate quick inputs so user sees active query
+  const qUrlEl = document.getElementById('url-quick-input');
+  if (qUrlEl) {
+    qUrlEl.value = query.replace(/^https?:\/\//i, '');
+  }
+  const qPhoneEl = document.getElementById('phone-quick-input');
+  if (qPhoneEl && (type === 'phone' || /^\+?\d[\d\s-]{7,}/.test(query))) {
+    qPhoneEl.value = query;
+  }
 
   // SMART AUTO-DETECTION: Guarantee that Phone numbers, UPI IDs, and Messages
   // are NEVER mistakenly classified as URLs!
@@ -2754,24 +2831,50 @@ function showToast(msg) {
   }, 3200);
 }
 
-function showNoTargetState() {
-  const targetDisplay = document.getElementById('target-display');
-  if (targetDisplay) targetDisplay.textContent = 'No Target Specified';
+function showNoTargetState(targetType = 'url') {
+  const urlParams = new URLSearchParams(window.location.search);
+  const type = targetType || (urlParams.get('type') || 'url').toLowerCase();
+  currentTargetType = type;
 
-  const signalsContainer = document.getElementById('signals-container');
-  if (signalsContainer) {
-    signalsContainer.innerHTML = `
-      <div style="padding: 48px 24px; text-align: center; background: #FFFFFF; border-radius: 16px; border: 1px dashed var(--ink-100, #E8EBF3);">
-        <h4 style="margin-bottom: 8px; font-weight: 800; color: var(--ink-900, #0A0F1E);">Enter a Target to Analyze</h4>
-        <p style="color: var(--ink-500, #4B5570); margin-bottom: 20px; font-size: 0.9375rem;">
-          Use the quick scanner bar below or visit the live Check page.
-        </p>
-        <a href="check.html" class="btn-back-scanner" style="display: inline-flex;">
-          Go to Check Scanner
-        </a>
-      </div>
-    `;
+  document.querySelectorAll('.tool-result-view').forEach(v => {
+    v.classList.remove('active');
+    v.style.display = 'none';
+  });
+  const activeView = document.getElementById('view-' + type) || document.getElementById('view-url');
+  if (activeView) {
+    activeView.classList.add('active');
+    activeView.style.display = 'block';
   }
+
+  const targetDisplay = document.getElementById('target-display');
+  if (targetDisplay) targetDisplay.textContent = 'Enter Website URL to Analyze';
+
+  const phoneTargetDisplay = document.getElementById('phone-target-display');
+  if (phoneTargetDisplay) phoneTargetDisplay.textContent = 'Enter Caller Number to Inspect';
+
+  const scanMetaEl = document.getElementById('scan-meta');
+  if (scanMetaEl) {
+    const scanId = 'INFR-' + Math.floor(1000 + Math.random() * 9000) + '-R';
+    const scanDate = new Date().toLocaleString('en-IN', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    scanMetaEl.innerHTML = `<span class="pulse-dot"></span> Scan ID: ${scanId} • ${scanDate} IST`;
+  }
+
+  // Auto-focus quick input
+  setTimeout(() => {
+    if (type === 'phone') {
+      const pInput = document.getElementById('phone-quick-input');
+      if (pInput) pInput.focus();
+    } else {
+      const uInput = document.getElementById('url-quick-input');
+      if (uInput) uInput.focus();
+    }
+  }, 100);
 }
 
 function showErrorState(errorMsg) {
