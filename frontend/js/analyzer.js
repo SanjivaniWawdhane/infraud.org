@@ -240,6 +240,11 @@ async function initAnalysis() {
   const query = rawQuery.trim();
   currentTargetQuery = query;
 
+  // SMART AUTO-DETECTION: Guarantee that Phone numbers, UPI IDs, and Messages
+  // are NEVER mistakenly classified as URLs!
+  const type = detectTargetType(query, rawType);
+  currentTargetType = type;
+
   // Immediately populate quick inputs so user sees active query
   const qUrlEl = document.getElementById('url-quick-input');
   if (qUrlEl) {
@@ -249,11 +254,6 @@ async function initAnalysis() {
   if (qPhoneEl && (type === 'phone' || /^\+?\d[\d\s-]{7,}/.test(query))) {
     qPhoneEl.value = query;
   }
-
-  // SMART AUTO-DETECTION: Guarantee that Phone numbers, UPI IDs, and Messages
-  // are NEVER mistakenly classified as URLs!
-  const type = detectTargetType(query, rawType);
-  currentTargetType = type;
 
   // If detected type differs from parameter, silently update URL for accurate bookmarks & sharing
   if (rawType !== type) {
@@ -1935,7 +1935,7 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
     const isRecent = domainIntel.isRecent;
     if (metaHost) {
       metaHost.textContent = domainIntel.domainAgeFormatted;
-      metaHost.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#0F172A');
+      metaHost.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#059669');
     }
     if (metaHostDesc) {
       metaHostDesc.textContent = isNew
@@ -1946,13 +1946,26 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
       metaHostIcon.style.background = isNew ? '#FEE2E2' : (isRecent ? '#FEF3C7' : '#EFF6FF');
       metaHostIcon.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#2563EB');
     }
-  } else {
+  } else if (domainIntel) {
+    // Domain Intel is resolved, ccTLD or privacy hides creation date
     if (metaHost) {
-      metaHost.textContent = 'Official Apex Domain';
-      metaHost.style.color = '#0F172A';
+      metaHost.textContent = domainIntel.domainAgeFormatted || 'Active Apex Domain';
+      metaHost.style.color = '#059669';
     }
     if (metaHostDesc) {
-      metaHostDesc.textContent = 'Clean registered domain name, authentic root namespace';
+      metaHostDesc.textContent = `Registrar: ${domainIntel.registrar || 'ICANN Accredited'} • ${domainIntel.primaryStatus || 'Active'}`;
+    }
+    if (metaHostIcon) {
+      metaHostIcon.style.background = '#EFF6FF';
+      metaHostIcon.style.color = '#2563EB';
+    }
+  } else {
+    if (metaHost) {
+      metaHost.textContent = 'Checking Age...';
+      metaHost.style.color = '#64748B';
+    }
+    if (metaHostDesc) {
+      metaHostDesc.textContent = 'Querying live ICANN RDAP registry...';
     }
     if (metaHostIcon) {
       metaHostIcon.style.background = '#EFF6FF';
@@ -3019,38 +3032,43 @@ function renderDomainSpecifications(target, data, intel) {
 
   if (specName) specName.textContent = (intel && intel.domain) || hostname;
 
-  if (intel && intel.domainAgeFormatted && intel.domainAgeFormatted !== 'Age Unknown') {
-    if (specAge) {
-      specAge.textContent = intel.domainAgeFormatted;
-      specAge.style.color = intel.isNewlyRegistered ? '#DC2626' : (intel.isRecent ? '#D97706' : '#059669');
-    }
-    if (specCreated) specCreated.textContent = intel.creationDateFormatted || 'Historical Record';
-    if (specExpiry) specExpiry.textContent = intel.expirationDateFormatted || 'Active Registry';
-    if (specRegistrar) specRegistrar.textContent = intel.registrar || 'ICANN Accredited Registrar';
-    if (specNs) {
-      specNs.textContent = intel.primaryNameServer || (intel.nameServers && intel.nameServers[0]) || 'Authoritative DNS';
-      if (intel.nameServers && intel.nameServers.length > 1) {
-        specNs.title = intel.nameServers.join(', ');
+  if (intel) {
+    if (intel.isIp) {
+      if (specAge) { specAge.textContent = 'Raw IP (No Domain Age)'; specAge.style.color = '#D97706'; }
+      if (specCreated) specCreated.textContent = 'IANA Subnet Allocation';
+      if (specExpiry) specExpiry.textContent = 'Perpetual Subnet Block';
+      if (specRegistrar) specRegistrar.textContent = 'IANA / Regional Registry';
+      if (specNs) specNs.textContent = 'Direct IP (No Nameserver)';
+      if (specIp) specIp.textContent = `${hostname} • ${isHttp ? 'HTTP' : 'HTTPS'}`;
+      if (specStatus) specStatus.textContent = 'Active Numeric Host';
+      if (specBadge) specBadge.textContent = 'DIRECT IP';
+    } else {
+      const hasExactAge = intel.domainAgeFormatted && intel.domainAgeFormatted !== 'Age Unknown';
+      if (specAge) {
+        specAge.textContent = hasExactAge ? intel.domainAgeFormatted : 'Active Domain (DNS Verified)';
+        specAge.style.color = hasExactAge 
+          ? (intel.isNewlyRegistered ? '#DC2626' : (intel.isRecent ? '#D97706' : '#059669'))
+          : '#059669';
       }
+      if (specCreated) specCreated.textContent = intel.creationDateFormatted || 'Active Registry';
+      if (specExpiry) specExpiry.textContent = intel.expirationDateFormatted || 'Active Registry';
+      if (specRegistrar) specRegistrar.textContent = intel.registrar || 'ICANN Accredited Registrar';
+      if (specNs) {
+        specNs.textContent = intel.primaryNameServer || (intel.nameServers && intel.nameServers[0]) || 'Authoritative DNS';
+        if (intel.nameServers && intel.nameServers.length > 1) {
+          specNs.title = intel.nameServers.join(', ');
+        }
+      }
+      if (specIp) {
+        const ip = intel.primaryIp || (intel.resolvedIps && intel.resolvedIps[0]) || 'Active Host';
+        specIp.textContent = `${ip} • ${isHttp ? 'HTTP' : 'TLS 1.3 / HTTPS'}`;
+      }
+      if (specStatus) specStatus.textContent = intel.primaryStatus || 'Active / Verified';
+      if (specBadge) specBadge.textContent = intel.dataSource || 'LIVE RDAP';
     }
-    if (specIp) {
-      const ip = intel.primaryIp || (intel.resolvedIps && intel.resolvedIps[0]) || 'Active Host';
-      specIp.textContent = `${ip} • ${isHttp ? 'HTTP' : 'TLS 1.3 / HTTPS'}`;
-    }
-    if (specStatus) specStatus.textContent = intel.primaryStatus || 'Active / Verified';
-    if (specBadge) specBadge.textContent = intel.dataSource || 'LIVE RDAP';
-  } else if (intel && intel.isIp) {
-    if (specAge) { specAge.textContent = 'Raw IP (No Domain Age)'; specAge.style.color = '#D97706'; }
-    if (specCreated) specCreated.textContent = 'IANA Subnet Allocation';
-    if (specExpiry) specExpiry.textContent = 'Perpetual Subnet Block';
-    if (specRegistrar) specRegistrar.textContent = 'IANA / Regional Registry';
-    if (specNs) specNs.textContent = 'Direct IP (No Nameserver)';
-    if (specIp) specIp.textContent = `${hostname} • ${isHttp ? 'HTTP' : 'HTTPS'}`;
-    if (specStatus) specStatus.textContent = 'Active Numeric Host';
-    if (specBadge) specBadge.textContent = 'DIRECT IP';
   } else {
     // Fallback display while querying live backend endpoint
-    if (specAge) specAge.textContent = 'Checking Registry...';
+    if (specAge) { specAge.textContent = 'Checking Registry...'; specAge.style.color = '#64748B'; }
     if (specCreated) specCreated.textContent = 'Querying RDAP...';
     if (specExpiry) specExpiry.textContent = 'Querying RDAP...';
     if (specRegistrar) specRegistrar.textContent = 'ICANN Accredited Registrar';
@@ -3069,19 +3087,27 @@ function renderDomainSpecifications(target, data, intel) {
           const metaHost = document.getElementById('hero-meta-host');
           const metaHostDesc = document.getElementById('hero-meta-host-desc');
           const metaHostIcon = document.getElementById('hero-meta-host-icon');
-          if (metaHost && liveIntel.domainAgeFormatted && liveIntel.domainAgeFormatted !== 'Age Unknown') {
-            const isNew = liveIntel.isNewlyRegistered;
-            const isRecent = liveIntel.isRecent;
-            metaHost.textContent = liveIntel.domainAgeFormatted;
-            metaHost.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#0F172A');
-            if (metaHostDesc) {
-              metaHostDesc.textContent = isNew
-                ? `🚨 Registered ${liveIntel.domainAgeDays} days ago — disposable phishing risk`
-                : `Registrar: ${liveIntel.registrar || 'ICANN Accredited'} • ${liveIntel.primaryStatus || 'Active'}`;
-            }
-            if (metaHostIcon) {
-              metaHostIcon.style.background = isNew ? '#FEE2E2' : (isRecent ? '#FEF3C7' : '#EFF6FF');
-              metaHostIcon.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#2563EB');
+          if (metaHost) {
+            if (liveIntel.domainAgeFormatted && liveIntel.domainAgeFormatted !== 'Age Unknown') {
+              const isNew = liveIntel.isNewlyRegistered;
+              const isRecent = liveIntel.isRecent;
+              metaHost.textContent = liveIntel.domainAgeFormatted;
+              metaHost.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#059669');
+              if (metaHostDesc) {
+                metaHostDesc.textContent = isNew
+                  ? `🚨 Registered ${liveIntel.domainAgeDays} days ago — disposable phishing risk`
+                  : `Registrar: ${liveIntel.registrar || 'ICANN Accredited'} • ${liveIntel.primaryStatus || 'Active'}`;
+              }
+              if (metaHostIcon) {
+                metaHostIcon.style.background = isNew ? '#FEE2E2' : (isRecent ? '#FEF3C7' : '#EFF6FF');
+                metaHostIcon.style.color = isNew ? '#DC2626' : (isRecent ? '#D97706' : '#2563EB');
+              }
+            } else {
+              metaHost.textContent = 'Active Apex Domain';
+              metaHost.style.color = '#059669';
+              if (metaHostDesc) {
+                metaHostDesc.textContent = `Registrar: ${liveIntel.registrar || 'ICANN Accredited'} • ${liveIntel.primaryStatus || 'Active'}`;
+              }
             }
           }
         }

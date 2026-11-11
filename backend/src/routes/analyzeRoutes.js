@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { analyzeUrl } = require('../services/urlAnalyzer');
+const { analyzeUrl, analyzeUrlAsync } = require('../services/urlAnalyzer');
+const domainLookupService = require('../services/domainLookupService');
 
 const { analyzePhoneNumber } = require('../services/phoneAnalyzer');
 const { analyzeUpi } = require('../services/upiAnalyzer');
@@ -8,12 +9,12 @@ const { analyzeMessage } = require('../services/messageAnalyzer');
 
 /**
  * POST /api/analyze/url
- * Analyzes a URL using transparent structural heuristics.
+ * Analyzes a URL using transparent structural heuristics + online domain forensics (RDAP/DNS).
  * 
  * Expected Request Body:
  * { "url": "https://example.com" }
  */
-router.post('/url', (req, res, next) => {
+router.post('/url', async (req, res, next) => {
   try {
     const { url } = req.body || {};
 
@@ -33,7 +34,7 @@ router.post('/url', (req, res, next) => {
       });
     }
 
-    const result = analyzeUrl(url);
+    const result = analyzeUrlAsync ? await analyzeUrlAsync(url) : analyzeUrl(url);
 
     if (!result.success) {
       return res.status(result.statusCode || 400).json({
@@ -44,6 +45,41 @@ router.post('/url', (req, res, next) => {
     }
 
     return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /api/analyze/domain
+ * Returns real-time domain registration forensics (RDAP/DNS/WHOIS) with domain age.
+ */
+router.get('/domain', async (req, res, next) => {
+  try {
+    const domain = req.query.domain || req.query.query || req.query.url;
+    if (!domain || !domain.trim()) {
+      return res.status(400).json({ success: false, error: 'Missing domain parameter' });
+    }
+    const intel = await domainLookupService.lookupDomain(domain.trim());
+    return res.status(200).json(intel);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/analyze/domain
+ * Returns real-time domain registration forensics (RDAP/DNS/WHOIS) with domain age.
+ */
+router.post('/domain', async (req, res, next) => {
+  try {
+    const body = req.body || {};
+    const domain = body.domain || body.query || body.url;
+    if (!domain || !domain.trim()) {
+      return res.status(400).json({ success: false, error: 'Missing domain parameter' });
+    }
+    const intel = await domainLookupService.lookupDomain(domain.trim());
+    return res.status(200).json(intel);
   } catch (err) {
     next(err);
   }
