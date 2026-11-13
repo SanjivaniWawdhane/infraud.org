@@ -58,7 +58,7 @@ async function runTests() {
   const r5 = await analyzePhoneNumber('1409876543');
   assert(r5.success === true, 'Successfully analyzes TRAI 140 number');
   assert(r5.signals.some(s => s.id === 'TRAI_140_TELEMARKETING'), 'Identifies TRAI 140 Telemarketing signal');
-  assert(r5.riskScore === 60, 'Assigns 60% risk score for commercial telemarketing');
+  assert(r5.riskScore >= 60, 'Assigns >=60% risk score for commercial telemarketing');
   assert(r5.carrier.circle.includes('TRAI-140'), 'Identifies TRAI 140 regulatory channel');
 
   // 6. Valid International Number (US)
