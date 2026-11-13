@@ -754,6 +754,42 @@ function showLoadingState() {
   } else if (type === 'upi') {
     const upiDisplay = document.getElementById('upi-display-handle');
     if (upiDisplay) upiDisplay.textContent = currentTargetQuery;
+    const hudHandle = document.getElementById('upi-hud-handle');
+    if (hudHandle) hudHandle.textContent = currentTargetQuery;
+    const hudBankApp = document.getElementById('upi-hud-bank-app');
+    if (hudBankApp) hudBankApp.textContent = 'Auditing NPCI Clearing Rail...';
+
+    const upiScoreDisplay = document.getElementById('upi-score-display');
+    if (upiScoreDisplay) {
+      upiScoreDisplay.innerHTML = `<span style="font-size: 2.25rem; opacity: 0.5;">...</span>`;
+      upiScoreDisplay.style.color = '#94A3B8';
+    }
+
+    const upiGaugeCircle = document.getElementById('upi-gauge-circle');
+    if (upiGaugeCircle) {
+      upiGaugeCircle.style.strokeDashoffset = '427.2';
+      upiGaugeCircle.style.stroke = '#10B981';
+    }
+
+    const upiPointer = document.getElementById('upi-gradient-pointer');
+    if (upiPointer) {
+      upiPointer.style.left = '0%';
+    }
+
+    const upiRiskBadge = document.getElementById('upi-risk-badge');
+    if (upiRiskBadge) {
+      upiRiskBadge.textContent = 'CHECKING NPCI SWITCH...';
+      upiRiskBadge.className = 'upi-screen-action-chip upi-chip-green';
+    }
+
+    const upiVerdictTitle = document.getElementById('upi-verdict-title');
+    if (upiVerdictTitle) upiVerdictTitle.textContent = 'Evaluating Threat Risk...';
+
+    const upiRiskSummary = document.getElementById('upi-risk-summary');
+    if (upiRiskSummary) {
+      upiRiskSummary.textContent = 'Auditing acquiring bank partner, social engineering patterns, and active mule registry...';
+    }
+
     const shieldTitle = document.getElementById('upi-shield-title');
     if (shieldTitle) shieldTitle.textContent = 'VERIFYING NPCI RAIL...';
     const shieldDesc = document.getElementById('upi-shield-desc');
@@ -1644,6 +1680,129 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
     bank: psp ? `@${psp.toUpperCase()} Partner Bank` : 'Standard Bank Partner',
     app: 'NPCI UPI 2.0 Network'
   };
+
+  // ── UPI Cyber Threat Risk Gauge & Multi-Segment Risk Bar ──
+  const hudHandle = document.getElementById('upi-hud-handle');
+  if (hudHandle) hudHandle.textContent = target;
+  const hudBankApp = document.getElementById('upi-hud-bank-app');
+  if (hudBankApp) hudBankApp.textContent = `${partner.bank} • ${partner.app}`;
+
+  const chequeDateVal = document.getElementById('upi-cheque-date-val');
+  if (chequeDateVal) {
+    chequeDateVal.textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  // Determine Risk Level and Theme Color
+  // Low Risk: 0-24%
+  // Moderate Risk: 25-49%
+  // Risky: 50-74%
+  // Critical High Danger: 75-100%
+  let upiThemeColor = '#10B981'; // Green for low risk
+  let riskLevelText = 'LOW RISK';
+  let badgeClass = 'upi-chip-green';
+  let badgeText = '✓ LOW RISK — SAFE BENEFICIARY';
+  let verdictTitleText = 'Risk Level: Low Risk (Safe to Pay)';
+  let verdictDescText = 'Standard NPCI UPI format with valid PSP gateway. Zero fraudulent cybercrime complaints or mule telemetry flags on record.';
+
+  if (riskScore >= 75) {
+    upiThemeColor = '#EF4444'; // Red
+    riskLevelText = 'CRITICAL RISK';
+    badgeClass = 'upi-chip-red';
+    badgeText = '🚨 CRITICAL RISK — DO NOT TRANSFER';
+    verdictTitleText = 'Risk Level: High Risk (Severe Threat)';
+    verdictDescText = 'Confirmed high danger! Associated with deceptive brand impersonation, urgent lottery/refund trap, or cyber mule accounts. Do NOT transfer funds or scan QR codes.';
+  } else if (riskScore >= 50) {
+    upiThemeColor = '#DC2626'; // High Red
+    riskLevelText = 'HIGH RISK';
+    badgeClass = 'upi-chip-red';
+    badgeText = '🚨 HIGH RISK — POTENTIAL MULE SCAM';
+    verdictTitleText = 'Risk Level: High Risk (Mule Account)';
+    verdictDescText = 'Handle flagged for high-risk suspicious keywords, unknown provider, or fraud complaints. High probability of cyber mule operation.';
+  } else if (riskScore >= 25) {
+    upiThemeColor = '#F59E0B'; // Amber
+    riskLevelText = 'MODERATE RISK';
+    badgeClass = 'upi-chip-yellow';
+    badgeText = '⚠️ MODERATE RISK — EXERCISE CAUTION';
+    verdictTitleText = 'Risk Level: Moderate Risk (Verify Name)';
+    verdictDescText = 'Uncommon handle or non-standard PSP gateway. Always verify the registered legal beneficiary name displayed in your UPI app before completing payment.';
+  }
+
+  // Update Radial Gauge
+  const upiGaugeCircle = document.getElementById('upi-gauge-circle');
+  if (upiGaugeCircle) {
+    const circumference = 427.2;
+    const offset = circumference - (riskScore / 100) * circumference;
+    upiGaugeCircle.style.stroke = upiThemeColor;
+    upiGaugeCircle.style.strokeDashoffset = offset;
+  }
+
+  // Update Score Display with Count-up animation
+  const upiScoreDisplay = document.getElementById('upi-score-display');
+  if (upiScoreDisplay) {
+    upiScoreDisplay.style.color = upiThemeColor;
+    if (typeof animateCountUp === 'function') {
+      animateCountUp(upiScoreDisplay, riskScore);
+    } else {
+      upiScoreDisplay.textContent = riskScore;
+    }
+  }
+
+  // Update 4-Stage Segmented Meter Bar
+  const segSafe = document.getElementById('upi-seg-safe');
+  const segCaution = document.getElementById('upi-seg-caution');
+  const segRisky = document.getElementById('upi-seg-risky');
+  const segDanger = document.getElementById('upi-seg-danger');
+
+  [segSafe, segCaution, segRisky, segDanger].forEach(seg => {
+    if (seg) seg.classList.remove('active');
+  });
+
+  if (riskScore >= 75) {
+    if (segDanger) segDanger.classList.add('active');
+  } else if (riskScore >= 50) {
+    if (segRisky) segRisky.classList.add('active');
+  } else if (riskScore >= 25) {
+    if (segCaution) segCaution.classList.add('active');
+  } else {
+    if (segSafe) segSafe.classList.add('active');
+  }
+
+  // Update Continuous Gradient Risk Bar Pointer
+  const upiPointer = document.getElementById('upi-gradient-pointer');
+  if (upiPointer) {
+    const clampedScore = Math.max(3, Math.min(97, riskScore));
+    upiPointer.style.left = `${clampedScore}%`;
+    upiPointer.title = `Calculated Threat Score: ${riskScore}% (${riskLevelText})`;
+  }
+
+  // Update Verdict Badge & Texts
+  const upiRiskBadge = document.getElementById('upi-risk-badge');
+  if (upiRiskBadge) {
+    upiRiskBadge.className = `upi-screen-action-chip ${badgeClass}`;
+    upiRiskBadge.textContent = badgeText;
+  }
+
+  const upiVerdictTitle = document.getElementById('upi-verdict-title');
+  if (upiVerdictTitle) {
+    upiVerdictTitle.textContent = verdictTitleText;
+    upiVerdictTitle.style.color = upiThemeColor;
+  }
+
+  const upiRiskSummary = document.getElementById('upi-risk-summary');
+  if (upiRiskSummary) {
+    upiRiskSummary.textContent = verdictDescText;
+  }
+
+  // Update Cheque Header Risk Tag
+  const chequeRiskTag = document.getElementById('upi-cheque-risk-tag');
+  const chequeRiskText = document.getElementById('upi-cheque-risk-text');
+  if (chequeRiskText) {
+    chequeRiskText.textContent = `${riskLevelText} (${riskScore}/100)`;
+    chequeRiskText.style.color = upiThemeColor;
+  }
+  if (chequeRiskTag) {
+    chequeRiskTag.style.borderColor = upiThemeColor;
+  }
 
   // Verdict Shield
   const shieldEl = document.getElementById('upi-verdict-shield');

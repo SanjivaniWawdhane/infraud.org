@@ -1539,6 +1539,325 @@
       .upi-alert-title { font-weight: 800; font-size: 0.875rem; letter-spacing: 0.04em; margin-bottom: 3px; }
       .upi-alert-text { font-size: 0.875rem; line-height: 1.45; }
 
+      /* ── 3. Dual-Panel UPI Master Console (Matching URL & Phone Architectures) ── */
+      .upi-master-console {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 24px;
+        align-items: start;
+        margin-bottom: 28px;
+      }
+      @media (max-width: 960px) {
+        .upi-master-console {
+          grid-template-columns: 1fr;
+        }
+      }
+      .upi-master-console .upi-cheque-container {
+        margin-bottom: 0;
+      }
+
+      /* Left: Payment Terminal / NPCI Cybersecurity Radar HUD Simulator */
+      .upi-terminal-frame {
+        background: linear-gradient(180deg, #090B14 0%, #131428 50%, #1A173B 100%);
+        border-radius: 32px;
+        border: 2px solid rgba(168, 85, 247, 0.22);
+        padding: 24px 20px;
+        box-shadow: 0 25px 60px -15px rgba(10, 15, 30, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+        color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .upi-terminal-frame::before {
+        content: '';
+        position: absolute;
+        top: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, transparent 70%);
+        filter: blur(30px);
+        pointer-events: none;
+      }
+
+      /* Terminal Bezel */
+      .upi-terminal-bezel {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 14px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        font-family: var(--mono, 'JetBrains Mono', monospace);
+        font-size: 0.6875rem;
+        font-weight: 700;
+        color: #94A3B8;
+        letter-spacing: 0.06em;
+      }
+      .upi-terminal-chip-badge {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        padding: 3px 10px;
+        border-radius: 8px;
+        color: #FBBF24;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .upi-radar-pill {
+        background: #000000;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 3px 10px;
+        border-radius: 100px;
+        color: #34D399;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+      }
+
+      /* Target Identity inside Terminal */
+      .upi-terminal-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 20px;
+        background: rgba(168, 85, 247, 0.15);
+        border: 2px solid rgba(168, 85, 247, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        color: #FBBF24;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      }
+      .upi-screen-target-num {
+        font-family: var(--mono, 'JetBrains Mono', monospace);
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #FFFFFF;
+        margin-bottom: 3px;
+        word-break: break-all;
+        padding: 0 6px;
+      }
+      .upi-screen-target-desc {
+        font-size: 0.78rem;
+        color: #94A3B8;
+        margin-bottom: 14px;
+      }
+
+      /* Cyber Threat Radial Gauge */
+      .upi-screen-gauge-box {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        margin-bottom: 12px;
+      }
+      .upi-screen-gauge-svg {
+        width: 140px;
+        height: 140px;
+        transform: rotate(-90deg);
+      }
+      .upi-screen-gauge-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .upi-screen-score-num {
+        font-size: 2.6rem;
+        font-weight: 900;
+        line-height: 1;
+        color: #FFFFFF;
+        letter-spacing: -0.04em;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      }
+      .upi-screen-score-label {
+        font-size: 0.625rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        color: #94A3B8;
+        margin-top: 3px;
+      }
+
+      /* 4-Stage Meter Bar */
+      .upi-meter-bar {
+        display: flex;
+        width: 160px;
+        height: 6px;
+        border-radius: 99px;
+        overflow: hidden;
+        gap: 3px;
+        margin-bottom: 12px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .upi-meter-seg {
+        flex: 1;
+        height: 100%;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        opacity: 0.3;
+      }
+      .upi-seg-safe { background: #10B981; }
+      .upi-seg-caution { background: #F59E0B; }
+      .upi-seg-risky { background: #EA580C; }
+      .upi-seg-danger { background: #EF4444; }
+      .upi-meter-seg.active {
+        opacity: 1;
+        filter: drop-shadow(0 0 6px currentColor);
+        transform: scaleY(1.3);
+      }
+
+      /* Continuous Gradient Risk Bar with Needle/Pointer */
+      .upi-gradient-risk-container {
+        width: 100%;
+        max-width: 290px;
+        margin-bottom: 14px;
+        padding: 0 4px;
+      }
+      .upi-gradient-bar-track {
+        position: relative;
+        height: 8px;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #10B981 0%, #10B981 25%, #F59E0B 50%, #EA580C 75%, #EF4444 100%);
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.4) inset;
+        margin-bottom: 6px;
+      }
+      .upi-gradient-pointer {
+        position: absolute;
+        top: -4px;
+        left: 0%;
+        transform: translateX(-50%);
+        width: 16px;
+        height: 16px;
+        background: #FFFFFF;
+        border: 3px solid #1E1B4B;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.6), 0 0 0 2px #FFFFFF;
+        transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .upi-gradient-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.625rem;
+        font-weight: 700;
+        color: #94A3B8;
+        font-family: var(--mono, monospace);
+        letter-spacing: 0.02em;
+      }
+
+      /* Verdict Badge & Title */
+      .upi-screen-action-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 16px;
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        border: 1px solid transparent;
+      }
+      .upi-chip-green {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34D399;
+        border-color: rgba(16, 185, 129, 0.35);
+      }
+      .upi-chip-yellow {
+        background: rgba(245, 158, 11, 0.15);
+        color: #FBBF24;
+        border-color: rgba(245, 158, 11, 0.35);
+      }
+      .upi-chip-red {
+        background: rgba(239, 68, 68, 0.2);
+        color: #F87171;
+        border-color: rgba(239, 68, 68, 0.4);
+      }
+
+      .upi-screen-verdict-title {
+        font-size: 1.125rem;
+        font-weight: 900;
+        margin: 0 0 6px;
+        line-height: 1.3;
+      }
+      .upi-screen-verdict-desc {
+        font-size: 0.78rem;
+        color: #CBD5E1;
+        line-height: 1.45;
+        margin: 0 0 16px;
+        max-width: 290px;
+      }
+
+      /* Terminal Action Buttons */
+      .upi-terminal-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+      .btn-terminal-action {
+        width: 100%;
+        padding: 9px 14px;
+        border-radius: 10px;
+        font-size: 0.78125rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+      .btn-terminal-sec {
+        background: rgba(255, 255, 255, 0.08);
+        color: #FFFFFF;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .btn-terminal-sec:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+      }
+      .btn-terminal-freeze {
+        background: rgba(239, 68, 68, 0.18);
+        color: #FCA5A5;
+        border: 1px solid rgba(239, 68, 68, 0.4);
+      }
+      .btn-terminal-freeze:hover {
+        background: rgba(239, 68, 68, 0.35);
+        color: #FFFFFF;
+        transform: translateY(-1px);
+      }
+
+      /* Cheque Top Right Strip */
+      .upi-cheque-top-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .upi-cheque-risk-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #F8FAFC;
+        border: 1.5px solid #10B981;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-family: var(--mono, monospace);
+        font-size: 0.8125rem;
+        font-weight: 800;
+        color: #0F172A;
+        transition: all 0.3s ease;
+      }
+
       /* Perforated Bank Cheque Leaf */
       .upi-cheque-container {
         background: #FFFFFF;
@@ -4008,8 +4327,91 @@
           </div>
         </div>
 
-        <!-- 3. Perforated Bank Cheque / Passbook Leaf -->
-        <div class="upi-cheque-container">
+        <!-- 3. Dual-Panel UPI Intelligence Console (Matches URL & Phone Architectures) -->
+        <div class="upi-master-console">
+
+          <!-- Left: Payment Terminal / NPCI Cybersecurity Radar HUD Simulator -->
+          <div class="upi-terminal-frame" id="upi-score-sidebar">
+            
+            <!-- Terminal Bezel Header -->
+            <div class="upi-terminal-bezel">
+              <span class="upi-terminal-chip-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                <span>CHIP & PIN</span>
+              </span>
+              <span class="upi-radar-pill">
+                <span class="phone-dynamic-dot"></span>
+                <span>NPCI RADAR</span>
+              </span>
+              <span style="color: #C084FC; font-weight: 800;">UPI 2.0</span>
+            </div>
+
+            <!-- Terminal Avatar / Rupee Icon -->
+            <div class="upi-terminal-avatar">
+              <span style="font-size: 1.75rem; font-weight: 900; font-family: var(--mono);">₹</span>
+            </div>
+
+            <div class="upi-screen-target-num target-display-value" id="upi-hud-handle">merchant@bank</div>
+            <div class="upi-screen-target-desc" id="upi-hud-bank-app">Checking NPCI Clearing Registry...</div>
+
+            <!-- Cyber Threat Radial Gauge -->
+            <div class="upi-screen-gauge-box">
+              <svg class="upi-screen-gauge-svg" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="11"></circle>
+                <circle class="phone-gauge-progress" id="upi-gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="11" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2" style="transition: stroke-dashoffset 1s ease, stroke 0.4s ease;"></circle>
+              </svg>
+              <div class="upi-screen-gauge-center">
+                <div class="upi-screen-score-num" id="upi-score-display">0</div>
+                <div class="upi-screen-score-label">THREAT SCORE</div>
+              </div>
+            </div>
+
+            <!-- 4-Stage Segmented Meter Bar -->
+            <div class="upi-meter-bar" id="upi-meter-bar">
+              <div class="upi-meter-seg upi-seg-safe" id="upi-seg-safe" title="Safe (0-24%)"></div>
+              <div class="upi-meter-seg upi-seg-caution" id="upi-seg-caution" title="Caution (25-49%)"></div>
+              <div class="upi-meter-seg upi-seg-risky" id="upi-seg-risky" title="Risky (50-74%)"></div>
+              <div class="upi-meter-seg upi-seg-danger" id="upi-seg-danger" title="High Danger (75-100%)"></div>
+            </div>
+
+            <!-- Continuous Gradient Risk Bar with Needle/Pointer -->
+            <div class="upi-gradient-risk-container">
+              <div class="upi-gradient-bar-track">
+                <div class="upi-gradient-pointer" id="upi-gradient-pointer" title="Calculated Threat Score: 0%"></div>
+              </div>
+              <div class="upi-gradient-labels">
+                <span style="color: #34D399;">0% Low Risk</span>
+                <span style="color: #FBBF24;">50% Caution</span>
+                <span style="color: #F87171;">100% High Risk</span>
+              </div>
+            </div>
+
+            <!-- Risk Level Badge / Verdict Chip -->
+            <div class="upi-screen-action-chip upi-chip-green" id="upi-risk-badge">
+              ✓ VERIFIED SAFE VPA (LOW RISK)
+            </div>
+
+            <h2 class="upi-screen-verdict-title" id="upi-verdict-title">Risk Level: Low Risk</h2>
+            <p class="upi-screen-verdict-desc" id="upi-risk-summary">
+              Standard NPCI UPI format with valid PSP gateway. Zero fraudulent cybercrime or mule complaints detected.
+            </p>
+
+            <!-- Quick Terminal Actions -->
+            <div class="upi-terminal-controls">
+              <button type="button" class="btn-terminal-action btn-terminal-sec" onclick="verifyVpaAction(event)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Re-verify Routing</span>
+              </button>
+              <a href="tel:1930" class="btn-terminal-action btn-terminal-freeze">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                <span>Freeze Account (1930)</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Right: Perforated Bank Cheque / Passbook Leaf -->
+          <div class="upi-cheque-container">
           <div class="upi-cheque-watermark">NPCI CLEARING RAIL</div>
           
           <div class="upi-cheque-top-strip">
@@ -4031,9 +4433,15 @@
               </div>
             </div>
 
-            <div class="upi-cheque-date-box">
-              <span class="cheque-meta-label">DATE OF AUDIT</span>
-              <span class="cheque-meta-val">06-11-2026</span>
+            <div class="upi-cheque-top-right">
+              <div class="upi-cheque-risk-tag" id="upi-cheque-risk-tag" title="NPCI Cyber Threat Risk Score">
+                <span class="phone-dynamic-dot"></span>
+                <span id="upi-cheque-risk-text">LOW RISK (15/100)</span>
+              </div>
+              <div class="upi-cheque-date-box">
+                <span class="cheque-meta-label">DATE OF AUDIT</span>
+                <span class="cheque-meta-val" id="upi-cheque-date-val">LIVE NPCI RAIL</span>
+              </div>
             </div>
           </div>
 
@@ -4078,6 +4486,8 @@
             ⑈ 110002002 ⑆ 000123 ⑈ 10 24
           </div>
         </div>
+
+        </div> <!-- /upi-master-console -->
 
         <!-- 4. 2-Column UPI Scam Vector Simulator & Golden Hour Recovery -->
         <div class="upi-simulator-deck">
