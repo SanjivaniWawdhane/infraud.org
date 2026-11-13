@@ -739,6 +739,11 @@ function showLoadingState() {
       phoneRiskBadge.className = 'pclean-action-chip pclean-pill-gray';
     }
 
+    const phonePointer = document.getElementById('phone-gradient-pointer');
+    if (phonePointer) {
+      phonePointer.style.left = '0%';
+    }
+
     // Bento tiles reset
     const tileLine = document.getElementById('phone-tile-line');
     if (tileLine) tileLine.textContent = 'Cellular Mobile';
@@ -1533,6 +1538,32 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
       phoneRiskBadge.textContent = '✓ CLEAN NUMBER • NO FRAUD REPORTS';
       phoneRiskBadge.className = 'pclean-action-chip pclean-pill-green';
     }
+  }
+
+  // ── Update 4-Stage Segmented Meter Bar & Continuous Slider for Phone ──
+  const phoneSegSafe = document.getElementById('phone-seg-safe');
+  const phoneSegCaution = document.getElementById('phone-seg-caution');
+  const phoneSegRisky = document.getElementById('phone-seg-risky');
+  const phoneSegDanger = document.getElementById('phone-seg-danger');
+
+  [phoneSegSafe, phoneSegCaution, phoneSegRisky, phoneSegDanger].forEach(seg => {
+    if (seg) seg.classList.remove('active');
+  });
+
+  if (riskScore >= 70) {
+    if (phoneSegDanger) phoneSegDanger.classList.add('active');
+  } else if (riskScore >= 60) {
+    if (phoneSegRisky) phoneSegRisky.classList.add('active');
+  } else if (riskScore >= 25) {
+    if (phoneSegCaution) phoneSegCaution.classList.add('active');
+  } else {
+    if (phoneSegSafe) phoneSegSafe.classList.add('active');
+  }
+
+  const phonePointer = document.getElementById('phone-gradient-pointer');
+  if (phonePointer) {
+    const clampedScore = Math.max(3, Math.min(97, riskScore));
+    phonePointer.style.left = `${clampedScore}%`;
   }
 
   // 3. The 4 Essential Telemetry Cards (Right Grid)
