@@ -26,6 +26,10 @@ window.analyzeTarget = function(targetQuery, targetType) {
   if (phoneInput && (t === 'phone' || /^\+?\d[\d\s-]{7,}/.test(q))) {
     phoneInput.value = q;
   }
+  const upiInput = document.getElementById('upi-quick-input');
+  if (upiInput && (t === 'upi' || q.includes('@'))) {
+    upiInput.value = q;
+  }
 
   // Trigger analysis immediately
   if (typeof initAnalysis === 'function') {
@@ -159,20 +163,27 @@ window.clearQuickUrlInput = function() {
 
 
 // ── SaaS UPI Quick Input & Handlers ──
-window.handleQuickUpiSubmit = function(e) {
+window.verifyVpaAction = function(e) {
   if (e && typeof e.preventDefault === 'function') e.preventDefault();
   const input = document.getElementById('upi-quick-input');
   const errorEl = document.getElementById('upi-quick-error');
-  const btn = document.querySelector('.upi-dock-btn') || document.getElementById('upi-quick-btn');
-  if (!input) return;
-  let val = input.value.trim();
+  const headerBtn = document.getElementById('btn-header-verify-vpa');
+  const dockBtn = document.getElementById('upi-quick-btn') || document.querySelector('.upi-dock-btn');
+
+  // Resolve VPA target from input, active state query, URL query param, or display handle
+  let val = (input && input.value ? input.value.trim() : '') ||
+            (currentTargetQuery || '').trim();
+
   if (!val) {
-    if (errorEl) {
-      errorEl.textContent = 'Please enter a valid UPI ID / VPA handle (e.g. name@bank, 9876543210@paytm).';
-      errorEl.style.display = 'block';
+    const urlParams = new URLSearchParams(window.location.search);
+    val = (urlParams.get('query') || urlParams.get('q') || '').trim();
+  }
+
+  if (!val) {
+    const displayEl = document.getElementById('upi-display-handle');
+    if (displayEl && displayEl.textContent) {
+      val = displayEl.textContent.trim();
     }
-    input.focus();
-    return;
   }
 
   // Clean UPI string (remove upi://pay?pa= prefix if pasted)
@@ -189,28 +200,40 @@ window.handleQuickUpiSubmit = function(e) {
 
   val = val.replace(/\s+/g, '');
 
-  if (!val.includes('@') && !/^\d{10}$/.test(val)) {
+  if (!val || (!val.includes('@') && !/^\d{10}$/.test(val))) {
     if (errorEl) {
-      errorEl.textContent = 'UPI handle must contain an "@" symbol (e.g. username@okhdfcbank) or 10-digit number.';
+      errorEl.textContent = 'Please enter a valid UPI ID / VPA handle (e.g. name@bank, 9876543210@paytm).';
       errorEl.style.display = 'block';
     }
-    input.focus();
+    if (typeof showToast === 'function') {
+      showToast('Please enter a valid UPI VPA handle');
+    }
+    if (input) input.focus();
     return;
   }
 
   if (errorEl) errorEl.style.display = 'none';
-  input.value = val;
+  if (input) input.value = val;
 
-  if (btn) {
-    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Verifying...</span>`;
-    setTimeout(() => {
-      if (btn) {
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Verify VPA</span>`;
-      }
-    }, 1500);
+  // Active spinning loading state on both Verify VPA buttons
+  if (headerBtn) {
+    headerBtn.disabled = true;
+    headerBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Verifying VPA...</span>`;
+  }
+  if (dockBtn) {
+    dockBtn.disabled = true;
+    dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Verifying...</span>`;
+  }
+
+  if (typeof showToast === 'function') {
+    showToast('Verifying VPA routing with NPCI switch...');
   }
 
   window.analyzeTarget(val, 'upi');
+};
+
+window.handleQuickUpiSubmit = function(e) {
+  return window.verifyVpaAction(e);
 };
 
 window.clearQuickUpiInput = function() {
@@ -313,6 +336,10 @@ async function initAnalysis(overrideQuery, overrideType) {
   const qPhoneEl = document.getElementById('phone-quick-input');
   if (qPhoneEl && (type === 'phone' || /^\+?\d[\d\s-]{7,}/.test(query))) {
     qPhoneEl.value = query;
+  }
+  const qUpiEl = document.getElementById('upi-quick-input');
+  if (qUpiEl && (type === 'upi' || query.includes('@'))) {
+    qUpiEl.value = query;
   }
 
   // If detected type differs from parameter, silently update URL for accurate bookmarks & sharing
@@ -731,6 +758,18 @@ function showLoadingState() {
     if (shieldTitle) shieldTitle.textContent = 'VERIFYING NPCI RAIL...';
     const shieldDesc = document.getElementById('upi-shield-desc');
     if (shieldDesc) shieldDesc.textContent = 'Auditing acquiring bank partner and active mule registry...';
+
+    // Set active spinning loading feedback on both Verify VPA buttons
+    const headerVerifyBtn = document.getElementById('btn-header-verify-vpa');
+    if (headerVerifyBtn) {
+      headerVerifyBtn.disabled = true;
+      headerVerifyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Verifying VPA...</span>`;
+    }
+    const upiQuickBtn = document.getElementById('upi-quick-btn');
+    if (upiQuickBtn) {
+      upiQuickBtn.disabled = true;
+      upiQuickBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Verifying...</span>`;
+    }
   } else if (type === 'message') {
     const bubble = document.getElementById('msg-bubble-content');
     if (bubble) bubble.textContent = 'Parsing message semantics, extracting payload URLs, phones, and checking linguistic fear triggers...';
@@ -1567,11 +1606,16 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
   if (upiQuickInput) {
     upiQuickInput.value = target;
   }
-  // Reset Verify VPA button
+  // Reset Verify VPA buttons (both dock button and header action button)
   const upiQuickBtn = document.getElementById('upi-quick-btn');
   if (upiQuickBtn) {
     upiQuickBtn.disabled = false;
     upiQuickBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Verify VPA</span>`;
+  }
+  const headerVerifyBtn = document.getElementById('btn-header-verify-vpa');
+  if (headerVerifyBtn) {
+    headerVerifyBtn.disabled = false;
+    headerVerifyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Verify VPA</span>`;
   }
 
   const parts = target.split('@');
@@ -2989,8 +3033,31 @@ function animateCountUp(element, targetNum) {
  * Rescans current target
  */
 window.rescanTarget = function() {
+  if (currentTargetType === 'upi') {
+    window.verifyVpaAction();
+    return;
+  }
   initAnalysis();
   showToast('Rescanning target heuristics...');
+};
+
+/**
+ * Shares UPI clearance or copies link as fallback
+ */
+window.shareClearance = function() {
+  const shareUrl = window.location.href;
+  const shareText = `INFRAUD NPCI UPI VPA Audit: ${currentTargetQuery || 'target'}`;
+  if (navigator.share) {
+    navigator.share({
+      title: 'INFRAUD UPI Clearance',
+      text: shareText,
+      url: shareUrl
+    }).catch(() => {
+      window.copyResultLink();
+    });
+  } else {
+    window.copyResultLink();
+  }
 };
 
 /**

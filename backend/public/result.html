@@ -1505,6 +1505,13 @@
         background: rgba(255, 255, 255, 0.22);
         transform: translateY(-1px);
       }
+      .upi-btn-action:disabled,
+      .upi-dock-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
+        pointer-events: none;
+      }
       .btn-upi-report {
         background: rgba(239, 68, 68, 0.3);
         border-color: rgba(239, 68, 68, 0.5);
@@ -3952,7 +3959,7 @@
             <button type="button" class="upi-dock-clear" onclick="clearQuickUpiInput()" title="Clear">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <button type="submit" class="upi-dock-btn" id="upi-quick-btn" title="Verify UPI VPA handle">
+            <button type="submit" class="upi-dock-btn" id="upi-quick-btn" onclick="handleQuickUpiSubmit(event)" title="Verify UPI VPA handle">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               <span>Verify VPA</span>
             </button>
@@ -3975,9 +3982,9 @@
             </div>
           </div>
           <div class="upi-bank-actions">
-            <button class="upi-btn-action" onclick="rescanTarget()" title="Rescan UPI routing">
+            <button class="upi-btn-action" id="btn-header-verify-vpa" onclick="verifyVpaAction(event)" title="Verify NPCI VPA routing">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              Verify VPA
+              <span>Verify VPA</span>
             </button>
             <button class="upi-btn-action" onclick="copyResultLink()" title="Copy shareable receipt">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
