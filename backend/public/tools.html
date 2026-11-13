@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Security Tools | INFRAUD</title>
     <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
 <body>
                   <!-- ═══════════════════════════════════════════
@@ -27,6 +28,11 @@
         <a href="blog.html" >Blog</a>
         <a href="learn.html" >Learn</a>
         <a href="about.html" >About</a>
+      
+        <div class="nav-mobile-auth">
+          <a href="login.html" class="nav-mobile-btn nav-mobile-login">Login</a>
+          <a href="index.html#analyzer-section" class="nav-mobile-btn nav-mobile-signup">Get Started</a>
+        </div>
       </nav>
 
       <!-- Actions -->
@@ -383,6 +389,22 @@
           }
         });
       })();
+    </script>
+  <script>
+      // nav-outside-click-listener: Auto close mobile menu on outside click or nav link tap
+      document.addEventListener('click', function(e) {
+        const nav = document.querySelector('.nav-edge');
+        if (!nav) return;
+        const hamb = nav.querySelector('.nav-edge-hamburger');
+        const menu = nav.querySelector('.nav-edge-menu');
+        if (nav.classList.contains('mobile-open')) {
+          if (e.target.closest('.nav-edge-menu a')) {
+            nav.classList.remove('mobile-open');
+          } else if (!nav.contains(e.target)) {
+            nav.classList.remove('mobile-open');
+          }
+        }
+      });
     </script>
   </header>
 

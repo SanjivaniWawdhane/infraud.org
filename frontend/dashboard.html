@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Dashboard | INFRAUD</title>
     <link rel="stylesheet" href="css/style.css" />
     <style>
@@ -297,6 +297,7 @@
             .header { flex-direction: column; align-items: flex-start; gap: 20px; }
         }
     </style>
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
 <body>
 
@@ -306,6 +307,9 @@
             <img src="assets/logo.jpg" alt="INFRAUD logo" />
             <span class="brand-text">INFRAUD</span>
         </a>
+        <button type="button" class="sidebar-toggle-btn" aria-label="Toggle navigation" onclick="document.querySelector('.sidebar').classList.toggle('open')" style="display: none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
 
         <nav>
             <a href="#" class="nav-item active">

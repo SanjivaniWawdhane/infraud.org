@@ -1,0 +1,698 @@
+/* ═══════════════════════════════════════════════════════════════
+   INFRAUD — PRODUCTION-GRADE MASTER RESPONSIVE SYSTEM
+   Complete cross-device styling for Mobile, Tablet, Laptop & Desktop
+   Handles all screen sizes: 320px, 360px, 375px, 414px, 480px, 
+   640px, 768px, 900px, 992px, 1024px, 1200px, 1440px+
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 0. Global Overflow Defense & Fluid Base ── */
+html {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* Ensure all media cannot overflow parent containers */
+img, svg, video, canvas, picture {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fluid Containers */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+/* Clean text wrap for hashes, URLs, IDs */
+.font-mono, 
+.target-display-value, 
+.phone-big-number, 
+.td-identifier, 
+.code-block, 
+pre, code {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+/* ── 1. Master Navigation (nav-edge) Responsive Polish ── */
+.nav-edge {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  transition: all 0.25s ease;
+}
+
+.nav-edge-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 16px;
+  position: relative;
+}
+
+/* Mobile Auth Buttons Container inside nav-edge-menu */
+.nav-mobile-auth {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(10, 15, 30, 0.08);
+}
+
+.nav-mobile-auth a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.nav-mobile-login {
+  background: var(--ink-50, #F4F5FA);
+  color: var(--ink-900, #0A0F1E) !important;
+  border: 1px solid var(--ink-100, #E8EBF3);
+}
+
+.nav-mobile-signup {
+  background: var(--blue-600, #2563EB);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Navbar breakpoint <= 992px */
+@media (max-width: 992px) {
+  .nav-edge .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .nav-edge-menu {
+    display: none !important;
+    flex-direction: column;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    padding: 16px 20px 24px;
+    box-shadow: 0 16px 40px rgba(10, 15, 30, 0.12);
+    border-bottom: 1px solid rgba(10, 15, 30, 0.08);
+    gap: 4px;
+    margin: 0;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    z-index: 999;
+  }
+
+  .nav-edge.mobile-open .nav-edge-menu {
+    display: flex !important;
+    animation: slideDownNav 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideDownNav {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-edge-menu a {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    color: var(--ink-700, #1E2742);
+    transition: background 0.15s ease;
+  }
+
+  .nav-edge-menu a:hover,
+  .nav-edge-menu a.active {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--blue-600, #2563EB);
+  }
+
+  .nav-mobile-auth {
+    display: flex;
+  }
+
+  /* Hide desktop-only actions bar items */
+  .nav-edge-actions .nav-edge-login,
+  .nav-edge-actions .nav-edge-signup {
+    display: none !important;
+  }
+
+  .nav-edge-hamburger {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(10, 15, 30, 0.04);
+    border: none;
+    cursor: pointer;
+    color: var(--ink-900, #0A0F1E);
+    transition: background 0.2s;
+  }
+
+  .nav-edge-hamburger:hover {
+    background: rgba(10, 15, 30, 0.08);
+  }
+}
+
+/* ── 2. Fluid Typography Scaling ── */
+@media (max-width: 768px) {
+  .t-display {
+    font-size: clamp(2rem, 8vw, 2.75rem) !important;
+    line-height: 1.15 !important;
+  }
+  .t-heading {
+    font-size: clamp(1.6rem, 6vw, 2.1rem) !important;
+    line-height: 1.25 !important;
+  }
+  .about-header-title,
+  .reports-title,
+  .learn-title,
+  .page-title {
+    font-size: clamp(1.85rem, 7vw, 2.8rem) !important;
+    line-height: 1.2 !important;
+  }
+  .about-header-desc,
+  .reports-subtitle,
+  .learn-subtitle,
+  .page-subtitle {
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  h1 { font-size: 1.85rem !important; }
+  h2 { font-size: 1.5rem !important; }
+  h3 { font-size: 1.2rem !important; }
+}
+
+/* ── 3. Universal Grids Auto-Responsive System ── */
+@media (max-width: 1024px) {
+  .grid-4,
+  .tools-showcase-grid,
+  .stats-grid,
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+  
+  .eco-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .eco-span-col-2 {
+    grid-column: span 2 !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .eco-grid,
+  .tools-showcase-grid,
+  .learn-grid,
+  .blog-grid,
+  .stats-grid,
+  .hiw-steps,
+  .wtc-layout,
+  .result-grid,
+  .dashboard-grid,
+  .input-grid,
+  .blog-studio-grid,
+  .message-scenarios-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .eco-span-col-2,
+  .eco-span-row-2 {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+
+  /* Sections Spacing */
+  .section {
+    padding: 48px 0 !important;
+  }
+  .section-sm {
+    padding: 36px 0 !important;
+  }
+  .hero {
+    padding: 48px 0 60px !important;
+  }
+  .page-header,
+  .reports-hero,
+  .learn-hero,
+  .about-header {
+    padding: 60px 16px 40px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+  .footer-bottom {
+    flex-direction: column !important;
+    gap: 16px !important;
+    text-align: center !important;
+  }
+}
+
+/* ── 4. Tables & Data Containers Horizontal Defense ── */
+.table-card,
+.table-container,
+.data-table-wrap,
+.responsive-table-box {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 16px;
+  position: relative;
+}
+
+.table-card table,
+.data-table,
+.reports-table,
+.library-table {
+  min-width: 580px;
+}
+
+@media (max-width: 640px) {
+  .reports-table th,
+  .reports-table td {
+    padding: 14px 16px !important;
+    font-size: 0.8125rem !important;
+  }
+  .td-identifier {
+    font-size: 0.84rem !important;
+    gap: 8px !important;
+  }
+}
+
+/* ── 5. Hero Section & Search Bar Mobile Optimization ── */
+@media (max-width: 640px) {
+  .hero-dock-tabs,
+  .checker-tabs-container {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    padding-bottom: 6px;
+    gap: 6px;
+    scrollbar-width: none;
+  }
+  .hero-dock-tabs::-webkit-scrollbar,
+  .checker-tabs-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hero-dock-tab,
+  .checker-tab {
+    flex-shrink: 0;
+    padding: 8px 14px !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .hero-tool-panel,
+  .tool-checker-master-card {
+    padding: 18px 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .hero-console-bar {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 10px !important;
+  }
+
+  .hero-search-wrap,
+  .tool-input-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .hero-search-input,
+  .tool-input-main {
+    width: 100% !important;
+    height: 48px !important;
+    font-size: 0.9375rem !important;
+  }
+
+  .hero-search-btn,
+  .tool-submit-btn {
+    width: 100% !important;
+    height: 48px !important;
+    justify-content: center !important;
+  }
+
+  .hero-trust-bar {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .hero-feature-tags {
+    justify-content: center !important;
+  }
+
+  .upi-bank-pills-row {
+    overflow-x: auto;
+    padding-bottom: 4px;
+    width: 100%;
+  }
+}
+
+/* ── 6. Tool Result Views (Phone, URL, UPI, SMS) Responsive Mastery ── */
+/* Phone Tool & Smartphone HUD */
+@media (max-width: 980px) {
+  .phone-master-console {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .phone-smartphone-frame {
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 22px 18px !important;
+  }
+
+  .phone-master-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 18px 16px !important;
+    gap: 16px !important;
+  }
+
+  .pclean-header-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pclean-act-btn {
+    flex: 1;
+    min-width: 110px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .phone-dock-inner {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .phone-dock-country {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .phone-dock-input {
+    width: 100%;
+    height: 40px;
+    font-size: 0.9375rem !important;
+  }
+
+  .phone-dock-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .phone-matrix-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .phone-bottom-suite {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .phone-card-glass {
+    padding: 16px !important;
+  }
+
+  .phone-hardware-sim {
+    padding: 18px 16px !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  .phone-sim-right-badge {
+    align-self: flex-start;
+  }
+
+  .phone-big-number {
+    font-size: 1.25rem !important;
+  }
+
+  .phone-screen-caller-num {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* URL Dossier Responsive */
+@media (max-width: 860px) {
+  .pclean-split-grid,
+  .pclean-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .url-browser-omnibox {
+    font-size: 0.8125rem !important;
+    padding: 6px 12px !important;
+  }
+  .url-dock-inner {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .url-dock-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* UPI Rail & Bank Cheque Responsive */
+@media (max-width: 640px) {
+  .upi-cheque-container {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+  .upi-bank-header-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .passbook-col {
+    padding: 14px !important;
+  }
+}
+
+/* ── 7. Reports Page (reports.html) Filter Controls ── */
+@media (max-width: 768px) {
+  .controls-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .search-input-wrap {
+    min-width: 100% !important;
+    width: 100% !important;
+  }
+  .filter-select {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .reports-hero {
+    padding: 60px 16px 36px !important;
+  }
+  .btn-report {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 8. Auth Pages (Login, Signup, Forgot/Reset Password, Report) ── */
+@media (max-width: 540px) {
+  .auth-container {
+    padding: 40px 14px 60px !important;
+    min-height: auto !important;
+  }
+  .auth-card {
+    padding: 24px 18px !important;
+    border-radius: 18px !important;
+    max-width: 100% !important;
+  }
+  .auth-card h2 {
+    font-size: 1.45rem !important;
+    margin-bottom: 12px !important;
+  }
+}
+
+/* ── 9. Dashboard & Admin Dashboard Mobile Ergonomics ── */
+@media (max-width: 900px) {
+  body.has-dashboard-sidebar {
+    flex-direction: column !important;
+  }
+  .sidebar {
+    width: 100% !important;
+    height: auto !important;
+    position: static !important;
+    padding: 16px 20px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--ink-100, #E8EBF3) !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+  }
+
+  .sidebar .brand {
+    margin-bottom: 0 !important;
+  }
+
+  .sidebar-toggle-btn {
+    display: flex !important;
+  }
+
+  .main-content {
+    padding: 20px 16px !important;
+    width: 100% !important;
+  }
+
+  .header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .header-actions {
+    width: 100% !important;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+/* ── 10. Learn Page & Blog Cards Responsive ── */
+@media (max-width: 768px) {
+  .fc-card {
+    grid-template-columns: 1fr !important;
+  }
+  .fc-content {
+    padding: 28px 20px !important;
+  }
+  .fc-img {
+    height: 220px !important;
+    object-fit: cover !important;
+    width: 100% !important;
+  }
+  .learn-grid,
+  .blog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+}
+
+/* ── 11. Final CTA Card & Ambient Mesh Overflow Killers ── */
+.final-cta-section,
+.cta-card,
+.reports-hero,
+.about-header,
+.learn-hero {
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.cta-mesh-1,
+.cta-mesh-2,
+.phone-ambient-mesh,
+.footer-bg-glow {
+  max-width: 100vw !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 640px) {
+  .cta-card {
+    padding: 36px 20px !important;
+  }
+  .cta-block {
+    padding: 32px 18px !important;
+  }
+  .cta-block .flex {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  .cta-block .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 12. Small Mobile Devices Specific Optimization (320px - 380px) ── */
+@media (max-width: 380px) {
+  .nav-edge-logo span {
+    font-size: 1.1rem !important;
+  }
+  .nav-edge-github {
+    padding: 0 6px !important;
+  }
+  .nav-gh-divider {
+    margin: 0 4px !important;
+  }
+  .btn, .btn-lg, .auth-btn {
+    padding: 10px 14px !important;
+    font-size: 0.875rem !important;
+  }
+}
