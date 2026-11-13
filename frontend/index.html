@@ -942,13 +942,13 @@
           <!-- LEFT SIDE: Copy & CTA -->
           <div class="hero-content">
 
-            <h1
-              style="font-size: clamp(3rem, 4.5vw, 4.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 24px; color: var(--ink-900);">
-              Stop scams before<br />they reach you.
+            <h1 class="hero-title"
+              style="font-size: clamp(1.85rem, 5.5vw, 3.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 20px; color: var(--ink-900);">
+              Stop scams before<br class="hero-desktop-br" />they reach you.
             </h1>
 
-            <p
-              style="font-size: 1.25rem; line-height: 1.6; color: var(--ink-500); margin-bottom: 40px; max-width: 480px;">
+            <p class="hero-subtitle"
+              style="font-size: clamp(0.95rem, 2.5vw, 1.25rem); line-height: 1.6; color: var(--ink-500); margin-bottom: 32px; max-width: 480px;">
               The intelligence layer for your digital life. Paste any suspicious link, message, or payment handle for an
               instant, explainable risk verdict.
             </p>
@@ -1779,7 +1779,7 @@
         @media (max-width: 992px) {
           .hero-grid {
             grid-template-columns: 1fr !important;
-            gap: 40px !important;
+            gap: 36px !important;
             text-align: center;
           }
 
@@ -1790,7 +1790,8 @@
           }
 
           .hero-content h1 {
-            font-size: 2.5rem !important;
+            font-size: clamp(1.85rem, 5.5vw, 3.5rem) !important;
+            line-height: 1.15 !important;
           }
 
           .hero-tool-panel {
@@ -1814,19 +1815,22 @@
           }
 
           .hero-visual {
-            padding: 0 !important;
-            display: flex;
-            justify-content: center;
+            display: none !important;
           }
         }
 
         @media (max-width: 640px) {
+          .hero-desktop-br {
+            display: none !important;
+          }
+
           .hero-dock-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            width: 100%;
-            border-radius: 16px;
-            padding: 5px;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            width: 100% !important;
+            border-radius: 16px !important;
+            padding: 6px !important;
+            gap: 6px !important;
           }
 
           .hero-dock-tab {
@@ -2149,7 +2153,7 @@
 
         <div style="text-align: center; margin-bottom: 64px;">
           <div class="eyebrow" style="margin: 0 auto 16px;">What we check</div>
-          <h2 class="t-heading" style="font-size: clamp(2rem, 4vw, 3rem);">One platform.<br />Every threat vector.</h2>
+          <h2 class="t-heading" style="font-size: clamp(1.6rem, 4vw, 2.75rem);">One platform.<br />Every threat vector.</h2>
         </div>
 
         <div class="wtc-layout" style="display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start;">
@@ -2573,7 +2577,7 @@
 
         <div style="text-align: center; margin-bottom: 80px;">
           <div class="eyebrow" style="margin: 0 auto 16px;">How it works</div>
-          <h2 class="t-heading" style="font-size: clamp(2rem, 4vw, 3rem);">From suspicion to<br />certainty in seconds.
+          <h2 class="t-heading" style="font-size: clamp(1.6rem, 4vw, 2.75rem);">From suspicion to<br />certainty in seconds.
           </h2>
         </div>
 
@@ -2583,7 +2587,7 @@
 
           <!-- Line connector -->
           <div
-            style="position: absolute; top: 40px; left: calc(12.5% + 20px); right: calc(12.5% + 20px); height: 2px; background: var(--ink-100); z-index: 0; pointer-events: none;">
+            class="hiw-connector-line" style="position: absolute; top: 40px; left: calc(12.5% + 20px); right: calc(12.5% + 20px); height: 2px; background: var(--ink-100); z-index: 0; pointer-events: none;">
             <div
               style="position: absolute; left: 0; top: 0; height: 100%; width: 100%; background: linear-gradient(90deg, var(--blue-600) 0%, var(--blue-100) 100%); opacity: 0.4;">
             </div>
@@ -3037,7 +3041,7 @@
         }
 
         .eco-title {
-          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-size: clamp(1.75rem, 5vw, 3.5rem);
           font-weight: 800;
           letter-spacing: -0.04em;
           line-height: 1.1;
@@ -3407,7 +3411,7 @@
         }
 
         .eco-stat-huge {
-          font-size: clamp(3rem, 4vw, 4rem);
+          font-size: clamp(2rem, 4vw, 3.5rem);
           font-weight: 800;
           line-height: 1;
           background: linear-gradient(135deg, var(--blue-600, #2563EB), #06B6D4);
@@ -3797,7 +3801,7 @@
         }
 
         .cta-headline {
-          font-size: clamp(3rem, 5vw, 4.5rem);
+          font-size: clamp(1.85rem, 5vw, 3.75rem);
           font-weight: 800;
           line-height: 1.05;
           letter-spacing: -0.04em;

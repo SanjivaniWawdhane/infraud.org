@@ -30,6 +30,10 @@ window.analyzeTarget = function(targetQuery, targetType) {
   if (upiInput && (t === 'upi' || q.includes('@'))) {
     upiInput.value = q;
   }
+  const msgInput = document.getElementById('msg-quick-input');
+  if (msgInput && (t === 'message' || q.length > 50)) {
+    msgInput.value = q;
+  }
 
   // Trigger analysis immediately
   if (typeof initAnalysis === 'function') {
@@ -236,6 +240,93 @@ window.handleQuickUpiSubmit = function(e) {
   return window.verifyVpaAction(e);
 };
 
+// ── Forensic Message Quick Inspector Handlers ──
+window.reparseMessageAction = function(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  const input = document.getElementById('msg-quick-input');
+  const errorEl = document.getElementById('msg-quick-error');
+  const headerBtn = document.getElementById('btn-header-reparse-nlp');
+  const dockBtn = document.getElementById('msg-quick-btn');
+
+  let val = (input && input.value ? input.value.trim() : '') ||
+            (currentTargetQuery || '').trim();
+
+  if (!val) {
+    const urlParams = new URLSearchParams(window.location.search);
+    val = (urlParams.get('query') || urlParams.get('q') || '').trim();
+  }
+
+  if (!val) {
+    if (errorEl) {
+      errorEl.textContent = 'Please enter or paste message text to analyze.';
+      errorEl.style.display = 'block';
+    }
+    if (typeof showToast === 'function') showToast('Please enter message text');
+    if (input) input.focus();
+    return;
+  }
+
+  if (errorEl) errorEl.style.display = 'none';
+  if (input) input.value = val;
+
+  // Set loading state on buttons
+  if (headerBtn) {
+    headerBtn.disabled = true;
+    headerBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Parsing NLP...</span>`;
+  }
+  if (dockBtn) {
+    dockBtn.disabled = true;
+    dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Decoding...</span>`;
+  }
+
+  if (typeof showToast === 'function') {
+    showToast('Running Forensic NLP token analysis...');
+  }
+
+  window.analyzeTarget(val, 'message');
+};
+
+window.handleQuickMsgSubmit = function(e) {
+  return window.reparseMessageAction(e);
+};
+
+window.clearQuickMsgInput = function() {
+  const input = document.getElementById('msg-quick-input');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  const errorEl = document.getElementById('msg-quick-error');
+  if (errorEl) errorEl.style.display = 'none';
+};
+
+window.fillQuickMsg = function(text) {
+  const input = document.getElementById('msg-quick-input');
+  if (input) {
+    input.value = text;
+    window.reparseMessageAction();
+  }
+};
+
+window.switchMsgMockupMode = function(mode) {
+  const waTab = document.getElementById('msg-mode-wa');
+  const smsTab = document.getElementById('msg-mode-sms');
+  const waView = document.getElementById('msg-mockup-wa');
+  const smsView = document.getElementById('msg-mockup-sms');
+
+  if (mode === 'sms') {
+    if (waTab) waTab.classList.remove('active');
+    if (smsTab) smsTab.classList.add('active');
+    if (waView) waView.style.display = 'none';
+    if (smsView) smsView.style.display = 'flex';
+  } else {
+    if (smsTab) smsTab.classList.remove('active');
+    if (waTab) waTab.classList.add('active');
+    if (smsView) smsView.style.display = 'none';
+    if (waView) waView.style.display = 'flex';
+  }
+};
+
 window.clearQuickUpiInput = function() {
   const input = document.getElementById('upi-quick-input');
   if (input) {
@@ -354,6 +445,10 @@ async function initAnalysis(overrideQuery, overrideType) {
   const qUpiEl = document.getElementById('upi-quick-input');
   if (qUpiEl && (type === 'upi' || query.includes('@'))) {
     qUpiEl.value = query;
+  }
+  const qMsgEl = document.getElementById('msg-quick-input');
+  if (qMsgEl && type === 'message') {
+    qMsgEl.value = query;
   }
 
   // If detected type differs from parameter, silently update URL for accurate bookmarks & sharing
@@ -828,10 +923,27 @@ function showLoadingState() {
   } else if (type === 'message') {
     const bubble = document.getElementById('msg-bubble-content');
     if (bubble) bubble.textContent = 'Parsing message semantics, extracting payload URLs, phones, and checking linguistic fear triggers...';
+    const smsBubble = document.getElementById('msg-sms-bubble-content');
+    if (smsBubble) smsBubble.textContent = 'Parsing message semantics, extracting payload URLs, phones, and checking linguistic fear triggers...';
     const pressScore = document.getElementById('msg-pressure-score');
     if (pressScore) pressScore.textContent = '--%';
-    const pressPill = document.getElementById('msg-pressure-pill');
-    if (pressPill) pressPill.textContent = 'PARSING COERCION PATTERNS';
+    const stratEl = document.getElementById('msg-val-strategy');
+    if (stratEl) stratEl.textContent = 'Parsing Linguistic Patterns...';
+    const gaugeScore = document.getElementById('msg-gauge-score');
+    if (gaugeScore) gaugeScore.textContent = '--';
+    const gaugeCircle = document.getElementById('msg-gauge-circle');
+    if (gaugeCircle) gaugeCircle.style.strokeDashoffset = '251.2';
+
+    const headerBtn = document.getElementById('btn-header-reparse-nlp');
+    if (headerBtn) {
+      headerBtn.disabled = true;
+      headerBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Parsing NLP...</span>`;
+    }
+    const dockBtn = document.getElementById('msg-quick-btn');
+    if (dockBtn) {
+      dockBtn.disabled = true;
+      dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Decoding...</span>`;
+    }
   } else {
     const scoreDisplay = document.getElementById('score-display');
     if (scoreDisplay) {
@@ -1949,77 +2061,223 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
  */
 function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const text = (data.target || currentTargetQuery).trim();
-  const bubbleEl = document.getElementById('msg-bubble-content');
-  if (bubbleEl) {
-    let highlighted = escapeHtml(text);
-    // Highlight critical panic keywords
-    const criticalWords = [
-      'electricity', 'power', 'bijli', 'disconnect(?:ed)?', 'cut tonight', 'account blocked',
-      'immediately', 'urgent(?:ly)?', 'within \\d+ hours?', 'police', 'cbi', 'arrest', 'customs',
-      'narcotics', 'warrant', 'apk', 'deactivated', 'immediate action'
-    ];
-    criticalWords.forEach(kw => {
-      const re = new RegExp(`\\b(${kw})\\b`, 'gi');
-      highlighted = highlighted.replace(re, '<mark class="threat-kw-critical">$1</mark>');
-    });
 
-    // Highlight warning credential / financial keywords
-    const warnWords = [
-      'otp', 'upi pin', 'mpin', 'pin', 'password', 'cvv', 'share', 'verify',
-      'refund', 'cashback', 'lottery', 'winner', 'prize', 'reward', 'daily income', 'part-time job'
-    ];
-    warnWords.forEach(kw => {
-      const re = new RegExp(`\\b(${kw})\\b`, 'gi');
-      highlighted = highlighted.replace(re, '<mark class="threat-kw-warn">$1</mark>');
-    });
+  // 1. Reset buttons
+  const headerBtn = document.getElementById('btn-header-reparse-nlp');
+  if (headerBtn) {
+    headerBtn.disabled = false;
+    headerBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Re-parse NLP</span>`;
+  }
+  const dockBtn = document.getElementById('msg-quick-btn');
+  if (dockBtn) {
+    dockBtn.disabled = false;
+    dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Decode NLP</span>`;
+  }
 
-    bubbleEl.innerHTML = highlighted;
+  // 2. Pre-fill quick dock input
+  const qInput = document.getElementById('msg-quick-input');
+  if (qInput) qInput.value = text;
+
+  // 3. Metadata counts
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const chars = text.length;
+  const charEl = document.getElementById('msg-char-count');
+  if (charEl) charEl.textContent = `${chars} chars, ${words} words`;
+
+  // 4. Detected Strategy
+  let strategy = 'Social Engineering Coercion';
+  if (/electricity|power|bijli|cut tonight/i.test(text)) {
+    strategy = '⚡ Electricity Disconnection Extortion';
+  } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
+    strategy = '🚓 Digital Arrest Law Enforcement Threat';
+  } else if (/job|part-time|like|youtube|telegram|daily income|hotel review/i.test(text)) {
+    strategy = '💼 Part-Time Prepaid Task / Job Scam';
+  } else if (/lottery|prize|winner|reward|kbc|cashback/i.test(text)) {
+    strategy = '💰 Lottery & Cash Prize Bait';
+  } else if (/blocked|kyc|pan|aadhaar|deactivated|netbanking/i.test(text)) {
+    strategy = '🏦 Banking KYC & Account Freeze Phishing';
+  } else if (/apk|sideload|download/i.test(text)) {
+    strategy = '📦 Malicious Android APK Sideloading';
+  } else if (riskScore < 20) {
+    strategy = '✅ Benign / Everyday Communication';
+  }
+  const stratEl = document.getElementById('msg-val-strategy');
+  if (stratEl) stratEl.textContent = strategy;
+
+  // 5. Header Status Pill
+  const headerPill = document.getElementById('msg-header-status-pill');
+  if (headerPill) {
+    if (riskScore >= 70) {
+      headerPill.className = 'msg-status-pill pill-danger';
+      headerPill.textContent = '🚨 CRITICAL SCAM DETECTED';
+    } else if (riskScore >= 35) {
+      headerPill.className = 'msg-status-pill pill-warning';
+      headerPill.textContent = '⚠️ SUSPICIOUS COERCION PATTERN';
+    } else {
+      headerPill.className = 'msg-status-pill pill-safe';
+      headerPill.textContent = '🛡️ BENIGN / CLEAN TEXT';
+    }
+  }
+
+  // 6. Circular Threat Score Gauge
+  const gaugeScore = document.getElementById('msg-gauge-score');
+  if (gaugeScore) gaugeScore.textContent = riskScore;
+  const gaugeCircle = document.getElementById('msg-gauge-circle');
+  if (gaugeCircle) {
+    const circumference = 251.2;
+    const offset = Math.max(0, circumference - (riskScore / 100) * circumference);
+    gaugeCircle.style.strokeDashoffset = offset;
+    gaugeCircle.style.stroke = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#D97706' : '#10B981');
+  }
+  const gaugePill = document.getElementById('msg-gauge-pill');
+  if (gaugePill) {
+    if (riskScore >= 70) {
+      gaugePill.className = 'msg-gauge-status-badge pill-danger';
+      gaugePill.textContent = 'CRITICAL THREAT';
+    } else if (riskScore >= 35) {
+      gaugePill.className = 'msg-gauge-status-badge pill-warning';
+      gaugePill.textContent = 'ELEVATED RISK';
+    } else {
+      gaugePill.className = 'msg-gauge-status-badge pill-safe';
+      gaugePill.textContent = 'SAFE / LOW RISK';
+    }
+  }
+  const verdictTitle = document.getElementById('msg-gauge-verdict-title');
+  if (verdictTitle) {
+    verdictTitle.textContent = riskScore >= 70 ? 'High Coercion Scam' : (riskScore >= 35 ? 'Suspicious Language' : 'Clean Verification');
+  }
+  const gaugeSummary = document.getElementById('msg-gauge-summary');
+  if (gaugeSummary) {
+    gaugeSummary.textContent = theme.summary || 'Heuristic evaluation based on VADER coercion metrics and TRAI mandate.';
+  }
+
+  // 7. Dynamic Syntax Highlighting for WhatsApp and SMS Views
+  let highlighted = escapeHtml(text);
+
+  // Critical Panic / Coercion keywords
+  const criticalWords = [
+    'electricity', 'power', 'bijli', 'disconnected?', 'cut tonight', 'account blocked',
+    'immediately', 'urgently?', 'urgent', 'within \\d+ hours?', 'police', 'cbi', 'arrest',
+    'customs', 'narcotics', 'warrant', 'apk', 'deactivated', 'immediate action', 'notice',
+    'final warning', 'cutoff', 'suspended', 'penalty', 'cyber crime', 'court order'
+  ];
+  criticalWords.forEach(kw => {
+    const re = new RegExp(`\\b(${kw})\\b`, 'gi');
+    highlighted = highlighted.replace(re, '<mark class="threat-kw-critical">$1</mark>');
+  });
+
+  // Credential / Financial Harvester keywords
+  const warnWords = [
+    'otp', 'upi pin', 'mpin', 'pin', 'password', 'cvv', 'share', 'verify',
+    'refund', 'cashback', 'lottery', 'winner', 'prize', 'reward', 'daily income',
+    'part-time job', 'earn rs', 'telegram', 'sideload'
+  ];
+  warnWords.forEach(kw => {
+    const re = new RegExp(`\\b(${kw})\\b`, 'gi');
+    highlighted = highlighted.replace(re, '<mark class="threat-kw-warn">$1</mark>');
+  });
+
+  // Authority & Brand Impersonation keywords
+  const authorityWords = [
+    'msedcl', 'bescom', 'tneb', 'dhbvn', 'uppcl', 'sbi', 'hdfc', 'icici', 'axis bank',
+    'punjab national', 'bank of baroda', 'paytm', 'phonepe', 'google pay', 'india post',
+    'fedex', 'dhl', 'rbi', 'trai', 'kbc'
+  ];
+  authorityWords.forEach(kw => {
+    const re = new RegExp(`\\b(${kw})\\b`, 'gi');
+    highlighted = highlighted.replace(re, '<mark class="threat-kw-impersonation">$1</mark>');
+  });
+
+  const waBubble = document.getElementById('msg-bubble-content');
+  if (waBubble) waBubble.innerHTML = highlighted;
+
+  const smsBubble = document.getElementById('msg-sms-bubble-content');
+  if (smsBubble) smsBubble.innerHTML = highlighted;
+
+  // 8. Dynamic 4-Vector Psychological Manipulation Radar
+  function setPsychVector(id, valText, badgeCls, fillPercent, fillColor, descText) {
+    const valEl = document.getElementById('psych-val-' + id);
+    if (valEl) {
+      valEl.textContent = valText;
+      valEl.className = 'psych-badge ' + badgeCls;
+    }
+    const barEl = document.getElementById('psych-bar-' + id);
+    if (barEl) {
+      barEl.style.width = fillPercent;
+      barEl.style.background = fillColor;
+    }
+    const descEl = document.getElementById('psych-desc-' + id);
+    if (descEl) descEl.textContent = descText;
+  }
+
+  // Vector 1: Urgency
+  const hasUrgency = /(immediately|urgent|tonight|within \d+ hours|power cut|disconnect|arrest|warrant|blocked|cutoff|final warning)/i.test(text);
+  if (hasUrgency) {
+    setPsychVector('urgency', 'Critical (90%)', 'psych-badge-critical', '90%', '#DC2626', 'Severe threat of immediate cutoff or arrest');
+  } else if (riskScore > 30) {
+    setPsychVector('urgency', 'Moderate (45%)', 'psych-badge-elevated', '45%', '#D97706', 'Mild urgency or time-sensitive request');
+  } else {
+    setPsychVector('urgency', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'Zero artificial urgency or panic triggers');
+  }
+
+  // Vector 2: Authority Impersonation
+  const hasAuth = /(electricity|discom|msedcl|bescom|tneb|uppcl|police|cbi|customs|court|rbi|sbi|hdfc|icici|fedex|dhl|india post)/i.test(text);
+  if (hasAuth) {
+    setPsychVector('authority', 'Severe (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Impersonates official public agency or bank');
+  } else if (/bank|courier|delivery|telecom/i.test(text)) {
+    setPsychVector('authority', 'Mild (35%)', 'psych-badge-elevated', '35%', '#D97706', 'Generic corporate entity referenced');
+  } else {
+    setPsychVector('authority', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No authority or public body spoofed');
+  }
+
+  // Vector 3: Financial Greed / Task Bait
+  const hasGreed = /(lottery|kbc|winner|prize|reward|cashback|earn rs|daily income|part-time|telegram task|like youtube|ratings)/i.test(text);
+  if (hasGreed) {
+    setPsychVector('greed', 'Flagged (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Unrealistic financial bounty or task bait');
+  } else {
+    setPsychVector('greed', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No unearned cash or job lures');
+  }
+
+  // Vector 4: Credentials / OTP Harvesting
+  const hasCreds = /(otp|one time password|upi pin|mpin|pin|password|cvv|netbanking|card details|share screen|anydesk|rustdesk|apk|sideload)/i.test(text);
+  if (hasCreds) {
+    setPsychVector('creds', 'Critical (95%)', 'psych-badge-critical', '95%', '#DC2626', 'Direct demands for OTP, PIN, or malicious APK');
+  } else {
+    setPsychVector('creds', 'Safe (5%)', 'psych-badge-clean', '5%', '#10B981', 'No requests for secrets or unverified APKs');
   }
 
   const pressureScore = document.getElementById('msg-pressure-score');
   if (pressureScore) {
-    pressureScore.textContent = `${riskScore}%`;
-    pressureScore.style.color = theme.color;
+    pressureScore.textContent = `${riskScore}% ${riskScore >= 70 ? 'Critical' : (riskScore >= 35 ? 'Moderate' : 'Low Pressure')}`;
   }
 
-  const pressurePill = document.getElementById('msg-pressure-pill');
-  if (pressurePill) {
-    pressurePill.textContent = theme.label;
-    pressurePill.style.color = theme.color;
-    pressurePill.style.background = theme.bgPill;
-    pressurePill.style.borderColor = theme.borderPill;
-  }
+  // 9. Sender & TRAI Compliance Analysis
+  const hasPhone = /(?:\+91[\s-]?)?[6-9]\d{9}/.test(text);
+  const senderEl = document.getElementById('msg-val-sender');
+  const smsSenderEl = document.getElementById('msg-sms-sender-header');
+  const senderTypeEl = document.getElementById('msg-sender-type');
+  const waStatusEl = document.getElementById('msg-wa-status-text');
 
-  const descEl = document.getElementById('msg-pressure-desc');
-  if (descEl) {
-    descEl.textContent = theme.summary;
-  }
-
-  const stratEl = document.getElementById('msg-val-strategy');
-  if (stratEl) {
-    if (/electricity|power|bijli|cut tonight/i.test(text)) {
-      stratEl.textContent = 'Electricity Bill Panic';
-    } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
-      stratEl.textContent = 'Digital Arrest Extortion';
-    } else if (/job|part-time|like|youtube|telegram|daily income/i.test(text)) {
-      stratEl.textContent = 'Part-Time Task Scam';
-    } else if (/lottery|prize|winner|reward|cashback/i.test(text)) {
-      stratEl.textContent = 'Financial Bait / Reward';
-    } else if (/blocked|kyc|pan|aadhaar|deactivated/i.test(text)) {
-      stratEl.textContent = 'Banking KYC Phishing';
-    } else {
-      stratEl.textContent = riskScore > 30 ? 'Social Engineering' : 'Standard Greeting / Message';
+  if (hasPhone) {
+    const phoneMatch = text.match(/(?:\+91[\s-]?)?[6-9]\d{9}/)[0];
+    if (senderEl) senderEl.textContent = phoneMatch;
+    if (smsSenderEl) smsSenderEl.textContent = phoneMatch;
+    if (senderTypeEl) senderTypeEl.textContent = 'Non-Compliant Private Mobile (Violates TRAI TCCCPR 2018)';
+    if (waStatusEl) {
+      waStatusEl.textContent = '🚨 Unregistered Mobile';
+      waStatusEl.style.color = '#EF4444';
+    }
+  } else {
+    if (senderEl) senderEl.textContent = 'Unregistered Electronic Channel';
+    if (smsSenderEl) smsSenderEl.textContent = 'AX-NOTIFY';
+    if (senderTypeEl) senderTypeEl.textContent = 'Unregistered Third-Party Messaging Channel';
+    if (waStatusEl) {
+      waStatusEl.textContent = 'online';
+      waStatusEl.style.color = 'inherit';
     }
   }
 
-  const senderEl = document.getElementById('msg-val-sender');
-  if (senderEl) {
-    const hasPhone = /(?:\+91[\s-]?)?[6-9]\d{9}/.test(text);
-    senderEl.textContent = hasPhone ? 'Private +91 Mobile' : 'Unregistered Private Channel';
-    senderEl.style.color = riskScore >= 50 ? '#EF4444' : 'var(--ink-900, #0A0F1E)';
-  }
-
-  // Extracted Payloads
+  // 10. Extracted Threat Payloads
   const extractedContainer = document.getElementById('msg-extracted-container');
   if (extractedContainer) {
     const urls = data.embeddedUrls || [];
@@ -2032,7 +2290,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
       if (urlMatches) urls.push(...urlMatches);
     }
     if (phones.length === 0) {
-      const phoneMatches = text.match(/(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?\d{3}[\s-]?\d{3,4}\b/g);
+      const phoneMatches = text.match(/(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?[0-9]{3}[\s-]?[0-9]{3,4}\b/g);
       if (phoneMatches) phones.push(...phoneMatches);
     }
     if (upis.length === 0) {
@@ -2042,16 +2300,17 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
 
     if (urls.length === 0 && phones.length === 0 && upis.length === 0) {
       extractedContainer.innerHTML = `
-        <div style="font-size:0.8125rem; color:var(--ink-500); padding:6px 0;">
+        <div style="font-size:0.8125rem; color:var(--ink-500); padding:4px 0;">
           No embedded web links, phone numbers, or UPI handles detected in message body.
         </div>
       `;
     } else {
       let chipsHtml = '<div class="extracted-payloads-wrap">';
       urls.forEach(u => {
+        const isApk = /\.apk(\?|$)/i.test(u) || /apk/i.test(u);
         chipsHtml += `
           <div class="extracted-chip">
-            <span style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🔗 ${escapeHtml(u)}</span>
+            <span style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${isApk ? '⚠️ APK:' : '🔗'} ${escapeHtml(u)}</span>
             <a href="result.html?type=url&query=${encodeURIComponent(u)}" class="btn-chip-inspect">Scan Link</a>
           </div>
         `;
@@ -2077,7 +2336,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // Populate signals & recommendations
+  // 11. Populate signals & recommendations
   renderSignalsList(signals, theme, 'msg-signals-container', 'msg-signals-count');
   renderRecommendationsList(recommendations, theme, 'msg-recommendations-list');
 }
@@ -3239,6 +3498,10 @@ function animateCountUp(element, targetNum) {
 window.rescanTarget = function() {
   if (currentTargetType === 'upi') {
     window.verifyVpaAction();
+    return;
+  }
+  if (currentTargetType === 'message') {
+    window.reparseMessageAction();
     return;
   }
   initAnalysis();
