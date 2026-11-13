@@ -1217,6 +1217,50 @@ pre, code {
   }
 }
 
+/* Compact Desktop Navigation Adjustment (993px - 1180px) */
+@media (min-width: 993px) and (max-width: 1180px) {
+  .nav-edge .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .nav-edge-inner {
+    gap: 6px !important;
+  }
+  .nav-edge-logo {
+    gap: 6px !important;
+  }
+  .nav-edge-logo span {
+    font-size: 1.12rem !important;
+  }
+  .nav-brand-status {
+    padding: 2px 6px !important;
+    font-size: 0.6875rem !important;
+  }
+  .nav-edge-menu {
+    margin: 0 4px !important;
+    gap: 2px !important;
+  }
+  .nav-link-item {
+    padding: 5px 6px !important;
+    font-size: 0.78125rem !important;
+  }
+  .nav-edge-github {
+    display: none !important;
+  }
+  .nav-edge-actions {
+    gap: 6px !important;
+  }
+  .nav-edge-login {
+    padding: 6px 8px !important;
+    font-size: 0.8125rem !important;
+  }
+  .nav-edge-signup {
+    padding: 6px 12px !important;
+    font-size: 0.8125rem !important;
+    height: 34px !important;
+  }
+}
+
 /* Mobile & Tablet Navigation System (<= 992px) */
 @media (max-width: 992px) {
   .nav-edge {
@@ -1678,6 +1722,51 @@ pre, code {
   }
   .nav-mobile-login:active {
     background: #F8FAFC !important;
+  }
+}
+
+/* Ultra-Compact Mobile (< 380px) Navigation Refinements */
+@media (max-width: 380px) {
+  .nav-edge .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .nav-edge-inner {
+    gap: 6px !important;
+  }
+  .nav-edge-logo img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .nav-brand-text {
+    font-size: 1.05rem !important;
+  }
+  .nav-mobile-verify-pill {
+    padding: 0 10px !important;
+    height: 32px !important;
+    font-size: 0.72rem !important;
+  }
+  .nav-edge-hamburger {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .nav-quick-tools-bento {
+    gap: 6px !important;
+  }
+  .quick-tool-card {
+    padding: 8px 6px !important;
+    gap: 6px !important;
+  }
+  .quick-tool-icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 7px !important;
+  }
+  .quick-tool-name {
+    font-size: 0.72rem !important;
+  }
+  .quick-tool-desc {
+    font-size: 0.6rem !important;
   }
 }
 
