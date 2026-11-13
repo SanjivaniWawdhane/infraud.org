@@ -381,7 +381,8 @@
       // Mobile Hamburger Toggle
       const hambBtn = document.querySelector('.nav-edge-hamburger');
       if (hambBtn) {
-        hambBtn.addEventListener('click', () => {
+        hambBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           const nav = document.querySelector('.nav-edge');
           if (nav) nav.classList.toggle('mobile-open');
         });
@@ -468,12 +469,12 @@
 
   <main>
     <!-- Hero Section -->
-    <section class="section" class="section about-hero-section" style="border-bottom: 1px solid var(--ink-100);">
+    <section class="section about-hero-section" style="border-bottom: 1px solid var(--ink-100);">
       <div class="container">
         <div class="wrap-md" style="text-align: center;">
           <div class="eyebrow">Our Mission</div>
-          <h1 class="t-display" style="margin-bottom: 24px;">Built to protect the internet.</h1>
-          <p class="t-body" style="font-size: 1.25rem;">
+          <h1 class="t-display about-hero-title" style="font-size: clamp(2rem, 5.5vw, 3.5rem); margin-bottom: 20px; line-height: 1.15;">Built to protect the internet.</h1>
+          <p class="t-body about-hero-desc" style="font-size: clamp(1rem, 2.5vw, 1.25rem); line-height: 1.6;">
             INFRAUD is an intelligence platform designed to democratize digital safety. We aggregate threat signals to provide explainable risk scores before you make a mistake.
           </p>
         </div>
@@ -561,7 +562,7 @@
           <p class="t-body" style="margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; color: var(--ink-300);">
             INFRAUD is only as strong as its community. Help us map the adversary infrastructure.
           </p>
-          <div class="flex justify-c gap-4">
+          <div class="flex justify-c gap-4 cta-actions-row">
             <a href="https://github.com/infraud" class="btn btn-white btn-lg">Contribute on GitHub</a>
             <a href="reports.html" class="btn btn-outline btn-lg" style="background: transparent; color: white; border-color: rgba(255,255,255,0.2);">Report a Threat</a>
           </div>

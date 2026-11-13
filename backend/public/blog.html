@@ -472,7 +472,8 @@
       // Mobile Hamburger Toggle
       const hambBtn = document.querySelector('.nav-edge-hamburger');
       if (hambBtn) {
-        hambBtn.addEventListener('click', () => {
+        hambBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           const nav = document.querySelector('.nav-edge');
           if (nav) nav.classList.toggle('mobile-open');
         });

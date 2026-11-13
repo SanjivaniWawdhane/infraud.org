@@ -868,3 +868,107 @@ pre, code {
     padding: 24px 16px !important;
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════
+   PRODUCTION-GRADE MOBILE NAV & HERO SHIELD (CROSS-DEVICE)
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Prevent header collision on small screens (320px - 640px) */
+  .nav-edge-github {
+    display: none !important;
+  }
+  .nav-edge .container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .nav-edge-inner {
+    gap: 8px !important;
+  }
+  .nav-edge-logo span {
+    font-size: 1.15rem !important;
+  }
+  
+  /* Mobile drawer full accessibility */
+  .nav-edge-menu {
+    max-height: calc(100vh - 72px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 16px 14px 24px !important;
+  }
+  .nav-edge-menu a {
+    padding: 12px 14px !important;
+    font-size: 0.95rem !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* About & Hero Section Mobile Polish */
+  .about-hero-section,
+  .about-header {
+    padding: 44px 0 28px !important;
+  }
+  .about-hero-section .t-display,
+  .about-header-title {
+    font-size: clamp(1.85rem, 6.5vw, 2.35rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 14px !important;
+    letter-spacing: -0.03em !important;
+  }
+  .about-hero-section .t-body,
+  .about-header-desc {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    max-width: 100% !important;
+    padding: 0 4px !important;
+  }
+
+  /* CTA Block Mobile Stacking */
+  .cta-block {
+    padding: 32px 16px !important;
+    border-radius: 20px !important;
+  }
+  .cta-block .t-heading {
+    font-size: clamp(1.35rem, 5vw, 1.75rem) !important;
+    line-height: 1.25 !important;
+  }
+  .cta-block .t-body {
+    font-size: 0.9375rem !important;
+    margin-bottom: 22px !important;
+  }
+  .cta-actions-row,
+  .cta-block .flex,
+  .cta-block .flex.justify-c.gap-4 {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  .cta-block .btn,
+  .cta-block .btn-lg,
+  .cta-block a.btn {
+    width: 100% !important;
+    height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 16px !important;
+    font-size: 0.9375rem !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2.items-c.gap-12,
+  .grid-2.gap-12 {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
