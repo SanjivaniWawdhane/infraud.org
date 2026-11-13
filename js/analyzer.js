@@ -245,6 +245,20 @@ window.clearQuickUpiInput = function() {
   const errorEl = document.getElementById('upi-quick-error');
   if (errorEl) errorEl.style.display = 'none';
 };
+
+/**
+ * Copies active UPI handle to clipboard with toast notification
+ */
+window.copyCanonicalUpi = function() {
+  const target = (currentTargetQuery || '').trim();
+  if (target) {
+    navigator.clipboard.writeText(target).then(() => {
+      if (typeof showToast === 'function') showToast('UPI VPA handle copied to clipboard!');
+    }).catch(() => {
+      if (typeof copyResultLink === 'function') copyResultLink();
+    });
+  }
+};
 /**
  * INFRAUD.org — Threat Intelligence Analysis Controller (V2 Redesign)
  * 
@@ -778,8 +792,8 @@ function showLoadingState() {
 
     const upiRiskBadge = document.getElementById('upi-risk-badge');
     if (upiRiskBadge) {
-      upiRiskBadge.textContent = 'CHECKING NPCI SWITCH...';
-      upiRiskBadge.className = 'upi-screen-action-chip upi-chip-green';
+      upiRiskBadge.textContent = 'CHECKING NPCI RAIL...';
+      upiRiskBadge.className = 'upi-risk-pill upi-pill-green';
     }
 
     const upiVerdictTitle = document.getElementById('upi-verdict-title');
@@ -1699,30 +1713,30 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
   // Critical High Danger: 75-100%
   let upiThemeColor = '#10B981'; // Green for low risk
   let riskLevelText = 'LOW RISK';
-  let badgeClass = 'upi-chip-green';
-  let badgeText = '✓ LOW RISK — SAFE BENEFICIARY';
+  let badgeClass = 'upi-pill-green';
+  let badgeText = '✓ LOW RISK';
   let verdictTitleText = 'Risk Level: Low Risk (Safe to Pay)';
-  let verdictDescText = 'Standard NPCI UPI format with valid PSP gateway. Zero fraudulent cybercrime complaints or mule telemetry flags on record.';
+  let verdictDescText = 'Standard NPCI UPI format with authorized PSP banking gateway. Zero fraudulent cybercrime complaints or mule telemetry flags on record.';
 
   if (riskScore >= 75) {
     upiThemeColor = '#EF4444'; // Red
     riskLevelText = 'CRITICAL RISK';
-    badgeClass = 'upi-chip-red';
-    badgeText = '🚨 CRITICAL RISK — DO NOT TRANSFER';
-    verdictTitleText = 'Risk Level: High Risk (Severe Threat)';
+    badgeClass = 'upi-pill-red';
+    badgeText = '🚨 CRITICAL RISK';
+    verdictTitleText = 'Risk Level: Critical Threat (Do Not Pay)';
     verdictDescText = 'Confirmed high danger! Associated with deceptive brand impersonation, urgent lottery/refund trap, or cyber mule accounts. Do NOT transfer funds or scan QR codes.';
   } else if (riskScore >= 50) {
     upiThemeColor = '#DC2626'; // High Red
     riskLevelText = 'HIGH RISK';
-    badgeClass = 'upi-chip-red';
-    badgeText = '🚨 HIGH RISK — POTENTIAL MULE SCAM';
+    badgeClass = 'upi-pill-red';
+    badgeText = '🚨 HIGH RISK';
     verdictTitleText = 'Risk Level: High Risk (Mule Account)';
-    verdictDescText = 'Handle flagged for high-risk suspicious keywords, unknown provider, or fraud complaints. High probability of cyber mule operation.';
+    verdictDescText = 'Handle flagged for suspicious keywords, unverified provider, or fraud complaints. High probability of fraudulent cyber mule operations.';
   } else if (riskScore >= 25) {
     upiThemeColor = '#F59E0B'; // Amber
     riskLevelText = 'MODERATE RISK';
-    badgeClass = 'upi-chip-yellow';
-    badgeText = '⚠️ MODERATE RISK — EXERCISE CAUTION';
+    badgeClass = 'upi-pill-yellow';
+    badgeText = '⚠️ MODERATE RISK';
     verdictTitleText = 'Risk Level: Moderate Risk (Verify Name)';
     verdictDescText = 'Uncommon handle or non-standard PSP gateway. Always verify the registered legal beneficiary name displayed in your UPI app before completing payment.';
   }
@@ -1778,7 +1792,7 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
   // Update Verdict Badge & Texts
   const upiRiskBadge = document.getElementById('upi-risk-badge');
   if (upiRiskBadge) {
-    upiRiskBadge.className = `upi-screen-action-chip ${badgeClass}`;
+    upiRiskBadge.className = `upi-risk-pill ${badgeClass}`;
     upiRiskBadge.textContent = badgeText;
   }
 
@@ -1836,13 +1850,13 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
   const stampEl = document.getElementById('upi-rubber-stamp');
   if (stampEl) {
     if (riskScore >= 50) {
-      stampEl.className = 'upi-stamp-badge upi-stamp-danger';
-      stampEl.textContent = 'DO NOT PAY • MULE ACCOUNT';
+      stampEl.className = 'upi-details-stamp upi-stamp-danger';
+      stampEl.textContent = 'HIGH RISK • MULE SUSPECT';
     } else if (riskScore >= 25) {
-      stampEl.className = 'upi-stamp-badge upi-stamp-danger';
-      stampEl.textContent = 'SUSPICIOUS VPA';
+      stampEl.className = 'upi-details-stamp upi-stamp-danger';
+      stampEl.textContent = 'MODERATE RISK • CAUTION';
     } else {
-      stampEl.className = 'upi-stamp-badge upi-stamp-safe';
+      stampEl.className = 'upi-details-stamp upi-stamp-safe';
       stampEl.textContent = 'VERIFIED SAFE BENEFICIARY';
     }
   }
