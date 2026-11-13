@@ -34,13 +34,14 @@ window.analyzeTarget = function(targetQuery, targetType) {
   if (msgInput && (t === 'message' || q.length > 50)) {
     msgInput.value = q;
   }
+  // In-phone smartphone mockup inputs are typing fields and should stay clear for user typing
   const pChatInput = document.getElementById('phone-chat-input');
-  if (pChatInput && (t === 'message' || q.length > 50)) {
-    pChatInput.value = q;
+  if (pChatInput) {
+    pChatInput.value = '';
   }
   const pSmsInput = document.getElementById('phone-sms-input');
-  if (pSmsInput && (t === 'message' || q.length > 50)) {
-    pSmsInput.value = q;
+  if (pSmsInput) {
+    pSmsInput.value = '';
   }
 
   // Trigger analysis immediately
@@ -316,15 +317,20 @@ window.fillQuickMsg = function(text) {
   const input = document.getElementById('msg-quick-input');
   if (input) input.value = text;
   const pChat = document.getElementById('phone-chat-input');
-  if (pChat) pChat.value = text;
+  if (pChat) pChat.value = '';
   const pSms = document.getElementById('phone-sms-input');
-  if (pSms) pSms.value = text;
+  if (pSms) pSms.value = '';
   window.reparseMessageAction();
 };
 
 // ── Interactive In-Phone Smartphone Mockup Handlers ──
+let isSubmittingPhoneMsg = false;
 window.handleInPhoneMsgSubmit = function(e) {
-  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
+  if (isSubmittingPhoneMsg) return;
   const phoneInput = document.getElementById('phone-chat-input');
   if (!phoneInput) return;
   const val = phoneInput.value.trim();
@@ -332,27 +338,46 @@ window.handleInPhoneMsgSubmit = function(e) {
     phoneInput.focus();
     return;
   }
+  isSubmittingPhoneMsg = true;
+  setTimeout(() => { isSubmittingPhoneMsg = false; }, 300);
 
-  // Sync to quick dock & SMS input
+  // 1. Instantly clear both in-phone typing fields so the user sees the message has been sent
+  phoneInput.value = '';
+  const smsInput = document.getElementById('phone-sms-input');
+  if (smsInput) smsInput.value = '';
+
+  // 2. Sync to quick dock input
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = val;
-  const smsInput = document.getElementById('phone-sms-input');
-  if (smsInput) smsInput.value = val;
 
-  // Button feedback animation
+  // 3. Button feedback animation
   const sendBtn = document.getElementById('phone-chat-send-btn');
   if (sendBtn) {
-    sendBtn.style.transform = 'scale(0.9)';
-    setTimeout(() => { if (sendBtn) sendBtn.style.transform = ''; }, 150);
+    sendBtn.style.transform = 'scale(0.85) rotate(-15deg)';
+    sendBtn.style.opacity = '0.7';
+    setTimeout(() => {
+      if (sendBtn) {
+        sendBtn.style.transform = '';
+        sendBtn.style.opacity = '';
+      }
+    }, 200);
   }
 
-  // Immediately display inside speech bubble
+  // 4. Immediately display inside WhatsApp & SMS speech bubbles
   const waBubble = document.getElementById('msg-bubble-content');
   if (waBubble) waBubble.textContent = val;
+  const smsBubble = document.getElementById('msg-sms-bubble-content');
+  if (smsBubble) smsBubble.textContent = val;
+
+  const timeNow = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   const timeEl = document.getElementById('msg-bubble-time');
-  if (timeEl) {
-    timeEl.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  }
+  if (timeEl) timeEl.textContent = timeNow;
+  const smsTimeEl = document.getElementById('msg-sms-time');
+  if (smsTimeEl) smsTimeEl.textContent = timeNow;
+
+  // Single grey tick for in-flight delivery
+  const ticksEl = document.getElementById('msg-bubble-ticks');
+  if (ticksEl) ticksEl.innerHTML = `<span style="color: #8696A0;">✓</span>`;
 
   if (typeof showToast === 'function') {
     showToast('Analyzing message in forensic simulator...');
@@ -361,8 +386,13 @@ window.handleInPhoneMsgSubmit = function(e) {
   window.analyzeTarget(val, 'message');
 };
 
+let isSubmittingPhoneSms = false;
 window.handleInPhoneSmsSubmit = function(e) {
-  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
+  if (isSubmittingPhoneSms) return;
   const smsInput = document.getElementById('phone-sms-input');
   if (!smsInput) return;
   const val = smsInput.value.trim();
@@ -370,23 +400,45 @@ window.handleInPhoneSmsSubmit = function(e) {
     smsInput.focus();
     return;
   }
+  isSubmittingPhoneSms = true;
+  setTimeout(() => { isSubmittingPhoneSms = false; }, 300);
 
-  // Sync to quick dock & WhatsApp input
+  // 1. Instantly clear both in-phone typing fields
+  smsInput.value = '';
+  const phoneInput = document.getElementById('phone-chat-input');
+  if (phoneInput) phoneInput.value = '';
+
+  // 2. Sync to quick dock input
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = val;
-  const phoneInput = document.getElementById('phone-chat-input');
-  if (phoneInput) phoneInput.value = val;
 
-  // Button feedback animation
+  // 3. Button feedback animation
   const sendBtn = document.getElementById('phone-sms-send-btn');
   if (sendBtn) {
-    sendBtn.style.transform = 'scale(0.9)';
-    setTimeout(() => { if (sendBtn) sendBtn.style.transform = ''; }, 150);
+    sendBtn.style.transform = 'scale(0.85) translateY(-2px)';
+    sendBtn.style.opacity = '0.7';
+    setTimeout(() => {
+      if (sendBtn) {
+        sendBtn.style.transform = '';
+        sendBtn.style.opacity = '';
+      }
+    }, 200);
   }
 
-  // Immediately display inside SMS speech bubble
+  // 4. Immediately display inside SMS & WhatsApp speech bubbles
   const smsBubble = document.getElementById('msg-sms-bubble-content');
   if (smsBubble) smsBubble.textContent = val;
+  const waBubble = document.getElementById('msg-bubble-content');
+  if (waBubble) waBubble.textContent = val;
+
+  const timeNow = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const timeEl = document.getElementById('msg-bubble-time');
+  if (timeEl) timeEl.textContent = timeNow;
+  const smsTimeEl = document.getElementById('msg-sms-time');
+  if (smsTimeEl) smsTimeEl.textContent = timeNow;
+
+  const ticksEl = document.getElementById('msg-bubble-ticks');
+  if (ticksEl) ticksEl.innerHTML = `<span style="color: #8696A0;">✓</span>`;
 
   if (typeof showToast === 'function') {
     showToast('Analyzing SMS notice in forensic simulator...');
@@ -538,12 +590,12 @@ async function initAnalysis(overrideQuery, overrideType) {
     qMsgEl.value = query;
   }
   const pChatEl = document.getElementById('phone-chat-input');
-  if (pChatEl && type === 'message') {
-    pChatEl.value = query;
+  if (pChatEl) {
+    pChatEl.value = '';
   }
   const pSmsEl = document.getElementById('phone-sms-input');
-  if (pSmsEl && type === 'message') {
-    pSmsEl.value = query;
+  if (pSmsEl) {
+    pSmsEl.value = '';
   }
 
   // If detected type differs from parameter, silently update URL for accurate bookmarks & sharing
@@ -740,7 +792,7 @@ function updateTargetTypeVisuals(query, type) {
       el.innerHTML = `<span style="color: #FBBF24; margin-right: 4px; font-weight: 800;">₹</span> <span style="font-family: var(--mono); color: #FFFFFF;">${escapeHtml(query)}</span>`;
     } else if (type === 'message') {
       const preview = query.length > 70 ? query.substring(0, 68) + '...' : query;
-      el.innerHTML = `<span style="color: #FFFFFF;">"${escapeHtml(preview)}"</span>`;
+      el.innerHTML = `<span style="color: var(--ink-900, #0F172A); font-weight: 800;">"${escapeHtml(preview)}"</span>`;
     } else {
       el.innerHTML = `<span style="color: #0F172A; font-family: var(--mono); font-weight: 800;">${escapeHtml(query)}</span>`;
     }
@@ -813,9 +865,9 @@ function updateTargetTypeVisuals(query, type) {
       protocolTag.style.color = '#FDE68A';
     }
     if (iconBox) {
-      iconBox.style.background = 'rgba(245, 158, 11, 0.25)';
-      iconBox.style.color = '#FCD34D';
-      iconBox.style.boxShadow = '0 0 20px rgba(245, 158, 11, 0.4)';
+      iconBox.style.background = '#EEF2FF';
+      iconBox.style.color = '#2563EB';
+      iconBox.style.boxShadow = 'none';
       iconBox.innerHTML = `
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -824,7 +876,7 @@ function updateTargetTypeVisuals(query, type) {
     }
     if (targetDisplay) {
       const preview = query.length > 70 ? query.substring(0, 68) + '...' : query;
-      targetDisplay.innerHTML = `<span style="color: #FFFFFF;">"${escapeHtml(preview)}"</span>`;
+      targetDisplay.innerHTML = `<span style="color: var(--ink-900, #0F172A); font-weight: 800;">"${escapeHtml(preview)}"</span>`;
     }
   } else {
     // Website / URL
@@ -1016,14 +1068,13 @@ function showLoadingState() {
       upiQuickBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Verifying...</span>`;
     }
   } else if (type === 'message') {
-    const bubble = document.getElementById('msg-bubble-content');
-    if (bubble) bubble.textContent = 'Parsing message semantics, extracting payload URLs, phones, and checking linguistic fear triggers...';
-    const smsBubble = document.getElementById('msg-sms-bubble-content');
-    if (smsBubble) smsBubble.textContent = 'Parsing message semantics, extracting payload URLs, phones, and checking linguistic fear triggers...';
+    // Keep user's active typed message in speech bubbles - DO NOT overwrite with generic text!
+    const ticksEl = document.getElementById('msg-bubble-ticks');
+    if (ticksEl) ticksEl.innerHTML = `<span style="color: #8696A0;">✓</span>`;
     const pressScore = document.getElementById('msg-pressure-score');
     if (pressScore) pressScore.textContent = '--%';
     const stratEl = document.getElementById('msg-val-strategy');
-    if (stratEl) stratEl.textContent = 'Parsing Linguistic Patterns...';
+    if (stratEl) stratEl.textContent = 'Evaluating Message Semantics...';
     const gaugeScore = document.getElementById('msg-gauge-score');
     if (gaugeScore) gaugeScore.textContent = '--';
     const gaugeCircle = document.getElementById('msg-gauge-circle');
@@ -2169,13 +2220,13 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Decode NLP</span>`;
   }
 
-  // 2. Pre-fill Quick Dock Input & In-Phone Chat Inputs
+  // 2. Pre-fill Quick Dock Input (top bar) and leave in-phone inputs clear for typing
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = text;
   const pChatInput = document.getElementById('phone-chat-input');
-  if (pChatInput) pChatInput.value = text;
+  if (pChatInput) pChatInput.value = '';
   const pSmsInput = document.getElementById('phone-sms-input');
-  if (pSmsInput) pSmsInput.value = text;
+  if (pSmsInput) pSmsInput.value = '';
 
   // 3. Metadata counts & Target Quote
   const words = text.split(/\s+/).filter(Boolean).length;
@@ -2301,6 +2352,17 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
 
   const smsBubble = document.getElementById('msg-sms-bubble-content');
   if (smsBubble) smsBubble.innerHTML = highlighted;
+
+  // Animate delivery status to verified double blue ticks
+  const ticksEl = document.getElementById('msg-bubble-ticks');
+  if (ticksEl) {
+    ticksEl.innerHTML = `<span style="color: #53BDEB; font-weight: bold;">✓✓</span>`;
+  }
+  const timeNow = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const timeEl = document.getElementById('msg-bubble-time');
+  if (timeEl) timeEl.textContent = timeNow;
+  const smsTimeEl = document.getElementById('msg-sms-time');
+  if (smsTimeEl) smsTimeEl.textContent = timeNow;
 
   // 8. 4-Vector Psychological Manipulation Radar
   function setPsychVector(id, valText, tagCls, fillPercent, fillColor, descText) {

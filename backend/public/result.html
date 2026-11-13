@@ -5378,7 +5378,7 @@
                       </div>
                       <div class="wa-meta-time">
                         <span id="msg-bubble-time">11:42 AM</span>
-                        <span style="color: #53BDEB; font-weight: bold;">✓✓</span>
+                        <span id="msg-bubble-ticks" style="color: #53BDEB; font-weight: bold;">✓✓</span>
                       </div>
                     </div>
                   </div>
@@ -5388,7 +5388,7 @@
                 <form class="phone-chat-bar" onsubmit="handleInPhoneMsgSubmit(event); return false;">
                   <div class="phone-chat-input-pill">
                     <button type="button" class="phone-chat-icon-btn" title="Emoji">😊</button>
-                    <input type="text" id="phone-chat-input" class="phone-chat-input-field" placeholder="Type message to inspect..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
+                    <input type="text" id="phone-chat-input" class="phone-chat-input-field" placeholder="Type message to inspect..." autocomplete="off" spellcheck="false" />
                     <button type="button" class="phone-chat-icon-btn" title="Attach">📎</button>
                     <button type="button" class="phone-chat-icon-btn" title="Camera">📷</button>
                   </div>
@@ -5405,8 +5405,11 @@
                   <div class="sms-header-desc">TRAI Official SMS Rail • India (+91)</div>
                 </div>
                 <div class="sms-scroll-area">
-                  <div class="sms-speech-bubble" id="msg-sms-bubble-content">
-                    Analyzing suspicious message tokens...
+                  <div class="sms-speech-bubble">
+                    <div id="msg-sms-bubble-content">Analyzing suspicious message tokens...</div>
+                    <div class="sms-meta-time" id="msg-sms-meta-time" style="font-size: 0.625rem; color: #8E8E93; margin-top: 6px; text-align: right;">
+                      <span>Delivered</span> • <span id="msg-sms-time">11:42 AM</span>
+                    </div>
                   </div>
                 </div>
 
@@ -5414,7 +5417,7 @@
                 <form class="phone-sms-bar" onsubmit="handleInPhoneSmsSubmit(event); return false;">
                   <button type="button" class="sms-icon-btn" title="Media">+</button>
                   <div class="phone-sms-input-pill">
-                    <input type="text" id="phone-sms-input" class="phone-sms-input-field" placeholder="Text Message (Type to inspect)..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneSmsSubmit(event);}" />
+                    <input type="text" id="phone-sms-input" class="phone-sms-input-field" placeholder="Text Message (Type to inspect)..." autocomplete="off" spellcheck="false" />
                   </div>
                   <button type="submit" class="phone-sms-send-btn" id="phone-sms-send-btn" title="Send & Inspect SMS">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
