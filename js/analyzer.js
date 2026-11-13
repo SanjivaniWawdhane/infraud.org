@@ -157,6 +157,71 @@ window.clearQuickUrlInput = function() {
   if (errorEl) errorEl.style.display = 'none';
 };
 
+
+// ── SaaS UPI Quick Input & Handlers ──
+window.handleQuickUpiSubmit = function(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  const input = document.getElementById('upi-quick-input');
+  const errorEl = document.getElementById('upi-quick-error');
+  const btn = document.querySelector('.upi-dock-btn') || document.getElementById('upi-quick-btn');
+  if (!input) return;
+  let val = input.value.trim();
+  if (!val) {
+    if (errorEl) {
+      errorEl.textContent = 'Please enter a valid UPI ID / VPA handle (e.g. name@bank, 9876543210@paytm).';
+      errorEl.style.display = 'block';
+    }
+    input.focus();
+    return;
+  }
+
+  // Clean UPI string (remove upi://pay?pa= prefix if pasted)
+  if (val.toLowerCase().includes('pa=')) {
+    try {
+      const parsedUrl = new URL(val);
+      const paParam = parsedUrl.searchParams.get('pa');
+      if (paParam) val = paParam;
+    } catch (err) {
+      const match = val.match(/pa=([^&]+)/i);
+      if (match) val = decodeURIComponent(match[1]);
+    }
+  }
+
+  val = val.replace(/\s+/g, '');
+
+  if (!val.includes('@') && !/^\d{10}$/.test(val)) {
+    if (errorEl) {
+      errorEl.textContent = 'UPI handle must contain an "@" symbol (e.g. username@okhdfcbank) or 10-digit number.';
+      errorEl.style.display = 'block';
+    }
+    input.focus();
+    return;
+  }
+
+  if (errorEl) errorEl.style.display = 'none';
+  input.value = val;
+
+  if (btn) {
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg><span>Verifying...</span>`;
+    setTimeout(() => {
+      if (btn) {
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Verify VPA</span>`;
+      }
+    }, 1500);
+  }
+
+  window.analyzeTarget(val, 'upi');
+};
+
+window.clearQuickUpiInput = function() {
+  const input = document.getElementById('upi-quick-input');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  const errorEl = document.getElementById('upi-quick-error');
+  if (errorEl) errorEl.style.display = 'none';
+};
 /**
  * INFRAUD.org — Threat Intelligence Analysis Controller (V2 Redesign)
  * 
@@ -1496,6 +1561,18 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
   const target = (data.target || currentTargetQuery).trim();
   const upiDisplay = document.getElementById('upi-display-handle');
   if (upiDisplay) upiDisplay.textContent = target;
+
+  // Pre-fill UPI Quick Search Input
+  const upiQuickInput = document.getElementById('upi-quick-input');
+  if (upiQuickInput) {
+    upiQuickInput.value = target;
+  }
+  // Reset Verify VPA button
+  const upiQuickBtn = document.getElementById('upi-quick-btn');
+  if (upiQuickBtn) {
+    upiQuickBtn.disabled = false;
+    upiQuickBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Verify VPA</span>`;
+  }
 
   const parts = target.split('@');
   const psp = (parts[1] || '').toLowerCase();

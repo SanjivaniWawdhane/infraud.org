@@ -1326,6 +1326,107 @@
 }
 
 /* ── TOOL 3: NPCI BANKING CHEQUE & PASSBOOK LEDGER (UPI SCANNER) ── */
+      /* ── 0. High-Tech Floating Quick Search Dock (UPI) ── */
+      .upi-dock-strip {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 24px;
+      }
+      .upi-dock-inner {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1.5px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 5px 6px 5px 14px;
+        gap: 12px;
+        box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+        transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .upi-dock-inner:focus-within {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12), 0 8px 24px -4px rgba(124, 58, 237, 0.15);
+        transform: translateY(-1px);
+      }
+      .upi-dock-prefix {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #F5F3FF;
+        color: #7C3AED;
+        border: 1.5px solid #DDD6FE;
+        font-family: var(--mono, 'JetBrains Mono', monospace);
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 9px;
+        flex-shrink: 0;
+      }
+      .upi-rupee-sign {
+        font-weight: 800;
+        font-size: 0.9rem;
+      }
+      .upi-dock-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: var(--font, sans-serif);
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #0F172A;
+        min-width: 0;
+      }
+      .upi-dock-input::placeholder {
+        color: #94A3B8;
+        font-weight: 400;
+        font-size: 0.875rem;
+      }
+      .upi-dock-clear {
+        border: none;
+        background: transparent;
+        color: #94A3B8;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        transition: color 0.15s ease;
+      }
+      .upi-dock-clear:hover {
+        color: #334155;
+      }
+      .upi-dock-btn {
+        background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+        color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 22px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        flex-shrink: 0;
+      }
+      .upi-dock-btn:hover {
+        background: #6D28D9;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
+      }
+      .upi-dock-error {
+        display: none;
+        font-size: 0.78rem;
+        color: #DC2626;
+        font-weight: 600;
+        margin-top: 6px;
+        padding-left: 6px;
+      }
       .upi-bank-header-bar {
         background: linear-gradient(135deg, #1E1B4B 0%, #312E81 60%, #4338CA 100%);
         border: 1px solid rgba(124, 58, 237, 0.45);
@@ -3839,6 +3940,25 @@
            Perforated Bank Cheque + Golden Rule Banner + Simulator
            ═══════════════════════════════════════════════ -->
       <div id="view-upi" class="tool-result-view">
+
+        <!-- 0. High-Tech Floating Quick Search Dock (Matches Phone & URL tools) -->
+        <div class="upi-dock-strip">
+          <form class="upi-dock-inner" onsubmit="handleQuickUpiSubmit(event); return false;">
+            <span class="upi-dock-prefix" id="upi-search-proto-badge">
+              <span class="upi-rupee-sign">₹</span>
+              <span>UPI / VPA</span>
+            </span>
+            <input type="text" id="upi-quick-input" class="upi-dock-input" placeholder="Check another UPI ID or VPA (e.g. merchant@okaxis, 9876543210@paytm)..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickUpiSubmit(event);}" />
+            <button type="button" class="upi-dock-clear" onclick="clearQuickUpiInput()" title="Clear">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <button type="submit" class="upi-dock-btn" id="upi-quick-btn" title="Verify UPI VPA handle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <span>Verify VPA</span>
+            </button>
+          </form>
+          <div id="upi-quick-error" class="upi-dock-error"></div>
+        </div>
         <!-- 1. NPCI Payment Safety Radar Clearance Header -->
         <div class="upi-bank-header-bar">
           <div class="upi-bank-title-group">
