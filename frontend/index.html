@@ -617,7 +617,7 @@
         </a>
 
         <!-- Animated Morphing Hamburger Button -->
-        <button class="nav-edge-hamburger" aria-label="Toggle Menu" id="nav-hamburger-btn">
+        <button class="nav-edge-hamburger" aria-label="Toggle Menu" id="nav-hamburger-btn" onclick="window.toggleMobileNav && window.toggleMobileNav(event)">
           <span class="hamb-line hamb-line-1"></span>
           <span class="hamb-line hamb-line-2"></span>
           <span class="hamb-line hamb-line-3"></span>
@@ -4575,8 +4575,8 @@
     });
   </script>
 
-    <!-- Mobile Backdrop Scrim -->
-  <div class="nav-mobile-backdrop" id="nav-mobile-backdrop"></div>
+      <!-- Mobile Backdrop Scrim -->
+  <div class="nav-mobile-backdrop" id="nav-mobile-backdrop" onclick="window.closeMobileNav && window.closeMobileNav()"></div>
 
   <!-- Native Mobile App Bottom Dock (Thumb Navigation) -->
   <nav class="mobile-bottom-dock" aria-label="Mobile Navigation Dock">
@@ -4601,7 +4601,7 @@
       </div>
       <span>Reports</span>
     </a>
-    <button type="button" class="bottom-dock-tab bottom-dock-menu-btn" id="bottom-dock-menu-toggle" aria-label="Toggle Command Drawer">
+    <button type="button" class="bottom-dock-tab bottom-dock-menu-btn" id="bottom-dock-menu-toggle" onclick="window.toggleMobileNav && window.toggleMobileNav(event)" aria-label="Toggle Command Drawer">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       <span>Menu</span>
     </button>
@@ -4610,16 +4610,20 @@
   <!-- Mobile Drawer Interactive Controller -->
   <script>
     (function() {
-      const nav = document.querySelector('.nav-edge');
-      const hambBtn = document.getElementById('nav-hamburger-btn');
-      const backdrop = document.getElementById('nav-mobile-backdrop');
-      const bottomMenuBtn = document.getElementById('bottom-dock-menu-toggle');
+      function getNav() {
+        return document.querySelector('.nav-edge');
+      }
+      function getBackdrop() {
+        return document.getElementById('nav-mobile-backdrop');
+      }
 
-      function toggleMenu(e) {
+      window.toggleMobileNav = function(e) {
         if (e) {
           e.preventDefault();
           e.stopPropagation();
         }
+        const nav = getNav();
+        const backdrop = getBackdrop();
         if (!nav) return;
         const isOpen = nav.classList.toggle('mobile-open');
         if (backdrop) {
@@ -4627,21 +4631,19 @@
           else backdrop.classList.remove('active');
         }
         document.body.style.overflow = isOpen ? 'hidden' : '';
-      }
+      };
 
-      function closeMenu() {
+      window.closeMobileNav = function() {
+        const nav = getNav();
+        const backdrop = getBackdrop();
         if (!nav) return;
         nav.classList.remove('mobile-open');
         if (backdrop) backdrop.classList.remove('active');
         document.body.style.overflow = '';
-      }
-
-      if (hambBtn) hambBtn.addEventListener('click', toggleMenu);
-      if (bottomMenuBtn) bottomMenuBtn.addEventListener('click', toggleMenu);
-      if (backdrop) backdrop.addEventListener('click', closeMenu);
+      };
 
       document.querySelectorAll('.nav-edge-menu a').forEach(link => {
-        link.addEventListener('click', closeMenu);
+        link.addEventListener('click', window.closeMobileNav);
       });
     })();
   </script>

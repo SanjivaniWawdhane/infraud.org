@@ -2209,6 +2209,20 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const text = (data.target || currentTargetQuery).trim();
 
   // 1. Reset Action Buttons
+  const chatSendBtn = document.getElementById('phone-chat-send-btn');
+  if (chatSendBtn) {
+    chatSendBtn.disabled = false;
+    chatSendBtn.style.opacity = '1';
+    chatSendBtn.style.transform = '';
+    chatSendBtn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+  }
+  const smsSendBtn = document.getElementById('phone-sms-send-btn');
+  if (smsSendBtn) {
+    smsSendBtn.disabled = false;
+    smsSendBtn.style.opacity = '1';
+    smsSendBtn.style.transform = '';
+    smsSendBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>';
+  }
   const headerBtn = document.getElementById('btn-header-reparse-nlp');
   if (headerBtn) {
     headerBtn.disabled = false;

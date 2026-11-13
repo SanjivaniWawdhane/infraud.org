@@ -105,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', (e) => {
+            // NEVER intercept SPA/tool forms, phone bars, or forms that prevent default
+            if (e.defaultPrevented || form.getAttribute('onsubmit') || form.classList.contains('phone-chat-bar') || form.classList.contains('phone-sms-bar') || form.closest('.tool-result-view') || form.closest('.phone-device-screen') || form.closest('.msg-centerpiece-grid')) {
+                return;
+            }
             const btn = form.querySelector('button[type="submit"]');
             if (btn) {
                 const originalText = btn.innerText;
@@ -112,8 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>';
                 btn.disabled = true;
                 btn.style.opacity = '0.8';
-                
-                // Allow default submission to proceed, this just handles the visual state until page unload
             }
         });
     });
