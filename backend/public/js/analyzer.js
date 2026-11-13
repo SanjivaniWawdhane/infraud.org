@@ -34,6 +34,14 @@ window.analyzeTarget = function(targetQuery, targetType) {
   if (msgInput && (t === 'message' || q.length > 50)) {
     msgInput.value = q;
   }
+  const pChatInput = document.getElementById('phone-chat-input');
+  if (pChatInput && (t === 'message' || q.length > 50)) {
+    pChatInput.value = q;
+  }
+  const pSmsInput = document.getElementById('phone-sms-input');
+  if (pSmsInput && (t === 'message' || q.length > 50)) {
+    pSmsInput.value = q;
+  }
 
   // Trigger analysis immediately
   if (typeof initAnalysis === 'function') {
@@ -296,16 +304,95 @@ window.clearQuickMsgInput = function() {
     input.value = '';
     input.focus();
   }
+  const pChat = document.getElementById('phone-chat-input');
+  if (pChat) pChat.value = '';
+  const pSms = document.getElementById('phone-sms-input');
+  if (pSms) pSms.value = '';
   const errorEl = document.getElementById('msg-quick-error');
   if (errorEl) errorEl.style.display = 'none';
 };
 
 window.fillQuickMsg = function(text) {
   const input = document.getElementById('msg-quick-input');
-  if (input) {
-    input.value = text;
-    window.reparseMessageAction();
+  if (input) input.value = text;
+  const pChat = document.getElementById('phone-chat-input');
+  if (pChat) pChat.value = text;
+  const pSms = document.getElementById('phone-sms-input');
+  if (pSms) pSms.value = text;
+  window.reparseMessageAction();
+};
+
+// ── Interactive In-Phone Smartphone Mockup Handlers ──
+window.handleInPhoneMsgSubmit = function(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  const phoneInput = document.getElementById('phone-chat-input');
+  if (!phoneInput) return;
+  const val = phoneInput.value.trim();
+  if (!val) {
+    phoneInput.focus();
+    return;
   }
+
+  // Sync to quick dock & SMS input
+  const qInput = document.getElementById('msg-quick-input');
+  if (qInput) qInput.value = val;
+  const smsInput = document.getElementById('phone-sms-input');
+  if (smsInput) smsInput.value = val;
+
+  // Button feedback animation
+  const sendBtn = document.getElementById('phone-chat-send-btn');
+  if (sendBtn) {
+    sendBtn.style.transform = 'scale(0.9)';
+    setTimeout(() => { if (sendBtn) sendBtn.style.transform = ''; }, 150);
+  }
+
+  // Immediately display inside speech bubble
+  const waBubble = document.getElementById('msg-bubble-content');
+  if (waBubble) waBubble.textContent = val;
+  const timeEl = document.getElementById('msg-bubble-time');
+  if (timeEl) {
+    timeEl.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
+  if (typeof showToast === 'function') {
+    showToast('Analyzing message in forensic simulator...');
+  }
+
+  window.analyzeTarget(val, 'message');
+};
+
+window.handleInPhoneSmsSubmit = function(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  const smsInput = document.getElementById('phone-sms-input');
+  if (!smsInput) return;
+  const val = smsInput.value.trim();
+  if (!val) {
+    smsInput.focus();
+    return;
+  }
+
+  // Sync to quick dock & WhatsApp input
+  const qInput = document.getElementById('msg-quick-input');
+  if (qInput) qInput.value = val;
+  const phoneInput = document.getElementById('phone-chat-input');
+  if (phoneInput) phoneInput.value = val;
+
+  // Button feedback animation
+  const sendBtn = document.getElementById('phone-sms-send-btn');
+  if (sendBtn) {
+    sendBtn.style.transform = 'scale(0.9)';
+    setTimeout(() => { if (sendBtn) sendBtn.style.transform = ''; }, 150);
+  }
+
+  // Immediately display inside SMS speech bubble
+  const smsBubble = document.getElementById('msg-sms-bubble-content');
+  if (smsBubble) smsBubble.textContent = val;
+
+  if (typeof showToast === 'function') {
+    showToast('Analyzing SMS notice in forensic simulator...');
+  }
+
+  window.analyzeTarget(val, 'message');
 };
 
 window.switchMsgMockupMode = function(mode) {
@@ -449,6 +536,14 @@ async function initAnalysis(overrideQuery, overrideType) {
   const qMsgEl = document.getElementById('msg-quick-input');
   if (qMsgEl && type === 'message') {
     qMsgEl.value = query;
+  }
+  const pChatEl = document.getElementById('phone-chat-input');
+  if (pChatEl && type === 'message') {
+    pChatEl.value = query;
+  }
+  const pSmsEl = document.getElementById('phone-sms-input');
+  if (pSmsEl && type === 'message') {
+    pSmsEl.value = query;
   }
 
   // If detected type differs from parameter, silently update URL for accurate bookmarks & sharing
@@ -2074,9 +2169,13 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Decode NLP</span>`;
   }
 
-  // 2. Pre-fill Quick Dock Input
+  // 2. Pre-fill Quick Dock Input & In-Phone Chat Inputs
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = text;
+  const pChatInput = document.getElementById('phone-chat-input');
+  if (pChatInput) pChatInput.value = text;
+  const pSmsInput = document.getElementById('phone-sms-input');
+  if (pSmsInput) pSmsInput.value = text;
 
   // 3. Metadata counts & Target Quote
   const words = text.split(/\s+/).filter(Boolean).length;

@@ -2540,7 +2540,7 @@
         position: relative;
       }
       .phone-device-statusbar {
-        padding: 8px 16px;
+        padding: 8px 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -2548,6 +2548,149 @@
         font-weight: 700;
         color: #0F172A;
         z-index: 5;
+        position: relative;
+      }
+
+      /* In-Phone WhatsApp Chat Input Bar */
+      .phone-chat-bar {
+        background: #EFEAE2;
+        padding: 8px 10px 10px 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        z-index: 5;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      .phone-chat-input-pill {
+        flex: 1;
+        background: #FFFFFF;
+        border-radius: 24px;
+        padding: 4px 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        min-width: 0;
+      }
+      .phone-chat-icon-btn {
+        border: none;
+        background: transparent;
+        color: #8696A0;
+        font-size: 1.05rem;
+        cursor: pointer;
+        padding: 2px 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      .phone-chat-input-field {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: var(--font, 'Inter', system-ui, sans-serif);
+        font-size: 0.875rem;
+        color: #111B21;
+        min-width: 0;
+        padding: 6px 2px;
+      }
+      .phone-chat-input-field::placeholder {
+        color: #8696A0;
+        font-size: 0.8125rem;
+      }
+      .phone-chat-send-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #00A884;
+        color: #FFFFFF;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+      }
+      .phone-chat-send-btn:hover {
+        background: #008f6f;
+        transform: scale(1.06);
+      }
+      .phone-chat-send-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* In-Phone SMS Chat Input Bar */
+      .phone-sms-bar {
+        background: #F1F5F9;
+        border-top: 1px solid #E2E8F0;
+        padding: 8px 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        z-index: 5;
+      }
+      .sms-icon-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #CBD5E1;
+        color: #334155;
+        border: none;
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .phone-sms-input-pill {
+        flex: 1;
+        background: #FFFFFF;
+        border: 1.5px solid #CBD5E1;
+        border-radius: 20px;
+        padding: 4px 12px;
+        min-width: 0;
+      }
+      .phone-sms-input-field {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: var(--font, 'Inter', system-ui, sans-serif);
+        font-size: 0.875rem;
+        color: #0F172A;
+        padding: 4px 0;
+      }
+      .phone-sms-input-field::placeholder {
+        color: #94A3B8;
+        font-size: 0.8125rem;
+      }
+      .phone-sms-send-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+      .phone-sms-send-btn:hover {
+        background: #1D4ED8;
+        transform: scale(1.06);
+      }
+      .phone-sms-send-btn:active {
+        transform: scale(0.95);
       }
       .phone-device-switcher {
         background: #FFFFFF;
@@ -5191,11 +5334,10 @@
             </div>
 
             <div class="phone-device-screen">
-              <!-- Top Statusbar -->
+              <!-- Top Statusbar (Clear Center to avoid Hardware Notch overlap) -->
               <div class="phone-device-statusbar">
-                <span>9:41 AM</span>
-                <span style="font-size: 0.625rem; color: #64748B;">● FORENSIC RADAR</span>
-                <span>5G 📶 100%</span>
+                <span style="font-weight: 800;">9:41 AM</span>
+                <span style="font-weight: 700;">5G 📶 100%</span>
               </div>
 
               <!-- Native Segmented Switcher -->
@@ -5241,6 +5383,19 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Interactive WhatsApp Chat Typing Bar -->
+                <form class="phone-chat-bar" onsubmit="handleInPhoneMsgSubmit(event); return false;">
+                  <div class="phone-chat-input-pill">
+                    <button type="button" class="phone-chat-icon-btn" title="Emoji">😊</button>
+                    <input type="text" id="phone-chat-input" class="phone-chat-input-field" placeholder="Type message to inspect..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
+                    <button type="button" class="phone-chat-icon-btn" title="Attach">📎</button>
+                    <button type="button" class="phone-chat-icon-btn" title="Camera">📷</button>
+                  </div>
+                  <button type="submit" class="phone-chat-send-btn" id="phone-chat-send-btn" title="Send & Inspect Message">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  </button>
+                </form>
               </div>
 
               <!-- SMS Notice Inside Phone -->
@@ -5254,6 +5409,17 @@
                     Analyzing suspicious message tokens...
                   </div>
                 </div>
+
+                <!-- Interactive SMS Typing Bar -->
+                <form class="phone-sms-bar" onsubmit="handleInPhoneSmsSubmit(event); return false;">
+                  <button type="button" class="sms-icon-btn" title="Media">+</button>
+                  <div class="phone-sms-input-pill">
+                    <input type="text" id="phone-sms-input" class="phone-sms-input-field" placeholder="Text Message (Type to inspect)..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneSmsSubmit(event);}" />
+                  </div>
+                  <button type="submit" class="phone-sms-send-btn" id="phone-sms-send-btn" title="Send & Inspect SMS">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                  </button>
+                </form>
               </div>
 
               <!-- Extracted Threat Payloads Shelf Inside Phone -->
