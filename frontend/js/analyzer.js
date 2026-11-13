@@ -2291,7 +2291,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   if (gaugeScore) gaugeScore.textContent = riskScore;
   const gaugeCircle = document.getElementById('msg-gauge-circle');
   if (gaugeCircle) {
-    const circumference = 251.2;
+    const circumference = 427.2;
     const offset = Math.max(0, circumference - (riskScore / 100) * circumference);
     gaugeCircle.style.strokeDashoffset = offset;
     gaugeCircle.style.stroke = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#D97706' : '#10B981');
@@ -2317,6 +2317,28 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   if (gaugeSummary) {
     gaugeSummary.textContent = theme.summary || 'Heuristic evaluation based on VADER coercion metrics and TRAI mandate.';
   }
+  // 6b. Multi-Segment 4-Stage Meter Bar & Gradient Pointer
+  const segSafe = document.getElementById('msg-seg-safe');
+  const segCaution = document.getElementById('msg-seg-caution');
+  const segRisky = document.getElementById('msg-seg-risky');
+  const segDanger = document.getElementById('msg-seg-danger');
+  [segSafe, segCaution, segRisky, segDanger].forEach(s => s && s.classList.remove('active'));
+  if (riskScore >= 75) {
+    if (segDanger) segDanger.classList.add('active');
+  } else if (riskScore >= 50) {
+    if (segRisky) segRisky.classList.add('active');
+  } else if (riskScore >= 25) {
+    if (segCaution) segCaution.classList.add('active');
+  } else {
+    if (segSafe) segSafe.classList.add('active');
+  }
+
+  const pointer = document.getElementById('msg-gradient-pointer');
+  if (pointer) {
+    pointer.style.left = Math.min(100, Math.max(0, riskScore)) + '%';
+    pointer.style.borderColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#F59E0B' : '#10B981');
+  }
+
 
   // 7. Dynamic Syntax Highlighting for WhatsApp and SMS Views
   let highlighted = escapeHtml(text);
@@ -2415,7 +2437,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
 
   const pressureScore = document.getElementById('msg-pressure-score');
   if (pressureScore) {
-    pressureScore.textContent = `${riskScore}% ${riskScore >= 70 ? 'Critical' : (riskScore >= 35 ? 'Moderate' : 'Low Pressure')}`;
+    const liveColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#F59E0B' : '#10B981'); const liveText = riskScore >= 70 ? 'Critical Pressure' : (riskScore >= 35 ? 'Moderate Pressure' : 'Clean Communication'); pressureScore.innerHTML = `<span class="msg-live-dot" style="background: ${liveColor};"></span><span>${riskScore}% ${liveText}</span>`;
   }
 
   // 9. Sender & TRAI Compliance Analysis

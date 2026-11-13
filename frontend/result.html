@@ -2115,8 +2115,9 @@
         transform: translateY(-1px);
       }
 
-      /* ── TOOL 4: FORENSIC NLP & MESSAGE THREAT ANALYZER ── */
-      /* Floating Quick Search Dock for Message */
+      
+      /* ── TOOL 4: ENTERPRISE FORENSIC NLP & MESSAGE THREAT ANALYZER ── */
+      /* 0. Floating Quick Search Dock */
       .msg-dock-strip {
         position: relative;
         z-index: 2;
@@ -2134,16 +2135,16 @@
         transition: all 0.2s ease;
       }
       .msg-dock-inner:focus-within {
-        border-color: #D97706;
-        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12), 0 0 0 3px rgba(217, 119, 6, 0.1);
+        border-color: #4F46E5;
+        box-shadow: 0 4px 16px rgba(79, 70, 229, 0.12), 0 0 0 3px rgba(79, 70, 229, 0.1);
       }
       .msg-dock-prefix {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #FEF3C7;
-        color: #92400E;
-        border: 1px solid #FDE68A;
+        background: #EEF2FF;
+        color: #4338CA;
+        border: 1px solid #C7D2FE;
         font-family: var(--mono, 'JetBrains Mono', monospace);
         font-size: 0.8125rem;
         font-weight: 700;
@@ -2185,7 +2186,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+        background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
         color: #FFFFFF;
         border: none;
         font-size: 0.8125rem;
@@ -2194,17 +2195,16 @@
         border-radius: 10px;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25);
+        box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
         flex-shrink: 0;
       }
       .msg-dock-btn:hover {
-        background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+        background: linear-gradient(135deg, #4338CA 0%, #3730A3 100%);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
       }
-      .msg-dock-btn:disabled,
-      .msg-btn-pill:disabled {
-        opacity: 0.7;
+      .msg-dock-btn:disabled {
+        opacity: 0.65;
         cursor: not-allowed;
         transform: none !important;
         pointer-events: none;
@@ -2222,791 +2222,29 @@
         font-weight: 700;
         color: #64748B;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
       }
       .msg-preset-chip {
         background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        border-radius: 100px;
-        padding: 4px 12px;
+        border: 1px solid #E2E8F0;
+        border-radius: 20px;
+        padding: 5px 12px;
         font-size: 0.75rem;
         font-weight: 600;
         color: #334155;
         cursor: pointer;
         transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
       }
       .msg-preset-chip:hover {
-        background: #FEF3C7;
-        border-color: #F59E0B;
-        color: #92400E;
+        background: #F1F5F9;
+        border-color: #CBD5E1;
+        color: #0F172A;
         transform: translateY(-1px);
       }
       .msg-dock-error {
-        display: none;
-        color: #DC2626;
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-top: 6px;
-        padding-left: 6px;
-      }
-
-      /* Forensic Header Bar */
-      .msg-nlp-header-bar {
-        background: linear-gradient(135deg, #1C1917 0%, #292524 55%, #451A03 100%);
-        border: 1px solid rgba(245, 158, 11, 0.45);
-        border-radius: 20px;
-        padding: 24px 28px;
-        box-shadow: 0 12px 36px rgba(41, 37, 36, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 20px;
-        margin-bottom: 24px;
-        color: #FFFFFF;
-      }
-      .msg-header-left {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-      .msg-nlp-icon {
-        width: 48px; height: 48px;
-        border-radius: 14px;
-        background: rgba(245, 158, 11, 0.2);
-        border: 1px solid rgba(245, 158, 11, 0.35);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #FCD34D;
-        flex-shrink: 0;
-      }
-      .msg-header-tag {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: #FDE68A;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
-        flex-wrap: wrap;
-      }
-      .nlp-pill-amber {
-        background: rgba(255, 255, 255, 0.15);
-        color: #FFFFFF;
-        padding: 2px 8px;
-        border-radius: 100px;
-        font-size: 0.6875rem;
-      }
-      .msg-status-pill {
-        font-size: 0.6875rem;
-        font-weight: 800;
-        padding: 3px 10px;
-        border-radius: 100px;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-      .pill-danger {
-        background: #EF4444;
-        color: #FFFFFF;
-      }
-      .pill-safe {
-        background: #10B981;
-        color: #FFFFFF;
-      }
-      .pill-warning {
-        background: #F59E0B;
-        color: #FFFFFF;
-      }
-      .msg-target-title {
-        color: #FFFFFF !important;
-        font-size: 1.375rem;
-        font-weight: 800;
-        margin: 0 0 6px 0;
-        max-width: 680px;
-        word-break: break-word;
-      }
-      .msg-meta-subline {
-        font-size: 0.8125rem;
-        color: #D6D3D1;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .msg-meta-subline strong {
-        color: #FDE68A;
-      }
-      .msg-header-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .msg-btn-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.8125rem;
-        font-weight: 700;
-        color: #FFFFFF;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        padding: 9px 18px;
-        border-radius: 10px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.2s ease;
-      }
-      .msg-btn-pill:hover {
-        background: rgba(255, 255, 255, 0.22);
-        transform: translateY(-1px);
-      }
-      .btn-msg-report {
-        background: rgba(239, 68, 68, 0.3);
-        border-color: rgba(239, 68, 68, 0.5);
-        color: #FCA5A5;
-      }
-      .btn-msg-report:hover {
-        background: rgba(239, 68, 68, 0.5);
-        color: #FFFFFF;
-      }
-      .btn-msg-emergency {
-        background: rgba(220, 38, 38, 0.85);
-        border-color: #EF4444;
-        color: #FFFFFF;
-      }
-      .btn-msg-emergency:hover {
-        background: #DC2626;
-      }
-
-      /* Centerpiece Grid */
-      .msg-centerpiece-grid {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 24px;
-        margin-bottom: 24px;
-      }
-      @media (max-width: 960px) {
-        .msg-centerpiece-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* Mockup Showcase Card */
-      .msg-mockup-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.04);
-        display: flex;
-        flex-direction: column;
-      }
-      .msg-mockup-tabs-bar {
-        background: #F8FAFC;
-        border-bottom: 1px solid #E2E8F0;
-        padding: 10px 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .msg-tab-group {
-        display: flex;
-        gap: 8px;
-      }
-      .msg-mode-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        border-radius: 8px;
-        padding: 6px 14px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: #475569;
-        cursor: pointer;
-        transition: all 0.15s ease;
-      }
-      .msg-mode-btn.active {
-        background: #0F172A;
-        border-color: #0F172A;
-        color: #FFFFFF;
-      }
-      .msg-security-stamp {
-        font-size: 0.6875rem;
-        font-weight: 700;
-        color: #64748B;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
-
-      /* WhatsApp Mockup Body */
-      .whatsapp-frame-inner {
-        display: flex;
-        flex-direction: column;
-      }
-      .whatsapp-top-bar {
-        background: #075E54;
-        padding: 12px 18px;
-        color: #FFFFFF;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .wa-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .wa-avatar {
-        width: 36px; height: 36px;
-        border-radius: 50%;
-        background: #128C7E;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: 0.9375rem;
-      }
-      .wa-name {
-        font-size: 0.9375rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .wa-status { font-size: 0.6875rem; opacity: 0.85; }
-      .wa-actions { display: flex; gap: 16px; opacity: 0.85; }
-      .whatsapp-chat-body {
-        background: #EFEAE2;
-        padding: 24px 20px;
-        min-height: 200px;
-        display: flex;
-        flex-direction: column;
-      }
-      .wa-date-chip {
-        align-self: center;
-        background: rgba(255, 255, 255, 0.85);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-        font-size: 0.6875rem;
-        font-weight: 700;
-        color: #54656F;
-        padding: 4px 12px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-      }
-      .wa-chat-bubble-container {
-        display: flex;
-        justify-content: flex-start;
-      }
-      .wa-chat-bubble {
-        background: #FFFFFF;
-        border-radius: 0 14px 14px 14px;
-        padding: 16px 20px;
-        max-width: 92%;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        position: relative;
-      }
-      .wa-bubble-text {
-        font-size: 0.9375rem;
-        line-height: 1.6;
-        color: #111B21;
-        margin-bottom: 8px;
-        word-break: break-word;
-      }
-      .wa-bubble-meta {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.6875rem;
-        color: #667781;
-      }
-      .wa-checkmarks { color: #53BDEB; font-weight: bold; }
-
-      /* SMS Mockup Body */
-      .sms-frame-inner {
-        display: none;
-        flex-direction: column;
-      }
-      .sms-top-bar {
-        background: #F1F5F9;
-        border-bottom: 1px solid #E2E8F0;
-        padding: 14px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .sms-sender-title {
-        font-size: 0.9375rem;
-        font-weight: 800;
-        color: #0F172A;
-      }
-      .sms-subtag {
-        font-size: 0.6875rem;
-        color: #64748B;
-        font-weight: 600;
-      }
-      .sms-chat-body {
-        background: #F8FAFC;
-        padding: 24px 20px;
-        min-height: 200px;
-        display: flex;
-        flex-direction: column;
-      }
-      .sms-bubble {
-        background: #E2E8F0;
-        border-radius: 18px 18px 18px 4px;
-        padding: 16px 20px;
-        max-width: 92%;
-        color: #0F172A;
-        font-size: 0.9375rem;
-        line-height: 1.6;
-        word-break: break-word;
-      }
-
-      /* Dynamic Threat Keywords Syntax Highlighting */
-      mark.threat-kw-critical {
-        background: #FEE2E2 !important;
-        color: #991B1B !important;
-        border: 1px solid #F87171;
-        font-weight: 700;
-        padding: 2px 6px;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(220, 38, 38, 0.12);
-      }
-      mark.threat-kw-warn {
-        background: #FEF3C7 !important;
-        color: #92400E !important;
-        border: 1px solid #FBBF24;
-        font-weight: 700;
-        padding: 2px 6px;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(217, 119, 6, 0.12);
-      }
-      mark.threat-kw-impersonation {
-        background: #EFF6FF !important;
-        color: #1E40AF !important;
-        border: 1px solid #60A5FA;
-        font-weight: 700;
-        padding: 2px 6px;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(37, 99, 235, 0.12);
-      }
-
-      /* Syntax Legend */
-      .msg-syntax-legend {
-        background: #FFFFFF;
-        border-top: 1px solid #E2E8F0;
-        padding: 12px 18px;
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-        font-size: 0.75rem;
-        align-items: center;
-      }
-      .legend-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 3px 10px;
-        border-radius: 6px;
-        font-weight: 700;
-        font-size: 0.75rem;
-      }
-      .pill-red { background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; }
-      .pill-amber { background: #FEF3C7; color: #D97706; border: 1px solid #FCD34D; }
-      .pill-blue { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
-
-      /* Extracted Payloads Box */
-      .msg-payloads-card {
-        background: #F8FAFC;
-        border-top: 1px solid #E2E8F0;
-        padding: 16px 18px;
-      }
-      .payloads-header-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.8125rem;
-        font-weight: 700;
-        color: #0F172A;
-        margin-bottom: 10px;
-      }
-      .extracted-payloads-wrap {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .extracted-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        border-radius: 10px;
-        padding: 6px 12px;
-        font-size: 0.8125rem;
-        font-family: var(--mono);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-      }
-      .btn-chip-inspect {
-        background: #2563EB;
-        color: #FFFFFF;
-        font-size: 0.6875rem;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: all 0.15s ease;
-      }
-      .btn-chip-inspect:hover {
-        background: #1D4ED8;
-      }
-
-      /* Right Column: Threat Metrics & Radar */
-      .msg-metrics-column {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      /* Gauge Card */
-      .msg-gauge-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.04);
-        display: flex;
-        align-items: center;
-        gap: 24px;
-      }
-      .msg-gauge-visual {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        flex-shrink: 0;
-      }
-      .msg-gauge-svg {
-        transform: rotate(-90deg);
-        width: 100px;
-        height: 100px;
-      }
-      .msg-gauge-bg {
-        fill: none;
-        stroke: #F1F5F9;
-        stroke-width: 9;
-      }
-      .msg-gauge-meter {
-        fill: none;
-        stroke: #EF4444;
-        stroke-width: 9;
-        stroke-linecap: round;
-        stroke-dasharray: 251.2;
-        stroke-dashoffset: 0;
-        transition: stroke-dashoffset 1s ease, stroke 0.4s ease;
-      }
-      .msg-gauge-center {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      .msg-gauge-val {
-        font-size: 1.625rem;
-        font-weight: 900;
-        font-family: var(--mono);
-        color: #0F172A;
-        line-height: 1;
-      }
-      .msg-gauge-lbl {
-        font-size: 0.5625rem;
-        font-weight: 800;
-        color: #64748B;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 2px;
-      }
-      .msg-gauge-info {
-        flex: 1;
-      }
-      .msg-gauge-pill-wrap {
-        margin-bottom: 6px;
-      }
-      .msg-gauge-status-badge {
-        display: inline-block;
-        font-size: 0.75rem;
-        font-weight: 800;
-        padding: 4px 12px;
-        border-radius: 100px;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
-      .msg-gauge-verdict-title {
-        font-size: 1.0625rem;
-        font-weight: 800;
-        color: #0F172A;
-        margin-bottom: 4px;
-      }
-      .msg-gauge-summary-text {
-        font-size: 0.8125rem;
-        color: #64748B;
-        line-height: 1.45;
-      }
-
-      /* Psychological Radar */
-      .msg-psych-radar {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 22px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.04);
-      }
-      .psych-radar-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.875rem;
-        font-weight: 800;
-        color: #78350F;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #F1F5F9;
-      }
-      .psych-score-badge {
-        margin-left: auto;
-        background: #FEF3C7;
-        color: #92400E;
-        font-size: 0.75rem;
-        font-weight: 700;
-        padding: 3px 10px;
-        border-radius: 100px;
-      }
-      .psych-bars-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .psych-card {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 12px 14px;
-      }
-      .psych-card-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        color: #1E293B;
-        margin-bottom: 8px;
-      }
-      .psych-badge {
-        font-size: 0.6875rem;
-        font-weight: 800;
-        padding: 2px 8px;
-        border-radius: 6px;
-      }
-      .psych-badge-critical { background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; }
-      .psych-badge-elevated { background: #FEF3C7; color: #D97706; border: 1px solid #FCD34D; }
-      .psych-badge-clean { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; }
-      .psych-progress-track {
-        height: 6px;
-        background: #E2E8F0;
-        border-radius: 3px;
-        overflow: hidden;
-        margin-bottom: 6px;
-      }
-      .psych-progress-fill {
-        height: 100%;
-        border-radius: 3px;
-        transition: width 0.6s ease, background-color 0.3s ease;
-      }
-      .psych-desc {
-        font-size: 0.6875rem;
-        color: #64748B;
-      }
-
-      /* TRAI Regulatory Compliance Bento */
-      .msg-trai-bento {
-        background: #FFFFFF;
-        border: 1.5px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 18px 20px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.04);
-        display: flex;
-        align-items: flex-start;
-        gap: 14px;
-      }
-      .trai-bento-icon {
-        width: 36px; height: 36px;
-        border-radius: 10px;
-        background: #EEF2FF;
-        color: #4F46E5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .trai-bento-content {
-        flex: 1;
-      }
-      .trai-bento-label {
-        font-size: 0.6875rem;
-        font-weight: 800;
-        color: #64748B;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: 2px;
-      }
-      .trai-bento-value {
-        font-size: 0.875rem;
-        font-weight: 800;
-        color: #0F172A;
-        margin-bottom: 4px;
-      }
-      .trai-bento-advisory {
-        font-size: 0.75rem;
-        color: #64748B;
-        line-height: 1.4;
-      }
-
-      /* Guidance Deck */
-      .msg-guidance-deck {
-        display: grid;
-        grid-template-columns: 1.25fr 1fr;
-        gap: 24px;
-      }
-      @media (max-width: 860px) {
-        .msg-guidance-deck { grid-template-columns: 1fr; }
-      }
-      .msg-signals-panel, .msg-actions-panel {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 4px 18px rgba(10, 15, 30, 0.03);
-      }
-      .msg-panel-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.875rem;
-        font-weight: 700;
-        color: #78350F;
-        margin-bottom: 18px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #F1F5F9;
-      }
-
-/* ═══════════════════════════════════════════════════════════════
-   TIER-1 CYBER TELECOM & CALLER INTELLIGENCE DESIGN SYSTEM
-   Luxury Glassmorphism + Photorealistic Smartphone HUD + SIM Hardware
-   ═══════════════════════════════════════════════════════════════ */
-
-#view-phone {
-  font-family: var(--font, 'Inter', system-ui, -apple-system, sans-serif);
-  color: #0F172A;
-  position: relative;
-}
-
-/* ═══════════════════════════════════════════════
-         ENTERPRISE TELECOM & CALLER INTELLIGENCE DOSSIER
-      ═══════════════════════════════════════════════ */
-
-      /* 0. Floating Quick Search Dock */
-      .phone-dock-strip {
-        position: relative;
-        z-index: 2;
-        margin-bottom: 24px;
-      }
-      .phone-dock-inner {
-        display: flex;
-        align-items: center;
-        background: #FFFFFF;
-        border: 1.5px solid #E2E8F0;
-        border-radius: 14px;
-        padding: 5px 6px 5px 14px;
-        gap: 12px;
-        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
-        transition: all 0.2s ease;
-      }
-      .phone-dock-inner:focus-within {
-        border-color: #059669;
-        box-shadow: 0 4px 16px rgba(5, 150, 105, 0.12), 0 0 0 3px rgba(5, 150, 105, 0.1);
-      }
-      .phone-dock-country {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: #F0FDF4;
-        color: #047857;
-        border: 1px solid #BBF7D0;
-        font-family: var(--mono, 'JetBrains Mono', monospace);
-        font-size: 0.8125rem;
-        font-weight: 700;
-        padding: 6px 12px;
-        border-radius: 8px;
-        flex-shrink: 0;
-      }
-      .phone-dock-input {
-        flex: 1;
-        border: none;
-        outline: none;
-        background: transparent;
-        font-family: var(--mono, 'JetBrains Mono', monospace);
-        font-size: 0.9375rem;
-        font-weight: 600;
-        color: #0F172A;
-        min-width: 0;
-      }
-      .phone-dock-input::placeholder {
-        font-family: var(--font, sans-serif);
-        color: #94A3B8;
-        font-weight: 400;
-        font-size: 0.875rem;
-      }
-      .phone-dock-clear {
-        border: none;
-        background: none;
-        color: #94A3B8;
-        cursor: pointer;
-        padding: 6px;
-        display: flex;
-        align-items: center;
-        border-radius: 6px;
-        transition: all 0.15s ease;
-      }
-      .phone-dock-clear:hover {
-        color: #1E293B;
-        background: #F1F5F9;
-      }
-      .phone-dock-btn {
-        background: #059669;
-        color: #FFFFFF;
-        border: none;
-        padding: 9px 18px;
-        border-radius: 10px;
-        font-size: 0.8125rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-      }
-      .phone-dock-btn:hover {
-        background: #047857;
-        transform: translateY(-1px);
-      }
-      .phone-dock-error {
         display: none;
         color: #DC2626;
         font-size: 0.8125rem;
@@ -3016,7 +2254,7 @@
       }
 
       /* 1. Executive Master Header Card */
-      .phone-header-card {
+      .msg-header-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 18px;
@@ -3029,50 +2267,62 @@
         flex-wrap: wrap;
         gap: 20px;
       }
-      .phone-header-main {
+      .msg-header-main {
         display: flex;
         align-items: center;
         gap: 18px;
+        flex: 1;
+        min-width: 0;
       }
-      .phone-header-icon-box {
+      .msg-header-icon-box {
         width: 52px;
         height: 52px;
         border-radius: 14px;
-        background: #F0FDF4;
-        border: 1.5px solid #BBF7D0;
-        color: #059669;
+        background: #EEF2FF;
+        border: 1.5px solid #C7D2FE;
+        color: #4F46E5;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
       }
-      .phone-header-meta {
+      .msg-header-meta {
         display: flex;
         align-items: center;
         gap: 8px;
         font-size: 0.75rem;
         font-weight: 700;
         color: #64748B;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         flex-wrap: wrap;
       }
-      .phone-meta-dot { color: #CBD5E1; }
-      .phone-header-title-row {
+      .msg-meta-pill {
+        background: #F1F5F9;
+        color: #334155;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+      .msg-meta-dot { color: #CBD5E1; }
+      .msg-header-title-row {
         display: flex;
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
       }
-      .phone-big-number {
-        font-family: var(--mono, 'JetBrains Mono', monospace);
-        font-size: 1.625rem;
+      .msg-target-title {
+        font-size: 1.375rem;
         font-weight: 800;
         color: #0F172A;
         margin: 0;
         letter-spacing: -0.02em;
-        word-break: break-all;
+        line-height: 1.35;
+        word-break: break-word;
+        max-width: 100%;
       }
-      .phone-btn-copy {
+      .msg-btn-copy {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
         padding: 4px 10px;
@@ -3085,64 +2335,77 @@
         align-items: center;
         gap: 5px;
         transition: all 0.15s ease;
+        flex-shrink: 0;
       }
-      .phone-btn-copy:hover {
+      .msg-btn-copy:hover {
         background: #F1F5F9;
         color: #0F172A;
       }
-      .phone-header-sub {
+      .msg-header-sub {
         font-size: 0.8125rem;
         color: #64748B;
-        margin: 4px 0 0;
+        margin: 6px 0 0 0;
       }
-      .phone-header-actions {
+      .msg-header-actions {
         display: flex;
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
       }
-      .phone-action-btn {
+      .msg-action-btn {
         display: inline-flex;
         align-items: center;
         gap: 7px;
+        padding: 9px 16px;
+        border-radius: 10px;
         font-size: 0.8125rem;
         font-weight: 700;
-        padding: 9px 18px;
-        border-radius: 10px;
         cursor: pointer;
-        text-decoration: none;
         transition: all 0.2s ease;
+        text-decoration: none;
+        border: none;
       }
-      .phone-btn-primary {
-        background: #059669;
+      .msg-btn-primary {
+        background: #4F46E5;
         color: #FFFFFF;
-        border: 1px solid #047857;
+        box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
       }
-      .phone-btn-primary:hover {
-        background: #047857;
+      .msg-btn-primary:hover {
+        background: #4338CA;
         transform: translateY(-1px);
       }
-      .phone-btn-secondary {
-        background: #FFFFFF;
-        color: #334155;
-        border: 1px solid #CBD5E1;
-      }
-      .phone-btn-secondary:hover {
+      .msg-btn-secondary {
         background: #F8FAFC;
+        color: #334155;
+        border: 1px solid #E2E8F0;
+      }
+      .msg-btn-secondary:hover {
+        background: #F1F5F9;
         color: #0F172A;
+        transform: translateY(-1px);
       }
-      .phone-btn-flag {
-        background: #FEF2F2;
-        color: #DC2626;
-        border: 1px solid #FECACA;
+      .msg-btn-report {
+        background: #FFFBEB;
+        color: #B45309;
+        border: 1px solid #FDE68A;
       }
-      .phone-btn-flag:hover {
-        background: #FEE2E2;
-        color: #B91C1C;
+      .msg-btn-report:hover {
+        background: #FEF3C7;
+        color: #92400E;
+        transform: translateY(-1px);
+      }
+      .msg-btn-emergency {
+        background: #DC2626;
+        color: #FFFFFF;
+        box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+      }
+      .msg-btn-emergency:hover {
+        background: #B91C1C;
+        transform: translateY(-1px);
       }
 
       /* 2. Primary Threat Risk Assessment & Meter Bar Card */
-      .phone-risk-card {
+      .msg-risk-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 18px;
@@ -3150,19 +2413,19 @@
         margin-bottom: 24px;
         box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
       }
-      .phone-risk-grid {
+      .msg-risk-grid {
         display: grid;
-        grid-template-columns: 200px 1fr 300px;
+        grid-template-columns: 200px 1fr 310px;
         gap: 28px;
         align-items: center;
       }
       @media (max-width: 1040px) {
-        .phone-risk-grid {
+        .msg-risk-grid {
           grid-template-columns: 1fr;
           gap: 24px;
         }
       }
-      .phone-card-label {
+      .msg-card-label {
         display: block;
         font-size: 0.6875rem;
         font-weight: 800;
@@ -3173,7 +2436,7 @@
       }
 
       /* Left: Threat Score Ring */
-      .phone-score-column {
+      .msg-score-column {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -3182,28 +2445,28 @@
         padding-right: 20px;
       }
       @media (max-width: 1040px) {
-        .phone-score-column {
+        .msg-score-column {
           border-right: none;
           padding-right: 0;
           border-bottom: 1px solid #F1F5F9;
           padding-bottom: 20px;
         }
       }
-      .phone-score-display-wrap {
+      .msg-score-display-wrap {
         display: flex;
         flex-direction: column;
         align-items: center;
       }
-      .phone-score-gauge-ring {
+      .msg-score-gauge-ring {
         position: relative;
         width: 110px;
         height: 110px;
         margin-bottom: 10px;
       }
-      .phone-score-gauge-ring svg {
+      .msg-score-gauge-ring svg {
         transform: rotate(-90deg);
       }
-      .phone-score-inner-text {
+      .msg-score-inner-text {
         position: absolute;
         inset: 0;
         display: flex;
@@ -3212,25 +2475,25 @@
         justify-content: center;
         pointer-events: none;
       }
-      .phone-score-value {
+      .msg-score-value {
         font-size: 2.25rem;
         font-weight: 900;
         line-height: 1;
         letter-spacing: -0.04em;
-        color: #10B981;
+        color: #DC2626;
       }
-      .phone-score-max {
+      .msg-score-max {
         font-size: 0.6875rem;
         font-weight: 700;
         color: #94A3B8;
       }
-      .phone-score-status-box {
+      .msg-score-status-box {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 4px;
       }
-      .phone-risk-pill {
+      .msg-risk-pill {
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -3241,218 +2504,200 @@
         letter-spacing: 0.04em;
         text-transform: uppercase;
       }
-      .phone-pill-green {
-        background: #ECFDF5;
-        color: #065F46;
-        border: 1px solid #A7F3D0;
-      }
-      .phone-pill-yellow {
-        background: #FFFBEB;
-        color: #92400E;
-        border: 1px solid #FDE68A;
-      }
-      .phone-pill-red {
-        background: #FEF2F2;
-        color: #991B1B;
-        border: 1px solid #FECACA;
-      }
-      .phone-pill-gray {
-        background: #F1F5F9;
-        color: #334155;
-        border: 1px solid #E2E8F0;
-      }
-      .phone-pill-blue {
-        background: #EFF6FF;
-        color: #1D4ED8;
-        border: 1px solid #BFDBFE;
-      }
-      .phone-score-label {
+      .msg-score-label {
         font-size: 0.6875rem;
         font-weight: 600;
         color: #64748B;
       }
 
-      /* Middle: Segmented Risk Bar & Verdict */
-      .phone-meter-column {
+      /* Middle: Segmented Risk Bar & Clear Verdict */
+      .msg-meter-column {
         display: flex;
         flex-direction: column;
+        gap: 12px;
       }
-      .phone-meter-header {
+      .msg-meter-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 8px;
+        gap: 12px;
         flex-wrap: wrap;
-        gap: 10px;
       }
-      .phone-verdict-title {
-        font-size: 1.25rem;
+      .msg-verdict-title {
+        font-size: 1.1875rem;
         font-weight: 800;
         color: #0F172A;
         margin: 0;
-        letter-spacing: -0.02em;
+        line-height: 1.3;
       }
-      .phone-telecom-tag {
+      .msg-pressure-tag {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        padding: 4px 10px;
-        border-radius: 8px;
-        font-family: var(--mono, monospace);
+        background: #FEF2F2;
+        border: 1px solid #FECACA;
+        color: #991B1B;
+        padding: 3px 10px;
+        border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 700;
-        color: #334155;
       }
-      .phone-live-dot {
-        width: 6px;
-        height: 6px;
+      .msg-live-dot {
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
-        background: #10B981;
-        box-shadow: 0 0 6px #10B981;
+        background: #DC2626;
+        animation: pulse 1.5s infinite;
       }
-      .phone-verdict-desc {
-        font-size: 0.84375rem;
+      .msg-verdict-desc {
+        font-size: 0.875rem;
         color: #475569;
         line-height: 1.5;
-        margin: 0 0 18px;
+        margin: 0;
       }
 
-      /* Risk Meter Bar & Slider */
-      .phone-risk-meter-wrap {
+      /* 4-Stage Segmented Meter Bar */
+      .msg-risk-meter-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .msg-risk-meter-bar {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        background: #F1F5F9;
+        padding: 4px;
+        border-radius: 10px;
+      }
+      .msg-risk-seg {
+        padding: 8px 4px;
+        text-align: center;
+        border-radius: 6px;
+        font-size: 0.6875rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        transition: all 0.2s ease;
+        opacity: 0.35;
+        background: #E2E8F0;
+        color: #475569;
+      }
+      .msg-risk-seg.active {
+        opacity: 1;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        transform: scale(1.02);
+      }
+      .msg-risk-seg.seg-safe.active {
+        background: #10B981;
+        color: #FFFFFF;
+      }
+      .msg-risk-seg.seg-caution.active {
+        background: #F59E0B;
+        color: #FFFFFF;
+      }
+      .msg-risk-seg.seg-risky.active {
+        background: #F97316;
+        color: #FFFFFF;
+      }
+      .msg-risk-seg.seg-danger.active {
+        background: #DC2626;
+        color: #FFFFFF;
+      }
+
+      /* Continuous Gradient Progress Slider with Pin */
+      .msg-gradient-track {
+        position: relative;
+        height: 8px;
+        background: #E2E8F0;
+        border-radius: 100px;
+        margin: 6px 0 2px 0;
+      }
+      .msg-gradient-bar {
+        position: absolute;
+        inset: 0;
+        border-radius: 100px;
+        background: linear-gradient(90deg, #10B981 0%, #F59E0B 40%, #F97316 70%, #DC2626 100%);
+      }
+      .msg-gradient-pointer {
+        position: absolute;
+        top: 50%;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        border: 3px solid #DC2626;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        transform: translate(-50%, -50%);
+        transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2;
+      }
+      .msg-meter-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        color: #94A3B8;
+      }
+
+      /* Right Column: TRAI Regulatory Mandate & Security Advisory */
+      .msg-advisory-column {
+        display: flex;
+        flex-direction: column;
+      }
+      .msg-advisory-box {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
         border-radius: 14px;
-        padding: 16px;
-      }
-      .phone-risk-meter-bar {
+        padding: 18px;
         display: flex;
-        height: 24px;
-        border-radius: 8px;
-        overflow: hidden;
-        gap: 2px;
-        margin-bottom: 12px;
+        flex-direction: column;
+        gap: 10px;
       }
-      .phone-risk-seg {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.625rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.95);
-        opacity: 0.45;
-        transition: all 0.3s ease;
-      }
-      .phone-risk-seg.active {
-        opacity: 1;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) inset, 0 0 10px rgba(0, 0, 0, 0.1);
-        transform: scaleY(1.06);
-      }
-
-      /* Continuous Gradient Slider */
-      .phone-gradient-track {
-        position: relative;
-        height: 6px;
-        border-radius: 99px;
-        background: #E2E8F0;
-        margin: 6px 0 8px;
-      }
-      .phone-gradient-bar {
-        position: absolute;
-        inset: 0;
-        border-radius: 99px;
-        background: linear-gradient(90deg, #10B981 0%, #10B981 25%, #F59E0B 50%, #EA580C 75%, #EF4444 100%);
-      }
-      .phone-gradient-pointer {
-        position: absolute;
-        top: -4px;
-        left: 0%;
-        transform: translateX(-50%);
-        width: 14px;
-        height: 14px;
-        background: #FFFFFF;
-        border: 2.5px solid #0F172A;
-        border-radius: 50%;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-        transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-      .phone-meter-scale {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.625rem;
-        font-weight: 700;
-        color: #94A3B8;
-        font-family: var(--mono, monospace);
-      }
-
-      /* Right: Regulatory Advisory Box */
-      .phone-advisory-column {
-        border-left: 1px solid #F1F5F9;
-        padding-left: 20px;
-      }
-      @media (max-width: 1040px) {
-        .phone-advisory-column {
-          border-left: none;
-          padding-left: 0;
-          border-top: 1px solid #F1F5F9;
-          padding-top: 20px;
-        }
-      }
-      .phone-advisory-box {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 16px;
-      }
-      .phone-advisory-badge {
+      .msg-advisory-badge {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        color: #0F172A;
-        font-size: 0.75rem;
+        background: #FEF3C7;
+        color: #92400E;
+        border: 1px solid #FDE68A;
+        font-size: 0.6875rem;
         font-weight: 800;
-        margin-bottom: 8px;
-        letter-spacing: 0.02em;
+        padding: 3px 8px;
+        border-radius: 6px;
+        width: fit-content;
       }
-      .phone-advisory-text {
-        font-size: 0.8125rem;
-        color: #475569;
-        line-height: 1.45;
-        margin: 0 0 12px;
-      }
-      .btn-phone-block-action {
-        width: 100%;
-        padding: 8px 12px;
-        border-radius: 8px;
+      .msg-advisory-text {
         font-size: 0.75rem;
-        font-weight: 700;
-        cursor: pointer;
-        display: inline-flex;
+        color: #334155;
+        line-height: 1.5;
+        margin: 0;
+      }
+      .msg-advisory-footer {
+        display: flex;
         align-items: center;
-        justify-content: center;
         gap: 6px;
-        border: 1px solid transparent;
-        transition: all 0.2s ease;
+        font-size: 0.6875rem;
+        color: #15803D;
+        font-weight: 700;
+        border-top: 1px solid #E2E8F0;
+        padding-top: 8px;
       }
 
-      /* 3. Telecom Bento Grid (4 Clean Metric Cards) */
-      .phone-bento-grid {
+      /* 3. 4 Bento Metric Intelligence Tiles */
+      .msg-bento-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin-bottom: 24px;
       }
       @media (max-width: 900px) {
-        .phone-bento-grid { grid-template-columns: repeat(2, 1fr); }
+        .msg-bento-grid { grid-template-columns: repeat(2, 1fr); }
       }
       @media (max-width: 540px) {
-        .phone-bento-grid { grid-template-columns: 1fr; }
+        .msg-bento-grid { grid-template-columns: 1fr; }
       }
-      .phone-bento-tile {
+      .msg-bento-tile {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 14px;
@@ -3460,17 +2705,22 @@
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
         transition: transform 0.15s ease, box-shadow 0.15s ease;
       }
-      .phone-bento-tile:hover {
+      .msg-bento-tile:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
       }
-      .phone-bento-header {
+      .msg-bento-tile-header {
         display: flex;
         align-items: center;
-        gap: 10px;
+        justify-content: space-between;
         margin-bottom: 10px;
       }
-      .phone-icon-badge {
+      .msg-bento-icon-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .msg-bento-icon {
         width: 32px;
         height: 32px;
         border-radius: 8px;
@@ -3478,32 +2728,46 @@
         align-items: center;
         justify-content: center;
       }
-      .badge-blue { background: #EFF6FF; color: #2563EB; }
-      .badge-green { background: #ECFDF5; color: #059669; }
-      .badge-purple { background: #FAF5FF; color: #9333EA; }
-      .badge-red { background: #FEF2F2; color: #DC2626; }
-
-      .phone-bento-label {
+      .icon-urgency { background: #FEF2F2; color: #DC2626; }
+      .icon-authority { background: #EEF2FF; color: #4F46E5; }
+      .icon-greed { background: #ECFDF5; color: #059669; }
+      .icon-creds { background: #FFFBEB; color: #D97706; }
+      .msg-bento-label {
         font-size: 0.6875rem;
         font-weight: 800;
         color: #64748B;
         letter-spacing: 0.06em;
         text-transform: uppercase;
       }
-      .phone-bento-value {
-        font-size: 1rem;
+      .psych-badge {
+        font-size: 0.6875rem;
         font-weight: 800;
-        color: #0F172A;
-        margin-bottom: 4px;
-        line-height: 1.3;
+        padding: 2px 8px;
+        border-radius: 6px;
       }
-      .phone-bento-sub {
+      .psych-badge-critical { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+      .psych-badge-elevated { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+      .psych-badge-clean { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+      .msg-bento-track {
+        height: 6px;
+        background: #F1F5F9;
+        border-radius: 100px;
+        margin: 10px 0 8px 0;
+        overflow: hidden;
+      }
+      .msg-bento-fill {
+        height: 100%;
+        border-radius: 100px;
+        transition: width 0.6s ease;
+      }
+      .msg-bento-sub {
         font-size: 0.75rem;
         color: #64748B;
+        line-height: 1.4;
       }
 
-      /* 4. Forensic Telemetry Card */
-      .phone-details-card {
+      /* 4. Deep Forensic Linguistic Terminal & Payloads Suite */
+      .msg-details-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 16px;
@@ -3511,7 +2775,7 @@
         margin-bottom: 24px;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
       }
-      .phone-details-header {
+      .msg-details-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -3521,58 +2785,236 @@
         flex-wrap: wrap;
         gap: 12px;
       }
-      .phone-details-title-group {
+      .msg-details-title-group {
         display: flex;
         align-items: center;
         gap: 10px;
         color: #0F172A;
       }
-      .phone-details-title-group h3 {
+      .msg-details-title-group h3 {
         font-size: 1rem;
         font-weight: 800;
         margin: 0;
       }
-      .phone-details-status-tag {
+      .msg-details-stamp {
         font-family: var(--mono, monospace);
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         font-weight: 800;
-        letter-spacing: 0.06em;
-        padding: 5px 12px;
+        padding: 4px 10px;
         border-radius: 6px;
-        background: #F1F5F9;
-        color: #334155;
-        border: 1px solid #E2E8F0;
+        background: #EEF2FF;
+        color: #4338CA;
+        border: 1px solid #C7D2FE;
+        letter-spacing: 0.06em;
       }
-      .phone-details-grid {
+
+      .msg-forensic-split {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 1.25fr 1fr;
+        gap: 24px;
+      }
+      @media (max-width: 900px) {
+        .msg-forensic-split { grid-template-columns: 1fr; }
+      }
+
+      /* High-Tech Terminal Viewport */
+      .msg-terminal-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .msg-terminal-label {
+        font-size: 0.6875rem;
+        font-weight: 800;
+        color: #64748B;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .msg-terminal-viewport {
+        background: #F8FAFC;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 18px 20px;
+        font-size: 0.9375rem;
+        line-height: 1.7;
+        color: #1E293B;
+        min-height: 120px;
+        word-break: break-word;
+      }
+
+      /* Dynamic Threat Keywords Syntax Highlighting */
+      mark.threat-kw-critical {
+        background: #FEE2E2;
+        color: #991B1B;
+        border: 1px solid #FECACA;
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-weight: 700;
+      }
+      mark.threat-kw-warn {
+        background: #FEF3C7;
+        color: #92400E;
+        border: 1px solid #FDE68A;
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-weight: 700;
+      }
+      mark.threat-kw-impersonation {
+        background: #EEF2FF;
+        color: #3730A3;
+        border: 1px solid #C7D2FE;
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-weight: 700;
+      }
+
+      .msg-terminal-legend {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        font-size: 0.75rem;
+        margin-top: 4px;
+      }
+      .legend-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.6875rem;
+        font-weight: 700;
+      }
+
+      /* Clean Interactive Message Inspection Bar */
+      .msg-terminal-input-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        background: #FFFFFF;
+        border: 1.5px solid #CBD5E1;
+        border-radius: 12px;
+        padding: 5px 6px 5px 14px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .msg-terminal-input-bar:focus-within {
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      }
+      .msg-terminal-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: var(--font, 'Inter', system-ui, sans-serif);
+        font-size: 0.875rem;
+        color: #0F172A;
+        min-width: 0;
+      }
+      .msg-terminal-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #4F46E5;
+        color: #FFFFFF;
+        border: none;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        flex-shrink: 0;
+      }
+      .msg-terminal-btn:hover {
+        background: #4338CA;
+        transform: translateY(-1px);
+      }
+      .msg-terminal-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* Right Column: Extracted Payloads & Sender Metadata */
+      .msg-payloads-wrap {
+        display: flex;
+        flex-direction: column;
         gap: 16px;
       }
-      @media (max-width: 800px) {
-        .phone-details-grid { grid-template-columns: repeat(2, 1fr); }
+      .msg-telemetry-item {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 14px 16px;
       }
-      @media (max-width: 480px) {
-        .phone-details-grid { grid-template-columns: 1fr; }
+      .msg-telemetry-label {
+        font-size: 0.6875rem;
+        font-weight: 800;
+        color: #64748B;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+      .msg-telemetry-val {
+        font-size: 0.9375rem;
+        font-weight: 800;
+        color: #0F172A;
+      }
+      .extracted-payloads-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .extracted-chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #FFFFFF;
+        border: 1px solid #CBD5E1;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #1E293B;
+        gap: 10px;
+      }
+      .btn-chip-inspect {
+        background: #EEF2FF;
+        color: #4338CA;
+        border: 1px solid #C7D2FE;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        flex-shrink: 0;
+        transition: all 0.15s ease;
+      }
+      .btn-chip-inspect:hover {
+        background: #4338CA;
+        color: #FFFFFF;
       }
 
       /* 5. Signals & Guidance Deck */
-      .phone-signals-deck {
+      .msg-signals-deck {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
         margin-bottom: 24px;
       }
       @media (max-width: 800px) {
-        .phone-signals-deck { grid-template-columns: 1fr; }
+        .msg-signals-deck { grid-template-columns: 1fr; }
       }
-      .phone-signals-panel, .phone-guidance-panel {
+      .msg-signals-panel, .msg-guidance-panel {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 16px;
         padding: 22px;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
       }
-      .phone-panel-title {
+      .msg-panel-title {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -3585,7 +3027,7 @@
       }
 
       /* 6. Emergency 1930 Notice */
-      .phone-emergency-banner {
+      .msg-emergency-banner {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
         border-radius: 16px;
@@ -3594,134 +3036,6 @@
         align-items: center;
         gap: 20px;
         flex-wrap: wrap;
-      }
-
-      /* Compatibility aliases for legacy pclean-* classes */
-      .pclean-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 0.6875rem;
-        font-weight: 800;
-        padding: 3px 10px;
-        border-radius: 6px;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-      .pclean-pill-green { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
-      .pclean-pill-yellow { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
-      .pclean-pill-red { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
-      .pclean-pill-gray { background: #F1F5F9; color: #334155; border: 1px solid #E2E8F0; }
-      .pclean-pill-blue { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
-      .pclean-action-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 12px;
-        border-radius: 100px;
-        font-size: 0.6875rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      
-
-      /* Sleek Minimalist In-Chat Typing Bar (Enterprise UI - No Cartoon Emojis) */
-      .wa-chat-bar {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
-        background: #F0F2F5;
-        border-top: 1px solid #E2E8F0;
-        border-radius: 0 0 16px 16px;
-      }
-      .wa-chat-input {
-        flex: 1;
-        background: #FFFFFF;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 20px;
-        padding: 8px 16px;
-        font-family: var(--font, 'Inter', system-ui, sans-serif);
-        font-size: 0.875rem;
-        color: #0F172A;
-        outline: none;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      }
-      .wa-chat-input:focus {
-        border-color: #00A884;
-        box-shadow: 0 0 0 2px rgba(0, 168, 132, 0.15);
-      }
-      .wa-chat-send {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #00A884;
-        color: #FFFFFF;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: transform 0.15s ease, background 0.15s ease;
-      }
-      .wa-chat-send:hover {
-        background: #008f72;
-        transform: scale(1.05);
-      }
-      .wa-chat-send:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .sms-chat-bar {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
-        background: #F1F5F9;
-        border-top: 1px solid #E2E8F0;
-        border-radius: 0 0 16px 16px;
-      }
-      .sms-chat-input {
-        flex: 1;
-        background: #FFFFFF;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 20px;
-        padding: 8px 16px;
-        font-family: var(--font, 'Inter', system-ui, sans-serif);
-        font-size: 0.875rem;
-        color: #0F172A;
-        outline: none;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      }
-      .sms-chat-input:focus {
-        border-color: #2563EB;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
-      }
-      .sms-chat-send {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #2563EB;
-        color: #FFFFFF;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: transform 0.15s ease, background 0.15s ease;
-      }
-      .sms-chat-send:hover {
-        background: #1D4ED8;
-        transform: scale(1.05);
-      }
-      .sms-chat-send:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
       }
 
     </style>
@@ -5290,14 +4604,14 @@
       </div>
                   <div id="view-message" class="tool-result-view">
 
-        <!-- 0. High-Tech Floating Quick Message NLP Inspector Dock -->
+        <!-- 0. Unified Floating Quick Search Dock -->
         <div class="msg-dock-strip">
           <form class="msg-dock-inner" onsubmit="handleQuickMsgSubmit(event); return false;">
             <span class="msg-dock-prefix" id="msg-search-proto-badge">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              <span>SMS / CHAT</span>
+              <span>SMS / CHAT NLP</span>
             </span>
-            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste another suspicious SMS, WhatsApp message, or notice to analyze..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
+            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message, SMS, or notice to analyze..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
             <button type="button" class="msg-dock-clear" onclick="clearQuickMsgInput()" title="Clear">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
@@ -5318,271 +4632,333 @@
           <div id="msg-quick-error" class="msg-dock-error"></div>
         </div>
 
-        <!-- 1. Forensic NLP Threat Analysis Header Bar -->
-        <div class="msg-nlp-header-bar">
-          <div class="msg-header-left">
-            <div class="msg-nlp-icon">
+        <!-- 1. Executive Master Header Card -->
+        <div class="msg-header-card">
+          <div class="msg-header-main">
+            <div class="msg-header-icon-box">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             </div>
-            <div>
-              <div class="msg-header-tag">
-                <span>ADVANCED FORENSIC NLP THREAT PARSER</span>
-                <span>•</span>
-                <span class="nlp-pill-amber">BERT / VADER ACTIVE</span>
-                <span>•</span>
-                <span id="msg-header-status-pill" class="msg-status-pill pill-danger">🚨 CRITICAL SCAM DETECTED</span>
+            <div style="flex: 1; min-width: 0;">
+              <div class="msg-header-meta">
+                <span class="msg-meta-pill">ADVANCED FORENSIC NLP</span>
+                <span class="msg-meta-dot">•</span>
+                <span class="msg-meta-pill" style="background: #EEF2FF; color: #4338CA;">BERT & VADER NEURAL ACTIVE</span>
+                <span class="msg-meta-dot">•</span>
+                <span id="msg-header-status-pill" class="msg-risk-pill" style="background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA;">🚨 CRITICAL SCAM DETECTED</span>
               </div>
-              <h1 class="msg-target-title target-display-value">Analyzing Suspicious Text...</h1>
-              <div class="msg-meta-subline">
-                <span>Strategy: <strong id="msg-val-strategy">Analyzing Linguistic Pattern...</strong></span>
-                <span>•</span>
-                <span id="msg-char-count">0 chars, 0 words</span>
+              <div class="msg-header-title-row">
+                <h1 class="msg-target-title target-display-value">Analyzing Suspicious Text...</h1>
+                <button type="button" class="msg-btn-copy" onclick="copyResultLink()" title="Copy shareable report link">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy</span>
+                </button>
               </div>
+              <p class="msg-header-sub">
+                Strategy: <strong id="msg-val-strategy" style="color: #0F172A;">Analyzing Linguistic Pattern...</strong> • <span id="msg-char-count">0 chars, 0 words</span> • Lexical Safety Engine
+              </p>
             </div>
           </div>
           <div class="msg-header-actions">
-            <button class="msg-btn-pill" id="btn-header-reparse-nlp" onclick="reparseMessageAction(event)" title="Re-parse text tokens">
+            <button class="msg-action-btn msg-btn-primary" id="btn-header-reparse-nlp" onclick="reparseMessageAction(event)" title="Re-parse text tokens">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
               <span>Re-parse NLP</span>
             </button>
-            <button class="msg-btn-pill" onclick="copyResultLink()" title="Copy shareable report">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>Share Forensic</span>
+            <button class="msg-action-btn msg-btn-secondary" onclick="copyResultLink()" title="Share forensic report">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+              <span>Share</span>
             </button>
-            <a href="reports.html" class="msg-btn-pill btn-msg-report" title="Report SMS header to Citizen Cyber Portal">
+            <a href="reports.html" class="msg-action-btn msg-btn-report" title="Report SMS Spammer to Citizen Cyber Registry">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
               <span>Report Spammer (1909)</span>
             </a>
-            <a href="tel:1930" class="msg-btn-pill btn-msg-emergency" title="Dial 1930 National Cyber Crime Reporting Portal">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            <a href="tel:1930" class="msg-action-btn msg-btn-emergency" title="Dial 1930 National Cyber Crime Reporting Portal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
               <span>Dial 1930 Helpline</span>
             </a>
           </div>
         </div>
 
-        <!-- 2. Dual-Column Centerpiece: Realistic Chat Mockup & Threat Metrics -->
-        <div class="msg-centerpiece-grid">
-          
-          <!-- Column A: Realistic Chat Mockup Showcase with Mode Switcher -->
-          <div class="msg-mockup-card">
-            <div class="msg-mockup-tabs-bar">
-              <div class="msg-tab-group">
-                <button type="button" class="msg-mode-btn active" id="msg-mode-wa" onclick="switchMsgMockupMode('wa')">
-                  <span>💬 WhatsApp Chat</span>
-                </button>
-                <button type="button" class="msg-mode-btn" id="msg-mode-sms" onclick="switchMsgMockupMode('sms')">
-                  <span>📱 SMS Notice</span>
-                </button>
-              </div>
-              <span class="msg-security-stamp">Visual Forensic Simulator</span>
-            </div>
-
-            <!-- WhatsApp View -->
-            <div class="whatsapp-frame-inner" id="msg-mockup-wa">
-              <div class="whatsapp-top-bar">
-                <div class="wa-left">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                  <div class="wa-avatar">?</div>
-                  <div class="wa-contact-info">
-                    <div class="wa-name">
-                      <span id="msg-val-sender">Unknown Suspect Sender</span>
-                    </div>
-                    <div class="wa-status" id="msg-wa-status-text">online</div>
-                  </div>
-                </div>
-                <div class="wa-actions">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </div>
-              </div>
-
-              <div class="whatsapp-chat-body">
-                <div class="wa-date-chip">TODAY</div>
-                <div class="wa-chat-bubble-container">
-                  <div class="wa-chat-bubble">
-                    <div class="wa-bubble-text" id="msg-bubble-content">
-                      Analyzing suspicious message tokens...
-                    </div>
-                    <div class="wa-bubble-meta">
-                      <span class="wa-time" id="msg-bubble-time">11:42 AM</span>
-                      <span class="wa-checkmarks" id="msg-bubble-ticks">✓✓</span>
-                    </div>
-                  </div>
-                </div>
-              
-              <!-- Sleek Enterprise In-Chat Typing Bar (No Emojis, Clean Vector Send) -->
-              <div class="wa-chat-bar">
-                <input type="text" id="phone-chat-input" class="wa-chat-input" placeholder="Type a message to inspect forensic signals..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
-                <button type="button" class="wa-chat-send" id="phone-chat-send-btn" onclick="handleInPhoneMsgSubmit(event)" title="Send & Inspect">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- SMS View -->
-            <div class="sms-frame-inner" id="msg-mockup-sms">
-              <div class="sms-top-bar">
-                <div>
-                  <div class="sms-sender-title" id="msg-sms-sender-header">AX-NOTIFY</div>
-                  <div class="sms-subtag">TRAI SMS Header • Indian Cellular Rail</div>
-                </div>
-                <div style="font-size: 0.75rem; color: #64748B; font-weight: 600;">Text Message</div>
-              </div>
-              <div class="sms-chat-body">
-                <div class="sms-bubble" id="msg-sms-bubble-content">
-                  Analyzing suspicious message tokens...
-                </div>
-              
-              <!-- Sleek Enterprise SMS Typing Bar -->
-              <div class="sms-chat-bar">
-                <input type="text" id="phone-sms-input" class="sms-chat-input" placeholder="Type SMS message to simulate..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneSmsSubmit(event);}" />
-                <button type="button" class="sms-chat-send" id="phone-sms-send-btn" onclick="handleInPhoneSmsSubmit(event)" title="Send & Inspect">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- Threat Keyword Highlighting Legend -->
-            <div class="msg-syntax-legend">
-              <span style="font-weight: 700; color: #64748B;">NLP Highlights:</span>
-              <span class="legend-pill pill-red">🚨 Panic & Coercion</span>
-              <span class="legend-pill pill-amber">🔑 OTP / Credential Demands</span>
-              <span class="legend-pill pill-blue">🏛️ Authority / Brand Impersonation</span>
-            </div>
-
-            <!-- Extracted Threat Payloads Deck -->
-            <div class="msg-payloads-card">
-              <div class="payloads-header-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                <span>Extracted Threat Payloads Inside Message</span>
-              </div>
-              <div id="msg-extracted-container">
-                <div style="font-size:0.8125rem; color:var(--ink-500); padding:4px 0;">
-                  No embedded web links, phone numbers, or UPI handles detected in message body.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Column B: Threat Intelligence & Manipulation Radar -->
-          <div class="msg-metrics-column">
+        <!-- 2. Primary Threat Risk Assessment & Meter Bar Card -->
+        <div class="msg-risk-card">
+          <div class="msg-risk-grid">
             
-            <!-- Circular Threat Score Gauge Card -->
-            <div class="msg-gauge-card">
-              <div class="msg-gauge-visual">
-                <svg class="msg-gauge-svg" viewBox="0 0 100 100">
-                  <circle class="msg-gauge-bg" cx="50" cy="50" r="40" />
-                  <circle class="msg-gauge-meter" id="msg-gauge-circle" cx="50" cy="50" r="40" />
-                </svg>
-                <div class="msg-gauge-center">
-                  <span class="msg-gauge-val" id="msg-gauge-score">95</span>
-                  <span class="msg-gauge-lbl">SCORE</span>
+            <!-- Left Column: Threat Score & Radial Indicator -->
+            <div class="msg-score-column">
+              <span class="msg-card-label">THREAT ASSESSMENT</span>
+              <div class="msg-score-display-wrap">
+                <div class="msg-score-gauge-ring">
+                  <svg width="110" height="110" viewBox="0 0 160 160">
+                    <circle cx="80" cy="80" r="68" fill="none" stroke="#F1F5F9" stroke-width="12"></circle>
+                    <circle class="msg-gauge-progress" id="msg-gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#DC2626" stroke-width="12" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2" style="transition: stroke-dashoffset 0.8s ease, stroke 0.3s ease;"></circle>
+                  </svg>
+                  <div class="msg-score-inner-text">
+                    <span class="msg-score-value" id="msg-gauge-score">95</span>
+                    <span class="msg-score-max">/100</span>
+                  </div>
                 </div>
-              </div>
-              <div class="msg-gauge-info">
-                <div class="msg-gauge-pill-wrap">
-                  <span class="msg-gauge-status-badge pill-danger" id="msg-gauge-pill">CRITICAL THREAT</span>
-                </div>
-                <div class="msg-gauge-verdict-title" id="msg-gauge-verdict-title">Dangerous Phishing Lure</div>
-                <div class="msg-gauge-summary-text" id="msg-gauge-summary">
-                  High probability of financial extortion, credential theft, or unauthorized sideloading.
+                <div class="msg-score-status-box">
+                  <span class="msg-risk-pill" id="msg-gauge-pill" style="background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA;">CRITICAL THREAT</span>
+                  <span class="msg-score-label">Cyber Threat Score</span>
                 </div>
               </div>
             </div>
 
-            <!-- 4-Vector Psychological Manipulation Radar -->
-            <div class="msg-psych-radar">
-              <div class="psych-radar-header">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                <span>Psychological Manipulation Radar</span>
-                <span class="psych-score-badge" id="msg-pressure-score">95% Critical</span>
+            <!-- Middle Column: Segmented Risk Bar & Clear Verdict -->
+            <div class="msg-meter-column">
+              <div class="msg-meter-header">
+                <h2 class="msg-verdict-title" id="msg-gauge-verdict-title">Dangerous Phishing & Coercion Lure</h2>
+                <span class="msg-pressure-tag" id="msg-pressure-score">
+                  <span class="msg-live-dot"></span>
+                  <span>95% Critical Pressure</span>
+                </span>
               </div>
+              <p class="msg-verdict-desc" id="msg-gauge-summary">
+                Heuristic natural language processing detected intense psychological manipulation, false power disconnection threats, and credential harvesting patterns.
+              </p>
+
+              <!-- 4-Stage Segmented Meter Bar -->
+              <div class="msg-risk-meter-wrap">
+                <div class="msg-risk-meter-bar" id="msg-meter-bar">
+                  <div class="msg-risk-seg seg-safe" id="msg-seg-safe" title="Low Risk (0–24%)">
+                    <span>Low (0-24%)</span>
+                  </div>
+                  <div class="msg-risk-seg seg-caution" id="msg-seg-caution" title="Caution (25–49%)">
+                    <span>Caution (25-49%)</span>
+                  </div>
+                  <div class="msg-risk-seg seg-risky" id="msg-seg-risky" title="Risky (50–74%)">
+                    <span>Risky (50-74%)</span>
+                  </div>
+                  <div class="msg-risk-seg seg-danger active" id="msg-seg-danger" title="High Danger (75–100%)">
+                    <span>Critical (75-100%)</span>
+                  </div>
+                </div>
+
+                <!-- Continuous Gradient Progress Slider with Pin -->
+                <div class="msg-gradient-track">
+                  <div class="msg-gradient-bar"></div>
+                  <div class="msg-gradient-pointer" id="msg-gradient-pointer" style="left: 95%;" title="Threat position"></div>
+                </div>
+                <div class="msg-meter-scale">
+                  <span>0% Safe</span>
+                  <span>50% Caution</span>
+                  <span>100% Critical Scam</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: TRAI Mandate & Citizen Safety Advisory -->
+            <div class="msg-advisory-column">
+              <div class="msg-advisory-box">
+                <div class="msg-advisory-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  <span>TRAI TCCCPR 2018 Mandate</span>
+                </div>
+                <p class="msg-advisory-text">
+                  Legitimate utility cutoffs & banking alerts <strong>NEVER</strong> originate from private 10-digit mobile numbers. Government bodies and electricity discoms are legally mandated to send notices through registered 6-character alphanumeric headers.
+                </p>
+                <div class="msg-advisory-footer">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Never transfer money or dial unverified personal numbers</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. 4 Bento Metric Intelligence Tiles (2x2 Grid) -->
+        <div class="msg-bento-grid">
+          
+          <!-- Tile 1: Urgency -->
+          <div class="msg-bento-tile">
+            <div class="msg-bento-tile-header">
+              <div class="msg-bento-icon-group">
+                <div class="msg-bento-icon icon-urgency">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <span class="msg-bento-label">Artificial Urgency</span>
+              </div>
+              <span class="psych-badge psych-badge-critical" id="psych-val-urgency">Critical (90%)</span>
+            </div>
+            <div class="msg-bento-track">
+              <div class="msg-bento-fill" id="psych-bar-urgency" style="width: 90%; background: #DC2626;"></div>
+            </div>
+            <div class="msg-bento-sub" id="psych-desc-urgency">Threat of immediate cutoff or arrest</div>
+          </div>
+
+          <!-- Tile 2: Authority -->
+          <div class="msg-bento-tile">
+            <div class="msg-bento-tile-header">
+              <div class="msg-bento-icon-group">
+                <div class="msg-bento-icon icon-authority">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+                </div>
+                <span class="msg-bento-label">Authority Spoofing</span>
+              </div>
+              <span class="psych-badge psych-badge-critical" id="psych-val-authority">Severe (85%)</span>
+            </div>
+            <div class="msg-bento-track">
+              <div class="msg-bento-fill" id="psych-bar-authority" style="width: 85%; background: #DC2626;"></div>
+            </div>
+            <div class="msg-bento-sub" id="psych-desc-authority">Police, CBI, Customs, MSEDCL spoofing</div>
+          </div>
+
+          <!-- Tile 3: Greed -->
+          <div class="msg-bento-tile">
+            <div class="msg-bento-tile-header">
+              <div class="msg-bento-icon-group">
+                <div class="msg-bento-icon icon-greed">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 6v2m0 8v2"></path></svg>
+                </div>
+                <span class="msg-bento-label">Financial Task Bait</span>
+              </div>
+              <span class="psych-badge psych-badge-clean" id="psych-val-greed">Clean (5%)</span>
+            </div>
+            <div class="msg-bento-track">
+              <div class="msg-bento-fill" id="psych-bar-greed" style="width: 5%; background: #10B981;"></div>
+            </div>
+            <div class="msg-bento-sub" id="psych-desc-greed">Prepaid tasks, ₹50,000 cash prizes</div>
+          </div>
+
+          <!-- Tile 4: Credentials / OTP -->
+          <div class="msg-bento-tile">
+            <div class="msg-bento-tile-header">
+              <div class="msg-bento-icon-group">
+                <div class="msg-bento-icon icon-creds">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <span class="msg-bento-label">Credential Harvesting</span>
+              </div>
+              <span class="psych-badge psych-badge-critical" id="psych-val-creds">Critical (95%)</span>
+            </div>
+            <div class="msg-bento-track">
+              <div class="msg-bento-fill" id="psych-bar-creds" style="width: 95%; background: #DC2626;"></div>
+            </div>
+            <div class="msg-bento-sub" id="psych-desc-creds">Demands for PIN, password, or secrecy</div>
+          </div>
+
+        </div>
+
+        <!-- 4. Deep Forensic Linguistic Terminal & Payloads Suite -->
+        <div class="msg-details-card">
+          <div class="msg-details-header">
+            <div class="msg-details-title-group">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              <h3>Forensic NLP Tokenizer & Threat Payload Decomposition</h3>
+            </div>
+            <div class="msg-details-stamp">
+              SEMANTIC AUDIT ACTIVE
+            </div>
+          </div>
+
+          <div class="msg-forensic-split">
+            <!-- Left: High-Tech Linguistic Terminal -->
+            <div class="msg-terminal-wrap">
+              <div class="msg-terminal-label">EVALUATED MESSAGE BODY & THREAT TOKEN HIGHLIGHTS</div>
+              <div class="msg-terminal-viewport" id="msg-bubble-content">
+                Analyzing suspicious message tokens...
+              </div>
+
+              <!-- Syntax Legend -->
+              <div class="msg-terminal-legend">
+                <span style="font-weight: 700; color: #64748B;">NLP Highlights:</span>
+                <span class="legend-pill" style="background: #FEE2E2; color: #991B1B;">🚨 Panic & Coercion</span>
+                <span class="legend-pill" style="background: #FEF3C7; color: #92400E;">🔑 OTP / Demands</span>
+                <span class="legend-pill" style="background: #EEF2FF; color: #3730A3;">🏛️ Authority Impersonation</span>
+              </div>
+
+              <!-- Clean Minimalist Interactive Inspection Bar -->
+              <div class="msg-terminal-input-bar">
+                <input type="text" id="phone-chat-input" class="msg-terminal-input" placeholder="Type or paste any message to simulate & inspect live..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
+                <button type="button" id="phone-chat-send-btn" class="msg-terminal-btn" onclick="handleInPhoneMsgSubmit(event)" title="Inspect live">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                  <span>Inspect Live</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Sender Verification & Decomposed Payloads -->
+            <div class="msg-payloads-wrap">
               
-              <div class="psych-bars-grid">
-                <!-- Vector 1: Urgency -->
-                <div class="psych-card">
-                  <div class="psych-card-top">
-                    <span>🚨 Artificial Urgency / Panic</span>
-                    <span class="psych-badge psych-badge-critical" id="psych-val-urgency">Critical (90%)</span>
-                  </div>
-                  <div class="psych-progress-track">
-                    <div class="psych-progress-fill" id="psych-bar-urgency" style="width: 90%; background: #DC2626;"></div>
-                  </div>
-                  <div class="psych-desc" id="psych-desc-urgency">Threat of immediate cutoff or arrest</div>
-                </div>
-
-                <!-- Vector 2: Authority -->
-                <div class="psych-card">
-                  <div class="psych-card-top">
-                    <span>🏛️ Authority Impersonation</span>
-                    <span class="psych-badge psych-badge-critical" id="psych-val-authority">Severe (85%)</span>
-                  </div>
-                  <div class="psych-progress-track">
-                    <div class="psych-progress-fill" id="psych-bar-authority" style="width: 85%; background: #DC2626;"></div>
-                  </div>
-                  <div class="psych-desc" id="psych-desc-authority">Police, CBI, Customs, MSEDCL spoofing</div>
-                </div>
-
-                <!-- Vector 3: Financial Greed -->
-                <div class="psych-card">
-                  <div class="psych-card-top">
-                    <span>💰 Financial Greed / Task Bait</span>
-                    <span class="psych-badge psych-badge-clean" id="psych-val-greed">Clean (5%)</span>
-                  </div>
-                  <div class="psych-progress-track">
-                    <div class="psych-progress-fill" id="psych-bar-greed" style="width: 5%; background: #10B981;"></div>
-                  </div>
-                  <div class="psych-desc" id="psych-desc-greed">Prepaid tasks, ₹50,000 cash prizes</div>
-                </div>
-
-                <!-- Vector 4: Credentials / OTP -->
-                <div class="psych-card">
-                  <div class="psych-card-top">
-                    <span>🔑 OTP / Credential Harvesting</span>
-                    <span class="psych-badge psych-badge-critical" id="psych-val-creds">Critical (95%)</span>
-                  </div>
-                  <div class="psych-progress-track">
-                    <div class="psych-progress-fill" id="psych-bar-creds" style="width: 95%; background: #DC2626;"></div>
-                  </div>
-                  <div class="psych-desc" id="psych-desc-creds">Demands for PIN, password, or secrecy</div>
+              <div class="msg-telemetry-item">
+                <div class="msg-telemetry-label">SENDER IDENTITY & REGULATORY CHANNEL</div>
+                <div class="msg-telemetry-val" id="msg-val-sender">AX-NOTIFY</div>
+                <div style="font-size: 0.75rem; color: #64748B; margin-top: 4px;" id="msg-sender-type">
+                  TRAI Registered Alphanumeric Commercial Header
                 </div>
               </div>
+
+              <div class="msg-telemetry-item">
+                <div class="msg-telemetry-label">EXTRACTED THREAT PAYLOADS (LINKS, PHONES, UPIS)</div>
+                <div id="msg-extracted-container">
+                  <div style="font-size:0.8125rem; color:#64748B; padding:4px 0;">
+                    No embedded web links, phone numbers, or UPI handles detected in message body.
+                  </div>
+                </div>
+              </div>
+
             </div>
-
-            <!-- TRAI Regulatory Compliance Bento -->
-            <div class="msg-trai-bento">
-              <div class="trai-bento-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-              </div>
-              <div class="trai-bento-content">
-                <div class="trai-bento-label">TRAI Regulatory Compliance & Sender ID</div>
-                <div class="trai-bento-value" id="msg-sender-type">Unregistered Private Cellular Subscriber</div>
-                <div class="trai-bento-advisory">
-                  Under TRAI TCCCPR 2018, all banking and utility notices must originate from registered 6-character alphanumeric headers (e.g., AX-HDFCBK, BP-MSEDCL). Commercial communications sent from personal 10-digit mobile numbers are legally non-compliant and flag high fraud risk.
-                </div>
-              </div>
-            </div>
-
           </div>
+
+          <!-- Compatibility Hidden Elements for JS Anchors -->
+          <div style="display:none;" id="msg-sms-bubble-content"></div>
+          <div style="display:none;" id="msg-bubble-time"></div>
+          <div style="display:none;" id="msg-bubble-ticks"></div>
+          <div style="display:none;" id="phone-sms-input"></div>
+          <div style="display:none;" id="phone-sms-send-btn"></div>
+          <div style="display:none;" id="msg-sms-sender-header"></div>
+          <div style="display:none;" id="msg-wa-status-text"></div>
         </div>
 
-        <!-- 3. Linguistic Threat Signals & TRAI 1909 Playbook Deck -->
-        <div class="msg-guidance-deck">
+        <!-- 5. Forensic Signals & Recommended Action Guidance Deck -->
+        <div class="msg-signals-deck">
+          
+          <!-- Signals Panel -->
           <div class="msg-signals-panel">
-            <div class="msg-panel-header">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              <span>Linguistic Threat Signals (<span id="msg-signals-count">1</span>)</span>
+            <div class="msg-panel-title">
+              <div class="panel-title-left">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                <span>Heuristic Signals & Risk Flags</span>
+              </div>
+              <span class="signals-badge" id="msg-signals-count">0 Signals Detected</span>
             </div>
-            <div id="msg-signals-container"></div>
-          </div>
-          <div class="msg-actions-panel">
-            <div class="msg-panel-header">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>TRAI 1909 DND & Citizen Safety Playbook</span>
+            <div id="msg-signals-container" class="signals-list">
+              <!-- Dynamically populated by renderSignalsList -->
             </div>
-            <div id="msg-recommendations-list"></div>
           </div>
+
+          <!-- Guidance Panel -->
+          <div class="msg-guidance-panel">
+            <div class="msg-panel-title">
+              <div class="panel-title-left">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Recommended Safety Protocols</span>
+              </div>
+            </div>
+            <div id="msg-recommendations-list" class="recommendations-list">
+              <!-- Dynamically populated by renderRecommendationsList -->
+            </div>
+          </div>
+
         </div>
+
+        <!-- 6. Golden Hour Cyber Crime Helpline Notice -->
+        <div class="msg-emergency-banner">
+          <div class="emergency-icon-wrap" style="width: 44px; height: 44px; border-radius: 12px; background: #FEF2F2; color: #DC2626; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <div class="emergency-content" style="flex: 1; min-width: 260px;">
+            <h4 style="margin: 0 0 4px 0; font-size: 0.9375rem; font-weight: 800; color: #0F172A;">Coerced into sharing OTP, money, or downloading an APK?</h4>
+            <p style="margin: 0; font-size: 0.8125rem; color: #475569; line-height: 1.5;">
+              Dial <strong>1930</strong> (National Cyber Crime Reporting Portal) immediately within <strong>2 hours</strong> (The Golden Hour). The emergency nodal officers can freeze fraudulent bank transactions and block malicious APK distribution servers.
+            </p>
+          </div>
+          <a href="tel:1930" class="btn-emergency-call" style="background: #DC2626; color: #FFFFFF; font-weight: 700; font-size: 0.8125rem; padding: 10px 18px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: all 0.2s ease; flex-shrink: 0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>Dial 1930 Free Helpline</span>
+          </a>
+        </div>
+
       </div>
     </div>
 </main>
