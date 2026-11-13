@@ -2208,21 +2208,7 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
 function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const text = (data.target || currentTargetQuery).trim();
 
-  // 1. Reset Action Buttons
-  const chatSendBtn = document.getElementById('phone-chat-send-btn');
-  if (chatSendBtn) {
-    chatSendBtn.disabled = false;
-    chatSendBtn.style.opacity = '1';
-    chatSendBtn.style.transform = '';
-    chatSendBtn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
-  }
-  const smsSendBtn = document.getElementById('phone-sms-send-btn');
-  if (smsSendBtn) {
-    smsSendBtn.disabled = false;
-    smsSendBtn.style.opacity = '1';
-    smsSendBtn.style.transform = '';
-    smsSendBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>';
-  }
+  // 1. Reset buttons
   const headerBtn = document.getElementById('btn-header-reparse-nlp');
   if (headerBtn) {
     headerBtn.disabled = false;
@@ -2233,23 +2219,40 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     dockBtn.disabled = false;
     dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Decode NLP</span>`;
   }
-
-  // 2. Pre-fill Quick Dock Input (top bar) and leave in-phone inputs clear for typing
-  const qInput = document.getElementById('msg-quick-input');
-  if (qInput) qInput.value = text;
+  const chatSendBtn = document.getElementById('phone-chat-send-btn');
+  if (chatSendBtn) {
+    chatSendBtn.disabled = false;
+    chatSendBtn.style.opacity = '1';
+    chatSendBtn.style.transform = '';
+    chatSendBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+  }
+  const smsSendBtn = document.getElementById('phone-sms-send-btn');
+  if (smsSendBtn) {
+    smsSendBtn.disabled = false;
+    smsSendBtn.style.opacity = '1';
+    smsSendBtn.style.transform = '';
+    smsSendBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+  }
   const pChatInput = document.getElementById('phone-chat-input');
   if (pChatInput) pChatInput.value = '';
   const pSmsInput = document.getElementById('phone-sms-input');
   if (pSmsInput) pSmsInput.value = '';
+  const ticksEl = document.getElementById('msg-bubble-ticks');
+  if (ticksEl) ticksEl.innerHTML = '<span style="color: #53BDEB; font-weight: bold;">✓✓</span>';
 
-  // 3. Metadata counts & Target Quote
+
+  // 2. Pre-fill quick dock input
+  const qInput = document.getElementById('msg-quick-input');
+  if (qInput) qInput.value = text;
+
+  // 3. Metadata counts
   const words = text.split(/\s+/).filter(Boolean).length;
   const chars = text.length;
   const charEl = document.getElementById('msg-char-count');
   if (charEl) charEl.textContent = `${chars} chars, ${words} words`;
 
   // 4. Detected Strategy
-  let strategy = 'Personal / Benign Communication';
+  let strategy = 'Social Engineering Coercion';
   if (/electricity|power|bijli|cut tonight/i.test(text)) {
     strategy = '⚡ Electricity Disconnection Extortion';
   } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
@@ -2262,28 +2265,28 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     strategy = '🏦 Banking KYC & Account Freeze Phishing';
   } else if (/apk|sideload|download/i.test(text)) {
     strategy = '📦 Malicious Android APK Sideloading';
-  } else if (riskScore > 30) {
-    strategy = '⚠️ Psychological Coercion / Pressure';
+  } else if (riskScore < 20) {
+    strategy = '✅ Benign / Everyday Communication';
   }
   const stratEl = document.getElementById('msg-val-strategy');
   if (stratEl) stratEl.textContent = strategy;
 
-  // 5. Executive Header Status Pill
+  // 5. Header Status Pill
   const headerPill = document.getElementById('msg-header-status-pill');
   if (headerPill) {
     if (riskScore >= 70) {
-      headerPill.className = 'pclean-pill pclean-pill-red';
-      headerPill.textContent = '● DANGEROUS COERCION SCAM';
+      headerPill.className = 'msg-status-pill pill-danger';
+      headerPill.textContent = '🚨 CRITICAL SCAM DETECTED';
     } else if (riskScore >= 35) {
-      headerPill.className = 'pclean-pill pclean-pill-yellow';
-      headerPill.textContent = '● SUSPICIOUS PRESSURE DETECTED';
+      headerPill.className = 'msg-status-pill pill-warning';
+      headerPill.textContent = '⚠️ SUSPICIOUS COERCION PATTERN';
     } else {
-      headerPill.className = 'pclean-pill pclean-pill-green';
-      headerPill.textContent = '● BENIGN / SAFE COMMUNICATION';
+      headerPill.className = 'msg-status-pill pill-safe';
+      headerPill.textContent = '🛡️ BENIGN / CLEAN TEXT';
     }
   }
 
-  // 6. Threat Risk Assessment Gauge Card (Radius 40, Circumference 251.2)
+  // 6. Circular Threat Score Gauge
   const gaugeScore = document.getElementById('msg-gauge-score');
   if (gaugeScore) gaugeScore.textContent = riskScore;
   const gaugeCircle = document.getElementById('msg-gauge-circle');
@@ -2296,35 +2299,26 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const gaugePill = document.getElementById('msg-gauge-pill');
   if (gaugePill) {
     if (riskScore >= 70) {
-      gaugePill.className = 'msg-chip-pill msg-chip-danger';
+      gaugePill.className = 'msg-gauge-status-badge pill-danger';
       gaugePill.textContent = 'CRITICAL THREAT';
     } else if (riskScore >= 35) {
-      gaugePill.className = 'msg-chip-pill';
-      gaugePill.style.background = '#FFFBEB';
-      gaugePill.style.color = '#B45309';
-      gaugePill.style.border = '1px solid #FDE68A';
+      gaugePill.className = 'msg-gauge-status-badge pill-warning';
       gaugePill.textContent = 'ELEVATED RISK';
     } else {
-      gaugePill.className = 'msg-chip-pill msg-chip-safe';
-      gaugePill.textContent = 'SAFE COMMUNICATION';
+      gaugePill.className = 'msg-gauge-status-badge pill-safe';
+      gaugePill.textContent = 'SAFE / LOW RISK';
     }
   }
   const verdictTitle = document.getElementById('msg-gauge-verdict-title');
   if (verdictTitle) {
-    verdictTitle.textContent = riskScore >= 70 ? 'High-Risk Extortion Phishing' : (riskScore >= 35 ? 'Suspicious Language Pattern' : 'Verified Benign Communication');
+    verdictTitle.textContent = riskScore >= 70 ? 'High Coercion Scam' : (riskScore >= 35 ? 'Suspicious Language' : 'Clean Verification');
   }
   const gaugeSummary = document.getElementById('msg-gauge-summary');
   if (gaugeSummary) {
-    if (riskScore >= 70) {
-      gaugeSummary.textContent = 'This message exhibits severe psychological coercion patterns consistent with digital extortion. Contains urgent cutoff threats, law enforcement intimidation, or unsolicited credential harvesting.';
-    } else if (riskScore >= 35) {
-      gaugeSummary.textContent = 'This message contains non-standard psychological pressure, urgent requests, or unverified commercial solicitation. Exercise caution before clicking embedded links or replying.';
-    } else {
-      gaugeSummary.textContent = 'Heuristic natural language processing and lexical safety filters evaluated this text. No deceptive coercion, urgent power cutoff threats, banking OTP harvesting, or unauthorized APK sideloading signatures were detected.';
-    }
+    gaugeSummary.textContent = theme.summary || 'Heuristic evaluation based on VADER coercion metrics and TRAI mandate.';
   }
 
-  // 7. Dynamic Syntax Highlighting for Smartphone Chat Bubble
+  // 7. Dynamic Syntax Highlighting for WhatsApp and SMS Views
   let highlighted = escapeHtml(text);
 
   // Critical Panic / Coercion keywords
@@ -2367,23 +2361,12 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const smsBubble = document.getElementById('msg-sms-bubble-content');
   if (smsBubble) smsBubble.innerHTML = highlighted;
 
-  // Animate delivery status to verified double blue ticks
-  const ticksEl = document.getElementById('msg-bubble-ticks');
-  if (ticksEl) {
-    ticksEl.innerHTML = `<span style="color: #53BDEB; font-weight: bold;">✓✓</span>`;
-  }
-  const timeNow = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  const timeEl = document.getElementById('msg-bubble-time');
-  if (timeEl) timeEl.textContent = timeNow;
-  const smsTimeEl = document.getElementById('msg-sms-time');
-  if (smsTimeEl) smsTimeEl.textContent = timeNow;
-
-  // 8. 4-Vector Psychological Manipulation Radar
-  function setPsychVector(id, valText, tagCls, fillPercent, fillColor, descText) {
+  // 8. Dynamic 4-Vector Psychological Manipulation Radar
+  function setPsychVector(id, valText, badgeCls, fillPercent, fillColor, descText) {
     const valEl = document.getElementById('psych-val-' + id);
     if (valEl) {
       valEl.textContent = valText;
-      valEl.className = 'psych-meter-tag ' + tagCls;
+      valEl.className = 'psych-badge ' + badgeCls;
     }
     const barEl = document.getElementById('psych-bar-' + id);
     if (barEl) {
@@ -2397,66 +2380,45 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   // Vector 1: Urgency
   const hasUrgency = /(immediately|urgent|tonight|within \d+ hours|power cut|disconnect|arrest|warrant|blocked|cutoff|final warning)/i.test(text);
   if (hasUrgency) {
-    setPsychVector('urgency', 'Critical (90%)', 'tag-critical', '90%', '#DC2626', 'Severe threat of immediate cutoff or arrest');
+    setPsychVector('urgency', 'Critical (90%)', 'psych-badge-critical', '90%', '#DC2626', 'Severe threat of immediate cutoff or arrest');
   } else if (riskScore > 30) {
-    setPsychVector('urgency', 'Moderate (45%)', 'tag-warning', '45%', '#D97706', 'Mild urgency or time-sensitive request');
+    setPsychVector('urgency', 'Moderate (45%)', 'psych-badge-elevated', '45%', '#D97706', 'Mild urgency or time-sensitive request');
   } else {
-    setPsychVector('urgency', 'Clean (5%)', 'tag-clean', '5%', '#10B981', 'Zero artificial urgency or panic triggers');
+    setPsychVector('urgency', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'Zero artificial urgency or panic triggers');
   }
 
   // Vector 2: Authority Impersonation
   const hasAuth = /(electricity|discom|msedcl|bescom|tneb|uppcl|police|cbi|customs|court|rbi|sbi|hdfc|icici|fedex|dhl|india post)/i.test(text);
   if (hasAuth) {
-    setPsychVector('authority', 'Severe (85%)', 'tag-critical', '85%', '#DC2626', 'Impersonates official public agency or bank');
+    setPsychVector('authority', 'Severe (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Impersonates official public agency or bank');
   } else if (/bank|courier|delivery|telecom/i.test(text)) {
-    setPsychVector('authority', 'Mild (35%)', 'tag-warning', '35%', '#D97706', 'Generic corporate entity referenced');
+    setPsychVector('authority', 'Mild (35%)', 'psych-badge-elevated', '35%', '#D97706', 'Generic corporate entity referenced');
   } else {
-    setPsychVector('authority', 'Clean (5%)', 'tag-clean', '5%', '#10B981', 'No authority or public body spoofed');
+    setPsychVector('authority', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No authority or public body spoofed');
   }
 
   // Vector 3: Financial Greed / Task Bait
   const hasGreed = /(lottery|kbc|winner|prize|reward|cashback|earn rs|daily income|part-time|telegram task|like youtube|ratings)/i.test(text);
   if (hasGreed) {
-    setPsychVector('greed', 'Flagged (85%)', 'tag-critical', '85%', '#DC2626', 'Unrealistic financial bounty or task bait');
+    setPsychVector('greed', 'Flagged (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Unrealistic financial bounty or task bait');
   } else {
-    setPsychVector('greed', 'Clean (5%)', 'tag-clean', '5%', '#10B981', 'No unearned cash or job lures');
+    setPsychVector('greed', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No unearned cash or job lures');
   }
 
   // Vector 4: Credentials / OTP Harvesting
   const hasCreds = /(otp|one time password|upi pin|mpin|pin|password|cvv|netbanking|card details|share screen|anydesk|rustdesk|apk|sideload)/i.test(text);
   if (hasCreds) {
-    setPsychVector('creds', 'Critical (95%)', 'tag-critical', '95%', '#DC2626', 'Direct demands for OTP, PIN, or malicious APK');
+    setPsychVector('creds', 'Critical (95%)', 'psych-badge-critical', '95%', '#DC2626', 'Direct demands for OTP, PIN, or malicious APK');
   } else {
-    setPsychVector('creds', 'Safe (5%)', 'tag-clean', '5%', '#10B981', 'No requests for secrets or unverified APKs');
+    setPsychVector('creds', 'Safe (5%)', 'psych-badge-clean', '5%', '#10B981', 'No requests for secrets or unverified APKs');
   }
 
   const pressureScore = document.getElementById('msg-pressure-score');
   if (pressureScore) {
-    pressureScore.textContent = `${riskScore}% ${riskScore >= 70 ? 'Critical Panic' : (riskScore >= 35 ? 'Moderate' : 'Low Pressure')}`;
-    pressureScore.className = riskScore >= 70 ? 'bento-badge-pressure tag-critical' : (riskScore >= 35 ? 'bento-badge-pressure tag-warning' : 'bento-badge-pressure tag-clean');
+    pressureScore.textContent = `${riskScore}% ${riskScore >= 70 ? 'Critical' : (riskScore >= 35 ? 'Moderate' : 'Low Pressure')}`;
   }
 
-  // 9. Quick Action Guidance Box in Risk Card
-  const actionBox = document.getElementById('msg-quick-action-box');
-  if (actionBox) {
-    if (riskScore >= 70) {
-      actionBox.innerHTML = `
-        <div style="background: #FEF2F2; border: 1.5px solid #FECACA; border-radius: 14px; padding: 16px; text-align: center;">
-          <div style="font-size: 1.0625rem; font-weight: 800; color: #DC2626; margin-bottom: 4px;">🚨 High Risk Threat</div>
-          <div style="font-size: 0.75rem; color: #991B1B; line-height: 1.4;">Do NOT reply, transfer funds, or install files. Report to 1909 / 1930 immediately.</div>
-        </div>
-      `;
-    } else {
-      actionBox.innerHTML = `
-        <div style="background: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: 14px; padding: 16px; text-align: center;">
-          <div style="font-size: 1.0625rem; font-weight: 800; color: #047857; margin-bottom: 4px;">🛡️ Safe to Read</div>
-          <div style="font-size: 0.75rem; color: #065F46; line-height: 1.4;">Zero fraudulent extraction payload patterns identified.</div>
-        </div>
-      `;
-    }
-  }
-
-  // 10. Sender & TRAI Compliance Analysis
+  // 9. Sender & TRAI Compliance Analysis
   const hasPhone = /(?:\+91[\s-]?)?[6-9]\d{9}/.test(text);
   const senderEl = document.getElementById('msg-val-sender');
   const smsSenderEl = document.getElementById('msg-sms-sender-header');
@@ -2475,80 +2437,64 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   } else {
     if (senderEl) senderEl.textContent = 'Unregistered Electronic Channel';
     if (smsSenderEl) smsSenderEl.textContent = 'AX-NOTIFY';
-    if (senderTypeEl) senderTypeEl.textContent = 'Unregistered Electronic Messaging Channel';
+    if (senderTypeEl) senderTypeEl.textContent = 'Unregistered Third-Party Messaging Channel';
     if (waStatusEl) {
       waStatusEl.textContent = 'online';
       waStatusEl.style.color = 'inherit';
     }
   }
 
-  // 11. Extracted Threat Payloads
+  // 10. Extracted Threat Payloads
   const extractedContainer = document.getElementById('msg-extracted-container');
-  const chipLinks = document.getElementById('msg-chip-links');
-  const chipPhones = document.getElementById('msg-chip-phones');
-  const chipCoercion = document.getElementById('msg-chip-coercion');
-
-  const urls = data.embeddedUrls || [];
-  const phones = data.embeddedPhones || [];
-  const upis = data.embeddedUpis || [];
-
-  if (urls.length === 0) {
-    const urlMatches = text.match(/(?:https?:\/\/|www\.)[^\s<>"'{}|\\^`]+|[a-zA-Z0-9][-a-zA-Z0-9]{1,62}\.(?:com|org|net|in|xyz|top|link|live|app|download|online|site)(?:\/[^\s<>"'{}|\\^`]*)?/gi);
-    if (urlMatches) urls.push(...urlMatches);
-  }
-  if (phones.length === 0) {
-    const phoneMatches = text.match(/(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?[0-9]{3}[\s-]?[0-9]{3,4}\b/g);
-    if (phoneMatches) phones.push(...phoneMatches);
-  }
-  if (upis.length === 0) {
-    const upiMatches = text.match(/[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}/g);
-    if (upiMatches) upis.push(...upiMatches);
-  }
-
-  if (chipLinks) {
-    chipLinks.textContent = urls.length > 0 ? `🚨 ${urls.length} Embedded Link(s)` : '✓ 0 Malicious Links';
-    chipLinks.className = urls.length > 0 ? 'msg-chip-pill msg-chip-danger' : 'msg-chip-pill msg-chip-safe';
-  }
-  if (chipPhones) {
-    chipPhones.textContent = phones.length > 0 ? `🚨 ${phones.length} Phone Number(s)` : '✓ 0 Phishing Numbers';
-    chipPhones.className = phones.length > 0 ? 'msg-chip-pill msg-chip-danger' : 'msg-chip-pill msg-chip-safe';
-  }
-  if (chipCoercion) {
-    chipCoercion.textContent = riskScore >= 50 ? '🚨 High Coercion' : '✓ 0 Coercion Vectors';
-    chipCoercion.className = riskScore >= 50 ? 'msg-chip-pill msg-chip-danger' : 'msg-chip-pill msg-chip-safe';
-  }
-
   if (extractedContainer) {
+    const urls = data.embeddedUrls || [];
+    const phones = data.embeddedPhones || [];
+    const upis = data.embeddedUpis || [];
+
+    // Fallback regex extraction if empty
+    if (urls.length === 0) {
+      const urlMatches = text.match(/(?:https?:\/\/|www\.)[^\s<>"'{}|\\^`]+|[a-zA-Z0-9][-a-zA-Z0-9]{1,62}\.(?:com|org|net|in|xyz|top|link|live|app|download|online|site)(?:\/[^\s<>"'{}|\\^`]*)?/gi);
+      if (urlMatches) urls.push(...urlMatches);
+    }
+    if (phones.length === 0) {
+      const phoneMatches = text.match(/(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?[0-9]{3}[\s-]?[0-9]{3,4}\b/g);
+      if (phoneMatches) phones.push(...phoneMatches);
+    }
+    if (upis.length === 0) {
+      const upiMatches = text.match(/[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}/g);
+      if (upiMatches) upis.push(...upiMatches);
+    }
+
     if (urls.length === 0 && phones.length === 0 && upis.length === 0) {
       extractedContainer.innerHTML = `
-        <div style="font-size: 0.75rem; color: #64748B; padding: 2px 0;">
-          No embedded web links, phone numbers, or UPI handles.
+        <div style="font-size:0.8125rem; color:var(--ink-500); padding:4px 0;">
+          No embedded web links, phone numbers, or UPI handles detected in message body.
         </div>
       `;
     } else {
-      let chipsHtml = '<div class="extracted-chips-container">';
+      let chipsHtml = '<div class="extracted-payloads-wrap">';
       urls.forEach(u => {
         const isApk = /\.apk(\?|$)/i.test(u) || /apk/i.test(u);
         chipsHtml += `
-          <div class="payload-chip-item">
-            <span style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${isApk ? '⚠️ APK:' : '🔗'} ${escapeHtml(u)}</span>
-            <a href="result.html?type=url&query=${encodeURIComponent(u)}" class="payload-btn-scan">Scan Link</a>
+          <div class="extracted-chip">
+            <span style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${isApk ? '⚠️ APK:' : '🔗'} ${escapeHtml(u)}</span>
+            <a href="result.html?type=url&query=${encodeURIComponent(u)}" class="btn-chip-inspect">Scan Link</a>
           </div>
         `;
       });
       phones.forEach(p => {
         chipsHtml += `
-          <div class="payload-chip-item">
+          <div class="extracted-chip">
             <span>📞 ${escapeHtml(p)}</span>
-            <a href="result.html?type=phone&query=${encodeURIComponent(p)}" class="payload-btn-scan">Inspect</a>
+            <a href="result.html?type=phone&query=${encodeURIComponent(p)}" class="btn-chip-inspect">Inspect Caller</a>
           </div>
         `;
       });
       upis.forEach(up => {
         chipsHtml += `
-          <div class="payload-chip-item">
+          <div class="extracted-chip">
             <span>₹ ${escapeHtml(up)}</span>
-            <a href="result.html?type=upi&query=${encodeURIComponent(up)}" class="payload-btn-scan">Verify</a>
+            <a href="result.html?type=upi&query=${encodeURIComponent(up)}" class="btn-chip-inspect">Verify UPI</a>
           </div>
         `;
       });
@@ -2557,7 +2503,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // 12. Populate signals & recommendations
+  // 11. Populate signals & recommendations
   renderSignalsList(signals, theme, 'msg-signals-container', 'msg-signals-count');
   renderRecommendationsList(recommendations, theme, 'msg-recommendations-list');
 }
@@ -2568,6 +2514,8 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
 /**
  * Production-Grade Dynamic 8-Vector Heuristic Radar & URL Forensic Decomposition
  */
+
+
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
   // 1. Sync Minimalist Quick Input Field
   const quickInput = document.getElementById('url-quick-input');
