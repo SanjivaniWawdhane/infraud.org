@@ -1,22 +1,15 @@
 /**
  * INFRAUD Digital Flipbook Reader Engine
- * Redesigned for INFRAUD Website Theme: Minimal, Modern, Professional
- * Authentic 3D Real-Page-Flip Animation Engine
+ * Powered by StPageFlip Physics Engine (60fps Buttery Smooth Page Peeling)
  */
 
 (function () {
-  'use strict';
-
-  // --- State ---
-  let currentPage = 1; // 1 to 12
-  const totalPages = 12;
   let isSpread = window.innerWidth >= 860;
+  let pageFlipInstance = null;
   let soundEnabled = localStorage.getItem('infra_book_sound') !== 'false';
   let checklistState = [false, false, false, false, false, false];
-  let quizAnswers = {}; // { q1: 'B', ... }
-  let isAnimating = false;
+  let quizAnswers = {};
 
-  // --- Static Helper Components ---
   function getPrefaceHtml() {
     return `
       <div class="book-page-leaf book-page-left" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #F8FAFC;">
@@ -54,7 +47,6 @@
     `;
   }
 
-  // --- Page Definitions & Content (Pages 1 to 12) ---
   const pagesData = [
     // Page 1: Cover Page
     {
@@ -833,13 +825,7 @@
     }
   ];
 
-  // Helper to get HTML for any page number
-  function getPageContent(pNum) {
-    if (pNum === 'preface') return getPrefaceHtml();
-    if (pNum === 'certificate') return getCertificateHtml();
-    const p = pagesData.find(x => x.page === pNum);
-    return p ? p.render() : '<div class="book-page-leaf"></div>';
-  }
+  
 
   // --- Audio Synthesis Engine ---
   function playPageTurnSound() {
@@ -848,11 +834,10 @@
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
       const ctx = new AudioCtx();
-      const bufferSize = Math.floor(ctx.sampleRate * 0.12); // 120ms crisp paper rustle
+      const bufferSize = Math.floor(ctx.sampleRate * 0.12);
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
 
-      // Organic paper rustle simulation
       for (let i = 0; i < bufferSize; i++) {
         data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.25));
       }
@@ -874,12 +859,83 @@
       gain.connect(ctx.destination);
 
       noise.start();
-    } catch (e) {
-      // Audio autoplay policy catch
-    }
+    } catch (e) {}
   }
 
-  // --- Modal DOM Injection ---
+  // --- Page Flip HTML Builder ---
+  function buildBookPagesHtml() {
+    let html = '';
+    // Page 0: Cover (Hard)
+    html += `<div class="st-page" data-density="hard">${pagesData[0].render()}</div>`;
+    // Page 1: Preface (Soft)
+    html += `<div class="st-page" data-density="soft">${getPrefaceHtml()}</div>`;
+    // Pages 2 to 12 (Soft)
+    for (let i = 1; i < pagesData.length; i++) {
+      html += `<div class="st-page" data-density="soft">${pagesData[i].render()}</div>`;
+    }
+    // Page 13: Certificate Back Cover (Hard)
+    html += `<div class="st-page" data-density="hard">${getCertificateHtml()}</div>`;
+    return html;
+  }
+
+  function mapPageToIdx(pageNum) {
+    if (pageNum <= 1) return 0;
+    if (pageNum >= 12) return 12;
+    return pageNum;
+  }
+
+  function mapIdxToPage(idx) {
+    if (idx <= 0) return 1;
+    if (idx >= 12) return 12;
+    return idx;
+  }
+
+  function syncUI(idx) {
+    const total = 12;
+    const pageNum = mapIdxToPage(idx);
+
+    // Update Scrubber
+    const slider = document.getElementById('book-slider');
+    if (slider) slider.value = pageNum;
+
+    // Update Counter Label
+    const counter = document.getElementById('book-counter');
+    if (counter) {
+      if (idx === 0) {
+        counter.innerText = 'Cover (Page 1)';
+      } else if (idx === 13) {
+        counter.innerText = 'Curriculum Completed';
+      } else if (window.innerWidth >= 860 && isSpread) {
+        const leftP = idx;
+        const rightP = Math.min(total, idx + 1);
+        counter.innerText = `Pages ${leftP}-${rightP} of ${total}`;
+      } else {
+        counter.innerText = `Page ${pageNum} of ${total}`;
+      }
+    }
+
+    // Update TOC Select
+    const toc = document.getElementById('book-toc-select');
+    if (toc) {
+      toc.value = pageNum.toString();
+    }
+
+    // Update Floating Arrows
+    const btnPrev = document.getElementById('book-arrow-prev');
+    const btnNext = document.getElementById('book-arrow-next');
+    const dockPrev = document.getElementById('dock-btn-prev');
+    const dockNext = document.getElementById('dock-btn-next');
+
+    const isFirst = idx <= 0;
+    const isLast = idx >= 13;
+
+    if (btnPrev) btnPrev.disabled = isFirst;
+    if (dockPrev) dockPrev.disabled = isFirst;
+    if (btnNext) btnNext.disabled = isLast;
+    if (dockNext) dockNext.disabled = isLast;
+  }
+
+  // --- Modal Injection ---
   function injectModalMarkup() {
     if (document.getElementById('infra-book-modal')) return;
 
@@ -887,7 +943,7 @@
     modal.id = 'infra-book-modal';
     modal.className = 'book-modal-wrapper';
     modal.innerHTML = `
-      <!-- Top Control Bar (Website Theme) -->
+      <!-- Top Bar -->
       <div class="book-top-bar">
         <div class="book-brand-meta">
           <div class="book-badge-icon">
@@ -915,11 +971,6 @@
             <option value="12">Page 12: Glossary & Helplines</option>
           </select>
 
-          <button id="book-mode-btn" class="book-control-btn" onclick="window.bookReader.toggleSpreadMode()" title="Toggle View Mode">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-            <span class="btn-label" id="book-mode-label">${isSpread ? '2-Page Spread' : 'Single Page'}</span>
-          </button>
-
           <button id="book-sound-btn" class="book-control-btn ${soundEnabled ? 'active' : ''}" onclick="window.bookReader.toggleSound()" title="Page Flip Sound">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             <span class="btn-label" id="book-sound-label">${soundEnabled ? 'Sound ON' : 'Sound OFF'}</span>
@@ -936,27 +987,14 @@
         </div>
       </div>
 
-      <!-- Main Stage Area -->
+      <!-- Stage Area -->
       <div class="book-stage-area" id="book-stage">
         <button class="book-nav-arrow book-nav-prev" id="book-arrow-prev" onclick="window.bookReader.prevPage()" title="Previous Page (←)">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
 
-        <div class="book-wrapper-3d" id="book-container">
-          <!-- Static Base Left Page Slot -->
-          <div class="book-page-slot" id="page-slot-left"></div>
-
-          <!-- Static Base Right Page Slot -->
-          <div class="book-page-slot" id="page-slot-right"></div>
-
-          <!-- Genuine 3D Flipping Sheet Layer -->
-          <div class="book-flipping-sheet" id="book-flipping-sheet">
-            <div class="sheet-face sheet-front" id="sheet-face-front"></div>
-            <div class="sheet-face sheet-back" id="sheet-face-back"></div>
-          </div>
-
-          <!-- Center Spine Gutter Depth -->
-          <div class="book-spine-depth" id="book-spine"></div>
+        <div class="book-stage-viewport">
+          <div id="book-container" class="st-book-container"></div>
         </div>
 
         <button class="book-nav-arrow book-nav-next" id="book-arrow-next" onclick="window.bookReader.nextPage()" title="Next Page (→)">
@@ -964,7 +1002,7 @@
         </button>
       </div>
 
-      <!-- Bottom Dock Navigation (Floating Capsule) -->
+      <!-- Bottom Dock -->
       <div class="book-bottom-dock">
         <button class="book-nav-btn book-nav-btn-sec" onclick="window.bookReader.firstPage()" title="First Page">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
@@ -994,209 +1032,71 @@
     `;
 
     document.body.appendChild(modal);
+  }
 
-    // Keyboard navigation
-    document.addEventListener('keydown', function (e) {
-      if (!modal.classList.contains('active')) return;
-      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
-        e.preventDefault();
-        window.bookReader.nextPage();
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        e.preventDefault();
-        window.bookReader.prevPage();
-      } else if (e.key === 'Escape') {
-        window.bookReader.close();
-      }
+  function initPageFlipEngine(startPageNum = 1) {
+    const container = document.getElementById('book-container');
+    if (!container) return;
+
+    if (pageFlipInstance) {
+      try { pageFlipInstance.destroy(); } catch (e) {}
+      pageFlipInstance = null;
+    }
+
+    container.innerHTML = buildBookPagesHtml();
+
+    const isMobile = window.innerWidth < 860;
+    const baseW = isMobile ? Math.min(window.innerWidth - 32, 420) : Math.min((window.innerWidth - 140) / 2, 540);
+    const baseH = isMobile ? Math.min(window.innerHeight - 180, 640) : Math.min(window.innerHeight - 170, 720);
+
+    pageFlipInstance = new St.PageFlip(container, {
+      width: Math.floor(baseW),
+      height: Math.floor(baseH),
+      size: 'stretch',
+      minWidth: 280,
+      maxWidth: 580,
+      minHeight: 440,
+      maxHeight: 760,
+      showCover: true,
+      drawShadow: true,
+      maxShadowOpacity: 0.35,
+      flippingTime: 650,
+      usePortrait: true,
+      startPage: mapPageToIdx(startPageNum),
+      mobileScrollSupport: true,
+      clickEventForward: true,
+      useMouseEvents: true
     });
 
-    // Touch swipe support for mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const stage = document.getElementById('book-stage');
-    stage.addEventListener('touchstart', function (e) {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
+    pageFlipInstance.loadFromHTML(container.querySelectorAll('.st-page'));
 
-    stage.addEventListener('touchend', function (e) {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, { passive: true });
-
-    function handleSwipe() {
-      const deltaX = touchEndX - touchStartX;
-      if (Math.abs(deltaX) > 40) {
-        if (deltaX < 0) {
-          window.bookReader.nextPage();
-        } else {
-          window.bookReader.prevPage();
-        }
-      }
-    }
-  }
-
-  // --- Static Rendering Engine (Direct Update) ---
-  function updateStaticSlots() {
-    const slotLeft = document.getElementById('page-slot-left');
-    const slotRight = document.getElementById('page-slot-right');
-    const spine = document.getElementById('book-spine');
-    const counter = document.getElementById('book-counter');
-    const slider = document.getElementById('book-slider');
-    const toc = document.getElementById('book-toc-select');
-    const prevArrow = document.getElementById('book-arrow-prev');
-    const nextArrow = document.getElementById('book-arrow-next');
-    const dockPrev = document.getElementById('dock-btn-prev');
-    const dockNext = document.getElementById('dock-btn-next');
-
-    const effectiveSpread = isSpread && window.innerWidth >= 860;
-    if (spine) {
-      spine.style.display = effectiveSpread && currentPage > 1 ? 'block' : 'none';
-    }
-
-    if (!effectiveSpread) {
-      // Mobile Single Page
-      if (slotLeft) slotLeft.innerHTML = getPageContent(currentPage);
-      if (counter) counter.innerText = `Page ${currentPage} of ${totalPages}`;
-      if (slider) slider.value = currentPage;
-      if (toc) toc.value = currentPage;
-    } else {
-      // Desktop 2-Page Spread
-      if (currentPage === 1) {
-        if (slotLeft) slotLeft.innerHTML = getPageContent('preface');
-        if (slotRight) slotRight.innerHTML = getPageContent(1);
-        if (counter) counter.innerText = `Cover (Page 1)`;
-        if (slider) slider.value = 1;
-        if (toc) toc.value = 1;
-      } else {
-        const leftPageNum = currentPage % 2 === 0 ? currentPage : currentPage - 1;
-        const rightPageNum = leftPageNum + 1;
-
-        if (slotLeft) slotLeft.innerHTML = getPageContent(leftPageNum);
-        if (slotRight) slotRight.innerHTML = rightPageNum <= totalPages ? getPageContent(rightPageNum) : getPageContent('certificate');
-
-        if (counter) {
-          counter.innerText = rightPageNum <= totalPages ? `Pages ${leftPageNum}–${rightPageNum} of ${totalPages}` : `Page ${leftPageNum} of ${totalPages}`;
-        }
-        if (slider) slider.value = leftPageNum;
-        if (toc) toc.value = leftPageNum;
-      }
-    }
-
-    // Update buttons disabled states
-    const isAtStart = currentPage <= 1;
-    const isAtEnd = effectiveSpread ? (currentPage >= 11) : (currentPage >= 12);
-
-    if (prevArrow) prevArrow.disabled = isAtStart;
-    if (nextArrow) nextArrow.disabled = isAtEnd;
-    if (dockPrev) dockPrev.disabled = isAtStart;
-    if (dockNext) dockNext.disabled = isAtEnd;
-  }
-
-  // --- Real 3D Page Flip Animation Engine ---
-  function execute3DPageFlip(fromPage, toPage, direction) {
-    const effectiveSpread = isSpread && window.innerWidth >= 860;
-    const sheet = document.getElementById('book-flipping-sheet');
-    const sheetFront = document.getElementById('sheet-face-front');
-    const sheetBack = document.getElementById('sheet-face-back');
-    const container = document.getElementById('book-container');
-
-    if (!effectiveSpread) {
-      // Mobile 3D Turn
-      if (container) {
-        container.classList.remove('mobile-turning-next', 'mobile-turning-prev');
-        void container.offsetWidth; // Force reflow
-        container.classList.add(direction === 'forward' ? 'mobile-turning-next' : 'mobile-turning-prev');
-      }
+    pageFlipInstance.on('flip', (e) => {
       playPageTurnSound();
-      currentPage = toPage;
-      updateStaticSlots();
-      setTimeout(() => {
-        if (container) container.classList.remove('mobile-turning-next', 'mobile-turning-prev');
-        isAnimating = false;
-      }, 450);
-      return;
-    }
+      syncUI(e.data);
+    });
 
-    // Desktop Spread 3D Flip
-    if (!sheet || !sheetFront || !sheetBack) {
-      currentPage = toPage;
-      updateStaticSlots();
-      isAnimating = false;
-      return;
-    }
-
-    playPageTurnSound();
-
-    if (direction === 'forward') {
-      // Determine what's flipping forward:
-      // Front of sheet has old right page; Back of sheet has new left page.
-      const oldRightPage = fromPage === 1 ? 1 : (fromPage % 2 === 0 ? fromPage + 1 : fromPage);
-      const newLeftPage = toPage % 2 === 0 ? toPage : toPage - 1;
-      const newRightPage = newLeftPage + 1;
-
-      // Populate flipping sheet faces
-      sheetFront.innerHTML = getPageContent(oldRightPage);
-      sheetBack.innerHTML = getPageContent(newLeftPage);
-
-      // Pre-render the underlying base right slot with incoming page
-      const slotRight = document.getElementById('page-slot-right');
-      if (slotRight) {
-        slotRight.innerHTML = newRightPage <= totalPages ? getPageContent(newRightPage) : getPageContent('certificate');
-      }
-
-      // Trigger 3D forward rotation: 0deg to -180deg
-      sheet.className = 'book-flipping-sheet flip-forward';
-
-      setTimeout(() => {
-        // Animation finished: update base left slot and state
-        currentPage = toPage;
-        updateStaticSlots();
-        sheet.className = 'book-flipping-sheet';
-        sheetFront.innerHTML = '';
-        sheetBack.innerHTML = '';
-        isAnimating = false;
-      }, 600);
-
-    } else {
-      // Backward Turn:
-      // Front of sheet has old left page; Back of sheet has new right page.
-      const oldLeftPage = fromPage % 2 === 0 ? fromPage : fromPage - 1;
-      const newLeftPage = toPage === 1 ? 'preface' : (toPage % 2 === 0 ? toPage : toPage - 1);
-      const newRightPage = toPage === 1 ? 1 : (newLeftPage + 1);
-
-      sheetFront.innerHTML = getPageContent(oldLeftPage);
-      sheetBack.innerHTML = getPageContent(newRightPage);
-
-      // Pre-render the underlying base left slot with incoming page
-      const slotLeft = document.getElementById('page-slot-left');
-      if (slotLeft) {
-        slotLeft.innerHTML = getPageContent(newLeftPage);
-      }
-
-      // Trigger 3D backward rotation: 0deg to +180deg
-      sheet.className = 'book-flipping-sheet flip-backward';
-
-      setTimeout(() => {
-        currentPage = toPage;
-        updateStaticSlots();
-        sheet.className = 'book-flipping-sheet';
-        sheetFront.innerHTML = '';
-        sheetBack.innerHTML = '';
-        isAnimating = false;
-      }, 600);
-    }
+    syncUI(mapPageToIdx(startPageNum));
   }
 
   // --- Public Reader Controller API ---
   window.bookReader = {
-    open: function (pageToOpen) {
+    open: function (pageToOpen = 1) {
       injectModalMarkup();
       const modal = document.getElementById('infra-book-modal');
       if (modal) {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
-      currentPage = pageToOpen || 1;
-      updateStaticSlots();
+
+      // If St is not yet loaded, load it dynamically
+      if (!window.St || !window.St.PageFlip) {
+        const s = document.createElement('script');
+        s.src = '/js/page-flip.browser.js';
+        s.onload = () => initPageFlipEngine(pageToOpen);
+        document.head.appendChild(s);
+      } else {
+        initPageFlipEngine(pageToOpen);
+      }
     },
 
     close: function () {
@@ -1207,73 +1107,30 @@
       }
     },
 
-    goToPage: function (pageNum, withAnimation = true) {
-      if (pageNum < 1) pageNum = 1;
-      if (pageNum > totalPages) pageNum = totalPages;
-      if (pageNum === currentPage) return;
-      if (isAnimating) return;
-
-      const fromPage = currentPage;
-      const toPage = pageNum;
-      const direction = toPage > fromPage ? 'forward' : 'backward';
-
-      if (withAnimation) {
-        isAnimating = true;
-        execute3DPageFlip(fromPage, toPage, direction);
-      } else {
-        currentPage = toPage;
-        updateStaticSlots();
-      }
+    goToPage: function (pageNum) {
+      if (!pageFlipInstance) return;
+      const targetIdx = mapPageToIdx(pageNum);
+      pageFlipInstance.flip(targetIdx, 'bottom');
     },
 
     nextPage: function () {
-      if (isAnimating) return;
-      const effectiveSpread = isSpread && window.innerWidth >= 860;
-      if (effectiveSpread) {
-        if (currentPage === 1) {
-          this.goToPage(2, true);
-        } else if (currentPage < 11) {
-          this.goToPage(currentPage + 2, true);
-        }
-      } else {
-        if (currentPage < totalPages) {
-          this.goToPage(currentPage + 1, true);
-        }
-      }
+      if (!pageFlipInstance) return;
+      pageFlipInstance.flipNext('bottom');
     },
 
     prevPage: function () {
-      if (isAnimating) return;
-      const effectiveSpread = isSpread && window.innerWidth >= 860;
-      if (effectiveSpread) {
-        if (currentPage <= 3) {
-          this.goToPage(1, true);
-        } else {
-          this.goToPage(currentPage - 2, true);
-        }
-      } else {
-        if (currentPage > 1) {
-          this.goToPage(currentPage - 1, true);
-        }
-      }
+      if (!pageFlipInstance) return;
+      pageFlipInstance.flipPrev('bottom');
     },
 
     firstPage: function () {
-      if (isAnimating) return;
-      this.goToPage(1, true);
+      if (!pageFlipInstance) return;
+      pageFlipInstance.flip(0, 'bottom');
     },
 
     lastPage: function () {
-      if (isAnimating) return;
-      this.goToPage(totalPages, true);
-    },
-
-    toggleSpreadMode: function () {
-      if (isAnimating) return;
-      isSpread = !isSpread;
-      const label = document.getElementById('book-mode-label');
-      if (label) label.innerText = isSpread ? '2-Page Spread' : 'Single Page';
-      updateStaticSlots();
+      if (!pageFlipInstance) return;
+      pageFlipInstance.flip(pageFlipInstance.getPageCount() - 1, 'bottom');
     },
 
     toggleSound: function () {
@@ -1283,49 +1140,135 @@
       const label = document.getElementById('book-sound-label');
       if (btn) btn.classList.toggle('active', soundEnabled);
       if (label) label.innerText = soundEnabled ? 'Sound ON' : 'Sound OFF';
-      if (soundEnabled) playPageTurnSound();
     },
 
-    // --- Interactive Checklist Action ---
+    // --- Interactive Checklist Action (Direct DOM updates) ---
     toggleCheck: function (index) {
       checklistState[index] = !checklistState[index];
       playPageTurnSound();
-      updateStaticSlots();
+      const itemEl = document.getElementById('chk-item-' + index);
+      if (itemEl) {
+        if (checklistState[index]) itemEl.classList.add('checked');
+        else itemEl.classList.remove('checked');
+      }
+      const checkedCount = checklistState.filter(Boolean).length;
+      const progressPct = Math.round((checkedCount / 6) * 100);
+      const fillEl = document.getElementById('chk-meter-fill');
+      if (fillEl) fillEl.style.width = progressPct + '%';
+      const labelEl = document.getElementById('chk-meter-label');
+      if (labelEl) labelEl.innerText = checkedCount + '/6 verified';
     },
 
-    // --- Interactive Quiz Action ---
+    // --- Interactive Quiz Action (Direct DOM updates) ---
     answerQuiz: function (questionId, optionKey) {
       if (quizAnswers[questionId]) return;
       quizAnswers[questionId] = optionKey;
       playPageTurnSound();
-      updateStaticSlots();
+
+      const questions = [
+        { id: 'q1', correct: 'B' },
+        { id: 'q2', correct: 'C' },
+        { id: 'q3', correct: 'B' },
+        { id: 'q4', correct: 'C' },
+        { id: 'q5', correct: 'B' },
+        { id: 'q6', correct: 'B' }
+      ];
+
+      const q = questions.find(x => x.id === questionId);
+      if (!q) return;
+
+      const isCorrect = optionKey === q.correct;
+      const card = document.getElementById('quiz-card-' + questionId);
+      if (card) {
+        const btns = card.querySelectorAll('.quiz-option-btn');
+        btns.forEach(b => {
+          const opt = b.getAttribute('data-opt');
+          b.disabled = true;
+          if (opt === q.correct) b.classList.add('correct');
+          else if (opt === optionKey && !isCorrect) b.classList.add('wrong');
+        });
+
+        const fb = document.getElementById('quiz-fb-' + questionId);
+        if (fb) {
+          fb.style.display = 'block';
+          fb.className = 'quiz-feedback ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+          fb.innerText = isCorrect ? '✓ Correct! You recognized the safety rule.' : '✕ Incorrect. Remember: PIN is never needed to receive money.';
+        }
+      }
+
+      // Update total score meter
+      const answeredCount = Object.keys(quizAnswers).length;
+      let correctCount = 0;
+      questions.forEach(x => { if (quizAnswers[x.id] === x.correct) correctCount++; });
+      const scoreFill = document.getElementById('quiz-score-fill');
+      if (scoreFill) scoreFill.style.width = Math.round((correctCount / 6) * 100) + '%';
+      const scoreLabel = document.getElementById('quiz-score-label');
+      if (scoreLabel) scoreLabel.innerText = 'Score: ' + correctCount + '/6 correct (' + answeredCount + '/6 answered)';
     },
 
     resetQuiz: function () {
       quizAnswers = {};
       playPageTurnSound();
-      updateStaticSlots();
+      const cards = document.querySelectorAll('.quiz-card');
+      cards.forEach(card => {
+        const btns = card.querySelectorAll('.quiz-option-btn');
+        btns.forEach(b => {
+          b.disabled = false;
+          b.classList.remove('correct', 'wrong');
+        });
+        const fb = card.querySelector('.quiz-feedback');
+        if (fb) fb.style.display = 'none';
+      });
+      const scoreFill = document.getElementById('quiz-score-fill');
+      if (scoreFill) scoreFill.style.width = '0%';
+      const scoreLabel = document.getElementById('quiz-score-label');
+      if (scoreLabel) scoreLabel.innerText = 'Score: 0/6 correct (0/6 answered)';
     }
   };
 
-  // Global helper for opening reader
-  window.openBookReader = function (pageNum) {
-    window.bookReader.open(pageNum || 1);
+  window.openBookReader = function (page) {
+    window.bookReader.open(page);
   };
 
-  // Listen for hash triggers
-  window.addEventListener('load', function () {
-    injectModalMarkup();
-    if (window.location.hash === '#book' || window.location.hash === '#upi-guide') {
-      window.openBookReader(1);
-    }
-  });
-
-  window.addEventListener('resize', function () {
+  // Keyboard navigation
+  window.addEventListener('keydown', function (e) {
     const modal = document.getElementById('infra-book-modal');
-    if (modal && modal.classList.contains('active')) {
-      updateStaticSlots();
+    if (!modal || !modal.classList.contains('active')) return;
+
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      window.bookReader.nextPage();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      window.bookReader.prevPage();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      window.bookReader.close();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      window.bookReader.firstPage();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      window.bookReader.lastPage();
     }
   });
 
+  // Responsive resize handler
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const modal = document.getElementById('infra-book-modal');
+      if (modal && modal.classList.contains('active') && pageFlipInstance) {
+        initPageFlipEngine(pageFlipInstance.getCurrentPageIndex());
+      }
+    }, 250);
+  });
+
+  // Auto-open if URL has #book hash
+  window.addEventListener('DOMContentLoaded', function () {
+    if (window.location.hash === '#book') {
+      setTimeout(() => window.openBookReader(1), 350);
+    }
+  });
 })();

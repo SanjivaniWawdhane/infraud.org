@@ -1469,3 +1469,55 @@
     font-size: 0.71875rem;
   }
 }
+
+
+/* ── StPageFlip Book Stage & Viewport ── */
+.book-stage-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 50px;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.book-stage-viewport {
+  width: min(94vw, 1100px);
+  height: min(84vh, 720px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.st-book-container {
+  box-shadow: 0 24px 60px -12px rgba(10, 15, 30, 0.22), 0 0 0 1px rgba(10, 15, 30, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.st-page {
+  background: #FFFFFF;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.st-page[data-density="hard"] {
+  background: #0A0F1E;
+  color: #FFFFFF;
+}
+
+.st-page .book-page-leaf {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
