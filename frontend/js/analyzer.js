@@ -2034,15 +2034,23 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
 
   // Digital Receipt Rows
   const valPsp = document.getElementById('upi-val-psp');
-  if (valPsp) valPsp.textContent = partner.bank;
+  if (valPsp) {
+    valPsp.textContent = partner.app ? `${partner.app} Gateway` : 'Authorized NPCI Gateway Rail';
+  }
+
+  const isMobileNumber = /^\d{10}$/.test(username);
+  const isMerchant = /(merchant|store|shop|mart|pay|biz|enterprise)/i.test(username);
 
   const valApp = document.getElementById('upi-val-app');
-  if (valApp) valApp.textContent = partner.app;
+  if (valApp) {
+    valApp.textContent = isMobileNumber ? `${partner.app} • Mobile Linked` : (partner.app || 'Standard Domestic Route');
+  }
 
   const valType = document.getElementById('upi-val-type');
   if (valType) {
-    const isMerchant = /(merchant|store|shop|mart|pay|biz|enterprise)/i.test(username);
-    valType.textContent = isMerchant ? 'P2M Merchant Account' : 'P2P Individual Handle';
+    if (isMerchant) valType.textContent = 'P2M Merchant Account';
+    else if (isMobileNumber) valType.textContent = 'Mobile-Linked P2P Handle';
+    else valType.textContent = 'P2P Individual Handle';
   }
 
   const valMule = document.getElementById('upi-val-mule');
@@ -2053,6 +2061,20 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
     } else {
       valMule.textContent = 'Low / Clean Velocity';
       valMule.style.color = '#059669';
+    }
+  }
+
+  // Dynamic Header Action Button: Freeze Account vs Report VPA
+  const freezeBtn = document.getElementById('btn-upi-action-report') || document.querySelector('.upi-btn-freeze');
+  if (freezeBtn) {
+    if (riskScore >= 50) {
+      freezeBtn.className = 'upi-action-btn upi-btn-freeze';
+      freezeBtn.href = 'tel:1930';
+      freezeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg><span>Freeze Account (1930)</span>';
+    } else {
+      freezeBtn.className = 'upi-action-btn upi-btn-secondary';
+      freezeBtn.href = `reports.html?type=upi&target=${encodeURIComponent(target)}`;
+      freezeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg><span>Report VPA</span>';
     }
   }
 
@@ -2081,7 +2103,7 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
 
   // Populate signals & recommendations
   renderSignalsList(signals, theme, 'upi-signals-container', 'upi-signals-count');
-  renderRecommendationsList(recommendations, theme, 'upi-recommendations-list');
+  renderRecommendationsList(recommendations, theme, 'upi-recommendations-container');
 }
 
 /**
@@ -2925,7 +2947,9 @@ function renderSignalsList(signals, theme, containerId, countPillId) {
 
 
 function renderRecommendationsList(recommendations, theme, listId) {
-  const listEl = document.getElementById(listId);
+  const listEl = document.getElementById(listId) || 
+                 document.getElementById(listId.replace('-list', '-container')) || 
+                 document.getElementById(listId.replace('-container', '-list'));
   if (!listEl) return;
 
   if (recommendations && recommendations.length > 0) {
