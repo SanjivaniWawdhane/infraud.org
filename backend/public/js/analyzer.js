@@ -816,8 +816,8 @@ function updateTargetTypeVisuals(query, type) {
   const targetDisplay = document.getElementById('target-display');
 
   if (type === 'phone') {
-    if (breadcrumbTag) breadcrumbTag.textContent = 'Telecom & Caller Intelligence Dossier';
-    if (catTag) catTag.textContent = 'PHONE NUMBER TARGET';
+    if (breadcrumbTag) breadcrumbTag.textContent = 'Phone Number Safety Report';
+    if (catTag) catTag.textContent = 'PHONE NUMBER';
     if (protocolTag) {
       protocolTag.textContent = 'CELLULAR / TELECOM 5G CHANNEL';
       protocolTag.style.color = '#34D399';
@@ -1590,137 +1590,157 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   // Resolve Carrier / Provider
   const carrier = data.carrier || resolveTelecomCarrier(digits, countryName === 'India' ? 'IN' : 'INTL', countryName);
   const operatorName = carrier.brand || carrier.operator || 'Authorized Operator';
-  const circleName = carrier.circle || (isDomestic ? 'Maharashtra & Goa Circle [MH]' : 'International Network');
+  const circleName = carrier.circle ? carrier.circle.replace(/\[MH\]|\[.*?\]/g, '').trim() : (isDomestic ? 'Maharashtra & Goa' : 'International');
   const lineTypeStr = (data.lineType || 'CELLULAR MOBILE').toUpperCase();
 
   const isOfficial = data.isVerifiedOfficial || riskScore <= 10;
   const isScam = riskScore >= 70;
   const isTrai140 = (signals || []).some(s => s.id === 'TRAI_140_TELEMARKETING');
 
-  // 1. Verdict & Status Bar
-  const statusIconWrap = document.getElementById('phone-status-icon-wrap');
-  const verdictTag = document.getElementById('phone-verdict-tag');
-  const verdictTitle = document.getElementById('phone-verdict-title');
-  const scoreNum = document.getElementById('phone-score-num');
-  const scoreLevel = document.getElementById('phone-score-level');
-  const plainSummary = document.getElementById('phone-plain-summary');
-  const btnCall1930 = document.getElementById('phone-btn-call-1930');
-
-  if (scoreNum) {
-    scoreNum.textContent = riskScore;
-    scoreNum.className = 'msg-score-clean-num ' + (isScam ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
-  }
-
-  if (scoreLevel) {
-    if (isScam) {
-      scoreLevel.textContent = 'CRITICAL SCAM';
-      scoreLevel.style.background = '#FEE2E2';
-      scoreLevel.style.color = '#991B1B';
-    } else if (isTrai140) {
-      scoreLevel.textContent = 'TELEMARKETER';
-      scoreLevel.style.background = '#FEF3C7';
-      scoreLevel.style.color = '#92400E';
-    } else if (isOfficial) {
-      scoreLevel.textContent = 'VERIFIED SAFE';
-      scoreLevel.style.background = '#ECFDF5';
-      scoreLevel.style.color = '#065F46';
-    } else if (riskScore >= 35) {
-      scoreLevel.textContent = 'MODERATE CAUTION';
-      scoreLevel.style.background = '#FEF3C7';
-      scoreLevel.style.color = '#92400E';
-    } else {
-      scoreLevel.textContent = 'LOW RISK';
-      scoreLevel.style.background = '#ECFDF5';
-      scoreLevel.style.color = '#065F46';
-    }
-  }
-
-  // Plain-Language Summary
-  let summaryText = '';
-  if (isScam) {
-    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-danger';
-    if (verdictTag) { verdictTag.textContent = '🚨 FRAUD / SCAM CALL DETECTED'; verdictTag.className = 'msg-verdict-tag danger'; }
-    if (verdictTitle) {
-      const scamSig = (signals || []).find(s => s.severity === 'critical') || (signals || [])[0];
-      verdictTitle.textContent = scamSig ? `Suspected Fraud: ${scamSig.title}` : 'Suspected Extortion / Fake Courier Scam';
-    }
-    if (plainSummary) plainSummary.className = 'msg-plain-summary danger';
-    if (btnCall1930) btnCall1930.style.display = 'inline-flex';
-    summaryText = `This phone number is flagged in cybercrime reports for extortion scams (often impersonating FedEx parcel holds, Customs, or Police threatening 'Digital Arrest'). Disconnect immediately and never transfer money or share OTPs.`;
-  } else if (isTrai140) {
-    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-warning';
-    if (verdictTag) { verdictTag.textContent = '⚠️ COMMERCIAL TELEMARKETING'; verdictTag.className = 'msg-verdict-tag warning'; }
-    if (verdictTitle) verdictTitle.textContent = 'Promotional Sales / Telemarketing Line';
-    if (plainSummary) plainSummary.className = 'msg-plain-summary warning';
-    if (btnCall1930) btnCall1930.style.display = 'none';
-    summaryText = `This caller operates in TRAI's 140 commercial telemarketing pool used for loans, credit cards, or promotional offers. Not flagged for cybercrime, but expect unsolicited sales pitches.`;
-  } else if (isOfficial) {
-    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-safe';
-    if (verdictTag) { verdictTag.textContent = '✅ VERIFIED OFFICIAL HELPLINE'; verdictTag.className = 'msg-verdict-tag safe'; }
-    const orgName = data.verifiedEntity ? data.verifiedEntity.name : (digits.startsWith('1800') ? 'Official Institutional Toll-Free Helpline' : 'Official Service Channel');
-    if (verdictTitle) verdictTitle.textContent = orgName;
-    if (plainSummary) plainSummary.className = 'msg-plain-summary safe';
-    if (btnCall1930) btnCall1930.style.display = 'none';
-    summaryText = `Authenticated institutional helpline registered to ${orgName}. Safe for customer service inquiries. Note: Official banks will never ask for your UPI PIN, password, or card CVV.`;
-  } else {
-    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-safe';
-    if (verdictTag) { verdictTag.textContent = '📱 STANDARD MOBILE LINE'; verdictTag.className = 'msg-verdict-tag safe'; }
-    if (verdictTitle) verdictTitle.textContent = `${operatorName} Subscriber Line`;
-    if (plainSummary) plainSummary.className = 'msg-plain-summary safe';
-    if (btnCall1930) btnCall1930.style.display = 'none';
-    summaryText = `This is a standard individual cellular mobile SIM allocated to ${operatorName} in ${circleName}. No active cyber fraud complaints are recorded. Standard caution applies: never share OTPs or passwords over the phone.`;
-  }
-  if (plainSummary) plainSummary.textContent = summaryText;
-
-  // Segmented Meter Bar
-  const pointer = document.getElementById('phone-meter-pointer');
-  if (pointer) pointer.style.left = `${Math.min(Math.max(riskScore, 2), 98)}%`;
-
-  ['phone-seg-safe', 'phone-seg-caution', 'phone-seg-risky', 'phone-seg-danger'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('active');
-  });
-  if (riskScore <= 25) document.getElementById('phone-seg-safe')?.classList.add('active');
-  else if (riskScore <= 50) document.getElementById('phone-seg-caution')?.classList.add('active');
-  else if (riskScore <= 75) document.getElementById('phone-seg-risky')?.classList.add('active');
-  else document.getElementById('phone-seg-danger')?.classList.add('active');
-
-  // 2. Caller Overview Tiles
+  // 1. Phone number display
   const tileTarget = document.getElementById('phone-tile-target');
   if (tileTarget) tileTarget.textContent = `${flag}${formatted}`;
-
   const tileNat = document.getElementById('phone-tile-nat');
   if (tileNat) tileNat.textContent = nationalFormatted || (data.normalized ? data.normalized.national : '');
 
-  const tileCategory = document.getElementById('phone-tile-category');
-  const tileCategorySub = document.getElementById('phone-tile-category-sub');
-  if (tileCategory) {
-    if (isOfficial) {
-      tileCategory.textContent = 'Official Helpline';
-      if (tileCategorySub) tileCategorySub.textContent = data.verifiedEntity ? data.verifiedEntity.name : 'Institutional Support';
-    } else if (isScam) {
-      tileCategory.textContent = 'Reported Scam Line';
-      if (tileCategorySub) tileCategorySub.textContent = 'High-Risk Cyber Fraud';
-    } else if (isTrai140) {
-      tileCategory.textContent = 'TRAI Telemarketer';
-      if (tileCategorySub) tileCategorySub.textContent = '140 Commercial Series';
-    } else {
-      tileCategory.textContent = 'Personal Mobile SIM';
-      if (tileCategorySub) tileCategorySub.textContent = 'Individual Consumer';
-    }
+  // 2. Caller name & meta tags
+  const verdictTitle = document.getElementById('phone-verdict-title');
+  const metaCarrier = document.getElementById('phone-meta-carrier');
+  const metaCircle = document.getElementById('phone-meta-circle');
+  const metaType = document.getElementById('phone-meta-type');
+  if (metaCarrier) metaCarrier.textContent = operatorName;
+  if (metaCircle) metaCircle.textContent = circleName;
+  if (metaType) {
+    if (isOfficial) metaType.textContent = 'Official Helpline';
+    else if (lineTypeStr === 'TOLL_FREE' || lineTypeStr === 'TOLL-FREE') metaType.textContent = 'Toll-Free (1800)';
+    else if (lineTypeStr === 'FIXED_LINE' || lineTypeStr === 'LANDLINE') metaType.textContent = 'Landline';
+    else metaType.textContent = 'Mobile SIM';
   }
 
-  const tileCarrier = document.getElementById('phone-tile-carrier');
-  const tileCarrierSub = document.getElementById('phone-tile-carrier-sub');
-  if (tileCarrier) tileCarrier.textContent = operatorName;
-  if (tileCarrierSub) tileCarrierSub.textContent = carrier.licenseType || 'Licensed Telecom Operator';
+  // 3. Avatar, Badge & Score Pill
+  const avatar = document.getElementById('phone-caller-avatar');
+  const verdictBadge = document.getElementById('phone-verdict-badge');
+  const verdictTag = document.getElementById('phone-verdict-tag');
+  const scoreNum = document.getElementById('phone-score-num');
+  const plainSummary = document.getElementById('phone-plain-summary');
+  const btnCall1930 = document.getElementById('phone-btn-call-1930');
+  const meterFill = document.getElementById('phone-meter-fill');
 
-  const tileCircle = document.getElementById('phone-tile-circle');
-  const tileCircleSub = document.getElementById('phone-tile-circle-sub');
-  if (tileCircle) tileCircle.textContent = circleName;
-  if (tileCircleSub) tileCircleSub.textContent = isDomestic ? 'Licensed Service Area (DoT)' : 'International Telecom';
+  // Checkpoints
+  const chkIconCyber = document.getElementById('chk-icon-cybercrime');
+  const chkTitleCyber = document.getElementById('chk-title-cybercrime');
+  const chkDescCyber = document.getElementById('chk-desc-cybercrime');
 
-  // 3. Quick Input and Copy/Report Links
+  const chkIconTelecom = document.getElementById('chk-icon-telecom');
+  const chkTitleTelecom = document.getElementById('chk-title-telecom');
+  const chkDescTelecom = document.getElementById('chk-desc-telecom');
+
+  const chkIconType = document.getElementById('chk-icon-type');
+  const chkTitleType = document.getElementById('chk-title-type');
+  const chkDescType = document.getElementById('chk-desc-type');
+
+  if (scoreNum) {
+    scoreNum.textContent = riskScore;
+    scoreNum.className = 'phone-score-val ' + (isScam ? 'val-danger' : (riskScore >= 35 ? 'val-warning' : 'val-safe'));
+  }
+  if (meterFill) {
+    meterFill.style.width = `${Math.min(Math.max(riskScore, 5), 100)}%`;
+    meterFill.className = 'phone-meter-fill ' + (isScam ? 'fill-danger' : (riskScore >= 35 ? 'fill-warning' : 'fill-safe'));
+  }
+
+  if (isScam) {
+    if (avatar) avatar.className = 'phone-caller-avatar avatar-danger';
+    if (verdictBadge) { verdictBadge.className = 'phone-verdict-badge badge-danger'; }
+    if (verdictTag) verdictTag.textContent = '🚨 DANGEROUS SCAM';
+    const scamSig = (signals || []).find(s => s.severity === 'critical') || (signals || [])[0];
+    if (verdictTitle) verdictTitle.textContent = scamSig ? `Reported Scam: ${scamSig.title}` : 'Suspected Extortion / Fake Courier Scam';
+    if (plainSummary) {
+      plainSummary.className = 'phone-summary-banner summary-danger';
+      plainSummary.textContent = `Warning: This phone number is flagged in cybercrime reports for extortion scams (often claiming held parcels or threatening fake police arrest). Do NOT answer, send money, or share OTPs.`;
+    }
+    if (btnCall1930) btnCall1930.style.display = 'inline-flex';
+
+    if (chkIconCyber) { chkIconCyber.className = 'phone-check-icon check-red'; chkIconCyber.textContent = '✕'; }
+    if (chkTitleCyber) chkTitleCyber.textContent = 'National Cybercrime Registry: Active Scam Flag';
+    if (chkDescCyber) chkDescCyber.textContent = 'Multiple citizen complaints registered against this number for impersonation fraud.';
+
+    if (chkIconTelecom) { chkIconTelecom.className = 'phone-check-icon check-green'; chkIconTelecom.textContent = '✓'; }
+    if (chkTitleTelecom) chkTitleTelecom.textContent = 'Mobile Carrier';
+    if (chkDescTelecom) chkDescTelecom.textContent = `Registered on ${operatorName} (${circleName}).`;
+
+    if (chkIconType) { chkIconType.className = 'phone-check-icon check-red'; chkIconType.textContent = '!'; }
+    if (chkTitleType) chkTitleType.textContent = 'High-Risk Cyber Alert';
+    if (chkDescType) chkDescType.textContent = 'Do not accept incoming video calls or disclose financial details.';
+  } else if (isTrai140) {
+    if (avatar) avatar.className = 'phone-caller-avatar avatar-warning';
+    if (verdictBadge) { verdictBadge.className = 'phone-verdict-badge badge-warning'; }
+    if (verdictTag) verdictTag.textContent = '📢 SALES CALL';
+    if (verdictTitle) verdictTitle.textContent = 'Commercial Telemarketer (TRAI 140)';
+    if (plainSummary) {
+      plainSummary.className = 'phone-summary-banner summary-warning';
+      plainSummary.textContent = `This number belongs to TRAI's 140 commercial sales series. Not a cyber fraud scam, but expect promotional marketing calls selling loans or insurance.`;
+    }
+    if (btnCall1930) btnCall1930.style.display = 'none';
+
+    if (chkIconCyber) { chkIconCyber.className = 'phone-check-icon check-green'; chkIconCyber.textContent = '✓'; }
+    if (chkTitleCyber) chkTitleCyber.textContent = 'National Cybercrime Database: 0 Fraud Reports';
+    if (chkDescCyber) chkDescCyber.textContent = 'Registered commercial telemarketer. No extortion or phishing complaints on record.';
+
+    if (chkIconTelecom) { chkIconTelecom.className = 'phone-check-icon check-green'; chkIconTelecom.textContent = '✓'; }
+    if (chkTitleTelecom) chkTitleTelecom.textContent = 'TRAI Commercial Pool';
+    if (chkDescTelecom) chkDescTelecom.textContent = 'Complies with TRAI 140 series regulation for commercial promotions.';
+
+    if (chkIconType) { chkIconType.className = 'phone-check-icon check-blue'; chkIconType.textContent = 'ℹ'; }
+    if (chkTitleType) chkTitleType.textContent = 'Telemarketing Sales';
+    if (chkDescType) chkDescType.textContent = 'You can register on Do Not Disturb (DND by dialing 1909) to stop sales calls.';
+  } else if (isOfficial) {
+    if (avatar) avatar.className = 'phone-caller-avatar avatar-official';
+    if (verdictBadge) { verdictBadge.className = 'phone-verdict-badge badge-official'; }
+    if (verdictTag) verdictTag.textContent = '✅ VERIFIED HELPLINE';
+    const orgName = data.verifiedEntity ? data.verifiedEntity.name : (digits.startsWith('1800') ? 'Official Institutional Toll-Free Helpline' : 'Official Service Channel');
+    if (verdictTitle) verdictTitle.textContent = orgName;
+    if (plainSummary) {
+      plainSummary.className = 'phone-summary-banner summary-safe';
+      plainSummary.textContent = `Official customer support helpline registered to ${orgName}. Safe to contact for official customer inquiries.`;
+    }
+    if (btnCall1930) btnCall1930.style.display = 'none';
+
+    if (chkIconCyber) { chkIconCyber.className = 'phone-check-icon check-green'; chkIconCyber.textContent = '✓'; }
+    if (chkTitleCyber) chkTitleCyber.textContent = 'National Cybercrime Database: Official Record';
+    if (chkDescCyber) chkDescCyber.textContent = `Authenticated institutional channel for ${orgName}.`;
+
+    if (chkIconTelecom) { chkIconTelecom.className = 'phone-check-icon check-green'; chkIconTelecom.textContent = '✓'; }
+    if (chkTitleTelecom) chkTitleTelecom.textContent = 'Institutional Route';
+    if (chkDescTelecom) chkDescTelecom.textContent = 'Toll-free 1800 government & banking authorized telecom trunk.';
+
+    if (chkIconType) { chkIconType.className = 'phone-check-icon check-green'; chkIconType.textContent = '✓'; }
+    if (chkTitleType) chkTitleType.textContent = 'Official Service Channel';
+    if (chkDescType) chkDescType.textContent = 'Legitimate customer care. Remember: bank officers never ask for your UPI PIN or card CVV.';
+  } else {
+    if (avatar) avatar.className = 'phone-caller-avatar avatar-safe';
+    if (verdictBadge) { verdictBadge.className = 'phone-verdict-badge badge-safe'; }
+    if (verdictTag) verdictTag.textContent = '🟢 LIKELY SAFE';
+    if (verdictTitle) verdictTitle.textContent = `${operatorName} Subscriber Line`;
+    if (plainSummary) {
+      plainSummary.className = 'phone-summary-banner summary-safe';
+      plainSummary.textContent = `No fraud complaints found on national cybercrime databases. This is a regular personal mobile number registered with ${operatorName} in ${circleName}.`;
+    }
+    if (btnCall1930) btnCall1930.style.display = 'none';
+
+    if (chkIconCyber) { chkIconCyber.className = 'phone-check-icon check-green'; chkIconCyber.textContent = '✓'; }
+    if (chkTitleCyber) chkTitleCyber.textContent = 'National Cybercrime Database: 0 Reports';
+    if (chkDescCyber) chkDescCyber.textContent = 'No active extortion, phishing, or courier scam complaints found for this number.';
+
+    if (chkIconTelecom) { chkIconTelecom.className = 'phone-check-icon check-green'; chkIconTelecom.textContent = '✓'; }
+    if (chkTitleTelecom) chkTitleTelecom.textContent = 'Mobile Number Registration';
+    if (chkDescTelecom) chkDescTelecom.textContent = `Valid cellular series registered under ${operatorName} in ${circleName}.`;
+
+    if (chkIconType) { chkIconType.className = 'phone-check-icon check-blue'; chkIconType.textContent = 'ℹ'; }
+    if (chkTitleType) chkTitleType.textContent = 'Caller Classification';
+    if (chkDescType) chkDescType.textContent = 'Personal mobile line (regular individual subscriber). Standard caution applies.';
+  }
+
+  // Pre-fill search input
   const quickInput = document.getElementById('phone-quick-input');
   if (quickInput) {
     quickInput.value = nationalDigits.length === 10 ? nationalDigits : target;
@@ -1731,23 +1751,9 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
     reportBtn.href = `reports.html?type=phone&target=${encodeURIComponent(target)}`;
   }
 
-  // 4. Backward Compatibility Hidden Elements
+  // Backward compatibility
   const phoneTargetDisplay = document.getElementById('phone-target-display');
   if (phoneTargetDisplay) phoneTargetDisplay.textContent = `${flag}${formatted}`;
-  const tcNatDisplay = document.getElementById('tc-nat-display');
-  if (tcNatDisplay) tcNatDisplay.textContent = nationalFormatted;
-  const tcCallerName = document.getElementById('tc-caller-name');
-  if (tcCallerName) tcCallerName.textContent = operatorName;
-  const tcCarrierText = document.getElementById('tc-carrier-text');
-  if (tcCarrierText) tcCarrierText.textContent = operatorName;
-  const tcCircleText = document.getElementById('tc-circle-text');
-  if (tcCircleText) tcCircleText.textContent = circleName;
-  const phoneValFormatted = document.getElementById('phone-val-formatted');
-  if (phoneValFormatted) phoneValFormatted.textContent = data.normalized ? data.normalized.e164 : formatted;
-
-  // 5. Signals & Recommendations
-  renderSignalsList(signals, theme, 'phone-signals-container', 'phone-signals-count');
-  renderRecommendationsList(recommendations, theme, 'phone-recommendations-list');
 }
 
 function renderUpiView(data, theme, riskScore, signals, recommendations) {
