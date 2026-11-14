@@ -1579,3 +1579,41 @@
   color: #FFFFFF !important;
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
 }
+
+
+/* ─── KYC Theme Enhancements ─── */
+.book-cover-page.theme-kyc {
+  box-shadow: inset 0 0 100px rgba(220, 38, 38, 0.15) !important;
+}
+
+.book-cover-page.theme-kyc::before {
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.25) 0%, transparent 65%) !important;
+}
+
+.cover-brand-pill.pill-kyc {
+  background: rgba(220, 38, 38, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: #FCA5A5 !important;
+}
+
+.cover-hero-tag.tag-kyc {
+  color: #EF4444 !important;
+}
+
+.cover-golden-rule-box.rule-kyc {
+  border-left-color: #DC2626 !important;
+  background: rgba(220, 38, 38, 0.08) !important;
+}
+
+.cover-golden-rule-title.rule-title-kyc {
+  color: #F87171 !important;
+}
+
+.book-nav-btn.btn-kyc-accent {
+  background: #DC2626 !important;
+}
+
+.book-nav-btn.btn-kyc-accent:hover:not(:disabled) {
+  background: #B91C1C !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
+}

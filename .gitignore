@@ -48,3 +48,5 @@ test_*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+scratch/

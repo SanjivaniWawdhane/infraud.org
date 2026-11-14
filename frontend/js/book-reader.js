@@ -1,7 +1,7 @@
 /**
  * INFRAUD Digital Flipbook Reader Engine
  * Powered by StPageFlip Physics Engine (60fps Buttery Smooth Page Peeling)
- * Supports Multi-Book Registry: UPI Request Scams & Fake KYC Vectors
+ * Multi-Book Support: UPI Request Scams & Fake KYC Vectors
  */
 
 (function () {
@@ -846,7 +846,7 @@
     return `
       <div class="book-page-leaf book-page-left" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #F8FAFC;">
         <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(220,38,38,0.08); display:flex; align-items:center; justify-content:center; margin-bottom: 20px; color: #DC2626;">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; color: #DC2626; text-transform: uppercase; margin-bottom: 6px;">INFRAUD ACADEMY • INTERMEDIATE</div>
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #0A0F1E; margin-bottom: 12px; letter-spacing:-0.02em;">Fake KYC Vectors Handbook</h3>
@@ -865,16 +865,15 @@
   function getKycCertificateHtml() {
     return `
       <div class="book-page-leaf book-page-right" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #F8FAFC;">
-        <div style="width: 56px; height: 56px; border-radius: 50%; background: #DCFCE7; color: #16A34A; display:flex; align-items:center; justify-content:center; margin-bottom: 16px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: #D1FAE5; color: #059669; display:flex; align-items:center; justify-content:center; margin-bottom: 16px;">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; color: #16A34A; text-transform: uppercase; margin-bottom: 6px;">CURRICULUM COMPLETED</div>
-        <h3 style="font-size: 1.35rem; font-weight: 800; color: #0A0F1E; margin-bottom: 10px;">KYC Safety Mastery</h3>
-        <p style="font-size: 0.875rem; color: #4B5570; max-width: 310px; line-height: 1.6; margin-bottom: 22px;">
-          You have mastered the 5 core lessons on fake telecom &amp; banking KYC vectors. Remember: Never complete KYC from an unsolicited link or phone call.
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: #0A0F1E; margin-bottom: 6px;">Curriculum Completed</h3>
+        <p style="font-size: 0.875rem; color: #4B5570; max-width: 300px; line-height: 1.6; margin-bottom: 20px;">
+          You have reviewed all 5 lessons and safety exercises for Fake KYC Vectors. Never complete KYC from an unsolicited message or call.
         </p>
-        <a href="/books/INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" download="INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" class="book-control-btn book-control-btn-primary" style="background:#DC2626; border-color:#DC2626; padding: 10px 22px; font-size: 0.875rem;">
-          Download Official PDF
+        <a href="/books/INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" download="INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" class="book-control-btn book-control-btn-primary" style="background:#DC2626; border-color:#DC2626; padding: 10px 20px; font-size: 0.875rem;">
+          Download Reference PDF
         </a>
       </div>
     `;
@@ -956,52 +955,52 @@
   ];
 
   const kycPagesData = [
-    // Page 1: Cover
+    // Page 1: Cover Page
     {
       page: 1,
       title: "Cover",
       render: function () {
         return `
-          <div class="book-page-leaf book-page-cover" style="background: #0A0F1E; color: #FFFFFF;">
-            <div class="cover-brand-header">
-              <div class="cover-brand-pill">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>INFRAUD</span>
+          <div class="book-cover-page book-page-leaf theme-kyc">
+            <div class="cover-top-emblem">
+              <div class="cover-brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                INFRAUD
               </div>
-              <span class="cover-tag" style="background: rgba(220, 38, 38, 0.15); color: #EF4444; border: 1px solid rgba(220, 38, 38, 0.3);">SAFETY HANDBOOK</span>
+              <span class="cover-brand-pill pill-kyc">KYC Defense Guide</span>
             </div>
 
-            <div class="cover-hero">
-              <span class="cover-eyebrow" style="color: #EF4444;">OFFICIAL CURRICULUM GUIDE</span>
-              <h1 class="cover-title">Fake KYC Vectors</h1>
-              <p class="cover-desc">
+            <div class="cover-body-hero">
+              <div class="cover-hero-tag tag-kyc">Official Curriculum Guide</div>
+              <h1 class="cover-hero-title">Fake KYC Vectors</h1>
+              <p class="cover-hero-desc">
                 An intermediate-level guide to spotting fake banking and telecom KYC messages, impersonation calls, malicious links, and identity-theft attempts.
               </p>
+
+              <div class="cover-pills-row">
+                <div class="cover-meta-pill">
+                  <span>LEVEL</span>
+                  <strong>Intermediate</strong>
+                </div>
+                <div class="cover-meta-pill">
+                  <span>CURRICULUM</span>
+                  <strong>5 Lessons</strong>
+                </div>
+                <div class="cover-meta-pill">
+                  <span>TOPIC</span>
+                  <strong>KYC Safety</strong>
+                </div>
+              </div>
+
+              <div class="cover-golden-rule-box rule-kyc">
+                <div class="cover-golden-rule-title rule-title-kyc">★ THE MOST IMPORTANT RULE</div>
+                <p class="cover-golden-rule-text">
+                  Never complete KYC through an unsolicited link or a caller's instructions. Pause, independently contact the bank or telecom provider using its official app, website, branch, or published customer-care channel.
+                </p>
+              </div>
             </div>
 
-            <div class="cover-meta-grid">
-              <div class="cover-meta-card">
-                <span class="meta-label">LEVEL</span>
-                <span class="meta-val">Intermediate</span>
-              </div>
-              <div class="cover-meta-card">
-                <span class="meta-label">CURRICULUM</span>
-                <span class="meta-val">5 Lessons</span>
-              </div>
-              <div class="cover-meta-card">
-                <span class="meta-label">TOPIC</span>
-                <span class="meta-val">KYC Safety</span>
-              </div>
-            </div>
-
-            <div class="cover-golden-rule" style="border-left-color: #DC2626; background: rgba(220, 38, 38, 0.08);">
-              <div class="rule-badge" style="color: #EF4444;">★ THE MOST IMPORTANT RULE</div>
-              <div class="rule-body">
-                Never complete KYC through an unsolicited link or a caller's instructions. Pause, independently contact the bank or telecom provider using its official app, website, branch, or published customer-care channel.
-              </div>
-            </div>
-
-            <div class="cover-footer">
+            <div class="cover-footer-row">
               <span>INFRAUD Security Education Series</span>
               <span>Edition 2026 • 12 Pages</span>
             </div>
@@ -1024,61 +1023,76 @@
 
             <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">OVERVIEW</span>
             <h2 class="book-page-title">Table of Contents</h2>
-            <p class="book-page-subtitle">Your structured learning roadmap for fake KYC vectors</p>
+            <p class="book-page-subtitle">Your structured learning roadmap</p>
 
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.8125rem; margin-top: 10px;">
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(3)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Lesson 1</td>
-                <td style="padding: 7px 0;">KYC Fundamentals: What is Real and What is Not</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">03</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(4)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Lesson 2</td>
-                <td style="padding: 7px 0;">Fake KYC Vectors: SMS, Calls, WhatsApp, and APKs</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">04</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(5)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Lesson 3</td>
-                <td style="padding: 7px 0;">Link, Sender, and Malicious App Inspection Skills</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">05</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(6)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Lesson 4</td>
-                <td style="padding: 7px 0;">Identity Theft, Document Misuse &amp; Safe Masking</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">06</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(7)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Lesson 5</td>
-                <td style="padding: 7px 0;">Incident Response, Chakshu Reporting &amp; 1930</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">07</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(8)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Quick Ref</td>
-                <td style="padding: 7px 0;">Interactive Fake KYC Verification Checklist</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">08</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(9)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Quiz</td>
-                <td style="padding: 7px 0;">7-Question Knowledge Check with Instant Feedback</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">09–10</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(11)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Case Studies</td>
-                <td style="padding: 7px 0;">Real Threat Analysis &amp; 4-Step Defense Flowchart</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">11</td>
-              </tr>
-              <tr style="cursor: pointer;" onclick="window.bookReader.goToPage(12)">
-                <td style="padding: 7px 0; font-weight: 700; color: #DC2626;">Glossary</td>
-                <td style="padding: 7px 0;">Official RBI, TRAI &amp; DoT Sanchar Saathi References</td>
-                <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">12</td>
-              </tr>
+            <table style="width:100%; border-collapse:collapse; margin-bottom: 22px; font-size: 0.8125rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid #E8EBF3; text-align: left; color: #4B5570;">
+                  <th style="padding: 8px 0; font-weight: 700;">SECTION</th>
+                  <th style="padding: 8px 0; font-weight: 700;">FOCUS AREA</th>
+                  <th style="padding: 8px 0; text-align: right; font-weight: 700;">PAGE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(3)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Lesson 1</td>
+                  <td style="padding: 9px 0;">KYC Fundamentals: What is Real and What is Not</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">03</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(4)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Lesson 2</td>
+                  <td style="padding: 9px 0;">Fake KYC Vectors: SMS, Calls, WhatsApp, and APKs</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">04</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(5)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Lesson 3</td>
+                  <td style="padding: 9px 0;">Link, Sender, and Malicious App Inspection Skills</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">05</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(6)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Lesson 4</td>
+                  <td style="padding: 9px 0;">Identity Theft, Document Misuse &amp; Safe Masking</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">06</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(7)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Lesson 5</td>
+                  <td style="padding: 9px 0;">Incident Response: Chakshu Reporting &amp; 1930</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">07</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(8)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Quick Reference</td>
+                  <td style="padding: 9px 0;">Interactive Fake KYC Verification Checklist</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">08</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(9)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Knowledge Check</td>
+                  <td style="padding: 9px 0;">Interactive 7-Question Quiz with Instant Feedback</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">09–10</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(11)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Case Studies</td>
+                  <td style="padding: 9px 0;">Real Threat Analysis &amp; 4-Step Defense Flowchart</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">11</td>
+                </tr>
+                <tr style="cursor: pointer;" onclick="window.bookReader.goToPage(12)">
+                  <td style="padding: 9px 0; font-weight: 700; color: #DC2626;">Glossary</td>
+                  <td style="padding: 9px 0;">Official RBI, TRAI &amp; DoT Sanchar Saathi References</td>
+                  <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #9AA3B8;">12</td>
+                </tr>
+              </tbody>
             </table>
 
-            <div class="book-banner-danger" style="margin-top: 14px; border-left-color: #DC2626; background: #FEF2F2;">
-              <div class="book-banner-danger-title" style="color: #991B1B;">A SIMPLE DECISION RULE</div>
-              <p class="book-banner-danger-text" style="color: #7F1D1D;">
-                Do not trust the message's phone number, link, logo, sender name, or urgency claim as proof. Verify the request independently through a channel you locate yourself.
+            <div class="book-banner-rule" style="border-left-color: #DC2626;">
+              <div class="book-banner-rule-title" style="color: #DC2626;">A SIMPLE DECISION RULE</div>
+              <p class="book-banner-rule-text">
+                Do not trust the message's phone number, link, logo, sender name, or urgency claim as proof. 
+                Verify the request independently through an official channel you locate yourself.
               </p>
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 2</span>
             </div>
           </div>
         `;
@@ -1088,7 +1102,7 @@
     // Page 3: Lesson 1 - KYC Fundamentals
     {
       page: 3,
-      title: "Lesson 1 - KYC Fundamentals",
+      title: "Lesson 1: KYC Fundamentals",
       render: function () {
         return `
           <div class="book-page-leaf book-page-right">
@@ -1110,19 +1124,21 @@
               KYC helps reduce money laundering, identity fraud, and mule accounts. KYC may be required when opening an account, changing operational details, or when periodic updating is due under RBI norms.
             </p>
 
-            <h3 class="book-sec-title">1.2 Periodic KYC updates are real — but verify the route</h3>
+            <div class="book-banner-warning" style="border-left-color: #DC2626;">
+              <div class="book-banner-warning-title" style="color: #B91C1C;">PERIODIC KYC UPDATES: VERIFY THE ROUTE</div>
+              <p class="book-banner-warning-text">
+                RBI guidance states regulated entities give advance intimation before periodic KYC is due. However, <strong>RBI specifically cautions customers to exercise utmost caution with SMS or email links</strong> claiming to complete KYC updating. A genuine KYC requirement does not make an unsolicited message genuine.
+              </p>
+            </div>
+
+            <h3 class="book-sec-title">1.2 Warning signs that must make you pause</h3>
             <p class="book-p">
-              RBI guidance states regulated entities give advance intimation before periodic KYC is due. However, <strong>RBI specifically cautions customers to exercise utmost caution with SMS or email links</strong> claiming to complete KYC updating. A genuine KYC requirement does not make an unsolicited message genuine.
+              Legitimate KYC never threatens account blocking within minutes, never demands your secret UPI PIN, OTP, or passwords, and never requires installing remote-access tools.
             </p>
 
-            <div class="book-banner-danger" style="margin-top: 10px; border-left-color: #DC2626; background: #FEF2F2;">
-              <div class="book-banner-danger-title" style="color: #991B1B;">WHAT SHOULD MAKE YOU PAUSE</div>
-              <ul style="margin: 4px 0 0 16px; padding: 0; color: #7F1D1D; font-size: 0.8125rem; line-height: 1.5;">
-                <li>Threats that your bank account or SIM will be blocked within minutes.</li>
-                <li>Demands to share OTP, PIN, password, CVV, or netbanking login.</li>
-                <li>Instructions to install an APK file, AnyDesk, or screen-sharing app.</li>
-                <li>Demands to send unmasked document scans to a personal WhatsApp number.</li>
-              </ul>
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 3</span>
             </div>
           </div>
         `;
@@ -1132,7 +1148,7 @@
     // Page 4: Lesson 2 - Fake KYC Vectors
     {
       page: 4,
-      title: "Lesson 2 - Fake KYC Vectors",
+      title: "Lesson 2: Fake KYC Vectors",
       render: function () {
         return `
           <div class="book-page-leaf book-page-left">
@@ -1145,30 +1161,32 @@
             <h2 class="book-page-title">How Scammers Approach You</h2>
             <p class="book-page-subtitle">Recognising the four primary attack routes</p>
 
-            <div style="background:#FFFFFF; border:1px solid #E8EBF3; border-radius:10px; padding:12px; margin-bottom:10px; border-left:3px solid #DC2626;">
-              <div style="font-size:0.6875rem; font-weight:800; color:#DC2626; letter-spacing:0.06em;">VECTOR 1</div>
-              <h4 style="font-size:0.875rem; font-weight:700; color:#0A0F1E; margin:2px 0 4px;">SMS &amp; Messaging-App Trap</h4>
-              <p style="font-size:0.8125rem; color:#4B5570; margin:0; line-height:1.5;">
-                <strong>Typical lure:</strong> <em>"Dear customer, your SBI account/Jio SIM will be blocked today. Update re-KYC immediately: bit.ly/sbi-kyc"</em><br>
-                <strong>Goal:</strong> Trick you into tapping the link and submitting netbanking passwords, OTPs, or credit card details on a spoofed portal.
+            <div class="book-banner-danger" style="margin-bottom: 12px; border-left-color: #DC2626;">
+              <div class="book-banner-danger-title" style="color: #991B1B;">VECTOR 1: SMS &amp; MESSAGING-APP TRAP</div>
+              <p class="book-banner-danger-text">
+                <strong>Typical lure:</strong> <em>"Dear customer, your bank account/SIM will be blocked today. Update re-KYC immediately: bit.ly/sbi-kyc"</em><br>
+                <strong>Goal:</strong> Trick you into tapping the link and submitting netbanking passwords, OTPs, or debit card credentials on a spoofed portal.
               </p>
             </div>
 
-            <div style="background:#FFFFFF; border:1px solid #E8EBF3; border-radius:10px; padding:12px; margin-bottom:10px; border-left:3px solid #DC2626;">
-              <div style="font-size:0.6875rem; font-weight:800; color:#DC2626; letter-spacing:0.06em;">VECTOR 2</div>
-              <h4 style="font-size:0.875rem; font-weight:700; color:#0A0F1E; margin:2px 0 4px;">Impersonation Vishing Calls</h4>
-              <p style="font-size:0.8125rem; color:#4B5570; margin:0; line-height:1.5;">
+            <div class="book-banner-warning" style="margin-bottom: 12px; border-left-color: #EA580C;">
+              <div class="book-banner-warning-title" style="color: #9A3412;">VECTOR 2: IMPERSONATION VISHING CALLS</div>
+              <p class="book-banner-warning-text">
                 <strong>Typical lure:</strong> Callers claim to be from TRAI, bank fraud desk, or telecom operator. They use aggressive urgency and authoritative tone.<br>
                 <strong>TRAI Clarification:</strong> TRAI has officially confirmed that it <strong>never initiates calls threatening mobile disconnection</strong> to consumers.
               </p>
             </div>
 
-            <div style="background:#FFFFFF; border:1px solid #E8EBF3; border-radius:10px; padding:12px; border-left:3px solid #DC2626;">
-              <div style="font-size:0.6875rem; font-weight:800; color:#DC2626; letter-spacing:0.06em;">VECTOR 3</div>
-              <h4 style="font-size:0.875rem; font-weight:700; color:#0A0F1E; margin:2px 0 4px;">Malicious APK Downloads</h4>
-              <p style="font-size:0.8125rem; color:#4B5570; margin:0; line-height:1.5;">
-                <strong>Typical lure:</strong> <em>"Download our quick KYC support app to avoid branch visit."</em> The APK requests SMS reading permissions to intercept 2FA OTPs.
+            <div class="book-banner-danger" style="border-left-color: #7C3AED;">
+              <div class="book-banner-danger-title" style="color: #6D28D9;">VECTOR 3: MALICIOUS APK DOWNLOADS</div>
+              <p class="book-banner-danger-text">
+                <strong>Typical lure:</strong> <em>"Download our quick KYC support app to avoid branch visit."</em> The APK requests SMS reading permissions to intercept banking 2FA OTPs in real-time.
               </p>
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 4</span>
             </div>
           </div>
         `;
@@ -1178,7 +1196,7 @@
     // Page 5: Lesson 3 - Inspection Skills
     {
       page: 5,
-      title: "Lesson 3 - Inspection Skills",
+      title: "Lesson 3: Inspection Skills",
       render: function () {
         return `
           <div class="book-page-leaf book-page-right">
@@ -1195,7 +1213,7 @@
             <p class="book-p">
               Scammers create lookalike subdomains to deceive fast skimmers. Always look at the <strong>root domain</strong> immediately preceding the first single slash (<code>/</code>):
             </p>
-            <div style="background:#F1F5F9; padding: 8px 12px; border-radius: 8px; font-family: monospace; font-size: 0.75rem; color:#0A0F1E; margin: 6px 0 12px;">
+            <div style="background:#F1F5F9; padding: 10px 14px; border-radius: 8px; font-family: monospace; font-size: 0.78125rem; color:#0A0F1E; margin: 8px 0 14px; border: 1px solid #CBD5E1;">
               https://sbi.co.in.kyc-verify-portal.online/update<br>
               <span style="color:#DC2626; font-weight:700;">✗ Fake! Root domain is kyc-verify-portal.online, NOT sbi.co.in!</span>
             </div>
@@ -1207,12 +1225,13 @@
 
             <h3 class="book-sec-title">3.3 Android APK permission red flags</h3>
             <p class="book-p">
-              Legitimate banks never distribute apps via WhatsApp or direct APK links. Beware of any app requesting:
+              Legitimate banks never distribute apps via WhatsApp or direct APK links. Beware of any app requesting <code>RECEIVE_SMS</code>, <code>READ_SMS</code>, or Accessibility Services.
             </p>
-            <ul style="margin: 4px 0 0 16px; font-size: 0.8125rem; color:#4B5570; line-height: 1.5;">
-              <li><code>RECEIVE_SMS</code> or <code>READ_SMS</code> (Allows OTP theft)</li>
-              <li>Accessibility Services (Allows screen recording and remote control)</li>
-            </ul>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 5</span>
+            </div>
           </div>
         `;
       }
@@ -1221,7 +1240,7 @@
     // Page 6: Lesson 4 - Identity Protection
     {
       page: 6,
-      title: "Lesson 4 - Identity Protection",
+      title: "Lesson 4: Identity Protection",
       render: function () {
         return `
           <div class="book-page-leaf book-page-left">
@@ -1244,9 +1263,9 @@
               UIDAI provides official <strong>Masked Aadhaar</strong> (where the first 8 digits are hidden as <code>XXXX-XXXX-1234</code>). Masked Aadhaar is legally valid for all ordinary KYC verifications.
             </p>
 
-            <div class="book-banner-danger" style="margin: 10px 0; border-left-color: #16A34A; background: #F0FDF4;">
-              <div class="book-banner-danger-title" style="color: #166534;">GOLDEN HABIT: PHYSICAL CROSS-MARKING</div>
-              <p class="book-banner-danger-text" style="color: #14532D; font-size: 0.8125rem;">
+            <div class="book-banner-warning" style="border-left-color: #16A34A; background: #F0FDF4;">
+              <div class="book-banner-warning-title" style="color: #166534;">GOLDEN HABIT: PHYSICAL CROSS-MARKING</div>
+              <p class="book-banner-warning-text" style="color: #14532D; font-size: 0.8125rem;">
                 Whenever you submit a physical or PDF copy of an ID, draw two parallel diagonal lines across the document and write:<br>
                 <em>"Submitted to [Bank Name] exclusively for [Account No] KYC update on [Date]. Not valid for any other purpose."</em>
               </p>
@@ -1256,6 +1275,11 @@
             <p class="book-p">
               Use the official mAadhaar app or UIDAI portal to lock your biometric authentication when not actively at a bank branch.
             </p>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 6</span>
+            </div>
           </div>
         `;
       }
@@ -1264,7 +1288,7 @@
     // Page 7: Lesson 5 - Response & Reporting
     {
       page: 7,
-      title: "Lesson 5 - Incident Response",
+      title: "Lesson 5: Incident Protocol & 1930",
       render: function () {
         return `
           <div class="book-page-leaf book-page-right">
@@ -1273,14 +1297,18 @@
               <span>PAGE 07</span>
             </div>
 
-            <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">LESSON 5</span>
-            <h2 class="book-page-title">What to Do If Exposed</h2>
-            <p class="book-page-subtitle">Emergency action protocols based on exposure severity</p>
+            <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">EMERGENCY PROTOCOL</span>
+            <h2 class="book-page-title">Incident Protocol &amp; 1930</h2>
+            <p class="book-page-subtitle">The Golden Hour Action Plan</p>
+
+            <p class="book-p">
+              If you shared credentials or notice an unauthorised debit, <strong>every minute counts</strong>. Acting within the first 1 to 2 hours maximizes the chance of freezing the funds.
+            </p>
 
             <div class="helpline-emergency-banner" style="background:#FEF2F2; border-color:#FECACA;">
               <div class="helpline-left">
                 <h4 style="color:#991B1B;">NATIONAL CYBER CRIME HELPLINE</h4>
-                <p style="color:#7F1D1D;">Call 1930 immediately for financial cyber fraud</p>
+                <p style="color:#7F1D1D;">Call immediately for financial fraud across India</p>
               </div>
               <a href="tel:1930" class="helpline-call-btn" style="background:#DC2626;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -1290,36 +1318,26 @@
 
             <h3 class="book-sec-title">Severity-Based Action Tiers</h3>
             <ol style="padding-left: 20px; font-size: 0.8125rem; color: #1E2742; line-height: 1.55;">
-              <li style="margin-bottom: 8px;">
-                <strong>Received suspicious message/call, but did not interact:</strong><br>
-                Do not click or reply. Report the suspected telecom fraud communication to Department of Telecommunications <strong>Chakshu facility</strong> on Sanchar Saathi (<a href="https://sancharsaathi.gov.in/sfc/" target="_blank" style="color:#DC2626; font-weight:700;">sancharsaathi.gov.in/sfc</a>).
-              </li>
-              <li style="margin-bottom: 8px;">
-                <strong>Shared KYC documents or personal info:</strong><br>
-                Call your bank's fraud line immediately. Ask for a protective hold or monitoring on your account.
-              </li>
-              <li style="margin-bottom: 8px;">
-                <strong>Shared OTP, PIN, password, or banking credentials:</strong><br>
-                Place an immediate operational debit freeze on all netbanking, debit cards, and UPI VPAs. Change netbanking login passwords.
-              </li>
-              <li style="margin-bottom: 4px;">
-                <strong>Financial loss occurred (The Golden Hour):</strong><br>
-                Call <strong>1930</strong> immediately and register an official complaint at <strong>cybercrime.gov.in</strong> with transaction UTRs.
-              </li>
+              <li style="margin-bottom: 6px;"><strong>Suspicious message/call, no interaction:</strong> Report to DoT <strong>Chakshu facility</strong> (<a href="https://sancharsaathi.gov.in/sfc/" target="_blank" style="color:#DC2626; font-weight:700;">sancharsaathi.gov.in/sfc</a>) and 1909.</li>
+              <li style="margin-bottom: 6px;"><strong>Shared KYC documents:</strong> Call your bank fraud line immediately. Ask for a protective hold or monitoring on your account.</li>
+              <li style="margin-bottom: 6px;"><strong>Shared OTP, PIN, or password:</strong> Place an immediate operational debit freeze on all accounts and cards. Change netbanking login passwords.</li>
+              <li style="margin-bottom: 4px;"><strong>Financial loss occurred:</strong> Call <strong>1930</strong> immediately and register an official complaint at <strong>cybercrime.gov.in</strong> with transaction UTRs.</li>
             </ol>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 7</span>
+            </div>
           </div>
         `;
       }
     },
 
-    // Page 8: Quick Ref - Checklist
+    // Page 8: Quick Reference - Checklist
     {
       page: 8,
-      title: "Interactive Checklist",
+      title: "Quick Reference: Verification Checklist",
       render: function () {
-        const checkedCount = kycChecklistState.filter(Boolean).length;
-        const progressPct = Math.round((checkedCount / 7) * 100);
-
         return `
           <div class="book-page-leaf book-page-left">
             <div class="page-running-head">
@@ -1331,13 +1349,6 @@
             <h2 class="book-page-title">Fake KYC Verification Checklist</h2>
             <p class="book-page-subtitle">Verify every safety barrier before acting on any KYC communication</p>
 
-            <div class="checklist-meter-box">
-              <div class="meter-info">Safety Readiness: <span id="kyc-meter-label" style="color: #DC2626; font-weight:700;">${checkedCount}/7 verified</span></div>
-              <div class="meter-track">
-                <div class="meter-fill" id="kyc-meter-fill" style="width: ${progressPct}%; background: #DC2626;"></div>
-              </div>
-            </div>
-
             <div class="checklist-items-grid">
               ${[
                 { q: "Was I expecting a KYC update?", a: "If not, treat the message cautiously and verify independently." },
@@ -1348,8 +1359,8 @@
                 { q: "Is the caller refusing independent verification?", a: "Legitimate bank/telecom officers never object to you calling back." },
                 { q: "Have I masked or purpose-marked my documents?", a: "Cross-mark ID copies specifically for this single transaction." }
               ].map((item, idx) => `
-                <div class="check-item-card ${kycChecklistState[idx] ? 'checked' : ''}" id="kyc-chk-item-${idx}" onclick="window.bookReader.toggleKycCheck(${idx})">
-                  <div class="check-box-visual" style="${kycChecklistState[idx] ? 'background:#DC2626; color:#fff;' : ''}">${kycChecklistState[idx] ? '✓' : ''}</div>
+                <div class="check-item-card ${kycChecklistState[idx] ? 'checked' : ''}" onclick="window.bookReader.toggleKycCheck(${idx})">
+                  <div class="check-box-visual">${kycChecklistState[idx] ? '✓' : ''}</div>
                   <div class="check-text-content">
                     <div class="check-question">${item.q}</div>
                     <div class="check-action-guidance">${item.a}</div>
@@ -1357,34 +1368,45 @@
                 </div>
               `).join('')}
             </div>
+
+            <div class="book-banner-danger" style="margin: 8px 0; padding: 10px 14px; border-left-color: #DC2626;">
+              <div class="book-banner-danger-title" style="color: #991B1B;">7 FATAL RED FLAGS</div>
+              <p class="book-banner-danger-text" style="font-size: 0.78125rem;">
+                "Account/SIM blocked in 30 mins" • "Click link to update KYC" • "Install APK support app" • "Tell me the OTP" • "Share screen on AnyDesk" • "Send unmasked Aadhaar to WhatsApp" • "Do not contact bank"
+              </p>
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 8</span>
+            </div>
           </div>
         `;
       }
     },
 
-    // Page 9: Quiz Part 1
+    // Page 9: Knowledge Check Quiz Part 1
     {
       page: 9,
-      title: "Knowledge Check - Part 1",
+      title: "Knowledge Check: Scenarios 1–3",
       render: function () {
-        const questionsPart1 = kycQuizQuestions.slice(0, 3);
         return `
           <div class="book-page-leaf book-page-right">
             <div class="page-running-head">
-              <span>INTERMEDIATE QUIZ | SCENARIOS 1-3</span>
+              <span>KNOWLEDGE CHECK | QUIZ</span>
               <span>PAGE 09</span>
             </div>
 
-            <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">INTERMEDIATE QUIZ</span>
+            <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">INTERACTIVE QUIZ</span>
             <h2 class="book-page-title">Safety Scenarios (1–3)</h2>
             <p class="book-page-subtitle">Choose the safest response. Instant feedback provided.</p>
 
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              ${questionsPart1.map(q => {
+            <div class="quiz-container">
+              ${kycQuizQuestions.slice(0, 3).map(q => {
                 const userChoice = kycQuizAnswers[q.id];
                 const answered = !!userChoice;
                 return `
-                  <div class="quiz-question-block" id="kyc-quiz-block-${q.id}">
+                  <div class="quiz-question-block">
                     <div class="quiz-q-title">${q.text}</div>
                     <div class="quiz-options-list">
                       ${q.options.map(opt => {
@@ -1402,49 +1424,45 @@
                         `;
                       }).join('')}
                     </div>
-                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}" id="kyc-quiz-exp-${q.id}">
+                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}">
                       💡 <strong>Rationale:</strong> ${q.explanation}
                     </div>
                   </div>
                 `;
               }).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 9</span>
             </div>
           </div>
         `;
       }
     },
 
-    // Page 10: Quiz Part 2
+    // Page 10: Knowledge Check Quiz Part 2
     {
       page: 10,
-      title: "Knowledge Check - Part 2",
+      title: "Knowledge Check: Scenarios 4–7",
       render: function () {
-        const questionsPart2 = kycQuizQuestions.slice(3);
-        const answeredCount = Object.keys(kycQuizAnswers).length;
-        let correctCount = 0;
-        kycQuizQuestions.forEach(q => {
-          const opt = q.options.find(o => o.correct);
-          if (kycQuizAnswers[q.id] === opt.key) correctCount++;
-        });
-        const scorePct = Math.round((correctCount / kycQuizQuestions.length) * 100);
-
         return `
           <div class="book-page-leaf book-page-left">
             <div class="page-running-head">
-              <span>KNOWLEDGE CHECK | SCENARIOS 4-7</span>
+              <span>KNOWLEDGE CHECK | QUIZ</span>
               <span>PAGE 10</span>
             </div>
 
-            <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">INTERMEDIATE QUIZ</span>
+            <span class="book-chapter-tag" style="color: #DC2626; background: #FEF2F2;">INTERACTIVE QUIZ</span>
             <h2 class="book-page-title">Safety Scenarios (4–7)</h2>
             <p class="book-page-subtitle">Test incident reporting &amp; technical inspection</p>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              ${questionsPart2.map(q => {
+            <div class="quiz-container">
+              ${kycQuizQuestions.slice(3).map(q => {
                 const userChoice = kycQuizAnswers[q.id];
                 const answered = !!userChoice;
                 return `
-                  <div class="quiz-question-block" id="kyc-quiz-block-${q.id}">
+                  <div class="quiz-question-block">
                     <div class="quiz-q-title">${q.text}</div>
                     <div class="quiz-options-list">
                       ${q.options.map(opt => {
@@ -1462,7 +1480,7 @@
                         `;
                       }).join('')}
                     </div>
-                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}" id="kyc-quiz-exp-${q.id}">
+                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}">
                       💡 <strong>Rationale:</strong> ${q.explanation}
                     </div>
                   </div>
@@ -1470,16 +1488,9 @@
               }).join('')}
             </div>
 
-            <div style="margin-top: 10px; padding: 10px 14px; background: #FFFFFF; border: 1px solid #E8EBF3; border-radius: 10px; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <div id="kyc-quiz-score-label" style="font-size:0.8125rem; font-weight:700; color:#DC2626;">Score: ${correctCount}/${kycQuizQuestions.length} correct (${answeredCount}/${kycQuizQuestions.length} answered)</div>
-                <div style="width:120px; height:6px; background:#F1F5F9; border-radius:9999px; overflow:hidden; margin-top:4px;">
-                  <div id="kyc-quiz-score-fill" style="width:${scorePct}%; height:100%; background:#DC2626; transition:width 0.3s ease;"></div>
-                </div>
-              </div>
-              <button onclick="window.bookReader.resetKycQuiz()" style="padding:6px 12px; font-size:0.75rem; font-weight:700; color:#4B5570; background:#F8FAFC; border:1px solid #CBD5E1; border-radius:6px; cursor:pointer;">
-                Reset Quiz
-              </button>
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 10</span>
             </div>
           </div>
         `;
@@ -1489,7 +1500,7 @@
     // Page 11: Real-World Case Studies & Attack Breakdown
     {
       page: 11,
-      title: "Case Analysis & Defense Flowchart",
+      title: "Case Analysis & Defense Flow",
       render: function () {
         return `
           <div class="book-page-leaf book-page-right">
@@ -1502,28 +1513,31 @@
             <h2 class="book-page-title">Real Threats &amp; Defense Flow</h2>
             <p class="book-page-subtitle">Dissecting real KYC attack blueprints</p>
 
-            <div style="background:#FFFFFF; border:1px solid #E8EBF3; border-radius:10px; padding:10px 12px; margin-bottom:10px; border-left:3px solid #DC2626;">
-              <span style="background:#FEE2E2; color:#DC2626; font-size:0.6875rem; font-weight:800; padding:2px 6px; border-radius:4px;">CASE 1</span>
-              <h4 style="font-size:0.84375rem; font-weight:700; color:#0A0F1E; margin:4px 0 2px;">The "SIM Block in 24 Hours" Smish</h4>
-              <p style="font-size:0.78125rem; color:#4B5570; margin:0; line-height:1.45;">
+            <div class="book-banner-danger" style="margin-bottom: 12px; border-left-color: #DC2626;">
+              <div class="book-banner-danger-title" style="color: #991B1B;">CASE 1: THE "SIM BLOCK IN 24 HOURS" SMISH</div>
+              <p class="book-banner-danger-text">
                 Victim received SMS from spoofed header <code>VM-JI0KYC</code> stating SIM would deactivate at midnight. Tapping the link led to a cloned carrier login stealing credentials, followed by unauthorized SIM swap.
               </p>
             </div>
 
-            <div style="background:#FFFFFF; border:1px solid #E8EBF3; border-radius:10px; padding:10px 12px; margin-bottom:12px; border-left:3px solid #DC2626;">
-              <span style="background:#FEE2E2; color:#DC2626; font-size:0.6875rem; font-weight:800; padding:2px 6px; border-radius:4px;">CASE 2</span>
-              <h4 style="font-size:0.84375rem; font-weight:700; color:#0A0F1E; margin:4px 0 2px;">Video KYC Screen-Sharing Trap</h4>
-              <p style="font-size:0.78125rem; color:#4B5570; margin:0; line-height:1.45;">
+            <div class="book-banner-warning" style="margin-bottom: 14px; border-left-color: #EA580C;">
+              <div class="book-banner-warning-title" style="color: #9A3412;">CASE 2: VIDEO KYC SCREEN-SHARING TRAP</div>
+              <p class="book-banner-warning-text">
                 Caller posed as relationship manager offering "Home Video KYC". Convinced victim to install screen-sharing software to "complete camera setup", intercepting netbanking 2FA passwords.
               </p>
             </div>
 
             <h3 class="book-sec-title">The 4-Step KYC Defense Flowchart</h3>
-            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px 12px; font-size:0.75rem; line-height:1.6; color:#1E293B;">
+            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px 14px; font-size:0.78125rem; line-height:1.6; color:#1E293B;">
               <strong>Step 1:</strong> Receive unexpected SMS/Call threatening block.<br>
               <strong>Step 2:</strong> <strong>PAUSE.</strong> Do NOT tap link or share OTP.<br>
               <strong>Step 3:</strong> Verify via official banking app or branch.<br>
               <strong>Step 4:</strong> Report scam headers to DoT Chakshu &amp; 1930.
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 11</span>
             </div>
           </div>
         `;
@@ -1546,16 +1560,16 @@
             <h2 class="book-page-title">Key Terms &amp; Helplines</h2>
             <p class="book-page-subtitle">Regulatory guidance and verified reporting authorities</p>
 
-            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; font-size:0.78125rem;">
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom: 14px; font-size:0.8125rem;">
               <div><strong>Chakshu:</strong> Official DoT facility on Sanchar Saathi for citizens to report suspected telecom fraud communications (SMS/Calls/WhatsApp).</div>
               <div><strong>Smishing:</strong> Phishing attacks carried out via SMS text messages to steal credentials or distribute trojanized APKs.</div>
               <div><strong>Periodic KYC:</strong> Scheduled mandatory customer data review by RBI regulated entities, performed through verified official banking routes only.</div>
             </div>
 
             <h3 class="book-sec-title">Emergency Contacts &amp; Portals</h3>
-            <div style="border-left: 3px solid #DC2626; background: #FEF2F2; padding: 8px 12px; margin-bottom: 8px; border-radius: 8px;">
-              <div style="font-weight: 800; color: #991B1B; font-size: 0.84375rem;">1930 — National Cyber Crime Helpline</div>
-              <p style="margin: 2px 0 0; color: #7F1D1D; font-size: 0.75rem;">Immediate Golden Hour reporting for cyber financial fraud.</p>
+            <div style="border-left: 3px solid #DC2626; background: #FEF2F2; padding: 10px 14px; margin-bottom: 10px; border-radius: 8px;">
+              <div style="font-weight: 800; color: #991B1B; font-size: 0.875rem;">1930 — National Cyber Crime Helpline</div>
+              <p style="margin: 2px 0 0; color: #7F1D1D; font-size: 0.78125rem;">Immediate Golden Hour reporting for cyber financial fraud.</p>
             </div>
 
             <div style="font-size: 0.75rem; color: #4B5570; line-height: 1.6;">
@@ -1563,6 +1577,11 @@
               • Sanchar Saathi Chakshu: <a href="https://sancharsaathi.gov.in/sfc/" target="_blank" style="color:#DC2626; font-weight:700;">sancharsaathi.gov.in/sfc</a><br>
               • National Cyber Crime Portal: <a href="https://cybercrime.gov.in" target="_blank" style="color:#DC2626; font-weight:700;">cybercrime.gov.in</a><br>
               • RBI KYC Regulations: <a href="https://www.rbi.org.in" target="_blank" style="color:#DC2626; font-weight:700;">rbi.org.in</a>
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD KYC Safety Series</span>
+              <span class="page-num-badge">Page 12</span>
             </div>
           </div>
         `;
@@ -1576,8 +1595,7 @@
     upi: {
       id: 'upi',
       title: 'UPI Request Scams — Practical Safety Guide',
-      seriesTag: 'INFRAUD Academy • Beginner Curriculum',
-      color: '#2563EB',
+      seriesTag: 'INFRAUD Academy • Official Handbook',
       pdfUrl: '/books/INFRAUD_UPI_Request_Scams_Safety_Guide.pdf',
       pdfName: 'INFRAUD_UPI_Request_Scams_Safety_Guide.pdf',
       pages: upiPagesData,
@@ -1602,7 +1620,6 @@
       id: 'kyc',
       title: 'Fake KYC Vectors — Practical Safety Guide',
       seriesTag: 'INFRAUD Academy • Intermediate Curriculum',
-      color: '#DC2626',
       pdfUrl: '/books/INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf',
       pdfName: 'INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf',
       pages: kycPagesData,
@@ -1616,10 +1633,10 @@
         { page: 5, label: 'Page 5: Lesson 3 - Inspection Skills' },
         { page: 6, label: 'Page 6: Lesson 4 - Identity Protection' },
         { page: 7, label: 'Page 7: Lesson 5 - Response & Reporting' },
-        { page: 8, label: 'Page 8: Quick Ref - 7-Item Checklist' },
-        { page: 9, label: 'Page 9: Knowledge Check (Part 1)' },
-        { page: 10, label: 'Page 10: Knowledge Check (Part 2)' },
-        { page: 11, label: 'Page 11: Case Analysis & Flowchart' },
+        { page: 8, label: 'Page 8: Quick Reference - Checklist' },
+        { page: 9, label: 'Page 9: Knowledge Check (Scenarios 1-3)' },
+        { page: 10, label: 'Page 10: Knowledge Check (Scenarios 4-7)' },
+        { page: 11, label: 'Page 11: Case Analysis & Defense Flow' },
         { page: 12, label: 'Page 12: Glossary & Official Sources' }
       ]
     }
@@ -1706,11 +1723,11 @@
       tocSelect.innerHTML = book.toc.map(item => `<option value="${item.page}">${item.label}</option>`).join('');
     }
 
-    // Update switcher pills
-    document.querySelectorAll('.book-switch-btn').forEach(btn => {
-      const bId = btn.getAttribute('data-book');
-      btn.classList.toggle('active', bId === bookId);
-    });
+    // Toggle red accent on Next/Prev buttons if KYC
+    const btnNext = document.getElementById('dock-btn-next');
+    if (btnNext) {
+      btnNext.classList.toggle('btn-kyc-accent', bookId === 'kyc');
+    }
   }
 
   function syncUI(idx) {
@@ -1758,7 +1775,7 @@
     if (dockNext) dockNext.disabled = isLast;
   }
 
-  // --- Modal Injection ---
+  // --- Modal Injection (100% Identical to original UPI modal markup) ---
   function injectModalMarkup() {
     if (document.getElementById('infra-book-modal')) return;
 
@@ -1769,19 +1786,13 @@
       <!-- Top Bar -->
       <div class="book-top-bar">
         <div class="book-brand-meta">
-          <div class="book-badge-icon" id="book-badge-icon">
+          <div class="book-badge-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <div class="book-title-group">
             <div class="book-series-tag" id="book-modal-series">INFRAUD Academy • Official Handbook</div>
             <div class="book-main-title" id="book-modal-title">UPI Request Scams — Practical Safety Guide</div>
           </div>
-        </div>
-
-        <!-- Book Switcher Pills -->
-        <div class="book-switcher-group" style="display:inline-flex; align-items:center; gap:4px; background:rgba(255,255,255,0.06); padding:3px; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
-          <button class="book-switch-btn active" data-book="upi" onclick="window.bookReader.switchBook('upi')" style="padding:6px 12px; font-size:0.75rem; font-weight:700; border-radius:8px; border:none; cursor:pointer; background:#2563EB; color:#fff; transition:all 0.15s ease;">UPI Book</button>
-          <button class="book-switch-btn" data-book="kyc" onclick="window.bookReader.switchBook('kyc')" style="padding:6px 12px; font-size:0.75rem; font-weight:700; border-radius:8px; border:none; cursor:pointer; background:transparent; color:#94A3B8; transition:all 0.15s ease;">Fake KYC</button>
         </div>
 
         <div class="book-top-actions">
@@ -1812,7 +1823,7 @@
         </button>
 
         <div class="book-stage-viewport">
-          <div id="book-container"></div>
+          <div id="book-container" class="st-book-container"></div>
         </div>
 
         <button class="book-nav-arrow book-nav-next" id="book-arrow-next" onclick="window.bookReader.nextPage()" title="Next Page (→)">
@@ -1822,38 +1833,37 @@
 
       <!-- Bottom Dock Bar -->
       <div class="book-bottom-dock">
-        <div class="book-dock-controls">
-          <button class="dock-btn" onclick="window.bookReader.firstPage()" title="First Page">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
-            <span class="dock-label">First</span>
-          </button>
+        <button class="book-nav-btn book-nav-btn-sec" onclick="window.bookReader.firstPage()" title="First Page">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+          First
+        </button>
 
-          <button class="dock-btn" id="dock-btn-prev" onclick="window.bookReader.prevPage()" title="Previous Page">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-            <span class="dock-label">Prev</span>
-          </button>
+        <button class="book-nav-btn" id="dock-btn-prev" onclick="window.bookReader.prevPage()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Prev
+        </button>
 
-          <div class="book-scrubber-box">
-            <input type="range" id="book-slider" min="1" max="12" value="1" oninput="window.bookReader.goToPage(parseInt(this.value))">
-            <div class="book-page-counter" id="book-counter">Page 1 of 12</div>
-          </div>
-
-          <button class="dock-btn" id="dock-btn-next" onclick="window.bookReader.nextPage()" title="Next Page">
-            <span class="dock-label">Next</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-
-          <button class="dock-btn" onclick="window.bookReader.lastPage()" title="Last Page">
-            <span class="dock-label">Last</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
-          </button>
+        <div class="book-dock-pill">
+          <input type="range" min="1" max="12" value="1" class="book-page-slider" id="book-slider" oninput="window.bookReader.goToPage(parseInt(this.value))">
+          <div class="book-page-counter" id="book-counter">Cover (Page 1)</div>
         </div>
+
+        <button class="book-nav-btn" id="dock-btn-next" onclick="window.bookReader.nextPage()">
+          Next
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+
+        <button class="book-nav-btn book-nav-btn-sec" onclick="window.bookReader.lastPage()" title="Last Page">
+          Last
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
       </div>
     `;
 
     document.body.appendChild(modal);
   }
 
+  // --- 60fps StPageFlip Engine Initialization ---
   function initPageFlipEngine(startPageNum = 1) {
     const container = document.getElementById('book-container');
     if (!container) return;
@@ -1867,8 +1877,8 @@
     updateModalHeaderForBook(currentBookId);
 
     const isMobile = window.innerWidth < 860;
-    const baseW = isMobile ? Math.min(window.innerWidth - 32, 540) : Math.min(Math.floor((window.innerWidth - 120) / 2), 540);
-    const baseH = Math.min(window.innerHeight - 170, 720);
+    const baseW = isMobile ? Math.min(window.innerWidth - 32, 420) : Math.min((window.innerWidth - 140) / 2, 540);
+    const baseH = isMobile ? Math.min(window.innerHeight - 180, 640) : Math.min(window.innerHeight - 170, 720);
 
     pageFlipInstance = new St.PageFlip(container, {
       width: Math.floor(baseW),
@@ -1932,12 +1942,6 @@
       }
     },
 
-    switchBook: function (newBookId) {
-      if (!booksRegistry[newBookId]) return;
-      currentBookId = newBookId;
-      initPageFlipEngine(1);
-    },
-
     close: function () {
       const modal = document.getElementById('infra-book-modal');
       if (modal) {
@@ -1985,166 +1989,40 @@
     toggleCheck: function (index) {
       upiChecklistState[index] = !upiChecklistState[index];
       playPageTurnSound();
-      const itemEl = document.getElementById('chk-item-' + index);
-      if (itemEl) {
-        if (upiChecklistState[index]) itemEl.classList.add('checked');
-        else itemEl.classList.remove('checked');
+      if (pageFlipInstance) {
+        const curIdx = pageFlipInstance.getCurrentPageIndex();
+        initPageFlipEngine(mapIdxToPage(curIdx));
       }
-      const checkedCount = upiChecklistState.filter(Boolean).length;
-      const progressPct = Math.round((checkedCount / 6) * 100);
-      const fillEl = document.getElementById('chk-meter-fill');
-      if (fillEl) fillEl.style.width = progressPct + '%';
-      const labelEl = document.getElementById('chk-meter-label');
-      if (labelEl) labelEl.innerText = checkedCount + '/6 verified';
     },
 
     answerQuiz: function (questionId, optionKey) {
       if (upiQuizAnswers[questionId]) return;
       upiQuizAnswers[questionId] = optionKey;
       playPageTurnSound();
-
-      const questions = [
-        { id: 'q1', correct: 'B' },
-        { id: 'q2', correct: 'C' },
-        { id: 'q3', correct: 'B' },
-        { id: 'q4', correct: 'C' },
-        { id: 'q5', correct: 'B' },
-        { id: 'q6', correct: 'B' }
-      ];
-
-      const q = questions.find(x => x.id === questionId);
-      if (!q) return;
-
-      const isCorrect = optionKey === q.correct;
-      const card = document.getElementById('quiz-card-' + questionId);
-      if (card) {
-        const btns = card.querySelectorAll('.quiz-option-btn, .quiz-opt-btn');
-        btns.forEach(b => {
-          const opt = b.getAttribute('data-opt') || (b.innerText ? b.innerText.trim()[0] : '');
-          b.disabled = true;
-          if (opt === q.correct) b.classList.add('correct');
-          else if (opt === optionKey && !isCorrect) b.classList.add('wrong');
-        });
-
-        const fb = document.getElementById('quiz-fb-' + questionId);
-        if (fb) {
-          fb.style.display = 'block';
-          fb.className = 'quiz-feedback ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
-          fb.innerText = isCorrect ? '✓ Correct! You recognized the safety rule.' : '✕ Incorrect. Remember: PIN is never needed to receive money.';
-        }
+      if (pageFlipInstance) {
+        const curIdx = pageFlipInstance.getCurrentPageIndex();
+        initPageFlipEngine(mapIdxToPage(curIdx));
       }
-
-      const answeredCount = Object.keys(upiQuizAnswers).length;
-      let correctCount = 0;
-      questions.forEach(x => { if (upiQuizAnswers[x.id] === x.correct) correctCount++; });
-
-      const scorePct = Math.round((correctCount / questions.length) * 100);
-      const scoreFill = document.getElementById('quiz-score-fill');
-      if (scoreFill) scoreFill.style.width = scorePct + '%';
-      const scoreLabel = document.getElementById('quiz-score-label');
-      if (scoreLabel) scoreLabel.innerText = `Score: ${correctCount}/${questions.length} correct (${answeredCount}/${questions.length} answered)`;
-    },
-
-    resetQuiz: function () {
-      upiQuizAnswers = {};
-      const blocks = document.querySelectorAll('#book-container .quiz-question-block, #book-container [id^="quiz-card-"]');
-      blocks.forEach(b => {
-        b.querySelectorAll('button').forEach(btn => {
-          btn.disabled = false;
-          btn.classList.remove('correct', 'wrong');
-        });
-        const exp = b.querySelector('.quiz-explanation-box, .quiz-feedback');
-        if (exp) {
-          exp.classList.remove('visible');
-          exp.style.display = 'none';
-        }
-      });
-      const scoreFill = document.getElementById('quiz-score-fill');
-      if (scoreFill) scoreFill.style.width = '0%';
-      const scoreLabel = document.getElementById('quiz-score-label');
-      if (scoreLabel) scoreLabel.innerText = 'Score: 0/6 correct (0/6 answered)';
     },
 
     // --- KYC Interactive Actions ---
     toggleKycCheck: function (index) {
       kycChecklistState[index] = !kycChecklistState[index];
       playPageTurnSound();
-      const itemEl = document.getElementById('kyc-chk-item-' + index);
-      if (itemEl) {
-        if (kycChecklistState[index]) {
-          itemEl.classList.add('checked');
-          const box = itemEl.querySelector('.check-box-visual');
-          if (box) { box.style.background = '#DC2626'; box.style.color = '#fff'; box.innerText = '✓'; }
-        } else {
-          itemEl.classList.remove('checked');
-          const box = itemEl.querySelector('.check-box-visual');
-          if (box) { box.style.background = ''; box.style.color = ''; box.innerText = ''; }
-        }
+      if (pageFlipInstance) {
+        const curIdx = pageFlipInstance.getCurrentPageIndex();
+        initPageFlipEngine(mapIdxToPage(curIdx));
       }
-      const checkedCount = kycChecklistState.filter(Boolean).length;
-      const progressPct = Math.round((checkedCount / 7) * 100);
-      const fillEl = document.getElementById('kyc-meter-fill');
-      if (fillEl) fillEl.style.width = progressPct + '%';
-      const labelEl = document.getElementById('kyc-meter-label');
-      if (labelEl) labelEl.innerText = checkedCount + '/7 verified';
     },
 
     answerKycQuiz: function (questionId, optionKey) {
       if (kycQuizAnswers[questionId]) return;
       kycQuizAnswers[questionId] = optionKey;
       playPageTurnSound();
-
-      const q = kycQuizQuestions.find(x => x.id === questionId);
-      if (!q) return;
-
-      const correctOpt = q.options.find(o => o.correct);
-      const isCorrect = optionKey === correctOpt.key;
-
-      const block = document.getElementById('kyc-quiz-block-' + questionId);
-      if (block) {
-        const btns = block.querySelectorAll('.quiz-opt-btn');
-        btns.forEach(b => {
-          b.disabled = true;
-          const optLetter = b.querySelector('strong') ? b.querySelector('strong').innerText.replace('.', '').trim() : '';
-          if (optLetter === correctOpt.key) b.classList.add('correct');
-          else if (optLetter === optionKey && !isCorrect) b.classList.add('wrong');
-        });
-
-        const expBox = document.getElementById('kyc-quiz-exp-' + questionId);
-        if (expBox) {
-          expBox.classList.add('visible');
-        }
+      if (pageFlipInstance) {
+        const curIdx = pageFlipInstance.getCurrentPageIndex();
+        initPageFlipEngine(mapIdxToPage(curIdx));
       }
-
-      const answeredCount = Object.keys(kycQuizAnswers).length;
-      let correctCount = 0;
-      kycQuizQuestions.forEach(item => {
-        const cOpt = item.options.find(o => o.correct);
-        if (kycQuizAnswers[item.id] === cOpt.key) correctCount++;
-      });
-
-      const scorePct = Math.round((correctCount / kycQuizQuestions.length) * 100);
-      const scoreFill = document.getElementById('kyc-quiz-score-fill');
-      if (scoreFill) scoreFill.style.width = scorePct + '%';
-      const scoreLabel = document.getElementById('kyc-quiz-score-label');
-      if (scoreLabel) scoreLabel.innerText = `Score: ${correctCount}/${kycQuizQuestions.length} correct (${answeredCount}/${kycQuizQuestions.length} answered)`;
-    },
-
-    resetKycQuiz: function () {
-      kycQuizAnswers = {};
-      const blocks = document.querySelectorAll('#book-container [id^="kyc-quiz-block-"]');
-      blocks.forEach(b => {
-        b.querySelectorAll('.quiz-opt-btn').forEach(btn => {
-          btn.disabled = false;
-          btn.classList.remove('correct', 'wrong');
-        });
-        const exp = b.querySelector('.quiz-explanation-box');
-        if (exp) exp.classList.remove('visible');
-      });
-      const scoreFill = document.getElementById('kyc-quiz-score-fill');
-      if (scoreFill) scoreFill.style.width = '0%';
-      const scoreLabel = document.getElementById('kyc-quiz-score-label');
-      if (scoreLabel) scoreLabel.innerText = 'Score: 0/7 correct (0/7 answered)';
     }
   };
 
