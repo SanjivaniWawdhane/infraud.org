@@ -872,7 +872,7 @@
         <p style="font-size: 0.875rem; color: #4B5570; max-width: 300px; line-height: 1.6; margin-bottom: 20px;">
           You have reviewed all 5 lessons and safety exercises for Fake KYC Vectors. Never complete KYC from an unsolicited message or call.
         </p>
-        <a href="/books/INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" download="INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" class="book-control-btn book-control-btn-primary" style="background:#DC2626; border-color:#DC2626; padding: 10px 20px; font-size: 0.875rem;">
+        <a href="/books/INFRAUD_Fake_KYC_Vectors_Safety_Guide.pdf" download class="book-control-btn book-control-btn-primary" style="background:#DC2626; border-color:#DC2626; padding: 10px 20px; font-size: 0.875rem;">
           Download Reference PDF
         </a>
       </div>
@@ -1359,7 +1359,7 @@
                 { q: "Is the caller refusing independent verification?", a: "Legitimate bank/telecom officers never object to you calling back." },
                 { q: "Have I masked or purpose-marked my documents?", a: "Cross-mark ID copies specifically for this single transaction." }
               ].map((item, idx) => `
-                <div class="check-item-card ${kycChecklistState[idx] ? 'checked' : ''}" onclick="window.bookReader.toggleKycCheck(${idx})">
+                <div class="check-item-card ${kycChecklistState[idx] ? 'checked' : ''}" id="kyc-chk-item-${idx}" onclick="window.bookReader.toggleKycCheck(${idx})">
                   <div class="check-box-visual">${kycChecklistState[idx] ? '✓' : ''}</div>
                   <div class="check-text-content">
                     <div class="check-question">${item.q}</div>
@@ -1406,7 +1406,7 @@
                 const userChoice = kycQuizAnswers[q.id];
                 const answered = !!userChoice;
                 return `
-                  <div class="quiz-question-block">
+                  <div class="quiz-question-block" id="kyc-quiz-block-${q.id}">
                     <div class="quiz-q-title">${q.text}</div>
                     <div class="quiz-options-list">
                       ${q.options.map(opt => {
@@ -1462,7 +1462,7 @@
                 const userChoice = kycQuizAnswers[q.id];
                 const answered = !!userChoice;
                 return `
-                  <div class="quiz-question-block">
+                  <div class="quiz-question-block" id="kyc-quiz-block-${q.id}">
                     <div class="quiz-q-title">${q.text}</div>
                     <div class="quiz-options-list">
                       ${q.options.map(opt => {
@@ -1985,13 +1985,15 @@
       if (label) label.innerText = soundEnabled ? 'Sound ON' : 'Sound OFF';
     },
 
-    // --- UPI Interactive Actions ---
+    // --- UPI Interactive Actions (Pure In-DOM Updates) ---
     toggleCheck: function (index) {
       upiChecklistState[index] = !upiChecklistState[index];
       playPageTurnSound();
-      if (pageFlipInstance) {
-        const curIdx = pageFlipInstance.getCurrentPageIndex();
-        initPageFlipEngine(mapIdxToPage(curIdx));
+      const items = document.querySelectorAll('.check-item-card');
+      if (items && items[index]) {
+        items[index].classList.toggle('checked', upiChecklistState[index]);
+        const box = items[index].querySelector('.check-box-visual');
+        if (box) box.innerText = upiChecklistState[index] ? '✓' : '';
       }
     },
 
@@ -1999,19 +2001,43 @@
       if (upiQuizAnswers[questionId]) return;
       upiQuizAnswers[questionId] = optionKey;
       playPageTurnSound();
-      if (pageFlipInstance) {
-        const curIdx = pageFlipInstance.getCurrentPageIndex();
-        initPageFlipEngine(mapIdxToPage(curIdx));
+
+      const questions = [
+        { id: 'q1', correct: 'B' },
+        { id: 'q2', correct: 'A' },
+        { id: 'q3', correct: 'B' },
+        { id: 'q4', correct: 'B' },
+        { id: 'q5', correct: 'B' },
+        { id: 'q6', correct: 'B' }
+      ];
+
+      const q = questions.find(x => x.id === questionId);
+      if (!q) return;
+
+      const isCorrect = optionKey === q.correct;
+      const card = document.getElementById('quiz-card-' + questionId);
+      if (card) {
+        const btns = card.querySelectorAll('.quiz-opt-btn');
+        btns.forEach(b => {
+          b.disabled = true;
+          const optLetter = b.querySelector('strong') ? b.querySelector('strong').innerText.replace('.', '').trim() : '';
+          if (optLetter === q.correct) b.classList.add('correct');
+          else if (optLetter === optionKey && !isCorrect) b.classList.add('wrong');
+        });
+        const expBox = card.querySelector('.quiz-explanation-box');
+        if (expBox) expBox.classList.add('visible');
       }
     },
 
-    // --- KYC Interactive Actions ---
+    // --- KYC Interactive Actions (Pure In-DOM Updates) ---
     toggleKycCheck: function (index) {
       kycChecklistState[index] = !kycChecklistState[index];
       playPageTurnSound();
-      if (pageFlipInstance) {
-        const curIdx = pageFlipInstance.getCurrentPageIndex();
-        initPageFlipEngine(mapIdxToPage(curIdx));
+      const itemEl = document.getElementById('kyc-chk-item-' + index);
+      if (itemEl) {
+        itemEl.classList.toggle('checked', kycChecklistState[index]);
+        const box = itemEl.querySelector('.check-box-visual');
+        if (box) box.innerText = kycChecklistState[index] ? '✓' : '';
       }
     },
 
@@ -2019,9 +2045,25 @@
       if (kycQuizAnswers[questionId]) return;
       kycQuizAnswers[questionId] = optionKey;
       playPageTurnSound();
-      if (pageFlipInstance) {
-        const curIdx = pageFlipInstance.getCurrentPageIndex();
-        initPageFlipEngine(mapIdxToPage(curIdx));
+
+      const q = kycQuizQuestions.find(x => x.id === questionId);
+      if (!q) return;
+
+      const correctOpt = q.options.find(o => o.correct);
+      const isCorrect = optionKey === correctOpt.key;
+
+      const block = document.getElementById('kyc-quiz-block-' + questionId);
+      if (block) {
+        const btns = block.querySelectorAll('.quiz-opt-btn');
+        btns.forEach(b => {
+          b.disabled = true;
+          const optLetter = b.querySelector('strong') ? b.querySelector('strong').innerText.replace('.', '').trim() : '';
+          if (optLetter === correctOpt.key) b.classList.add('correct');
+          else if (optLetter === optionKey && !isCorrect) b.classList.add('wrong');
+        });
+
+        const expBox = block.querySelector('.quiz-explanation-box');
+        if (expBox) expBox.classList.add('visible');
       }
     }
   };
