@@ -3240,6 +3240,1082 @@
         flex-wrap: wrap;
       }
 
+    
+
+/* ══════════════════════════════════════════════════════════════════════
+   EXECUTIVE TELECOM & CALLER INTELLIGENCE DOSSIER (VIEW-PHONE)
+   Sleek 2-Column Split: Smartphone Caller ID Sandbox vs Forensic Radar
+   ══════════════════════════════════════════════════════════════════════ */
+
+#view-phone {
+  animation: fadeInPhone 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInPhone {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 0. Floating Quick Search Dock ── */
+.phone-dock-strip {
+  margin-bottom: 22px;
+}
+
+.phone-dock-inner {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 6px 8px 6px 14px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  gap: 10px;
+}
+
+.phone-dock-inner:focus-within {
+  border-color: #2563EB;
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.12), 0 0 0 3px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+.phone-dock-country {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.78125rem;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.phone-dock-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #0F172A;
+  padding: 4px 0;
+}
+
+.phone-dock-input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.phone-dock-clear {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94A3B8;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.15s;
+}
+
+.phone-dock-clear:hover {
+  color: #0F172A;
+  background: #F1F5F9;
+}
+
+.phone-dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.phone-dock-btn:hover {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.phone-dock-presets {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 0 8px;
+  flex-wrap: wrap;
+}
+
+.phone-preset-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phone-preset-chip {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 0.78125rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.phone-preset-chip:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  color: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+.phone-dock-error {
+  font-size: 0.8125rem;
+  color: #DC2626;
+  font-weight: 600;
+  margin-top: 6px;
+  padding-left: 14px;
+}
+
+/* ── 1. Executive Master Header Bar ── */
+.phone-master-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.phone-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 280px;
+}
+
+.phone-header-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 1px solid #BFDBFE;
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.phone-header-avatar:hover {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+.phone-header-text {
+  flex: 1;
+}
+
+.phone-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.phone-number-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.phone-btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.71875rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.phone-btn-copy:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.phone-header-meta-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.pclean-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.pclean-pill-gray {
+  background: #F1F5F9;
+  color: #475569;
+  border-color: #E2E8F0;
+}
+
+.pclean-pill-blue {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border-color: #BFDBFE;
+}
+
+.pclean-pill-green {
+  background: #ECFDF5;
+  color: #047857;
+  border-color: #A7F3D0;
+}
+
+.pclean-pill-yellow {
+  background: #FFFBEB;
+  color: #B45309;
+  border-color: #FDE68A;
+}
+
+.pclean-pill-red {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border-color: #FECACA;
+}
+
+.phone-header-sub {
+  font-size: 0.8125rem;
+  color: #64748B;
+  margin-top: 5px;
+}
+
+.phone-header-sub strong {
+  color: #334155;
+}
+
+.phone-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.phone-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.phone-btn-secondary {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+  color: #334155;
+}
+
+.phone-btn-secondary:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.phone-btn-flag {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #DC2626;
+}
+
+.phone-btn-flag:hover {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+  transform: translateY(-1px);
+}
+
+/* ── 2. The 2-Column Split Console ── */
+.phone-sandbox-grid {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1040px) {
+  .phone-sandbox-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Left Column: Interactive Smartphone Sandbox ── */
+.phone-device-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Smartphone Hardware Bezel Frame */
+.phone-device-bezel {
+  background: linear-gradient(145deg, #0F172A, #1E293B);
+  border-radius: 20px;
+  padding: 18px 16px 20px 16px;
+  color: #FFFFFF;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+/* Dynamic Island & Status Bar */
+.phone-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94A3B8;
+  margin-bottom: 18px;
+  padding: 0 4px;
+}
+
+.phone-dynamic-island {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 3px 10px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #34D399;
+}
+
+.phone-island-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: islandPulse 1.8s infinite;
+}
+
+@keyframes islandPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.phone-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Smartphone Caller Content */
+.phone-caller-body {
+  text-align: center;
+  padding: 12px 0 16px 0;
+}
+
+.phone-caller-avatar-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 14px auto;
+}
+
+.phone-caller-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  color: #34D399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.phone-avatar-ripple {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(52, 211, 153, 0.3);
+  animation: avatarRotate 20s linear infinite;
+}
+
+@keyframes avatarRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.phone-sim-tag-pill {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+}
+
+.phone-hud-number {
+  font-size: 1.625rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #F8FAFC;
+  margin: 0 0 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.phone-hud-sub {
+  font-size: 0.8125rem;
+  color: #94A3B8;
+  margin-bottom: 16px;
+}
+
+/* Soundwave Audio Bars */
+.phone-soundwave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 28px;
+  margin-bottom: 18px;
+}
+
+.soundwave-bar {
+  width: 3.5px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #10B981, #047857);
+  animation: soundwaveBounce 1.4s ease-in-out infinite alternate;
+}
+
+.sw-1 { height: 8px; animation-delay: 0.1s; }
+.sw-2 { height: 16px; animation-delay: 0.3s; }
+.sw-3 { height: 26px; animation-delay: 0.5s; }
+.sw-4 { height: 14px; animation-delay: 0.2s; }
+.sw-5 { height: 22px; animation-delay: 0.6s; }
+.sw-6 { height: 10px; animation-delay: 0.4s; }
+.sw-7 { height: 18px; animation-delay: 0.7s; }
+
+@keyframes soundwaveBounce {
+  0% { transform: scaleY(0.4); opacity: 0.6; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Hardware USIM Telemetry Strip */
+.phone-usim-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.phone-usim-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.phone-usim-label {
+  font-size: 0.6875rem;
+  color: #64748B;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phone-usim-val {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #38BDF8;
+}
+
+.phone-usim-sub {
+  font-size: 0.6875rem;
+  color: #94A3B8;
+}
+
+/* In-Device Actions */
+.phone-device-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.phone-hud-block-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.phone-hud-block-btn:hover {
+  transform: translateY(-1px);
+}
+
+.phone-hud-secondary-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.phone-device-sec-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 0.71875rem;
+  font-weight: 600;
+  color: #E2E8F0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.phone-device-sec-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+}
+
+/* ── Right Column: Forensic Threat Assessment Console ── */
+.phone-intel-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Threat Score & Risk Meter Card */
+.phone-score-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 22px 24px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+.phone-score-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.phone-score-gauge-ring {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  flex-shrink: 0;
+}
+
+.phone-gauge-progress {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s;
+}
+
+.phone-score-inner-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.phone-score-value {
+  font-size: 1.875rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #10B981;
+}
+
+.phone-score-max {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94A3B8;
+  display: block;
+  margin-top: 2px;
+}
+
+.phone-score-verdict-wrap {
+  flex: 1;
+  min-width: 220px;
+}
+
+.pclean-action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.71875rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+}
+
+.phone-verdict-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px 0;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.phone-verdict-desc {
+  font-size: 0.84375rem;
+  line-height: 1.5;
+  color: #64748B;
+  margin: 0;
+}
+
+/* 4-Stage Segmented Meter Bar */
+.phone-meter-wrapper {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.phone-risk-meter-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.phone-risk-seg {
+  padding: 6px 4px;
+  text-align: center;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  opacity: 0.45;
+}
+
+.phone-risk-seg.seg-safe { background: #ECFDF5; color: #047857; }
+.phone-risk-seg.seg-caution { background: #FFFBEB; color: #B45309; }
+.phone-risk-seg.seg-risky { background: #FFF7ED; color: #C2410C; }
+.phone-risk-seg.seg-danger { background: #FEF2F2; color: #B91C1C; }
+
+.phone-risk-seg.active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px currentColor;
+  transform: scale(1.02);
+}
+
+.phone-gradient-track {
+  position: relative;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #10B981 0%, #F59E0B 50%, #EF4444 100%);
+  margin-bottom: 8px;
+}
+
+.phone-gradient-pointer {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: #FFFFFF;
+  border: 3px solid #0F172A;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.phone-meter-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+/* 4 Bento Vector Tiles (2x2 Grid) */
+.phone-vectors-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .phone-vectors-2x2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.phone-vector-tile {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.phone-vector-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+  border-color: #CBD5E1;
+}
+
+.phone-vector-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.phone-vector-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.phone-vector-icon-wrap.badge-blue { background: #EFF6FF; color: #2563EB; }
+.phone-vector-icon-wrap.badge-green { background: #ECFDF5; color: #059669; }
+.phone-vector-icon-wrap.badge-purple { background: #FAF5FF; color: #7C3AED; }
+.phone-vector-icon-wrap.badge-red { background: #FEF2F2; color: #DC2626; }
+
+.phone-vector-title {
+  font-size: 0.71875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748B;
+}
+
+.phone-vector-val {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.phone-vector-desc {
+  font-size: 0.78125rem;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+/* ── 3. Bottom Section: Telecommunication Dossier & Playbook ── */
+.phone-bottom-suite {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phone-bottom-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.phone-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.phone-card-title-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phone-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-card-h3 {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #0F172A;
+  margin: 0;
+}
+
+/* 8-Cell Technical Telecom Grid */
+.phone-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .phone-spec-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .phone-spec-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.phone-spec-cell {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: background 0.2s;
+}
+
+.phone-spec-cell:hover {
+  background: #F1F5F9;
+}
+
+.phone-spec-lbl {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.phone-spec-val {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0F172A;
+  word-break: break-word;
+}
+
+.phone-spec-val.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+/* Signals & Recommendations Deck */
+.signals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signals-badge {
+  background: #F1F5F9;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 1930 Cybercrime Hotline Banner */
+.phone-emergency-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 20px 24px;
+  color: #FFFFFF;
+  gap: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  flex-wrap: wrap;
+}
+
+.phone-emergency-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 260px;
+}
+
+.emergency-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.emergency-content h4 {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  margin: 0 0 3px 0;
+  color: #F8FAFC;
+}
+
+.emergency-content p {
+  font-size: 0.78125rem;
+  color: #94A3B8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.phone-emergency-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-emergency-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #EF4444;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.84375rem;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn-emergency-call:hover {
+  background: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);
+}
+
+.btn-emergency-chakshu {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #F1F5F9;
+  text-decoration: none;
+  font-size: 0.84375rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.btn-emergency-chakshu:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+
     </style>
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
@@ -4198,132 +5274,199 @@
 
         <!-- 0. Unified Floating Quick Search Dock -->
         <div class="phone-dock-strip">
-          <div class="phone-dock-inner">
+          <form class="phone-dock-inner" onsubmit="handleQuickPhoneSubmit(event); return false;">
             <span class="phone-dock-country" id="phone-search-country-badge">
               <span>🇮🇳</span>
               <span>+91 (India)</span>
             </span>
-            <input type="text" id="phone-quick-input" class="phone-dock-input" placeholder="Inspect another caller or helpline (e.g. 98765 43210 or 1800 11 2211)..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter') handleQuickPhoneSubmit(event)" />
+            <input type="text" id="phone-quick-input" class="phone-dock-input" placeholder="Inspect another caller or helpline (e.g. 98765 43210 or 1800 11 2211)..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickPhoneSubmit(event);}" />
             <button type="button" class="phone-dock-clear" onclick="clearQuickPhoneInput()" title="Clear">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <button type="button" class="phone-dock-btn" onclick="handleQuickPhoneSubmit()">
+            <button type="submit" class="phone-dock-btn" id="phone-quick-btn" title="Inspect phone number">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-              <span>Inspect</span>
+              <span>Inspect Threat</span>
             </button>
+          </form>
+
+          <!-- Quick Preset Chips -->
+          <div class="phone-dock-presets">
+            <span class="phone-preset-label">Test Samples:</span>
+            <button type="button" class="phone-preset-chip" onclick="fillQuickPhone('+91 80102 37029')">📞 Standard Mobile (Jio)</button>
+            <button type="button" class="phone-preset-chip" onclick="fillQuickPhone('1800 11 2211')">🏢 SBI Helpline (Official 1800)</button>
+            <button type="button" class="phone-preset-chip" onclick="fillQuickPhone('98221 23456')">📱 Airtel Domestic Line</button>
+            <button type="button" class="phone-preset-chip" onclick="fillQuickPhone('14099 12345')">📢 TRAI 140 Telemarketing</button>
+            <button type="button" class="phone-preset-chip" onclick="fillQuickPhone('1800 208 9898')">🛒 Flipkart Support (1800)</button>
           </div>
           <div id="phone-quick-error" class="phone-dock-error"></div>
         </div>
 
-        <!-- 1. Executive Master Header Card -->
-        <div class="phone-header-card">
-          <div class="phone-header-main">
-            <div class="phone-header-icon-box">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <!-- 1. Executive Master Header Bar -->
+        <div class="phone-master-header">
+          <div class="phone-header-left">
+            <div class="phone-header-avatar" id="phone-main-icon-box">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
               </svg>
             </div>
             <div class="phone-header-text">
-              <div class="phone-header-meta">
-                <span id="phone-line-type-tag" class="pclean-pill pclean-pill-gray">CELLULAR MOBILE</span>
-                <span class="phone-meta-dot">•</span>
-                <span id="phone-origin-tag" class="pclean-pill pclean-pill-gray">INDIA (+91)</span>
-                <span class="phone-meta-dot">•</span>
-                <span id="phone-provider-pill" class="pclean-pill pclean-pill-blue">📶 RESOLVING CARRIER...</span>
-                <span class="phone-meta-dot">•</span>
-                <span id="phone-header-status-pill" class="pclean-pill pclean-pill-green">● SAFE & VERIFIED</span>
-              </div>
               <div class="phone-header-title-row">
-                <h1 class="phone-big-number target-display-value" id="phone-target-display">Analyzing Caller...</h1>
-                <button type="button" class="phone-btn-copy" onclick="copyCanonicalPhone()" title="Copy caller number">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                  <span id="copy-phone-label">Copy</span>
+                <h1 class="phone-number-title" id="phone-target-display">+91 80102 37029</h1>
+                <button type="button" class="phone-btn-copy" onclick="copyCurrentPhone()" id="phone-copy-btn" title="Copy Number">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy</span>
                 </button>
               </div>
-              <p class="phone-header-sub">
-                Telecom Provider: <strong id="phone-provider-name">Airtel / Jio / Vi / BSNL</strong> • Circle: <strong id="phone-canonical-display">Maharashtra & Goa</strong> • DoT National Numbering Plan Verified
-              </p>
+              <div class="phone-header-meta-strip">
+                <span class="pclean-pill pclean-pill-gray" id="phone-line-type-tag">CELLULAR MOBILE</span>
+                <span class="pclean-pill pclean-pill-gray" id="phone-origin-tag">INDIA (+91)</span>
+                <span class="pclean-pill pclean-pill-blue" id="phone-provider-pill">📶 RELIANCE JIO</span>
+                <span class="pclean-pill pclean-pill-green" id="phone-header-status-pill">● CLEAN DOMESTIC LINE</span>
+              </div>
+              <div class="phone-header-sub">
+                Telecom Provider: <strong id="phone-provider-name">Reliance Jio</strong> • Circle: <strong id="phone-canonical-display">Maharashtra & Goa Circle [MH]</strong> • DoT National Numbering Plan Verified
+              </div>
             </div>
           </div>
+
           <div class="phone-header-actions">
-            <button class="phone-action-btn phone-btn-secondary" onclick="rescanTarget()" title="Re-check caller routing">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <button type="button" class="phone-action-btn phone-btn-secondary" onclick="window.analyzeTarget(window.currentTargetQuery || '+918010237029', 'phone')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
               <span>Re-check</span>
             </button>
-            <button class="phone-action-btn phone-btn-secondary" onclick="copyResultLink()" title="Copy shareable link">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <button type="button" class="phone-action-btn phone-btn-secondary" onclick="sharePhoneAnalysis()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
               <span>Share</span>
             </button>
-            <button class="phone-action-btn phone-btn-flag" id="btn-quick-flag-scam" onclick="quickFlagPhoneAsScam()" title="Instantly flag this caller as dangerous scam">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>🚨 Flag Scam</span>
-            </button>
-            <a href="reports.html" class="phone-action-btn phone-btn-flag" id="btn-report-phone" title="Report scam caller">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>Report Abuse</span>
+            <a href="reports.html?type=phone" class="phone-action-btn phone-btn-flag" id="btn-report-phone" title="Report scam number to national database">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+              <span>Flag Scam</span>
             </a>
           </div>
         </div>
 
-        <!-- 2. Primary Threat Risk Assessment & Meter Bar Card -->
-        <div class="phone-risk-card">
-          <div class="phone-risk-grid">
-            
-            <!-- Left Column: Threat Score & Radial Indicator -->
-            <div class="phone-score-column">
-              <span class="phone-card-label">THREAT ASSESSMENT</span>
-              <div class="phone-score-display-wrap">
+        <!-- 2. The 2-Column Split Console: Visual Smartphone Sandbox (Left) vs Telecom Radar (Right) -->
+        <div class="phone-sandbox-grid">
+
+          <!-- Left Column: Interactive Smartphone Caller ID Security Sandbox -->
+          <div class="phone-device-card">
+            <div class="phone-device-bezel">
+
+              <!-- Status Bar & Dynamic Island -->
+              <div class="phone-status-bar">
+                <div class="phone-dynamic-island">
+                  <span class="phone-island-pulse" id="phone-island-dot"></span>
+                  <span id="phone-island-status">LIVE RADAR: ALL CLEAR</span>
+                </div>
+                <div class="phone-status-icons">
+                  <span>5G VoNR</span>
+                  <span>📶</span>
+                  <span>🔋 98%</span>
+                </div>
+              </div>
+
+              <!-- Smartphone Caller Body -->
+              <div class="phone-caller-body">
+                <div class="phone-caller-avatar-wrap">
+                  <div class="phone-avatar-ripple"></div>
+                  <div class="phone-caller-avatar" id="phone-hud-avatar-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="phone-sim-tag-pill" id="phone-sim-status-tag">● ACTIVE DOMESTIC LINE • CLEAN RECORD</div>
+                <h2 class="phone-hud-number" id="phone-hud-display-number">+91 80102 37029</h2>
+                <div class="phone-hud-sub" id="phone-hud-carrier-subtitle">Reliance Jio • Maharashtra & Goa Circle [MH]</div>
+
+                <!-- Animated Soundwave Simulation -->
+                <div class="phone-soundwave">
+                  <span class="soundwave-bar sw-1"></span>
+                  <span class="soundwave-bar sw-2"></span>
+                  <span class="soundwave-bar sw-3"></span>
+                  <span class="soundwave-bar sw-4"></span>
+                  <span class="soundwave-bar sw-5"></span>
+                  <span class="soundwave-bar sw-6"></span>
+                  <span class="soundwave-bar sw-7"></span>
+                </div>
+
+                <!-- Hardware USIM Telemetry Strip -->
+                <div class="phone-usim-card">
+                  <div class="phone-usim-row">
+                    <span class="phone-usim-label">Cellular Carrier</span>
+                    <span class="phone-usim-val" id="phone-sim-carrier-name">RELIANCE JIO 5G+</span>
+                  </div>
+                  <div class="phone-usim-sub" id="phone-sim-circle-name">Maharashtra & Goa Circle • DoT UASL Band 78 (5G SA)</div>
+                </div>
+
+                <!-- In-Device Actions -->
+                <div class="phone-device-actions">
+                  <button type="button" class="phone-hud-block-btn" id="phone-hud-block-btn" onclick="toggleDeviceBlock()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Clean Line • Standard Caller</span>
+                  </button>
+
+                  <div class="phone-hud-secondary-row">
+                    <button type="button" class="phone-device-sec-btn" onclick="copyCurrentPhone()">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                      <span>Copy Number</span>
+                    </button>
+                    <a href="tel:1930" class="phone-device-sec-btn" style="color: #F87171;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                      <span>Call 1930</span>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Right Column: Forensic Threat Assessment & 4 Vectors -->
+          <div class="phone-intel-column">
+
+            <!-- Threat Score & Risk Meter Card -->
+            <div class="phone-score-card">
+              <div class="phone-score-top">
                 <div class="phone-score-gauge-ring">
-                  <svg width="110" height="110" viewBox="0 0 160 160">
+                  <svg width="104" height="104" viewBox="0 0 160 160">
                     <circle cx="80" cy="80" r="68" fill="none" stroke="#F1F5F9" stroke-width="12"></circle>
-                    <circle class="phone-gauge-progress" id="phone-gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2" style="transition: stroke-dashoffset 0.8s ease, stroke 0.3s ease;"></circle>
+                    <circle class="phone-gauge-progress" id="phone-gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2"></circle>
                   </svg>
                   <div class="phone-score-inner-text">
-                    <span class="phone-score-value" id="phone-score-display">0</span>
+                    <span class="phone-score-value" id="phone-score-display">25</span>
                     <span class="phone-score-max">/100</span>
                   </div>
                 </div>
-                <div class="phone-score-status-box">
-                  <span class="pclean-action-chip pclean-pill-green" id="phone-risk-badge">✓ VERIFIED SAFE</span>
-                  <span class="phone-score-label">Telecom Threat Score</span>
+                <div class="phone-score-verdict-wrap">
+                  <span class="pclean-action-chip pclean-pill-green" id="phone-risk-badge">✓ CLEAN NUMBER • NO FRAUD REPORTS</span>
+                  <h2 class="phone-verdict-title" id="phone-verdict-title">Likely Safe Caller</h2>
+                  <p class="phone-verdict-desc" id="phone-risk-summary">
+                    Standard registered domestic subscriber line. Zero fraud reports or cybercrime complaints detected. Exercise normal caution: never share OTPs or banking PINs.
+                  </p>
                 </div>
               </div>
-            </div>
-
-            <!-- Middle Column: Segmented Risk Bar & Clear Verdict -->
-            <div class="phone-meter-column">
-              <div class="phone-meter-header">
-                <h2 class="phone-verdict-title" id="phone-verdict-title">Likely Safe Caller</h2>
-                <span class="phone-telecom-tag">
-                  <span class="phone-live-dot" id="phone-island-dot"></span>
-                  <span id="phone-hud-carrier-subtitle">Checking Carrier Allocation...</span>
-                </span>
-              </div>
-              <p class="phone-verdict-desc" id="phone-risk-summary">
-                Valid subscriber line with zero abuse complaints across Chakshu & 1930 logs.
-              </p>
 
               <!-- 4-Stage Segmented Meter Bar -->
-              <div class="phone-risk-meter-wrap">
+              <div class="phone-meter-wrapper">
                 <div class="phone-risk-meter-bar" id="phone-meter-bar">
                   <div class="phone-risk-seg seg-safe" id="phone-seg-safe" title="Low Risk (0–24%)">
-                    <span class="seg-label">Low (0-24%)</span>
+                    <span>Low (0-24%)</span>
                   </div>
-                  <div class="phone-risk-seg seg-caution" id="phone-seg-caution" title="Caution (25–59%)">
-                    <span class="seg-label">Caution (25-59%)</span>
+                  <div class="phone-risk-seg seg-caution active" id="phone-seg-caution" title="Caution (25–59%)">
+                    <span>Caution (25-59%)</span>
                   </div>
                   <div class="phone-risk-seg seg-risky" id="phone-seg-risky" title="Risky (60–74%)">
-                    <span class="seg-label">Risky (60-74%)</span>
+                    <span>Risky (60-74%)</span>
                   </div>
                   <div class="phone-risk-seg seg-danger" id="phone-seg-danger" title="Danger (75–100%)">
-                    <span class="seg-label">Critical (75-100%)</span>
+                    <span>Critical (75-100%)</span>
                   </div>
                 </div>
-
-                <!-- Continuous Gradient Progress Slider with Pin -->
                 <div class="phone-gradient-track">
-                  <div class="phone-gradient-bar"></div>
-                  <div class="phone-gradient-pointer" id="phone-gradient-pointer" title="Score position"></div>
+                  <div class="phone-gradient-pointer" id="phone-gradient-pointer" style="left: 25%;" title="Threat position"></div>
                 </div>
                 <div class="phone-meter-scale">
                   <span>0% Clean Line</span>
@@ -4331,165 +5474,168 @@
                   <span>100% Critical Scam</span>
                 </div>
               </div>
+
+              <!-- Compatibility elements -->
+              <div style="display:none;" id="phone-score-num">25%</div>
+              <div style="display:none;" id="phone-spam-percent">25%</div>
             </div>
 
-            <!-- Right Column: Regulatory Mandate & Advisory -->
-            <div class="phone-advisory-column">
-              <div class="phone-advisory-box">
-                <div class="phone-advisory-badge">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                  <span>DoT & TRAI Mandate</span>
+            <!-- 4 Bento Vector Tiles (2x2 Grid) -->
+            <div class="phone-vectors-2x2">
+              <div class="phone-vector-tile">
+                <div class="phone-vector-top">
+                  <div class="phone-vector-icon-wrap badge-blue">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  </div>
+                  <div class="phone-vector-title">Telecom Operator & NNP</div>
                 </div>
-                <p class="phone-advisory-text">
-                  Commercial telemarketers MUST use the 140 / 160 series. Legitimate government and police officials NEVER conduct "Digital Arrest" over phone or video calls.
-                </p>
-                <button class="btn-phone-block-action" id="phone-hud-block-btn" onclick="quickFlagPhoneAsScam()">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                  <span>Add to Device Blocklist</span>
-                </button>
+                <div class="phone-vector-val" id="phone-tile-carrier">Reliance Jio Infocomm Ltd</div>
+                <div class="phone-vector-desc" id="phone-tile-line">Cellular Mobile (GSM/LTE/5G) • DoT NNP Allocated</div>
+              </div>
+
+              <div class="phone-vector-tile">
+                <div class="phone-vector-top">
+                  <div class="phone-vector-icon-wrap badge-green">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  </div>
+                  <div class="phone-vector-title">Service Area & Circle</div>
+                </div>
+                <div class="phone-vector-val" id="phone-tile-origin">India (+91)</div>
+                <div class="phone-vector-desc" id="phone-tile-origin-sub">Standard domestic routing circle • Maharashtra & Goa [MH]</div>
+              </div>
+
+              <div class="phone-vector-tile">
+                <div class="phone-vector-top">
+                  <div class="phone-vector-icon-wrap badge-purple">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </div>
+                  <div class="phone-vector-title">TRAI Regulatory Channel</div>
+                </div>
+                <div class="phone-vector-val" id="phone-tile-trai">Standard Subscriber (Compliant)</div>
+                <div class="phone-vector-desc" id="phone-tile-trai-sub">Allocated domestic cellular line (DoT NNP) • Non-140</div>
+              </div>
+
+              <div class="phone-vector-tile">
+                <div class="phone-vector-top">
+                  <div class="phone-vector-icon-wrap badge-red">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  </div>
+                  <div class="phone-vector-title">National Abuse Radar</div>
+                </div>
+                <div class="phone-vector-val" id="phone-tile-reports">0 Prior Complaints</div>
+                <div class="phone-vector-desc" id="phone-tile-reports-sub">Clean record across Chakshu, 1930 & community logs</div>
               </div>
             </div>
 
-          </div>
-        </div>
-
-        <!-- 3. Telecom Infrastructure & Regulatory Bento Grid (4 Clean Metric Tiles) -->
-        <div class="phone-bento-grid">
-          
-          <div class="phone-bento-tile">
-            <div class="phone-bento-header">
-              <div class="phone-icon-badge badge-blue">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-              </div>
-              <span class="phone-bento-label">TELECOM OPERATOR & NNP</span>
-            </div>
-            <div class="phone-bento-value" id="phone-tile-carrier">Checking allocation...</div>
-            <div class="phone-bento-sub" id="phone-tile-line">Cellular Mobile (GSM/LTE/5G)</div>
-          </div>
-
-          <div class="phone-bento-tile">
-            <div class="phone-bento-header">
-              <div class="phone-icon-badge badge-green">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              </div>
-              <span class="phone-bento-label">DoT LICENSED SERVICE AREA</span>
-            </div>
-            <div class="phone-bento-value" id="phone-tile-origin">India (+91)</div>
-            <div class="phone-bento-sub" id="phone-tile-origin-sub">Domestic routing circle</div>
-          </div>
-
-          <div class="phone-bento-tile">
-            <div class="phone-bento-header">
-              <div class="phone-icon-badge badge-purple">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </div>
-              <span class="phone-bento-label">TRAI REGULATORY COMPLIANCE</span>
-            </div>
-            <div class="phone-bento-value" id="phone-tile-trai">TRAI Check...</div>
-            <div class="phone-bento-sub" id="phone-tile-trai-sub">Checking 140 / 160 prefix...</div>
-          </div>
-
-          <div class="phone-bento-tile">
-            <div class="phone-bento-header">
-              <div class="phone-icon-badge badge-red">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              </div>
-              <span class="phone-bento-label">LIVE DIRECTORY & ABUSE RADAR</span>
-            </div>
-            <div class="phone-bento-value" id="phone-tile-reports">Scanning...</div>
-            <div class="phone-bento-sub" id="phone-tile-reports-sub">Cross-checking national logs...</div>
           </div>
 
         </div>
 
-        <!-- 4. Technical Telecom Allocation & Dossier Card -->
-        <div class="phone-details-card">
-          <div class="phone-details-header">
-            <div class="phone-details-title-group">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-              <h3>Technical Telecom Allocation & Routing Telemetry</h3>
-            </div>
-            <div class="phone-details-status-tag" id="phone-sim-status-tag">
-              ● ACTIVE DOMESTIC SUBSCRIBER
-            </div>
-          </div>
-          
-          <div class="phone-details-grid">
-            <div class="upi-detail-item">
-              <span class="detail-label">NORMALIZED E.164 ROUTE</span>
-              <strong class="detail-value mono" id="phone-val-formatted">Checking...</strong>
-            </div>
-            <div class="upi-detail-item">
-              <span class="detail-label">ASSIGNED TSP CARRIER</span>
-              <strong class="detail-value" id="phone-sim-carrier-name">Resolving Provider...</strong>
-            </div>
-            <div class="upi-detail-item">
-              <span class="detail-label">DoT SPECTRUM & CIRCLE</span>
-              <strong class="detail-value" id="phone-sim-circle-name">National Numbering Plan</strong>
-            </div>
-            <div class="upi-detail-item">
-              <span class="detail-label">SPAM REPUTATION FREQUENCY</span>
-              <strong class="detail-value" id="phone-spam-percent">0% Adverse Telemetry</strong>
-            </div>
-          </div>
+        <!-- 3. Bottom Section: Telecommunication Dossier & Playbook -->
+        <div class="phone-bottom-suite">
 
-          <!-- Hidden anchors for backward compatibility with existing JS helpers -->
-          <div style="display:none;" id="phone-hud-display-number"></div>
-          <div style="display:none;" id="phone-score-num"></div>
-          <div style="display:none;" id="phone-island-status"></div>
-          <div style="display:none;" id="phone-hud-avatar-icon"></div>
-        </div>
-
-        <!-- 5. Forensic Signals & Recommended Action Guidance -->
-        <div class="phone-signals-deck">
-          
-          <!-- Signals Panel -->
-          <div class="phone-signals-panel">
-            <div class="phone-panel-title">
-              <div class="panel-title-left">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-                <span>Forensic Signals & Risk Flags</span>
+          <!-- 8-Cell Technical Telecom Grid -->
+          <div class="phone-bottom-card">
+            <div class="phone-card-title-row">
+              <div class="phone-card-title-left">
+                <div class="phone-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </div>
+                <h3 class="phone-card-h3">DoT & TRAI Technical Specifications</h3>
               </div>
-              <span class="signals-badge" id="phone-signals-count">0 Signals Detected</span>
+              <span class="pclean-pill pclean-pill-green">● Heuristic Engine Verified</span>
             </div>
-            <div id="phone-signals-container" class="signals-list">
-              <!-- Dynamically populated by renderSignalsList -->
-            </div>
-          </div>
 
-          <!-- Guidance Panel -->
-          <div class="phone-guidance-panel">
-            <div class="phone-panel-title">
-              <div class="panel-title-left">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                <span>Actionable Security Guidance & Playbook</span>
+            <div class="phone-spec-grid">
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">Normalized E.164 Number</div>
+                <div class="phone-spec-val mono" id="phone-val-formatted">+91 80102 37029</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">Telecom Operator / TSP</div>
+                <div class="phone-spec-val" id="phone-spec-operator">Reliance Jio Infocomm Ltd</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">Licensed Service Area</div>
+                <div class="phone-spec-val" id="phone-spec-circle">Maharashtra & Goa Circle [MH]</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">Line Classification</div>
+                <div class="phone-spec-val" id="phone-spec-line">Cellular Mobile (GSM/LTE/5G)</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">DoT National Numbering Plan</div>
+                <div class="phone-spec-val" id="phone-spec-nnp">Allocated & Validated (NNP)</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">Number Series Range</div>
+                <div class="phone-spec-val mono" id="phone-spec-series">8010XXXXXX (Western Zone)</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">TRAI Telemarketing Series</div>
+                <div class="phone-spec-val" id="phone-spec-trai">Non-Commercial (Standard Line)</div>
+              </div>
+              <div class="phone-spec-cell">
+                <div class="phone-spec-lbl">National Scam Match</div>
+                <div class="phone-spec-val" id="phone-spec-scam" style="color: #059669;">Clean (0 Blacklist Hits)</div>
               </div>
             </div>
-            <div id="phone-recommendations-list" class="recommendations-list">
-              <!-- Dynamically populated by renderRecommendationsList -->
+          </div>
+
+          <!-- Signals & Forensics Deck -->
+          <div class="phone-bottom-card">
+            <div class="phone-card-title-row">
+              <div class="phone-card-title-left">
+                <div class="phone-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <h3 class="phone-card-h3">Forensic Signals & Telecommunication Findings</h3>
+              </div>
+              <span class="signals-badge" id="phone-signals-count">Signals</span>
+            </div>
+            <div id="phone-signals-container" class="signals-list"></div>
+          </div>
+
+          <!-- Citizen Telecom Playbook -->
+          <div class="phone-bottom-card">
+            <div class="phone-card-title-row">
+              <div class="phone-card-title-left">
+                <div class="phone-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <h3 class="phone-card-h3">Citizen Telecom Protection Playbook</h3>
+              </div>
+              <span class="pclean-pill pclean-pill-blue">Official Advisory</span>
+            </div>
+            <div id="phone-recommendations-list" class="recommendations-list"></div>
+          </div>
+
+          <!-- 1930 Cybercrime Hotline Banner -->
+          <div class="phone-emergency-banner">
+            <div class="phone-emergency-left">
+              <div class="emergency-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              </div>
+              <div class="emergency-content">
+                <h4>Threatened with "Digital Arrest", Fake CBI, or Parcel Seizure?</h4>
+                <p>Disconnect the call immediately. Legitimate law enforcement officers NEVER conduct trial or demand funds over Skype, WhatsApp, or phone.</p>
+              </div>
+            </div>
+            <div class="phone-emergency-actions">
+              <a href="tel:1930" class="btn-emergency-call">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <span>Call 1930 Helpline</span>
+              </a>
+              <a href="https://sancharsaathi.gov.in/sfc/" target="_blank" rel="noopener noreferrer" class="btn-emergency-chakshu">
+                <span>Chakshu Portal ↗</span>
+              </a>
             </div>
           </div>
 
-        </div>
-
-        <!-- 6. National Cyber Crime Helpline Notice -->
-        <div class="phone-emergency-banner">
-          <div class="emergency-icon-wrap">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-          </div>
-          <div class="emergency-content">
-            <h4>Received a Digital Arrest threat, extortion call, or fake parcel notice?</h4>
-            <p>
-              Report the suspect number immediately to the Department of Telecommunications (DoT) via <strong>Chakshu (sancharsaathi.gov.in)</strong> or dial <strong>1930</strong> (National Cyber Crime Reporting Portal). Do not transfer money or share personal documents under intimidation.
-            </p>
-          </div>
-          <a href="tel:1930" class="btn-emergency-call">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            <span>Dial 1930 Free Helpline</span>
-          </a>
         </div>
 
       </div>
+
       <div id="view-upi" class="tool-result-view">
 
         <!-- 0. Unified Floating Quick Search Dock -->

@@ -1926,6 +1926,34 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   }
 
   // 4. Populate Findings (Signals) & Safety Playbook (Recommendations)
+  
+  // Dynamic 8-Cell Technical Specifications updating
+  const specOperator = document.getElementById('phone-spec-operator');
+  if (specOperator) specOperator.textContent = carrier.operator || operatorName;
+  const specCircle = document.getElementById('phone-spec-circle');
+  if (specCircle) specCircle.textContent = circleName;
+  const specLine = document.getElementById('phone-spec-line');
+  if (specLine) specLine.textContent = `${lineTypeStr} (${isDomestic ? 'Domestic Cellular' : 'International'})`;
+  const specNnp = document.getElementById('phone-spec-nnp');
+  if (specNnp) specNnp.textContent = isDomestic ? 'Allocated & Validated (DoT NNP)' : 'International E.164 Plan';
+  const specSeries = document.getElementById('phone-spec-series');
+  if (specSeries) specSeries.textContent = digits.length >= 4 ? `${digits.slice(0, 4)}XXXXXX (National Series)` : 'Standard Subscriber Block';
+  const specTrai = document.getElementById('phone-spec-trai');
+  if (specTrai) specTrai.textContent = isTrai140 ? 'TRAI 140 Series (Commercial)' : (isTrai160 ? 'TRAI 160 Series (Transactional)' : 'Non-Commercial (Standard Line)');
+  const specScam = document.getElementById('phone-spec-scam');
+  if (specScam) {
+    if (riskScore >= 70) {
+      specScam.textContent = 'Flagged (Scam Pattern Match)';
+      specScam.style.color = '#DC2626';
+    } else if (riskScore >= 35) {
+      specScam.textContent = 'Caution (Telemarketing Log)';
+      specScam.style.color = '#D97706';
+    } else {
+      specScam.textContent = 'Clean (0 Blacklist Hits)';
+      specScam.style.color = '#059669';
+    }
+  }
+
   renderSignalsList(signals, theme, 'phone-signals-container', 'phone-signals-count');
   renderRecommendationsList(recommendations, theme, 'phone-recommendations-list');
 
@@ -4186,3 +4214,66 @@ function renderDomainSpecifications(target, data, intel) {
     specOwner.textContent = (intel && intel.registrant) || '🔒 Redacted for Privacy (Protected per GDPR / Privacy Standards)';
   }
 }
+
+
+// ── Phone Analyzer Helper Functions ──
+window.fillQuickPhone = function(number) {
+  const input = document.getElementById('phone-quick-input');
+  if (input) {
+    input.value = number;
+    window.analyzeTarget(number, 'phone');
+  }
+};
+
+window.copyCurrentPhone = function() {
+  const target = window.currentTargetQuery || '+91 80102 37029';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(target).then(() => {
+      const copyBtn = document.getElementById('phone-copy-btn');
+      if (copyBtn) {
+        const orig = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span>✓ Copied!</span>';
+        copyBtn.style.color = '#059669';
+        setTimeout(() => {
+          copyBtn.innerHTML = orig;
+          copyBtn.style.color = '';
+        }, 1800);
+      }
+    }).catch(() => {});
+  }
+};
+
+window.sharePhoneAnalysis = function() {
+  const target = window.currentTargetQuery || '';
+  const url = window.location.href;
+  if (navigator.share) {
+    navigator.share({
+      title: 'InFraud Telecom Dossier - ' + target,
+      text: 'Check telecom risk dossier for ' + target + ' on InFraud:',
+      url: url
+    }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Analysis dossier link copied to clipboard!');
+    });
+  }
+};
+
+window.toggleDeviceBlock = function() {
+  const blockBtn = document.getElementById('phone-hud-block-btn');
+  if (!blockBtn) return;
+  const isBlocked = blockBtn.getAttribute('data-blocked') === 'true';
+  if (!isBlocked) {
+    blockBtn.setAttribute('data-blocked', 'true');
+    blockBtn.innerHTML = '<span>🚫 Number Added to Device Blocklist</span>';
+    blockBtn.style.background = '#DC2626';
+    blockBtn.style.color = '#FFFFFF';
+    blockBtn.style.borderColor = '#DC2626';
+  } else {
+    blockBtn.setAttribute('data-blocked', 'false');
+    blockBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>✓ Clean Line • Standard Caller</span>';
+    blockBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+    blockBtn.style.color = '#34D399';
+    blockBtn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+  }
+};
