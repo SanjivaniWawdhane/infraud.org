@@ -164,6 +164,12 @@ window.handleQuickUrlSubmit = function(e) {
   window.analyzeTarget(val, 'url');
 };
 
+window.fillQuickUrl = function(u) {
+  const input = document.getElementById('url-quick-input');
+  if (input) input.value = u;
+  window.analyzeTarget(u, 'url');
+};
+
 window.clearQuickUrlInput = function() {
   const input = document.getElementById('url-quick-input');
   if (input) {
@@ -2894,8 +2900,8 @@ function renderUrlView(data, theme, riskScore, signals, recommendations, target)
   }
 
   // 9. Populate Findings (Signals) & Safety Playbook (Recommendations)
-  renderSignalsList(signals, theme, 'signals-container', 'signals-count-pill');
-  renderRecommendationsList(recommendations, theme, 'recommendation-text');
+  renderSignalsList(signals, theme, 'signals-container', 'signals-count');
+  renderRecommendationsList(recommendations, theme, 'recommendations-container');
 
   // 10. Populate Real-Time Domain Forensics & Specifications (Owner PII strictly redacted)
   renderDomainSpecifications(target, data, domainIntel);
