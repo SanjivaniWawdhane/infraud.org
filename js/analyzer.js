@@ -2072,12 +2072,12 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     strategy = 'Fake Courier Delivery Scam';
     senderName = 'Courier Notice';
     senderType = 'SMS • Impersonating Delivery';
-    bannerDesc = 'Real couriers will never demand payment or address updates via SMS links.';
+    bannerDesc = 'Real couriers like FedEx or USPS will never demand payment or address updates via SMS links.';
   } else if (/electricity|power|bijli|cut tonight/i.test(text)) {
     strategy = 'Electricity Disconnection Threat';
     senderName = 'Electricity Alert';
     senderType = 'SMS • Impersonating Utility';
-    bannerDesc = 'Electricity boards follow regular billing cycles and never threaten cutoff tonight via SMS.';
+    bannerDesc = 'Electricity departments follow regular billing cycles and never threaten cutoff tonight via SMS.';
   } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
     strategy = 'Digital Arrest / Police Extortion';
     senderName = 'Cyber Cell Notice';
@@ -2110,124 +2110,128 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     bannerDesc = 'No suspicious phishing lures, payment demands, or fake claims detected.';
   }
 
-  // Update Sender Info on Phone Screen
+  // Update Left Phone Header
   const senderEl = document.getElementById('msg-val-sender');
   if (senderEl) senderEl.textContent = senderName;
   const senderTypeEl = document.getElementById('msg-sender-type');
   if (senderTypeEl) senderTypeEl.textContent = senderType;
 
-  // 4. Update Security Verdict Banner inside Phone
-  const verdictBanner = document.getElementById('msg-gauge-summary');
-  const bannerIcon = document.getElementById('msg-banner-icon');
-  const verdictTitle = document.getElementById('msg-gauge-verdict-title');
-  const bannerDescEl = document.getElementById('msg-banner-desc');
-  const avatarBox = document.getElementById('msg-status-icon-box');
-
   const isScam = riskScore >= 35;
 
-  if (verdictBanner) {
-    verdictBanner.className = 'phone-verdict-banner ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
-  }
-  if (bannerIcon) {
-    bannerIcon.textContent = riskScore >= 70 ? '🚨' : (riskScore >= 35 ? '⚠️' : '🟢');
-  }
-  if (verdictTitle) {
-    verdictTitle.textContent = strategy;
-  }
-  if (bannerDescEl) {
-    bannerDescEl.textContent = bannerDesc;
-  }
+  const avatarBox = document.getElementById('msg-status-icon-box');
   if (avatarBox) {
     avatarBox.className = 'phone-contact-avatar ' + (isScam ? 'danger' : 'safe');
     avatarBox.innerHTML = isScam ? '⚠️' : '✓';
   }
 
-  // 5. Render Clean SMS Message Text in Chat Bubble
+  // Update Left Phone Chat Bubble
   const msgBubble = document.getElementById('msg-bubble-content');
   if (msgBubble) {
     msgBubble.textContent = text;
   }
 
-  // 6. Action Steps Checklist inside Phone
+  // Update Right Column Verdict & Explanation
+  const deskIcon = document.getElementById('msg-desk-icon-box');
+  const deskTag = document.getElementById('msg-header-status-pill');
+  const verdictTitle = document.getElementById('msg-gauge-verdict-title');
+  const explanationEl = document.getElementById('msg-gauge-summary');
+
+  if (deskIcon) {
+    deskIcon.className = 'msg-desk-icon ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    deskIcon.textContent = riskScore >= 70 ? '🚨' : (riskScore >= 35 ? '⚠️' : '🟢');
+  }
+  if (deskTag) {
+    deskTag.className = 'msg-desk-tag ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    deskTag.textContent = riskScore >= 70 ? '🚨 CRITICAL SCAM' : (riskScore >= 35 ? '⚠️ SUSPICIOUS MESSAGE' : '🟢 LIKELY SAFE MESSAGE');
+  }
+  if (verdictTitle) {
+    verdictTitle.textContent = strategy;
+  }
+  if (explanationEl) {
+    explanationEl.className = 'msg-desk-explanation ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    explanationEl.textContent = bannerDesc;
+  }
+
+  // Update Action Checklist in Right Column
   const stepsEl = document.getElementById('msg-simple-steps');
   if (stepsEl) {
     if (isScam) {
       if (/courier|parcel|delivery/i.test(strategy)) {
         stepsEl.innerHTML = `
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Do NOT click any link</strong> in this message.</span>
+            <span><strong>Do NOT click any link</strong> in this message. Real couriers never send unverified payment links via SMS.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Never pay redelivery fees</strong> or share card/OTP details.</span>
+            <span><strong>Never pay redelivery fees</strong> or share card/OTP details to release a parcel.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>✅</span>
-            <span><strong>Track directly</strong> on official courier website or app.</span>
+            <span><strong>Track your package directly</strong> on the official courier website or app using your original tracking number.</span>
           </li>
         `;
       } else if (/electricity|power|bijli/i.test(strategy)) {
         stepsEl.innerHTML = `
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Do NOT call the number</strong> or download APK files.</span>
+            <span><strong>Do NOT call the number</strong> in the SMS or download APK files.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Do NOT send money</strong> to personal mobile numbers.</span>
+            <span><strong>Do NOT transfer money</strong> to any personal mobile number.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>✅</span>
-            <span><strong>Check bill status</strong> only on your official electricity portal.</span>
+            <span><strong>Check your electricity bill status</strong> only on your official electricity board portal.</span>
           </li>
         `;
       } else if (/bank|kyc|netbanking/i.test(strategy)) {
         stepsEl.innerHTML = `
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Never share OTPs or passwords</strong> with anyone.</span>
+            <span><strong>Never share OTPs, passwords, or PINs</strong> with anyone.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Do NOT enter Aadhaar/PAN</strong> on SMS links.</span>
+            <span><strong>Do NOT enter Aadhaar/PAN details</strong> on links sent via SMS.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>✅</span>
-            <span><strong>Visit your bank branch</strong> or official banking app directly.</span>
+            <span><strong>Visit your official bank branch</strong> or banking app directly.</span>
           </li>
         `;
       } else {
         stepsEl.innerHTML = `
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Do NOT tap links</strong> or call numbers in this message.</span>
+            <span><strong>Do NOT tap any links</strong> or call numbers in unsolicited messages.</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>❌</span>
-            <span><strong>Never share OTPs</strong> or banking PINs with strangers.</span>
+            <span><strong>Never share confidential details</strong> (OTP, passwords, UPI PINs).</span>
           </li>
-          <li class="phone-advice-item">
+          <li class="msg-desk-step-item">
             <span>✅</span>
-            <span><strong>Delete and block</strong> this sender on your phone.</span>
+            <span><strong>Delete or block</strong> the sender on your phone.</span>
           </li>
         `;
       }
     } else {
       stepsEl.innerHTML = `
-        <li class="phone-advice-item">
+        <li class="msg-desk-step-item">
           <span>✅</span>
-          <span><strong>No scam patterns detected.</strong> Message appears safe.</span>
+          <span><strong>No scam patterns detected.</strong> This message appears safe for normal conversation.</span>
         </li>
-        <li class="phone-advice-item">
+        <li class="msg-desk-step-item">
           <span>💡</span>
-          <span><strong>Safety Tip:</strong> Never share OTPs or banking PINs with anyone.</span>
+          <span><strong>Safety Rule:</strong> Never share sensitive banking credentials or OTPs with anyone.</span>
         </li>
       `;
     }
   }
 
-  // 7. Extracted Links / Phones inside Phone Screen
+  // Update Extracted Links / Phones inside Phone Screen
   const extractedContainer = document.getElementById('msg-extracted-container');
   if (extractedContainer) {
     const urls = data.embeddedUrls || [];
@@ -2258,7 +2262,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // 8. Outside Actions Row (Dial 1930 Helpline if scam)
+  // Right Column Action Buttons (Dial 1930 Helpline if scam)
   const emergBtn = document.getElementById('msg-btn-1930') || document.querySelector('#view-message .msg-btn-emergency');
   if (emergBtn) {
     emergBtn.style.display = isScam ? 'inline-flex' : 'none';
