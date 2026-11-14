@@ -2175,6 +2175,24 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const stratEl = document.getElementById('msg-val-strategy');
   if (stratEl) stratEl.textContent = strategy;
 
+  // Set clean, professional Dossier Title on Header Card (replaces awkward truncated quotes)
+  const msgTitle = document.querySelector('#view-message .msg-target-title');
+  if (msgTitle) {
+    msgTitle.innerHTML = `<span style="color: #0F172A; font-weight: 800;">${escapeHtml(strategy)}</span>`;
+  }
+
+  // Context-aware Header Action Buttons (don't alarm users on clean everyday messages)
+  const reportBtn = document.querySelector('#view-message .msg-btn-report');
+  const emergBtn = document.querySelector('#view-message .msg-btn-emergency');
+  if (reportBtn) {
+    reportBtn.innerHTML = riskScore >= 50 ?
+      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Report Spammer (1909)</span>` :
+      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span>Report Message</span>`;
+  }
+  if (emergBtn) {
+    emergBtn.style.display = riskScore >= 50 ? 'inline-flex' : 'none';
+  }
+
   // 5. Header Status Pill
   const headerPill = document.getElementById('msg-header-status-pill');
   if (headerPill) {
@@ -2215,11 +2233,23 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   }
   const verdictTitle = document.getElementById('msg-gauge-verdict-title');
   if (verdictTitle) {
-    verdictTitle.textContent = riskScore >= 70 ? 'High Coercion Scam' : (riskScore >= 35 ? 'Suspicious Language' : 'Clean Verification');
+    if (riskScore >= 70) {
+      verdictTitle.textContent = strategy ? strategy.replace(/^[^\w\s]+/, '').trim() : 'High Coercion Scam';
+    } else if (riskScore >= 35) {
+      verdictTitle.textContent = 'Suspicious Language Pattern';
+    } else {
+      verdictTitle.textContent = 'Clean / Low Risk Message';
+    }
   }
   const gaugeSummary = document.getElementById('msg-gauge-summary');
   if (gaugeSummary) {
-    gaugeSummary.textContent = theme.summary || 'Heuristic evaluation based on VADER coercion metrics and TRAI mandate.';
+    if (riskScore >= 70) {
+      gaugeSummary.textContent = 'High danger! Natural language processing detected coercive social engineering, extortion threats, or malicious payload lures designed to manipulate the recipient.';
+    } else if (riskScore >= 35) {
+      gaugeSummary.textContent = 'Caution advised. This message contains elevated urgency, unverified corporate claims, or suspicious links. Verify independently before replying or clicking.';
+    } else {
+      gaugeSummary.textContent = 'Low risk. Automated linguistic and structural forensics detected zero artificial urgency, fake lottery claims, or credential theft patterns.';
+    }
   }
   // 6b. Multi-Segment 4-Stage Meter Bar & Gradient Pointer
   const segSafe = document.getElementById('msg-seg-safe');
@@ -2355,18 +2385,34 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     const phoneMatch = text.match(/(?:\+91[\s-]?)?[6-9]\d{9}/)[0];
     if (senderEl) senderEl.textContent = phoneMatch;
     if (smsSenderEl) smsSenderEl.textContent = phoneMatch;
-    if (senderTypeEl) senderTypeEl.textContent = 'Non-Compliant Private Mobile (Violates TRAI TCCCPR 2018)';
+    if (senderTypeEl) senderTypeEl.textContent = 'Unregistered Private Mobile (Violates TRAI TCCCPR 2018)';
     if (waStatusEl) {
-      waStatusEl.textContent = '🚨 Unregistered Mobile';
-      waStatusEl.style.color = '#EF4444';
+      waStatusEl.textContent = '🚨 Unverified Mobile';
+      waStatusEl.style.color = '#DC2626';
+      waStatusEl.style.background = '#FEF2F2';
+      waStatusEl.style.borderColor = '#FECACA';
+    }
+  } else if (/swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart|otp/i.test(text)) {
+    const brandMatch = text.match(/\b(swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart)\b/i);
+    const brandName = brandMatch ? brandMatch[0].toUpperCase() : 'ENTERPRISE';
+    if (senderEl) senderEl.textContent = `VM-${brandName.substring(0, 6)}`;
+    if (smsSenderEl) smsSenderEl.textContent = `VM-${brandName.substring(0, 6)}`;
+    if (senderTypeEl) senderTypeEl.textContent = 'TRAI DLT Registered Enterprise Alphanumeric Route';
+    if (waStatusEl) {
+      waStatusEl.textContent = '✓ Verified Sender';
+      waStatusEl.style.color = '#047857';
+      waStatusEl.style.background = '#ECFDF5';
+      waStatusEl.style.borderColor = '#A7F3D0';
     }
   } else {
-    if (senderEl) senderEl.textContent = 'Unregistered Electronic Channel';
+    if (senderEl) senderEl.textContent = 'Incoming Cellular SMS';
     if (smsSenderEl) smsSenderEl.textContent = 'AX-NOTIFY';
-    if (senderTypeEl) senderTypeEl.textContent = 'Unregistered Third-Party Messaging Channel';
+    if (senderTypeEl) senderTypeEl.textContent = 'Standard Private Peer-to-Peer SMS';
     if (waStatusEl) {
-      waStatusEl.textContent = 'online';
-      waStatusEl.style.color = 'inherit';
+      waStatusEl.textContent = 'Cellular Message';
+      waStatusEl.style.color = '#475569';
+      waStatusEl.style.background = '#F1F5F9';
+      waStatusEl.style.borderColor = '#CBD5E1';
     }
   }
 

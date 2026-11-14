@@ -1,7 +1,7 @@
 /* ==========================================================================
    INFRAUD DIGITAL BOOK READER (FLIPBOOK)
    Redesigned for INFRAUD Website Theme: Minimal, Modern, Professional
-   Using Official Design System Tokens (--ink, --blue, --surface, --page)
+   Authentic 3D Real-Page-Flip Animation Engine
    ========================================================================== */
 
 /* ── Modal Overlay (Light Frosted Glass Backdrop) ── */
@@ -200,8 +200,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: #FFFFFF;
   border: 1px solid var(--ink-100, #E8EBF3);
@@ -210,8 +210,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 20;
-  box-shadow: 0 8px 24px rgba(10, 15, 30, 0.08);
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(10, 15, 30, 0.1);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -219,8 +219,8 @@
   background: var(--blue-600, #2563EB);
   border-color: var(--blue-600, #2563EB);
   color: #FFFFFF;
-  transform: translateY(-50%) scale(1.08);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
 }
 
 .book-nav-arrow:disabled {
@@ -229,8 +229,8 @@
   pointer-events: none;
 }
 
-.book-nav-prev { left: 24px; }
-.book-nav-next { right: 24px; }
+.book-nav-prev { left: 20px; }
+.book-nav-next { right: 20px; }
 
 /* ── Realistic 3D Book Container (Website Style) ── */
 .book-wrapper-3d {
@@ -243,12 +243,33 @@
   background: #FFFFFF;
   border-radius: 16px;
   box-shadow: 
-    0 24px 60px -12px rgba(10, 15, 30, 0.16),
+    0 25px 60px -12px rgba(10, 15, 30, 0.18),
     0 0 0 1px rgba(10, 15, 30, 0.06),
     0 8px 20px -4px rgba(10, 15, 30, 0.04);
   perspective: 2500px;
+  -webkit-perspective: 2500px;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  overflow: visible;
+}
+
+/* ── Static Base Page Slots (Left & Right) ── */
+.book-page-slot {
+  flex: 1;
+  height: 100%;
+  position: relative;
   overflow: hidden;
+  display: flex;
+}
+
+#page-slot-left {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+#page-slot-right {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
 /* ── Center Book Spine (Desktop Spread) ── */
@@ -263,19 +284,205 @@
     to right,
     rgba(10, 15, 30, 0.09) 0%,
     rgba(10, 15, 30, 0.02) 20%,
-    rgba(255, 255, 255, 0.3) 48%,
-    rgba(10, 15, 30, 0.12) 50%,
-    rgba(255, 255, 255, 0.3) 52%,
+    rgba(255, 255, 255, 0.4) 48%,
+    rgba(10, 15, 30, 0.14) 50%,
+    rgba(255, 255, 255, 0.4) 52%,
     rgba(10, 15, 30, 0.02) 80%,
     rgba(10, 15, 30, 0.09) 100%
   );
-  z-index: 5;
+  z-index: 10;
   pointer-events: none;
+}
+
+/* ── Genuine 3D Flipping Sheet (The Moving Leaf) ── */
+.book-flipping-sheet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 80;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  display: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Forward Turn: pivots from center spine (left: 50%, transform-origin: left center) */
+.book-flipping-sheet.flip-forward {
+  left: 50%;
+  transform-origin: left center;
+  -webkit-transform-origin: left center;
+  display: block;
+  animation: flipSheetForward 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Backward Turn: pivots from center spine (left: 0, transform-origin: right center) */
+.book-flipping-sheet.flip-backward {
+  left: 0;
+  transform-origin: right center;
+  -webkit-transform-origin: right center;
+  display: block;
+  animation: flipSheetBackward 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.sheet-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden !important;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.sheet-face .book-page-leaf {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+.sheet-front {
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+  z-index: 2;
+  box-shadow: inset -10px 0 25px rgba(10, 15, 30, 0.06);
+}
+
+.sheet-back {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  z-index: 1;
+  box-shadow: inset 10px 0 25px rgba(10, 15, 30, 0.06);
+}
+
+/* Explicit opacity switch at 50% midpoint to guarantee zero mirror artifacts across all browsers */
+.flip-forward .sheet-front {
+  animation: hideAtMidpoint 0.6s step-end forwards;
+}
+
+.flip-forward .sheet-back {
+  animation: showAtMidpoint 0.6s step-start forwards;
+}
+
+.flip-backward .sheet-front {
+  animation: hideAtMidpoint 0.6s step-end forwards;
+}
+
+.flip-backward .sheet-back {
+  animation: showAtMidpoint 0.6s step-start forwards;
+}
+
+@keyframes hideAtMidpoint {
+  0% { opacity: 1; visibility: visible; }
+  49.9% { opacity: 1; visibility: visible; }
+  50% { opacity: 0; visibility: hidden; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes showAtMidpoint {
+  0% { opacity: 0; visibility: hidden; }
+  49.9% { opacity: 0; visibility: hidden; }
+  50% { opacity: 1; visibility: visible; }
+  100% { opacity: 1; visibility: visible; }
+}
+
+/* Realistic 3D Keyframe Animations */
+@keyframes flipSheetForward {
+  0% {
+    transform: rotateY(0deg) skewY(0deg);
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+  }
+  30% {
+    transform: rotateY(-45deg) skewY(-1.8deg) scale(0.985);
+    filter: drop-shadow(-18px 14px 28px rgba(10, 15, 30, 0.26));
+  }
+  50% {
+    transform: rotateY(-90deg) skewY(0deg) scale(0.975);
+    filter: drop-shadow(-22px 16px 32px rgba(10, 15, 30, 0.32));
+  }
+  75% {
+    transform: rotateY(-135deg) skewY(1.8deg) scale(0.985);
+    filter: drop-shadow(-16px 12px 24px rgba(10, 15, 30, 0.24));
+  }
+  100% {
+    transform: rotateY(-180deg) skewY(0deg) scale(1);
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+  }
+}
+
+@keyframes flipSheetBackward {
+  0% {
+    transform: rotateY(0deg) skewY(0deg);
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+  }
+  30% {
+    transform: rotateY(45deg) skewY(1.8deg) scale(0.985);
+    filter: drop-shadow(18px 14px 28px rgba(10, 15, 30, 0.26));
+  }
+  50% {
+    transform: rotateY(90deg) skewY(0deg) scale(0.975);
+    filter: drop-shadow(22px 16px 32px rgba(10, 15, 30, 0.32));
+  }
+  75% {
+    transform: rotateY(135deg) skewY(-1.8deg) scale(0.985);
+    filter: drop-shadow(16px 12px 24px rgba(10, 15, 30, 0.24));
+  }
+  100% {
+    transform: rotateY(180deg) skewY(0deg) scale(1);
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+  }
+}
+
+/* Mobile 3D Turn Animations */
+.book-wrapper-3d.mobile-turning-next .book-page-slot {
+  animation: mobilePageCurlNext 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.book-wrapper-3d.mobile-turning-prev .book-page-slot {
+  animation: mobilePageCurlPrev 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes mobilePageCurlNext {
+  0% {
+    transform: translateX(0) rotateY(0deg);
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(-25%) rotateY(-25deg) scale(0.96);
+    opacity: 0.85;
+    box-shadow: 12px 10px 24px rgba(10, 15, 30, 0.25);
+  }
+  100% {
+    transform: translateX(0) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes mobilePageCurlPrev {
+  0% {
+    transform: translateX(0) rotateY(0deg);
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(25%) rotateY(25deg) scale(0.96);
+    opacity: 0.85;
+    box-shadow: -12px 10px 24px rgba(10, 15, 30, 0.25);
+  }
+  100% {
+    transform: translateX(0) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
 }
 
 /* ── Book Page Leaf (Website Surface Styling) ── */
 .book-page-leaf {
   flex: 1;
+  width: 100%;
   height: 100%;
   background: #FFFFFF;
   color: var(--ink-700, #1E2742);
@@ -1071,27 +1278,6 @@
   color: var(--ink-900, #0A0F1E);
 }
 
-/* ── Flipping Transition Animations ── */
-.book-wrapper-3d.turning-forward .book-page-right {
-  animation: pageTurnForward 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.book-wrapper-3d.turning-backward .book-page-left {
-  animation: pageTurnBackward 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes pageTurnForward {
-  0% { transform: rotateY(0deg); opacity: 1; }
-  50% { transform: rotateY(-22deg); opacity: 0.8; }
-  100% { transform: rotateY(0deg); opacity: 1; }
-}
-
-@keyframes pageTurnBackward {
-  0% { transform: rotateY(0deg); opacity: 1; }
-  50% { transform: rotateY(22deg); opacity: 0.8; }
-  100% { transform: rotateY(0deg); opacity: 1; }
-}
-
 /* ── Curriculum Trigger Card in learn.html ── */
 .module-card-book-trigger {
   position: relative;
@@ -1211,6 +1397,12 @@
     border-radius: 12px;
   }
   .book-spine-depth {
+    display: none !important;
+  }
+  .book-flipping-sheet {
+    display: none !important;
+  }
+  #page-slot-right {
     display: none !important;
   }
   .book-page-leaf {
