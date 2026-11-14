@@ -2889,6 +2889,28 @@ function renderSignalsList(signals, theme, containerId, countPillId) {
 
   if (threatCount === 0) {
     const authenticSignal = (signals || []).find(s => s.id === 'COMMUNITY_VERIFIED_AUTHENTIC');
+    let cleanTitle = authenticSignal ? escapeHtml(authenticSignal.title) : 'All Security Checks Passed';
+    let cleanDesc = authenticSignal ? escapeHtml(authenticSignal.description) : 'Automated heuristics verified security standards and global threat databases. Zero deceptive patterns or scam reports were detected.';
+    let cleanTip = 'Always verify beneficiary or contact identity through independent official channels.';
+
+    if (currentTargetType === 'upi') {
+      cleanTitle = 'All NPCI UPI Security Checks Passed';
+      cleanDesc = 'Automated forensics verified authorized PSP banking gateway, valid VPA syntax, and zero brand spoofing keywords. Zero mule reports or chargeback disputes on record.';
+      cleanTip = 'Remember the Golden Rule: Entering your UPI PIN ALWAYS transfers money OUT of your bank account. You NEVER need to enter your PIN or scan a QR code to receive money, refunds, or cashback.';
+    } else if (currentTargetType === 'phone') {
+      cleanTitle = 'Clean Domestic Telecom Subscriber';
+      cleanDesc = 'Verified against Department of Telecommunications (DoT) National Numbering Plan with zero fraudulent cybercrime reports or spam blacklist matches.';
+      cleanTip = 'Never share OTPs, banking PINs, or confidential personal documents with unsolicited callers.';
+    } else if (currentTargetType === 'message') {
+      cleanTitle = 'Zero Phishing or Coercive Patterns Detected';
+      cleanDesc = 'Lexical NLP analysis detected no artificial urgency, fake lottery lures, utility disconnection threats, or credential harvesting keywords.';
+      cleanTip = 'Always verify unsolicited messages independently through official corporate or government helplines.';
+    } else {
+      cleanTitle = 'All Security Checks Passed';
+      cleanDesc = 'Automated heuristics verified SSL encryption, domain structure, and global scam databases. Zero deceptive phishing patterns or fake logins were detected.';
+      cleanTip = 'Always verify that the address in your browser matches the intended organization before entering passwords or payment details.';
+    }
+
     container.innerHTML = `
       <div class="url-clean-seal-box">
         <div class="url-clean-seal-header">
@@ -2896,13 +2918,13 @@ function renderSignalsList(signals, theme, containerId, countPillId) {
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             <polyline points="9 12 11 14 15 10"></polyline>
           </svg>
-          <span>${authenticSignal ? escapeHtml(authenticSignal.title) : 'All Security Checks Passed'}</span>
+          <span>${cleanTitle}</span>
         </div>
         <p class="url-clean-seal-desc">
-          ${authenticSignal ? escapeHtml(authenticSignal.description) : 'Automated heuristics verified SSL encryption, domain structure, and global scam databases. Zero deceptive phishing patterns or fake logins were detected.'}
+          ${cleanDesc}
         </p>
         <div class="url-clean-seal-tip">
-          <strong>Safety Protocol:</strong> Always verify that the address in your browser matches the intended organization before entering passwords or payment details.
+          <strong>Safety Protocol:</strong> ${cleanTip}
         </div>
       </div>
     `;
