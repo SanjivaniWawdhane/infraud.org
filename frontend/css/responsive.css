@@ -1115,29 +1115,15 @@ pre, code {
    NEXT-GENERATION MOBILE NAVBAR & APP COMMAND CENTER SYSTEM
    ══════════════════════════════════════════════════════════════════════ */
 
-/* Brand Status Dot (Live Cyber Radar) */
+/* Brand Status Dot (Live Cyber Radar) - Completely disabled */
 .nav-brand-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  padding: 2px 7px;
-  border-radius: 99px;
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #047857;
-  letter-spacing: 0.05em;
-  margin-left: 6px;
-  vertical-align: middle;
+  display: none !important;
 }
 .nav-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #10B981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-  animation: navPulse 2s infinite;
+  display: none !important;
+}
+.nav-edge-github {
+  display: none !important;
 }
 @keyframes navPulse {
   0%, 100% { transform: scale(1); opacity: 1; }
@@ -1165,13 +1151,16 @@ pre, code {
     display: none !important;
   }
   .nav-brand-status {
-    display: inline-flex !important;
+    display: none !important;
+  }
+  .nav-edge-github {
+    display: none !important;
   }
   .nav-primary-links {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
+    gap: 8px !important;
     margin: 0 !important;
     flex-direction: row !important;
     background: transparent !important;
@@ -1180,11 +1169,11 @@ pre, code {
   .nav-link-item {
     position: relative !important;
     text-decoration: none !important;
-    font-size: 0.875rem !important;
+    font-size: 0.9375rem !important;
     font-weight: 500 !important;
-    color: var(--ink-500, #4B5570) !important;
-    padding: 8px 12px !important;
-    border-radius: 6px !important;
+    color: #334155 !important;
+    padding: 8px 14px !important;
+    border-radius: 8px !important;
     transition: all 0.2s !important;
     white-space: nowrap !important;
     background: transparent !important;
@@ -1193,13 +1182,13 @@ pre, code {
     border-bottom: none !important;
   }
   .nav-link-item:hover {
-    color: var(--ink-900, #0A0F1E) !important;
-    background: rgba(10, 15, 30, 0.04) !important;
+    color: #1d4ed8 !important;
+    background: rgba(37, 99, 235, 0.06) !important;
   }
   .nav-link-item.active {
-    color: var(--blue-600, #2563EB) !important;
+    color: #1d4ed8 !important;
     font-weight: 600 !important;
-    background: transparent !important;
+    background: rgba(37, 99, 235, 0.08) !important;
   }
   .nav-link-left {
     display: inline-flex !important;
