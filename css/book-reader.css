@@ -1521,3 +1521,61 @@
   overflow-y: auto;
   box-sizing: border-box;
 }
+
+
+/* --- Multi-Book Theming & Switcher Styles --- */
+.book-pill-ribbon.ribbon-red {
+  background: #FEE2E2 !important;
+  color: #DC2626 !important;
+  border: 1px solid #FECACA;
+}
+
+.book-read-cta-btn.btn-red {
+  background: #DC2626 !important;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25) !important;
+}
+
+.book-read-cta-btn.btn-red:hover {
+  background: #B91C1C !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35) !important;
+}
+
+.book-switcher-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.book-switch-btn {
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: #94A3B8;
+  transition: all 0.15s ease;
+}
+
+.book-switch-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.book-switch-btn.active[data-book="upi"] {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
+
+.book-switch-btn.active[data-book="kyc"] {
+  background: #DC2626 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
