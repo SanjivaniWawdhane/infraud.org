@@ -178,6 +178,7 @@ function analyzeMessage(rawMessage) {
   const electricityThreat = /(?:electricity|power|bijli|mseb|bses|dhbvn|tneb).{0,50}(?:disconnect|cut|suspend|unpaid|bill\s+due|contact\s+(?:officer|at))|(?:dear\s+(?:consumer|customer).{0,35}electricity)|(वीज\s+बिल\s+भरले\s+नाही|बिजली\s+कट|बिजली\s+बिल)/i.test(lowerMsg);
   const accountBlockThreat = /(?:account|sim|card|services?)\s+(?:will\s+be|has\s+been)\s+(?:blocked|suspended|deactivated|frozen|terminated)\s+(?:within|today|immediately|in\s+\d+\s+hours?)|(खाते\s+ब्लॉक|अकाउंट\s+ब्लॉक)/i.test(lowerMsg);
   const authorityThreat = /(?:arrest\s*warrant|cbi\s*officer|police\s*department|customs\s*officer|illegal\s*(?:parcel|courier|drugs)|narcotics|digital\s*arrest)/i.test(lowerMsg);
+  const courierParcelThreat = /(?:parcel|package|shipment|courier|delivery|consignment).{0,60}(?:held\s*up|on\s*hold|pending|failed|undelivered|address\s*update|redelivery|delivery\s*fee|customs|custom\s*fee|tracking\s*link|postage)|(?:usps|fedex|ups|dhl|india\s*post|bluedart|speed\s*post).{0,60}(?:parcel|package|shipment|held|delivery|fee|update|link|phishing)|(?:missing|pay).{0,35}(?:redelivery\s*fee|delivery\s*fee|customs\s*duty|address\s*update)|(?:phishing\s*link|phishing\s*site|phishing\s*form)/i.test(lowerMsg);
 
   if (electricityThreat) {
     signals.push({
@@ -211,6 +212,19 @@ function analyzeMessage(rawMessage) {
     });
     rawScore += 50;
     recommendations.push('Immediately disconnect and report calls or messages claiming your Aadhaar or phone is implicated in courier/drug cases to the National Cyber Crime Helpline at 1930.');
+  }
+
+  if (courierParcelThreat) {
+    signals.push({
+      id: 'COURIER_PARCEL_PHISHING',
+      title: 'Courier / Parcel Delivery Smishing Pattern',
+      description: 'Matches widespread postal and parcel delivery phishing scams (impersonating USPS, FedEx, UPS, India Post, or local couriers). Scammers falsely claim a parcel is held up, missing a fee, or requires address updates to steal personal credentials and payment card numbers.',
+      severity: 'critical',
+      weight: 50
+    });
+    rawScore += 50;
+    recommendations.push('Do NOT click delivery exception, redelivery fee, or address update links in SMS. Always track packages directly on the official courier portal using your original tracking number.');
+    recommendations.push('Legitimate postal and delivery services will never demand unexpected redelivery fees or personal banking details via third-party web forms.');
   }
 
   // ----------------------------------------------------

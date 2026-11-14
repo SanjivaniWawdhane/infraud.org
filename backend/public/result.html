@@ -2514,7 +2514,7 @@
   flex-wrap: wrap;
 }
 .msg-target-title {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: #0F172A;
   margin: 0;
@@ -2602,13 +2602,13 @@
   color: #FFFFFF;
 }
 
-/* 2. ASYMMETRICAL 2-COLUMN WORKSPACE */
+/* 2. BALANCED 2-COLUMN WORKSPACE */
 .msg-forensic-grid {
   display: grid;
-  grid-template-columns: minmax(350px, 440px) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-bottom: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 @media (max-width: 960px) {
   .msg-forensic-grid {
@@ -2616,59 +2616,71 @@
   }
 }
 
-/* LEFT COLUMN: AUTHENTIC MOBILE PHONE SIMULATOR */
-.msg-phone-frame {
+/* LEFT COLUMN: EVALUATED MESSAGE DOSSIER */
+.msg-evidence-card {
   background: #FFFFFF;
-  border: 1px solid #CBD5E1;
-  border-radius: 28px;
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.04);
-  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
   display: flex;
   flex-direction: column;
+  gap: 18px;
 }
-.phone-status-bar {
-  background: #F8FAFC;
-  padding: 10px 18px 6px 18px;
+.evidence-card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #475569;
+  justify-content: space-between;
+  padding-bottom: 14px;
   border-bottom: 1px solid #F1F5F9;
 }
-.phone-status-icons {
+.evidence-card-title {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #0F172A;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  margin: 0;
 }
-.phone-sender-bar {
-  background: #FFFFFF;
-  border-bottom: 1px solid #E2E8F0;
-  padding: 12px 18px;
+.evidence-protocol-tag {
+  font-family: var(--mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #4F46E5;
+  background: #EEF2FF;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Sender Telemetry Bar */
+.evidence-sender-bar {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.phone-sender-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+.evidence-sender-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #EEF2FF;
   color: #4F46E5;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 0.9375rem;
-  border: 1px solid #C7D2FE;
   flex-shrink: 0;
+  border: 1px solid #C7D2FE;
 }
-.phone-sender-info {
+.evidence-sender-info {
   flex: 1;
   min-width: 0;
 }
-.phone-sender-name {
+.evidence-sender-name {
   font-size: 0.9375rem;
   font-weight: 800;
   color: #0F172A;
@@ -2677,50 +2689,33 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.phone-sender-sub {
-  font-size: 0.72rem;
+.evidence-sender-sub {
+  font-size: 0.75rem;
   color: #64748B;
   margin: 2px 0 0 0;
 }
-.phone-screen-body {
+
+/* The Evaluated Message Content Box */
+.msg-body-box {
   background: #F8FAFC;
-  padding: 18px 16px;
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.phone-date-divider {
-  align-self: center;
-  background: #E2E8F0;
-  color: #64748B;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 12px;
-  letter-spacing: 0.02em;
-}
-.msg-speech-bubble {
-  align-self: flex-start;
-  max-width: 95%;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px 16px 16px 4px;
-  padding: 14px 16px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-  font-size: 0.875rem;
-  line-height: 1.55;
+  border: 1.5px solid #E2E8F0;
+  border-left: 4px solid #4F46E5;
+  border-radius: 14px;
+  padding: 18px 20px;
+  font-size: 1.025rem;
+  line-height: 1.65;
   color: #1E293B;
   position: relative;
   word-break: break-word;
 }
-.msg-bubble-meta {
+.msg-body-meta {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  gap: 4px;
-  margin-top: 8px;
-  font-size: 0.6875rem;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #E2E8F0;
+  font-size: 0.72rem;
   color: #94A3B8;
   font-weight: 600;
 }
@@ -2751,20 +2746,20 @@
   border-bottom: 2px solid #6366F1;
 }
 
-/* Payloads */
-.phone-payloads-card {
+/* Extracted Payloads */
+.evidence-payloads-box {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 14px 16px;
 }
-.phone-payloads-title {
-  font-size: 0.72rem;
+.evidence-payloads-title {
+  font-size: 0.75rem;
   font-weight: 800;
   color: #64748B;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -2772,7 +2767,7 @@
 .extracted-payloads-wrap {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 .extracted-chip {
   display: flex;
@@ -2781,18 +2776,18 @@
   gap: 8px;
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 8px;
-  font-size: 0.78rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: #1E293B;
 }
 .btn-chip-inspect {
   background: #4F46E5;
   color: #FFFFFF;
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: 6px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
@@ -2802,57 +2797,51 @@
   background: #4338CA;
 }
 
-/* In-Phone Input Bar */
-.phone-bottom-bar {
-  background: #FFFFFF;
-  border-top: 1px solid #E2E8F0;
-  padding: 10px 14px;
+/* In-Card Interactive Test Bar */
+.evidence-test-bar {
   display: flex;
   align-items: center;
   gap: 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-top: auto;
 }
-.phone-bottom-input {
+.evidence-test-input {
   flex: 1;
-  background: #F1F5F9;
-  border: 1px solid transparent;
-  border-radius: 20px;
-  padding: 8px 14px;
+  background: transparent;
+  border: none;
   font-size: 0.8125rem;
   color: #0F172A;
   outline: none;
-  transition: all 0.2s;
 }
-.phone-bottom-input:focus {
-  background: #FFFFFF;
-  border-color: #4F46E5;
-}
-.phone-bottom-send {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.evidence-test-btn {
   background: #4F46E5;
   color: #FFFFFF;
   border: none;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
   transition: all 0.2s ease;
-  flex-shrink: 0;
 }
-.phone-bottom-send:hover {
+.evidence-test-btn:hover {
   background: #4338CA;
-  transform: scale(1.05);
 }
 
 /* RIGHT COLUMN: CYBER FORENSICS INTELLIGENCE SUITE */
-.msg-intel-column {
+.msg-intel-card {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Card 1: Score & Meter Card */
+/* Score & Verdict Card */
 .msg-verdict-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -2969,7 +2958,7 @@
   margin-top: 6px;
 }
 
-/* Card 2: 4-Vector Manipulation Matrix */
+/* 4-Vector Manipulation Matrix */
 .msg-matrix-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -3050,14 +3039,15 @@
   line-height: 1.4;
 }
 
-/* Card 3: Signals & Guidance Side-by-Side */
-.msg-deck-split {
+/* 3. BOTTOM FULL-WIDTH SPLIT DECK: SIGNALS & GUIDANCE */
+.msg-bottom-deck {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 24px;
+  margin-bottom: 24px;
 }
-@media (max-width: 768px) {
-  .msg-deck-split {
+@media (max-width: 860px) {
+  .msg-bottom-deck {
     grid-template-columns: 1fr;
   }
 }
@@ -3065,17 +3055,17 @@
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 18px;
-  padding: 20px;
+  padding: 22px 24px;
   box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
 }
 .msg-deck-title {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 800;
   color: #0F172A;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 /* Emergency Helpline Notice */
@@ -5356,7 +5346,7 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               <span>SMS / CHAT NLP</span>
             </span>
-            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message, SMS, or notice to analyze..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
+            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message, SMS, parcel notice, or Telegram task to analyze..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
             <button type="button" class="msg-dock-clear" onclick="clearQuickMsgInput()" title="Clear">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
@@ -5368,6 +5358,7 @@
           <!-- Quick Preset Chips -->
           <div class="msg-dock-presets">
             <span class="msg-preset-label">Test Samples:</span>
+            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Claims a parcel (from USPS, FedEx, UPS, or local couriers) is held up, missing a redelivery fee, or requires address updates via a phishing link.')">📦 Courier Redelivery Phishing</button>
             <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Dear consumer your electricity power will be disconnected tonight at 9:30 PM from electricity office. Please call immediately 9876543210 or download http://bijli-update.apk')">⚡ Electricity Cut</button>
             <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Dear SBI customer, your netbanking has been blocked due to pending KYC update. Click https://sbi-kyc-verify.com to submit your Aadhaar and OTP immediately.')">🏦 Bank KYC Phishing</button>
             <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('CBI Cyber Cell notice: A digital arrest warrant has been issued against your Aadhaar for illegal narcotics parcel. Do not disconnect call and transfer Rs 50,000 to clearing account.')">🚓 Digital Arrest</button>
@@ -5423,67 +5414,59 @@
           </div>
         </div>
 
-        <!-- 2. The Core Asymmetrical 2-Column Workspace -->
+        <!-- 2. Balanced 2-Column Forensic Workspace -->
         <div class="msg-forensic-grid">
           
-          <!-- LEFT COLUMN: Realistic Smartphone SMS / Evidence Inspector -->
-          <div class="msg-phone-frame">
-            <!-- Phone Top Status Bar -->
-            <div class="phone-status-bar">
-              <span>9:41 AM</span>
-              <div class="phone-status-icons">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 21l3.54-.62C9.33 20.72 10.63 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
-                <span style="font-size:0.6875rem;">5G</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2" ry="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg>
-              </div>
+          <!-- LEFT COLUMN: Evaluated Message Dossier & Payloads -->
+          <div class="msg-evidence-card">
+            <div class="evidence-card-header">
+              <h3 class="evidence-card-title">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Evaluated Message Body & Evidence</span>
+              </h3>
+              <span class="evidence-protocol-tag">CELLULAR SMS GSM PDU</span>
             </div>
 
-            <!-- Phone Sender Identity Bar -->
-            <div class="phone-sender-bar">
-              <div class="phone-sender-avatar" id="msg-avatar-icon">
+            <!-- Sender Telemetry Strip -->
+            <div class="evidence-sender-bar">
+              <div class="evidence-sender-avatar" id="msg-avatar-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </div>
-              <div class="phone-sender-info">
-                <div class="phone-sender-name" id="msg-val-sender">AX-NOTIFY</div>
-                <div class="phone-sender-sub" id="msg-sender-type">Unregistered Private Mobile (Violates TRAI TCCCPR 2018)</div>
+              <div class="evidence-sender-info">
+                <div class="evidence-sender-name" id="msg-val-sender">AX-NOTIFY</div>
+                <div class="evidence-sender-sub" id="msg-sender-type">Unregistered Private Mobile (Violates TRAI TCCCPR 2018)</div>
               </div>
-              <span class="phone-channel-pill" id="msg-wa-status-text" style="font-size: 0.6875rem; font-weight: 700; color: #DC2626; background: #FEF2F2; padding: 3px 8px; border-radius: 6px; border: 1px solid #FECACA;">Unverified</span>
+              <span class="phone-channel-pill" id="msg-wa-status-text" style="font-size: 0.6875rem; font-weight: 700; color: #DC2626; background: #FEF2F2; padding: 4px 10px; border-radius: 6px; border: 1px solid #FECACA;">Unverified</span>
             </div>
 
-            <!-- Phone Screen Message Area -->
-            <div class="phone-screen-body">
-              <div class="phone-date-divider">
-                <span>Today • Cellular SMS</span>
+            <!-- The Evaluated Message Content Box -->
+            <div class="msg-body-box">
+              <div id="msg-bubble-content">Analyzing suspicious message tokens...</div>
+              <div class="msg-body-meta">
+                <span>Timestamp: <strong id="msg-bubble-time" style="color:#475569;">10:42 AM</strong></span>
+                <span id="msg-bubble-ticks"><span style="color: #2563EB; font-weight: bold;">✓✓ Delivered</span></span>
               </div>
+            </div>
 
-              <!-- The Speech Bubble with Forensic Token Highlighting -->
-              <div class="msg-speech-bubble">
-                <div id="msg-bubble-content">Analyzing suspicious message tokens...</div>
-                <div class="msg-bubble-meta">
-                  <span id="msg-bubble-time">10:42 AM</span>
-                  <span id="msg-bubble-ticks"><span style="color: #2563EB; font-weight: bold;">✓✓</span></span>
-                </div>
+            <!-- Extracted Interactive Payloads -->
+            <div class="evidence-payloads-box">
+              <div class="evidence-payloads-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Extracted Threat Payloads & Quarantined Links</span>
               </div>
-
-              <!-- Extracted Interactive Entities / Quarantined Payloads -->
-              <div class="phone-payloads-card">
-                <div class="phone-payloads-title">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                  <span>Extracted Interactive Payloads</span>
-                </div>
-                <div id="msg-extracted-container">
-                  <div style="font-size:0.8125rem; color:#64748B; padding:4px 0;">
-                    No embedded web links, phone numbers, or UPI handles detected in message body.
-                  </div>
+              <div id="msg-extracted-container">
+                <div style="font-size:0.8125rem; color:#64748B; padding:4px 0;">
+                  No embedded web links, phone numbers, or UPI handles detected in message body.
                 </div>
               </div>
             </div>
 
-            <!-- In-Phone Interactive Testing Bar -->
-            <form class="phone-bottom-bar" onsubmit="handleInPhoneMsgSubmit(event); return false;">
-              <input type="text" id="phone-chat-input" class="phone-bottom-input" placeholder="Type or paste message to simulate live..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
-              <button type="submit" id="phone-chat-send-btn" class="phone-bottom-send" onclick="handleInPhoneMsgSubmit(event)" title="Simulate incoming message">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <!-- In-Card Interactive Test Bar -->
+            <form class="evidence-test-bar" onsubmit="handleInPhoneMsgSubmit(event); return false;">
+              <input type="text" id="phone-chat-input" class="evidence-test-input" placeholder="Type or paste any text to test live in simulator..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
+              <button type="submit" id="phone-chat-send-btn" class="evidence-test-btn" onclick="handleInPhoneMsgSubmit(event)" title="Simulate incoming message">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <span>Inspect Live</span>
               </button>
             </form>
 
@@ -5495,8 +5478,8 @@
             <div style="display:none;" id="phone-sms-send-btn"></div>
           </div>
 
-          <!-- RIGHT COLUMN: Threat Risk Assessment & Forensic Matrix -->
-          <div class="msg-intel-column">
+          <!-- RIGHT COLUMN: Threat Risk Assessment & Manipulation Matrix -->
+          <div class="msg-intel-card">
             
             <!-- 1. Executive Threat Verdict Card -->
             <div class="msg-verdict-card">
@@ -5620,34 +5603,34 @@
               </div>
             </div>
 
-            <!-- 3. Signals and Recommendations Deck -->
-            <div class="msg-deck-split">
-              <!-- Heuristic Signals -->
-              <div class="msg-deck-card">
-                <div class="msg-deck-title">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-                    <span>Heuristic Threat Signals</span>
-                  </div>
-                  <span class="signals-badge" id="msg-signals-count" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: #FEF2F2; color: #991B1B; font-weight: 700;">0 Signals</span>
-                </div>
-                <div id="msg-signals-container" class="signals-list"></div>
-              </div>
-
-              <!-- Recommended Protocols -->
-              <div class="msg-deck-card">
-                <div class="msg-deck-title">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    <span>Recommended Safety Protocols</span>
-                  </div>
-                </div>
-                <div id="msg-recommendations-list" class="recommendations-list"></div>
-              </div>
-            </div>
-
           </div>
 
+        </div>
+
+        <!-- 3. Full-Width Bottom Deck: Signals & Guidance -->
+        <div class="msg-bottom-deck">
+          <!-- Heuristic Signals -->
+          <div class="msg-deck-card">
+            <div class="msg-deck-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                <span>Heuristic Threat Signals & Risk Flags</span>
+              </div>
+              <span class="signals-badge" id="msg-signals-count" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: #FEF2F2; color: #991B1B; font-weight: 700;">0 Signals</span>
+            </div>
+            <div id="msg-signals-container" class="signals-list"></div>
+          </div>
+
+          <!-- Recommended Protocols -->
+          <div class="msg-deck-card">
+            <div class="msg-deck-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Recommended Safety Protocols & Incident Playbook</span>
+              </div>
+            </div>
+            <div id="msg-recommendations-list" class="recommendations-list"></div>
+          </div>
         </div>
 
         <!-- 4. Emergency Golden Hour Helpline Banner -->

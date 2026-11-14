@@ -2157,7 +2157,9 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
 
   // 4. Detected Strategy
   let strategy = 'Social Engineering Coercion';
-  if (/electricity|power|bijli|cut tonight/i.test(text)) {
+  if (/parcel|package|shipment|courier|fedex|ups|usps|dhl|india post|redelivery|delivery fee|address update/i.test(text)) {
+    strategy = '📦 Courier & Parcel Delivery Smishing';
+  } else if (/electricity|power|bijli|cut tonight/i.test(text)) {
     strategy = '⚡ Electricity Disconnection Extortion';
   } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
     strategy = '🚓 Digital Arrest Law Enforcement Threat';
@@ -2243,7 +2245,9 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   }
   const gaugeSummary = document.getElementById('msg-gauge-summary');
   if (gaugeSummary) {
-    if (riskScore >= 70) {
+    if (/courier|parcel|delivery/i.test(strategy)) {
+      gaugeSummary.textContent = 'High risk! Natural language processing detected a parcel delivery smishing scam impersonating courier brands (USPS, FedEx, UPS). Scammers use fake package hold warnings and redelivery fee demands to steal credit cards and credentials.';
+    } else if (riskScore >= 70) {
       gaugeSummary.textContent = 'High danger! Natural language processing detected coercive social engineering, extortion threats, or malicious payload lures designed to manipulate the recipient.';
     } else if (riskScore >= 35) {
       gaugeSummary.textContent = 'Caution advised. This message contains elevated urgency, unverified corporate claims, or suspicious links. Verify independently before replying or clicking.';
@@ -2282,7 +2286,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     'electricity', 'power', 'bijli', 'disconnected?', 'cut tonight', 'account blocked',
     'immediately', 'urgently?', 'urgent', 'within \\d+ hours?', 'police', 'cbi', 'arrest',
     'customs', 'narcotics', 'warrant', 'apk', 'deactivated', 'immediate action', 'notice',
-    'final warning', 'cutoff', 'suspended', 'penalty', 'cyber crime', 'court order'
+    'final warning', 'cutoff', 'suspended', 'penalty', 'cyber crime', 'court order', 'parcel', 'package', 'shipment', 'held up', 'on hold', 'redelivery fee', 'delivery fee', 'address updates?', 'phishing link', 'phishing', 'customs fee', 'undelivered', 'consignment'
   ];
   criticalWords.forEach(kw => {
     const re = new RegExp(`\\b(${kw})\\b`, 'gi');
@@ -2304,7 +2308,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const authorityWords = [
     'msedcl', 'bescom', 'tneb', 'dhbvn', 'uppcl', 'sbi', 'hdfc', 'icici', 'axis bank',
     'punjab national', 'bank of baroda', 'paytm', 'phonepe', 'google pay', 'india post',
-    'fedex', 'dhl', 'rbi', 'trai', 'kbc'
+    'fedex', 'dhl', 'rbi', 'trai', 'kbc', 'usps', 'fedex', 'ups', 'dhl', 'india post', 'bluedart', 'speed post', 'couriers?'
   ];
   authorityWords.forEach(kw => {
     const re = new RegExp(`\\b(${kw})\\b`, 'gi');
@@ -2344,10 +2348,10 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   }
 
   // Vector 2: Authority Impersonation
-  const hasAuth = /(electricity|discom|msedcl|bescom|tneb|uppcl|police|cbi|customs|court|rbi|sbi|hdfc|icici|fedex|dhl|india post)/i.test(text);
-  if (hasAuth) {
-    setPsychVector('authority', 'Severe (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Impersonates official public agency or bank');
-  } else if (/bank|courier|delivery|telecom/i.test(text)) {
+  const hasAuth = /(electricity|discom|msedcl|bescom|tneb|uppcl|police|cbi|customs|court|rbi|sbi|hdfc|icici|fedex|dhl|india post|usps|ups|courier)/i.test(text);
+  if (riskScore >= 40 && hasAuth) {
+    setPsychVector('authority', 'Severe (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Impersonates courier, discom, bank, or police');
+  } else if (riskScore >= 25 && hasAuth) {
     setPsychVector('authority', 'Mild (35%)', 'psych-badge-elevated', '35%', '#D97706', 'Generic corporate entity referenced');
   } else {
     setPsychVector('authority', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No authority or public body spoofed');
@@ -2392,7 +2396,19 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
       waStatusEl.style.background = '#FEF2F2';
       waStatusEl.style.borderColor = '#FECACA';
     }
-  } else if (/swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart|otp/i.test(text)) {
+  } else if (riskScore >= 40 && /usps|fedex|ups|dhl|india post|courier|msedcl|sbi|hdfc|icici/i.test(text)) {
+    const brandMatch = text.match(/\b(usps|fedex|ups|dhl|india post|courier|msedcl|sbi|hdfc|icici)\b/i);
+    const brandName = brandMatch ? brandMatch[0].toUpperCase() : 'COURIER';
+    if (senderEl) senderEl.textContent = `Spoofed: ${brandName}`;
+    if (smsSenderEl) smsSenderEl.textContent = `Spoofed: ${brandName}`;
+    if (senderTypeEl) senderTypeEl.textContent = '🚨 Brand Impersonation Smishing Route (Unauthorized)';
+    if (waStatusEl) {
+      waStatusEl.textContent = '🚨 Spoofed Brand';
+      waStatusEl.style.color = '#DC2626';
+      waStatusEl.style.background = '#FEF2F2';
+      waStatusEl.style.borderColor = '#FECACA';
+    }
+  } else if (riskScore < 30 && /swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart|otp/i.test(text)) {
     const brandMatch = text.match(/\b(swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart)\b/i);
     const brandName = brandMatch ? brandMatch[0].toUpperCase() : 'ENTERPRISE';
     if (senderEl) senderEl.textContent = `VM-${brandName.substring(0, 6)}`;
