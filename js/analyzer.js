@@ -2055,23 +2055,18 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const headerBtn = document.getElementById('btn-header-reparse-nlp');
   if (headerBtn) {
     headerBtn.disabled = false;
-    headerBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg><span>Re-check Message</span>';
   }
   const dockBtn = document.getElementById('msg-quick-btn');
   if (dockBtn) {
     dockBtn.disabled = false;
-    dockBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Check Message</span>';
+    dockBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Check</span>';
   }
 
   // 2. Pre-fill quick dock input
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = text;
 
-  // 3. Update character count
-  const charEl = document.getElementById('msg-char-len-display');
-  if (charEl) charEl.textContent = text ? text.length + ' characters' : '';
-
-  // 4. Detected Plain-English Strategy
+  // 3. Detected Plain-English Strategy
   let strategy = 'Suspicious Message';
   if (/parcel|package|shipment|courier|fedex|ups|usps|dhl|india post|redelivery|delivery fee|address update/i.test(text)) {
     strategy = 'Fake Courier Delivery Scam';
@@ -2094,100 +2089,149 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const stratEl = document.getElementById('msg-val-strategy');
   if (stratEl) stratEl.textContent = strategy;
 
-  // 5. Update Main Title
+  // 4. Update Main Title
   const verdictTitle = document.getElementById('msg-gauge-verdict-title');
   if (verdictTitle) {
     verdictTitle.textContent = strategy;
   }
 
-  // 6. Status Icon & Header Tag
+  // 5. Status Icon & Header Tag
   const statusIcon = document.getElementById('msg-status-icon-box');
   const headerPill = document.getElementById('msg-header-status-pill');
   if (riskScore >= 70) {
     if (statusIcon) {
-      statusIcon.className = 'msg-status-icon-wrap msg-status-icon-danger';
-      statusIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+      statusIcon.className = 'msg-clean-icon danger';
+      statusIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
     }
     if (headerPill) {
-      headerPill.className = 'msg-verdict-tag danger';
-      headerPill.innerHTML = '<span>🚨 CRITICAL SCAM DETECTED</span>';
+      headerPill.className = 'msg-clean-badge danger';
+      headerPill.textContent = '🚨 CRITICAL SCAM DETECTED';
     }
   } else if (riskScore >= 35) {
     if (statusIcon) {
-      statusIcon.className = 'msg-status-icon-wrap msg-status-icon-warning';
-      statusIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+      statusIcon.className = 'msg-clean-icon warning';
+      statusIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
     }
     if (headerPill) {
-      headerPill.className = 'msg-verdict-tag warning';
-      headerPill.innerHTML = '<span>⚠️ SUSPICIOUS MESSAGE DETECTED</span>';
+      headerPill.className = 'msg-clean-badge warning';
+      headerPill.textContent = '⚠️ SUSPICIOUS MESSAGE DETECTED';
     }
   } else {
     if (statusIcon) {
-      statusIcon.className = 'msg-status-icon-wrap msg-status-icon-safe';
-      statusIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>';
+      statusIcon.className = 'msg-clean-icon safe';
+      statusIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>';
     }
     if (headerPill) {
-      headerPill.className = 'msg-verdict-tag safe';
-      headerPill.innerHTML = '<span>🟢 LIKELY SAFE MESSAGE</span>';
+      headerPill.className = 'msg-clean-badge safe';
+      headerPill.textContent = '🟢 LIKELY SAFE MESSAGE';
     }
   }
 
-  // 7. Threat Score Number & Level Pill
-  const gaugeScore = document.getElementById('msg-gauge-score');
-  if (gaugeScore) {
-    gaugeScore.textContent = riskScore;
-    gaugeScore.className = 'msg-score-val ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
-  }
-  const gaugePill = document.getElementById('msg-gauge-pill');
-  if (gaugePill) {
-    if (riskScore >= 70) {
-      gaugePill.style.background = '#FEF2F2';
-      gaugePill.style.color = '#991B1B';
-      gaugePill.textContent = 'CRITICAL SCAM';
-    } else if (riskScore >= 35) {
-      gaugePill.style.background = '#FFFBEB';
-      gaugePill.style.color = '#92400E';
-      gaugePill.textContent = 'HIGH RISK';
-    } else {
-      gaugePill.style.background = '#ECFDF5';
-      gaugePill.style.color = '#065F46';
-      gaugePill.textContent = 'SAFE';
-    }
-  }
-
-  // 8. Plain-English Summary
-  const gaugeSummary = document.getElementById('msg-gauge-summary');
-  if (gaugeSummary) {
-    gaugeSummary.className = 'msg-summary-banner ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
-    if (/courier|parcel|delivery/i.test(strategy)) {
-      gaugeSummary.textContent = 'This message looks like a parcel delivery scam. Scammers pretend to be couriers like FedEx or USPS claiming a package is on hold to trick you into clicking a link or paying a fake fee.';
-    } else if (/electricity|power|bijli/i.test(strategy)) {
-      gaugeSummary.textContent = 'This message looks like an electricity disconnection scam. Electricity boards follow formal billing cycles and will never threaten immediate cutoff tonight via an unofficial text message.';
-    } else if (/bank|kyc|netbanking/i.test(strategy)) {
-      gaugeSummary.textContent = 'This message is a banking phishing scam. Banks will never ask you to update KYC, submit passwords, or click links to unblock net-banking via SMS.';
-    } else if (riskScore >= 70) {
-      gaugeSummary.textContent = 'Dangerous scam! This message uses artificial pressure, false legal threats, or malicious links to steal money or passwords.';
-    } else if (riskScore >= 35) {
-      gaugeSummary.textContent = 'Suspicious message! This message contains unusual urgency, delivery hold claims, or requests for fees. Do not click links or call numbers provided.';
-    } else {
-      gaugeSummary.textContent = 'This message appears safe. No common phishing lures, urgency triggers, fake lottery claims, or OTP theft requests were detected.';
-    }
-  }
-
-  // 9. Sleek Minimalist Risk Meter Pointer
-  const pointer = document.getElementById('msg-gradient-pointer');
-  if (pointer) {
-    pointer.style.left = Math.min(100, Math.max(0, riskScore)) + '%';
-    pointer.style.borderColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#D97706' : '#059669');
-  }
-
-  // 10. Natural, Authentic Message Presentation (No AI candy-pill circus!)
+  // 6. Natural, Authentic Message Presentation
   const msgBubble = document.getElementById('msg-bubble-content');
   if (msgBubble) {
     msgBubble.textContent = text;
   }
 
-  // 11. Extracted Payloads (Shown ONLY if links or phones were found)
+  // 7. Plain-English Explanation
+  const gaugeSummary = document.getElementById('msg-gauge-summary');
+  if (gaugeSummary) {
+    gaugeSummary.className = 'msg-clean-explanation ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    if (/courier|parcel|delivery/i.test(strategy)) {
+      gaugeSummary.textContent = 'This message looks like a parcel delivery scam. Scammers pretend to be couriers like FedEx or USPS claiming a package is on hold to trick you into clicking a link or paying a fake fee.';
+    } else if (/electricity|power|bijli/i.test(strategy)) {
+      gaugeSummary.textContent = 'This message looks like an electricity cutoff scam. Electricity departments follow regular billing cycles and will never threaten immediate cutoff tonight via an unofficial SMS.';
+    } else if (/bank|kyc|netbanking/i.test(strategy)) {
+      gaugeSummary.textContent = 'This message is a banking phishing scam. Banks will never ask you to update KYC, submit passwords, or click links to unblock net-banking via SMS.';
+    } else if (riskScore >= 70) {
+      gaugeSummary.textContent = 'Dangerous scam! This message uses false urgency, fake threats, or malicious links to steal money or confidential information.';
+    } else if (riskScore >= 35) {
+      gaugeSummary.textContent = 'Suspicious message! This message contains unexpected urgency or requests for payments. Do not click links or call numbers provided.';
+    } else {
+      gaugeSummary.textContent = 'This looks like a normal everyday message. No common scam patterns, fake lottery claims, or OTP theft requests were detected.';
+    }
+  }
+
+  // 8. Human-Understandable Action Steps (3 Clear Rules)
+  const stepsEl = document.getElementById('msg-simple-steps');
+  if (stepsEl) {
+    if (riskScore >= 35) {
+      if (/courier|parcel|delivery/i.test(strategy)) {
+        stepsEl.innerHTML = `
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Do NOT tap any links</strong> in this message. Real couriers never send unverified payment links via SMS.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Never pay redelivery fees</strong> or share card/OTP details to release a parcel.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">✅</span>
+            <span><strong>Track your package directly</strong> on the official courier website or app using your original tracking number.</span>
+          </li>
+        `;
+      } else if (/electricity|power|bijli/i.test(strategy)) {
+        stepsEl.innerHTML = `
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Do NOT call the phone number</strong> in the SMS or download any app/APK files.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Do NOT transfer money</strong> to any personal mobile number or unknown bank account.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">✅</span>
+            <span><strong>Check your electricity bill status</strong> only on your official state electricity board portal or consumer app.</span>
+          </li>
+        `;
+      } else if (/bank|kyc|netbanking/i.test(strategy)) {
+        stepsEl.innerHTML = `
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Never share OTPs, passwords, or PINs</strong> with anyone, even if they claim to be bank officials.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Do NOT enter Aadhaar/PAN details</strong> on unofficial third-party websites sent via SMS.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">✅</span>
+            <span><strong>Visit your official bank branch</strong> or official banking app directly to verify account status.</span>
+          </li>
+        `;
+      } else {
+        stepsEl.innerHTML = `
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Do NOT click links</strong> or call numbers sent in unsolicited messages.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">❌</span>
+            <span><strong>Never share confidential details</strong> (OTP, passwords, UPI PINs) with strangers.</span>
+          </li>
+          <li class="msg-action-item">
+            <span class="msg-action-icon">✅</span>
+            <span><strong>Delete or block</strong> the sender on your phone.</span>
+          </li>
+        `;
+      }
+    } else {
+      stepsEl.innerHTML = `
+        <li class="msg-action-item">
+          <span class="msg-action-icon">✅</span>
+          <span><strong>No scam patterns detected.</strong> This message appears safe for normal conversation.</span>
+        </li>
+        <li class="msg-action-item">
+          <span class="msg-action-icon">💡</span>
+          <span><strong>Standard Safety Tip:</strong> Always verify caller and sender identity before sharing personal or banking information.</span>
+        </li>
+      `;
+    }
+  }
+
+  // 9. Extracted Payloads (Shown ONLY if links or phones were found)
   const extractedContainer = document.getElementById('msg-extracted-container');
   if (extractedContainer) {
     const urls = data.embeddedUrls || [];
@@ -2197,7 +2241,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
       extractedContainer.style.display = 'none';
     } else {
       extractedContainer.style.display = 'block';
-      let chipsHtml = '<div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">';
+      let chipsHtml = '';
       urls.forEach(u => {
         chipsHtml += `
           <div class="extracted-chip">
@@ -2214,26 +2258,15 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
           </div>
         `;
       });
-      chipsHtml += '</div>';
       extractedContainer.innerHTML = chipsHtml;
     }
   }
 
-  // 12. Context-Aware Action Buttons
-  const emergBtn = document.querySelector('#view-message .msg-btn-emergency');
-  const reportBtn = document.querySelector('#view-message .msg-btn-report');
+  // 10. Action Buttons (Dial 1930 only if scam)
+  const emergBtn = document.getElementById('msg-btn-1930') || document.querySelector('#view-message .msg-btn-emergency');
   if (emergBtn) {
     emergBtn.style.display = riskScore >= 50 ? 'inline-flex' : 'none';
   }
-  if (reportBtn) {
-    reportBtn.innerHTML = riskScore >= 50 ?
-      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Report Scam</span>' :
-      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span>Report Message</span>';
-  }
-
-  // 13. Render Clean Signals & Recommendations
-  renderSignalsList(signals, theme, 'msg-signals-container', 'msg-signals-count');
-  renderRecommendationsList(recommendations, theme, 'msg-recommendations-list');
 }
 
 
