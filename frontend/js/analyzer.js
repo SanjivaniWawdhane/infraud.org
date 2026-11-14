@@ -1584,7 +1584,6 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   }
 
   const countryName = data.normalized ? data.normalized.countryName : 'India';
-  const callingCode = data.normalized ? data.normalized.callingCode : '+91';
   const isDomestic = !data.normalized || data.normalized.countryCode === 'IN';
   const flag = isDomestic ? '🇮🇳 ' : '🌐 ';
 
@@ -1594,225 +1593,159 @@ function renderPhoneView(data, theme, riskScore, signals, recommendations) {
   const circleName = carrier.circle || (isDomestic ? 'Maharashtra & Goa Circle [MH]' : 'International Network');
   const lineTypeStr = (data.lineType || 'CELLULAR MOBILE').toUpperCase();
 
-  // 1. Identity Display Elements
-  const phoneTargetDisplay = document.getElementById('phone-target-display');
-  if (phoneTargetDisplay) phoneTargetDisplay.textContent = `${flag}${formatted}`;
-
-  const tcNatDisplay = document.getElementById('tc-nat-display');
-  if (tcNatDisplay) tcNatDisplay.textContent = nationalFormatted || (data.normalized ? data.normalized.national : '');
-
-  // Caller Classification & Name
-  const tcCallerName = document.getElementById('tc-caller-name');
-  const tcVerifiedPill = document.getElementById('tc-verified-pill');
-  const tcVerifiedText = document.getElementById('tc-verified-text');
-  const tcAvatar = document.getElementById('tc-avatar');
-  const tcAvatarInitials = document.getElementById('tc-avatar-initials');
-  const tcAvatarBadge = document.getElementById('tc-avatar-badge');
-
   const isOfficial = data.isVerifiedOfficial || riskScore <= 10;
   const isScam = riskScore >= 70;
   const isTrai140 = (signals || []).some(s => s.id === 'TRAI_140_TELEMARKETING');
 
-  // Derive caller name and avatar
-  let callerName = `${operatorName} Subscriber`;
-  let initials = operatorName.slice(0, 2).toUpperCase();
+  // 1. Verdict & Status Bar
+  const statusIconWrap = document.getElementById('phone-status-icon-wrap');
+  const verdictTag = document.getElementById('phone-verdict-tag');
+  const verdictTitle = document.getElementById('phone-verdict-title');
+  const scoreNum = document.getElementById('phone-score-num');
+  const scoreLevel = document.getElementById('phone-score-level');
+  const plainSummary = document.getElementById('phone-plain-summary');
+  const btnCall1930 = document.getElementById('phone-btn-call-1930');
 
-  if (isOfficial) {
-    callerName = data.verifiedEntity ? data.verifiedEntity.name : (digits.startsWith('1800') ? 'Verified Official Helpline (Toll-Free)' : 'Verified Official Organization');
-    initials = '✓';
-  } else if (isScam) {
-    const scamSignal = (signals || []).find(s => s.severity === 'critical') || (signals || [])[0];
-    callerName = scamSignal ? `⚠️ Suspected Fraud: ${scamSignal.title}` : '⚠️ Suspected Telecom Extortion / Scam';
-    initials = '⚠️';
-  } else if (isTrai140) {
-    callerName = 'Commercial Telemarketing / Promotional Line';
-    initials = '140';
+  if (scoreNum) {
+    scoreNum.textContent = riskScore;
+    scoreNum.className = 'msg-score-clean-num ' + (isScam ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
   }
 
-  if (tcCallerName) tcCallerName.textContent = callerName;
-
-  // Avatar styling
-  if (tcAvatar && tcAvatarInitials) {
-    tcAvatarInitials.textContent = initials;
+  if (scoreLevel) {
     if (isScam) {
-      tcAvatar.className = 'tc-avatar tc-avatar-scam';
-      if (tcAvatarBadge) {
-        tcAvatarBadge.className = 'tc-avatar-badge tc-badge-scam';
-        tcAvatarBadge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-      }
+      scoreLevel.textContent = 'CRITICAL SCAM';
+      scoreLevel.style.background = '#FEE2E2';
+      scoreLevel.style.color = '#991B1B';
     } else if (isTrai140) {
-      tcAvatar.className = 'tc-avatar tc-avatar-caution';
-      if (tcAvatarBadge) {
-        tcAvatarBadge.className = 'tc-avatar-badge';
-        tcAvatarBadge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-      }
-    } else {
-      tcAvatar.className = 'tc-avatar tc-avatar-clean';
-      if (tcAvatarBadge) {
-        tcAvatarBadge.className = 'tc-avatar-badge';
-        tcAvatarBadge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-      }
-    }
-  }
-
-  // Verified Pill
-  if (tcVerifiedPill && tcVerifiedText) {
-    if (isScam) {
-      tcVerifiedPill.className = 'tc-verified-pill tc-pill-scam';
-      tcVerifiedText.textContent = '🚨 Flagged High-Risk Threat';
-    } else if (isTrai140) {
-      tcVerifiedPill.className = 'tc-verified-pill tc-pill-caution';
-      tcVerifiedText.textContent = '⚠️ Commercial Telemarketer (TRAI 140)';
+      scoreLevel.textContent = 'TELEMARKETER';
+      scoreLevel.style.background = '#FEF3C7';
+      scoreLevel.style.color = '#92400E';
     } else if (isOfficial) {
-      tcVerifiedPill.className = 'tc-verified-pill tc-pill-clean';
-      tcVerifiedText.textContent = '✅ Verified Official Helpline';
-    } else {
-      tcVerifiedPill.className = 'tc-verified-pill tc-pill-clean';
-      tcVerifiedText.textContent = 'Verified Domestic Subscriber';
-    }
-  }
-
-  // Metadata tags
-  const tcCarrierText = document.getElementById('tc-carrier-text');
-  if (tcCarrierText) tcCarrierText.textContent = operatorName;
-
-  const tcCircleText = document.getElementById('tc-circle-text');
-  if (tcCircleText) tcCircleText.textContent = circleName;
-
-  const tcLinetypeText = document.getElementById('tc-linetype-text');
-  if (tcLinetypeText) {
-    if (lineTypeStr === 'TOLL_FREE' || lineTypeStr === 'TOLL-FREE') tcLinetypeText.textContent = 'Toll-Free (1800)';
-    else if (lineTypeStr === 'VOIP') tcLinetypeText.textContent = 'VoIP Virtual Line';
-    else if (lineTypeStr === 'FIXED_LINE' || lineTypeStr === 'LANDLINE') tcLinetypeText.textContent = 'Fixed Landline';
-    else tcLinetypeText.textContent = 'Cellular Mobile (5G/LTE)';
-  }
-
-  // 2. Horizontal Stats Strip
-  const tcSearchesNum = document.getElementById('tc-searches-num');
-  if (tcSearchesNum) {
-    const sCount = (data.onlineDirectory && typeof data.onlineDirectory.searches === 'number') ? data.onlineDirectory.searches : 0;
-    tcSearchesNum.textContent = sCount.toLocaleString();
-  }
-
-  const tcReportsNum = document.getElementById('tc-reports-num');
-  if (tcReportsNum) {
-    const rCount = data.communityReportCount || 0;
-    if (rCount > 0 || isScam) {
-      tcReportsNum.textContent = `${rCount > 0 ? rCount : 1} Report${rCount > 1 ? 's' : ''}`;
-      tcReportsNum.className = 'tc-stat-num tc-stat-danger';
-    } else {
-      tcReportsNum.textContent = '0 Reports';
-      tcReportsNum.className = 'tc-stat-num tc-stat-clean';
-    }
-  }
-
-  const tcCategoryText = document.getElementById('tc-category-text');
-  if (tcCategoryText) {
-    if (isScam) tcCategoryText.textContent = 'Extortion / Impersonation';
-    else if (isTrai140) tcCategoryText.textContent = 'Promotional UCC';
-    else if (isOfficial) tcCategoryText.textContent = 'Official Service Channel';
-    else tcCategoryText.textContent = 'Personal Mobile Line';
-  }
-
-  const tcRiskStatus = document.getElementById('tc-risk-status');
-  if (tcRiskStatus) {
-    if (isScam) {
-      tcRiskStatus.textContent = `Critical Threat (${riskScore}%)`;
-      tcRiskStatus.className = 'tc-stat-num tc-stat-danger';
+      scoreLevel.textContent = 'VERIFIED SAFE';
+      scoreLevel.style.background = '#ECFDF5';
+      scoreLevel.style.color = '#065F46';
     } else if (riskScore >= 35) {
-      tcRiskStatus.textContent = `Moderate Caution (${riskScore}%)`;
-      tcRiskStatus.className = 'tc-stat-num';
-      tcRiskStatus.style.color = '#D97706';
+      scoreLevel.textContent = 'MODERATE CAUTION';
+      scoreLevel.style.background = '#FEF3C7';
+      scoreLevel.style.color = '#92400E';
     } else {
-      tcRiskStatus.textContent = `Low Risk (${riskScore}%)`;
-      tcRiskStatus.className = 'tc-stat-num tc-stat-clean';
+      scoreLevel.textContent = 'LOW RISK';
+      scoreLevel.style.background = '#ECFDF5';
+      scoreLevel.style.color = '#065F46';
     }
   }
 
-  // 3. Technical Specifications Tables
-  const specOperator = document.getElementById('tc-spec-operator');
-  if (specOperator) specOperator.textContent = carrier.operator || operatorName;
-
-  const specCircle = document.getElementById('tc-spec-circle');
-  if (specCircle) specCircle.textContent = circleName;
-
-  const specSeries = document.getElementById('tc-spec-series');
-  if (specSeries) {
-    specSeries.textContent = nationalDigits.length >= 4 ? `${nationalDigits.slice(0, 4)}-XXXXXX (DoT Allocation)` : 'Standard Series Block';
+  // Plain-Language Summary
+  let summaryText = '';
+  if (isScam) {
+    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-danger';
+    if (verdictTag) { verdictTag.textContent = '🚨 FRAUD / SCAM CALL DETECTED'; verdictTag.className = 'msg-verdict-tag danger'; }
+    if (verdictTitle) {
+      const scamSig = (signals || []).find(s => s.severity === 'critical') || (signals || [])[0];
+      verdictTitle.textContent = scamSig ? `Suspected Fraud: ${scamSig.title}` : 'Suspected Extortion / Fake Courier Scam';
+    }
+    if (plainSummary) plainSummary.className = 'msg-plain-summary danger';
+    if (btnCall1930) btnCall1930.style.display = 'inline-flex';
+    summaryText = `This phone number is flagged in cybercrime reports for extortion scams (often impersonating FedEx parcel holds, Customs, or Police threatening 'Digital Arrest'). Disconnect immediately and never transfer money or share OTPs.`;
+  } else if (isTrai140) {
+    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-warning';
+    if (verdictTag) { verdictTag.textContent = '⚠️ COMMERCIAL TELEMARKETING'; verdictTag.className = 'msg-verdict-tag warning'; }
+    if (verdictTitle) verdictTitle.textContent = 'Promotional Sales / Telemarketing Line';
+    if (plainSummary) plainSummary.className = 'msg-plain-summary warning';
+    if (btnCall1930) btnCall1930.style.display = 'none';
+    summaryText = `This caller operates in TRAI's 140 commercial telemarketing pool used for loans, credit cards, or promotional offers. Not flagged for cybercrime, but expect unsolicited sales pitches.`;
+  } else if (isOfficial) {
+    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-safe';
+    if (verdictTag) { verdictTag.textContent = '✅ VERIFIED OFFICIAL HELPLINE'; verdictTag.className = 'msg-verdict-tag safe'; }
+    const orgName = data.verifiedEntity ? data.verifiedEntity.name : (digits.startsWith('1800') ? 'Official Institutional Toll-Free Helpline' : 'Official Service Channel');
+    if (verdictTitle) verdictTitle.textContent = orgName;
+    if (plainSummary) plainSummary.className = 'msg-plain-summary safe';
+    if (btnCall1930) btnCall1930.style.display = 'none';
+    summaryText = `Authenticated institutional helpline registered to ${orgName}. Safe for customer service inquiries. Note: Official banks will never ask for your UPI PIN, password, or card CVV.`;
+  } else {
+    if (statusIconWrap) statusIconWrap.className = 'msg-status-icon-wrap msg-status-icon-safe';
+    if (verdictTag) { verdictTag.textContent = '📱 STANDARD MOBILE LINE'; verdictTag.className = 'msg-verdict-tag safe'; }
+    if (verdictTitle) verdictTitle.textContent = `${operatorName} Subscriber Line`;
+    if (plainSummary) plainSummary.className = 'msg-plain-summary safe';
+    if (btnCall1930) btnCall1930.style.display = 'none';
+    summaryText = `This is a standard individual cellular mobile SIM allocated to ${operatorName} in ${circleName}. No active cyber fraud complaints are recorded. Standard caution applies: never share OTPs or passwords over the phone.`;
   }
+  if (plainSummary) plainSummary.textContent = summaryText;
 
-  const specNnp = document.getElementById('tc-spec-nnp');
-  if (specNnp) {
-    specNnp.textContent = isDomestic ? '✅ Allocated & Validated' : 'ITU-T E.164 Plan';
-  }
+  // Segmented Meter Bar
+  const pointer = document.getElementById('phone-meter-pointer');
+  if (pointer) pointer.style.left = `${Math.min(Math.max(riskScore, 2), 98)}%`;
 
-  const phoneValFormatted = document.getElementById('phone-val-formatted');
-  if (phoneValFormatted) phoneValFormatted.textContent = data.normalized ? data.normalized.e164 : formatted;
+  ['phone-seg-safe', 'phone-seg-caution', 'phone-seg-risky', 'phone-seg-danger'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+  if (riskScore <= 25) document.getElementById('phone-seg-safe')?.classList.add('active');
+  else if (riskScore <= 50) document.getElementById('phone-seg-caution')?.classList.add('active');
+  else if (riskScore <= 75) document.getElementById('phone-seg-risky')?.classList.add('active');
+  else document.getElementById('phone-seg-danger')?.classList.add('active');
 
-  // Regulatory Specs
-  const isTrai160 = (signals || []).some(s => s.id === 'TRAI_160_TRANSACTIONAL');
-  const specTrai = document.getElementById('tc-spec-trai');
-  if (specTrai) {
-    if (isTrai140) specTrai.textContent = 'TRAI 140 Series (Commercial Telemarketing)';
-    else if (isTrai160 || isOfficial) specTrai.textContent = 'TRAI 160 Series (Official Transactional)';
-    else specTrai.textContent = 'Non-Commercial (Standard Domestic Line)';
-  }
+  // 2. Caller Overview Tiles
+  const tileTarget = document.getElementById('phone-tile-target');
+  if (tileTarget) tileTarget.textContent = `${flag}${formatted}`;
 
-  const specTelemarketer = document.getElementById('tc-spec-telemarketer');
-  if (specTelemarketer) {
-    if (isTrai140) {
-      specTelemarketer.textContent = '⚠️ Active in 140 commercial telemarketing';
-      specTelemarketer.className = 'tc-spec-val tc-red';
+  const tileNat = document.getElementById('phone-tile-nat');
+  if (tileNat) tileNat.textContent = nationalFormatted || (data.normalized ? data.normalized.national : '');
+
+  const tileCategory = document.getElementById('phone-tile-category');
+  const tileCategorySub = document.getElementById('phone-tile-category-sub');
+  if (tileCategory) {
+    if (isOfficial) {
+      tileCategory.textContent = 'Official Helpline';
+      if (tileCategorySub) tileCategorySub.textContent = data.verifiedEntity ? data.verifiedEntity.name : 'Institutional Support';
+    } else if (isScam) {
+      tileCategory.textContent = 'Reported Scam Line';
+      if (tileCategorySub) tileCategorySub.textContent = 'High-Risk Cyber Fraud';
+    } else if (isTrai140) {
+      tileCategory.textContent = 'TRAI Telemarketer';
+      if (tileCategorySub) tileCategorySub.textContent = '140 Commercial Series';
     } else {
-      specTelemarketer.textContent = 'Passed (Not in 140 commercial pool)';
-      specTelemarketer.className = 'tc-spec-val tc-green';
+      tileCategory.textContent = 'Personal Mobile SIM';
+      if (tileCategorySub) tileCategorySub.textContent = 'Individual Consumer';
     }
   }
 
-  const specChakshu = document.getElementById('tc-spec-chakshu');
-  if (specChakshu) {
-    if (isScam) {
-      specChakshu.textContent = '⚠️ Reported Suspected Fraud on Sanchar Saathi';
-      specChakshu.className = 'tc-spec-val tc-red';
-    } else {
-      specChakshu.textContent = 'Clean (No Suspected Fraud Reports)';
-      specChakshu.className = 'tc-spec-val tc-green';
-    }
-  }
+  const tileCarrier = document.getElementById('phone-tile-carrier');
+  const tileCarrierSub = document.getElementById('phone-tile-carrier-sub');
+  if (tileCarrier) tileCarrier.textContent = operatorName;
+  if (tileCarrierSub) tileCarrierSub.textContent = carrier.licenseType || 'Licensed Telecom Operator';
 
-  const spec1930 = document.getElementById('tc-spec-1930');
-  if (spec1930) {
-    if (isScam) {
-      spec1930.textContent = '🚨 Active Cybercrime Flags (1930 Portal)';
-      spec1930.className = 'tc-spec-val tc-red';
-    } else {
-      spec1930.textContent = '0 Matches Found (Clean)';
-      spec1930.className = 'tc-spec-val tc-green';
-    }
-  }
+  const tileCircle = document.getElementById('phone-tile-circle');
+  const tileCircleSub = document.getElementById('phone-tile-circle-sub');
+  if (tileCircle) tileCircle.textContent = circleName;
+  if (tileCircleSub) tileCircleSub.textContent = isDomestic ? 'Licensed Service Area (DoT)' : 'International Telecom';
 
-  const specDirectory = document.getElementById('tc-spec-directory');
-  if (specDirectory) {
-    const sCount = (data.onlineDirectory && typeof data.onlineDirectory.searches === 'number') ? data.onlineDirectory.searches : 0;
-    if (sCount > 0) {
-      specDirectory.textContent = `${sCount.toLocaleString()} Inquiries (Tellows / InFraud Community)`;
-    } else {
-      specDirectory.textContent = '0 Inquiries • Unlisted / New Number';
-    }
-  }
-
-  // Pre-fill quick input
+  // 3. Quick Input and Copy/Report Links
   const quickInput = document.getElementById('phone-quick-input');
   if (quickInput) {
     quickInput.value = nationalDigits.length === 10 ? nationalDigits : target;
   }
 
-  const reportBtn = document.getElementById('tc-report-btn');
+  const reportBtn = document.getElementById('phone-report-btn');
   if (reportBtn) {
     reportBtn.href = `reports.html?type=phone&target=${encodeURIComponent(target)}`;
   }
 
-  // 4. Populate Findings (Signals) & Safety Playbook (Recommendations)
+  // 4. Backward Compatibility Hidden Elements
+  const phoneTargetDisplay = document.getElementById('phone-target-display');
+  if (phoneTargetDisplay) phoneTargetDisplay.textContent = `${flag}${formatted}`;
+  const tcNatDisplay = document.getElementById('tc-nat-display');
+  if (tcNatDisplay) tcNatDisplay.textContent = nationalFormatted;
+  const tcCallerName = document.getElementById('tc-caller-name');
+  if (tcCallerName) tcCallerName.textContent = operatorName;
+  const tcCarrierText = document.getElementById('tc-carrier-text');
+  if (tcCarrierText) tcCarrierText.textContent = operatorName;
+  const tcCircleText = document.getElementById('tc-circle-text');
+  if (tcCircleText) tcCircleText.textContent = circleName;
+  const phoneValFormatted = document.getElementById('phone-val-formatted');
+  if (phoneValFormatted) phoneValFormatted.textContent = data.normalized ? data.normalized.e164 : formatted;
+
+  // 5. Signals & Recommendations
   renderSignalsList(signals, theme, 'phone-signals-container', 'phone-signals-count');
   renderRecommendationsList(recommendations, theme, 'phone-recommendations-list');
 }
@@ -2116,146 +2049,122 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const headerBtn = document.getElementById('btn-header-reparse-nlp');
   if (headerBtn) {
     headerBtn.disabled = false;
-    headerBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Re-parse NLP</span>`;
+    headerBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Re-check Message</span>`;
   }
   const dockBtn = document.getElementById('msg-quick-btn');
   if (dockBtn) {
     dockBtn.disabled = false;
-    dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Decode NLP</span>`;
+    dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Check Message</span>`;
   }
-  const chatSendBtn = document.getElementById('phone-chat-send-btn');
-  if (chatSendBtn) {
-    chatSendBtn.disabled = false;
-    chatSendBtn.style.opacity = '1';
-    chatSendBtn.style.transform = '';
-    chatSendBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
-  }
-  const smsSendBtn = document.getElementById('phone-sms-send-btn');
-  if (smsSendBtn) {
-    smsSendBtn.disabled = false;
-    smsSendBtn.style.opacity = '1';
-    smsSendBtn.style.transform = '';
-    smsSendBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
-  }
-  const pChatInput = document.getElementById('phone-chat-input');
-  if (pChatInput) pChatInput.value = '';
-  const pSmsInput = document.getElementById('phone-sms-input');
-  if (pSmsInput) pSmsInput.value = '';
-  const ticksEl = document.getElementById('msg-bubble-ticks');
-  if (ticksEl) ticksEl.innerHTML = '<span style="color: #53BDEB; font-weight: bold;">✓✓</span>';
-
 
   // 2. Pre-fill quick dock input
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = text;
 
-  // 3. Metadata counts
-  const words = text.split(/\s+/).filter(Boolean).length;
-  const chars = text.length;
-  const charEl = document.getElementById('msg-char-count');
-  if (charEl) charEl.textContent = `${chars} chars, ${words} words`;
-
-  // 4. Detected Strategy
-  let strategy = 'Social Engineering Coercion';
+  // 3. Detected Plain-English Strategy
+  let strategy = 'Suspicious Message';
   if (/parcel|package|shipment|courier|fedex|ups|usps|dhl|india post|redelivery|delivery fee|address update/i.test(text)) {
-    strategy = '📦 Courier & Parcel Delivery Smishing';
+    strategy = '📦 Fake Courier Delivery Scam';
   } else if (/electricity|power|bijli|cut tonight/i.test(text)) {
-    strategy = '⚡ Electricity Disconnection Extortion';
+    strategy = '⚡ Electricity Disconnection Threat';
   } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
-    strategy = '🚓 Digital Arrest Law Enforcement Threat';
+    strategy = '🚓 Fake Police / Digital Arrest Call';
   } else if (/job|part-time|like|youtube|telegram|daily income|hotel review/i.test(text)) {
-    strategy = '💼 Part-Time Prepaid Task / Job Scam';
+    strategy = '💼 Part-Time Job Offer Scam';
   } else if (/lottery|prize|winner|reward|kbc|cashback/i.test(text)) {
-    strategy = '💰 Lottery & Cash Prize Bait';
+    strategy = '💰 Fake Lottery & Cash Prize';
   } else if (/blocked|kyc|pan|aadhaar|deactivated|netbanking/i.test(text)) {
-    strategy = '🏦 Banking KYC & Account Freeze Phishing';
+    strategy = '🏦 Bank Account KYC Phishing';
   } else if (/apk|sideload|download/i.test(text)) {
-    strategy = '📦 Malicious Android APK Sideloading';
+    strategy = '📦 Dangerous App / APK Download';
   } else if (riskScore < 20) {
-    strategy = '✅ Benign / Everyday Communication';
+    strategy = '✅ Normal Everyday Message';
   }
+
   const stratEl = document.getElementById('msg-val-strategy');
   if (stratEl) stratEl.textContent = strategy;
 
-  // Set clean, professional Dossier Title on Header Card (replaces awkward truncated quotes)
-  const msgTitle = document.querySelector('#view-message .msg-target-title');
-  if (msgTitle) {
-    msgTitle.innerHTML = `<span style="color: #0F172A; font-weight: 800;">${escapeHtml(strategy)}</span>`;
+  // 4. Update Main Title
+  const verdictTitle = document.getElementById('msg-gauge-verdict-title');
+  if (verdictTitle) {
+    verdictTitle.textContent = strategy;
   }
 
-  // Context-aware Header Action Buttons (don't alarm users on clean everyday messages)
-  const reportBtn = document.querySelector('#view-message .msg-btn-report');
-  const emergBtn = document.querySelector('#view-message .msg-btn-emergency');
-  if (reportBtn) {
-    reportBtn.innerHTML = riskScore >= 50 ?
-      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Report Spammer (1909)</span>` :
-      `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span>Report Message</span>`;
-  }
-  if (emergBtn) {
-    emergBtn.style.display = riskScore >= 50 ? 'inline-flex' : 'none';
-  }
-
-  // 5. Header Status Pill
+  // 5. Status Icon & Header Tag
+  const statusIcon = document.getElementById('msg-status-icon-box');
   const headerPill = document.getElementById('msg-header-status-pill');
-  if (headerPill) {
-    if (riskScore >= 70) {
-      headerPill.className = 'msg-status-pill pill-danger';
+  if (riskScore >= 70) {
+    if (statusIcon) {
+      statusIcon.className = 'msg-status-icon-wrap msg-status-icon-danger';
+      statusIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+    }
+    if (headerPill) {
+      headerPill.className = 'msg-verdict-tag danger';
       headerPill.textContent = '🚨 CRITICAL SCAM DETECTED';
-    } else if (riskScore >= 35) {
-      headerPill.className = 'msg-status-pill pill-warning';
-      headerPill.textContent = '⚠️ SUSPICIOUS COERCION PATTERN';
-    } else {
-      headerPill.className = 'msg-status-pill pill-safe';
-      headerPill.textContent = '🛡️ BENIGN / CLEAN TEXT';
+    }
+  } else if (riskScore >= 35) {
+    if (statusIcon) {
+      statusIcon.className = 'msg-status-icon-wrap msg-status-icon-warning';
+      statusIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+    }
+    if (headerPill) {
+      headerPill.className = 'msg-verdict-tag warning';
+      headerPill.textContent = '⚠️ SUSPICIOUS MESSAGE DETECTED';
+    }
+  } else {
+    if (statusIcon) {
+      statusIcon.className = 'msg-status-icon-wrap msg-status-icon-safe';
+      statusIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>';
+    }
+    if (headerPill) {
+      headerPill.className = 'msg-verdict-tag safe';
+      headerPill.textContent = '✅ LIKELY SAFE MESSAGE';
     }
   }
 
-  // 6. Circular Threat Score Gauge
+  // 6. Threat Score Number & Pill
   const gaugeScore = document.getElementById('msg-gauge-score');
-  if (gaugeScore) gaugeScore.textContent = riskScore;
-  const gaugeCircle = document.getElementById('msg-gauge-circle');
-  if (gaugeCircle) {
-    const circumference = 427.2;
-    const offset = Math.max(0, circumference - (riskScore / 100) * circumference);
-    gaugeCircle.style.strokeDashoffset = offset;
-    gaugeCircle.style.stroke = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#D97706' : '#10B981');
+  if (gaugeScore) {
+    gaugeScore.textContent = riskScore;
+    gaugeScore.className = 'msg-score-clean-num ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
   }
   const gaugePill = document.getElementById('msg-gauge-pill');
   if (gaugePill) {
     if (riskScore >= 70) {
-      gaugePill.className = 'msg-gauge-status-badge pill-danger';
-      gaugePill.textContent = 'CRITICAL THREAT';
+      gaugePill.style.background = '#FEF2F2';
+      gaugePill.style.color = '#991B1B';
+      gaugePill.textContent = 'CRITICAL SCAM';
     } else if (riskScore >= 35) {
-      gaugePill.className = 'msg-gauge-status-badge pill-warning';
-      gaugePill.textContent = 'ELEVATED RISK';
+      gaugePill.style.background = '#FFFBEB';
+      gaugePill.style.color = '#92400E';
+      gaugePill.textContent = 'HIGH RISK';
     } else {
-      gaugePill.className = 'msg-gauge-status-badge pill-safe';
-      gaugePill.textContent = 'SAFE / LOW RISK';
+      gaugePill.style.background = '#ECFDF5';
+      gaugePill.style.color = '#065F46';
+      gaugePill.textContent = 'LOW RISK';
     }
   }
-  const verdictTitle = document.getElementById('msg-gauge-verdict-title');
-  if (verdictTitle) {
-    if (riskScore >= 70) {
-      verdictTitle.textContent = strategy ? strategy.replace(/^[^\w\s]+/, '').trim() : 'High Coercion Scam';
-    } else if (riskScore >= 35) {
-      verdictTitle.textContent = 'Suspicious Language Pattern';
-    } else {
-      verdictTitle.textContent = 'Clean / Low Risk Message';
-    }
-  }
+
+  // 7. Plain-English Summary
   const gaugeSummary = document.getElementById('msg-gauge-summary');
   if (gaugeSummary) {
+    gaugeSummary.className = 'msg-plain-summary ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
     if (/courier|parcel|delivery/i.test(strategy)) {
-      gaugeSummary.textContent = 'High risk! Natural language processing detected a parcel delivery smishing scam impersonating courier brands (USPS, FedEx, UPS). Scammers use fake package hold warnings and redelivery fee demands to steal credit cards and credentials.';
+      gaugeSummary.textContent = 'This message looks like a parcel delivery scam. Scammers pretend to be couriers like FedEx or USPS claiming a package is on hold to trick you into clicking a link or paying a fake fee.';
+    } else if (/electricity|power|bijli/i.test(strategy)) {
+      gaugeSummary.textContent = 'This message looks like an electricity disconnection scam. Electricity boards follow formal billing cycles and will never threaten immediate cutoff tonight via an unofficial text message.';
+    } else if (/bank|kyc|netbanking/i.test(strategy)) {
+      gaugeSummary.textContent = 'This message is a banking phishing scam. Banks will never ask you to update KYC, submit passwords, or click links to unblock net-banking via SMS.';
     } else if (riskScore >= 70) {
-      gaugeSummary.textContent = 'High danger! Natural language processing detected coercive social engineering, extortion threats, or malicious payload lures designed to manipulate the recipient.';
+      gaugeSummary.textContent = 'Dangerous scam! This message uses artificial pressure, false legal threats, or malicious links to steal money or passwords.';
     } else if (riskScore >= 35) {
-      gaugeSummary.textContent = 'Caution advised. This message contains elevated urgency, unverified corporate claims, or suspicious links. Verify independently before replying or clicking.';
+      gaugeSummary.textContent = 'Suspicious message! This message contains unusual urgency, delivery hold claims, or requests for fees. Do not click links or call numbers provided.';
     } else {
-      gaugeSummary.textContent = 'Low risk. Automated linguistic and structural forensics detected zero artificial urgency, fake lottery claims, or credential theft patterns.';
+      gaugeSummary.textContent = 'This message appears safe. No common phishing lures, urgency triggers, fake lottery claims, or OTP theft requests were detected.';
     }
   }
-  // 6b. Multi-Segment 4-Stage Meter Bar & Gradient Pointer
+
+  // 8. Meter Bar Segments & Pointer
   const segSafe = document.getElementById('msg-seg-safe');
   const segCaution = document.getElementById('msg-seg-caution');
   const segRisky = document.getElementById('msg-seg-risky');
@@ -2270,30 +2179,27 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   } else {
     if (segSafe) segSafe.classList.add('active');
   }
-
   const pointer = document.getElementById('msg-gradient-pointer');
   if (pointer) {
     pointer.style.left = Math.min(100, Math.max(0, riskScore)) + '%';
     pointer.style.borderColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#F59E0B' : '#10B981');
   }
 
-
-  // 7. Dynamic Syntax Highlighting for WhatsApp and SMS Views
+  // 9. Dynamic Highlighting of Dangerous Words
   let highlighted = escapeHtml(text);
-
-  // Critical Panic / Coercion keywords
   const criticalWords = [
     'electricity', 'power', 'bijli', 'disconnected?', 'cut tonight', 'account blocked',
     'immediately', 'urgently?', 'urgent', 'within \\d+ hours?', 'police', 'cbi', 'arrest',
     'customs', 'narcotics', 'warrant', 'apk', 'deactivated', 'immediate action', 'notice',
-    'final warning', 'cutoff', 'suspended', 'penalty', 'cyber crime', 'court order', 'parcel', 'package', 'shipment', 'held up', 'on hold', 'redelivery fee', 'delivery fee', 'address updates?', 'phishing link', 'phishing', 'customs fee', 'undelivered', 'consignment'
+    'final warning', 'cutoff', 'suspended', 'penalty', 'cyber crime', 'court order',
+    'parcel', 'package', 'shipment', 'held up', 'on hold', 'redelivery fee', 'delivery fee',
+    'address updates?', 'phishing link', 'phishing', 'customs fee', 'undelivered', 'consignment'
   ];
   criticalWords.forEach(kw => {
     const re = new RegExp(`\\b(${kw})\\b`, 'gi');
     highlighted = highlighted.replace(re, '<mark class="threat-kw-critical">$1</mark>');
   });
 
-  // Credential / Financial Harvester keywords
   const warnWords = [
     'otp', 'upi pin', 'mpin', 'pin', 'password', 'cvv', 'share', 'verify',
     'refund', 'cashback', 'lottery', 'winner', 'prize', 'reward', 'daily income',
@@ -2304,168 +2210,34 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     highlighted = highlighted.replace(re, '<mark class="threat-kw-warn">$1</mark>');
   });
 
-  // Authority & Brand Impersonation keywords
   const authorityWords = [
     'msedcl', 'bescom', 'tneb', 'dhbvn', 'uppcl', 'sbi', 'hdfc', 'icici', 'axis bank',
     'punjab national', 'bank of baroda', 'paytm', 'phonepe', 'google pay', 'india post',
-    'fedex', 'dhl', 'rbi', 'trai', 'kbc', 'usps', 'fedex', 'ups', 'dhl', 'india post', 'bluedart', 'speed post', 'couriers?'
+    'fedex', 'dhl', 'rbi', 'trai', 'kbc', 'usps', 'ups', 'bluedart', 'speed post', 'couriers?'
   ];
   authorityWords.forEach(kw => {
     const re = new RegExp(`\\b(${kw})\\b`, 'gi');
     highlighted = highlighted.replace(re, '<mark class="threat-kw-impersonation">$1</mark>');
   });
 
-  const waBubble = document.getElementById('msg-bubble-content');
-  if (waBubble) waBubble.innerHTML = highlighted;
+  const msgBubble = document.getElementById('msg-bubble-content');
+  if (msgBubble) msgBubble.innerHTML = highlighted;
 
-  const smsBubble = document.getElementById('msg-sms-bubble-content');
-  if (smsBubble) smsBubble.innerHTML = highlighted;
-
-  // 8. Dynamic 4-Vector Psychological Manipulation Radar
-  function setPsychVector(id, valText, badgeCls, fillPercent, fillColor, descText) {
-    const valEl = document.getElementById('psych-val-' + id);
-    if (valEl) {
-      valEl.textContent = valText;
-      valEl.className = 'psych-badge ' + badgeCls;
-    }
-    const barEl = document.getElementById('psych-bar-' + id);
-    if (barEl) {
-      barEl.style.width = fillPercent;
-      barEl.style.background = fillColor;
-    }
-    const descEl = document.getElementById('psych-desc-' + id);
-    if (descEl) descEl.textContent = descText;
-  }
-
-  // Vector 1: Urgency
-  const hasUrgency = /(immediately|urgent|tonight|within \d+ hours|power cut|disconnect|arrest|warrant|blocked|cutoff|final warning)/i.test(text);
-  if (hasUrgency) {
-    setPsychVector('urgency', 'Critical (90%)', 'psych-badge-critical', '90%', '#DC2626', 'Severe threat of immediate cutoff or arrest');
-  } else if (riskScore > 30) {
-    setPsychVector('urgency', 'Moderate (45%)', 'psych-badge-elevated', '45%', '#D97706', 'Mild urgency or time-sensitive request');
-  } else {
-    setPsychVector('urgency', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'Zero artificial urgency or panic triggers');
-  }
-
-  // Vector 2: Authority Impersonation
-  const hasAuth = /(electricity|discom|msedcl|bescom|tneb|uppcl|police|cbi|customs|court|rbi|sbi|hdfc|icici|fedex|dhl|india post|usps|ups|courier)/i.test(text);
-  if (riskScore >= 40 && hasAuth) {
-    setPsychVector('authority', 'Severe (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Impersonates courier, discom, bank, or police');
-  } else if (riskScore >= 25 && hasAuth) {
-    setPsychVector('authority', 'Mild (35%)', 'psych-badge-elevated', '35%', '#D97706', 'Generic corporate entity referenced');
-  } else {
-    setPsychVector('authority', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No authority or public body spoofed');
-  }
-
-  // Vector 3: Financial Greed / Task Bait
-  const hasGreed = /(lottery|kbc|winner|prize|reward|cashback|earn rs|daily income|part-time|telegram task|like youtube|ratings)/i.test(text);
-  if (hasGreed) {
-    setPsychVector('greed', 'Flagged (85%)', 'psych-badge-critical', '85%', '#DC2626', 'Unrealistic financial bounty or task bait');
-  } else {
-    setPsychVector('greed', 'Clean (5%)', 'psych-badge-clean', '5%', '#10B981', 'No unearned cash or job lures');
-  }
-
-  // Vector 4: Credentials / OTP Harvesting
-  const hasCreds = /(otp|one time password|upi pin|mpin|pin|password|cvv|netbanking|card details|share screen|anydesk|rustdesk|apk|sideload)/i.test(text);
-  if (hasCreds) {
-    setPsychVector('creds', 'Critical (95%)', 'psych-badge-critical', '95%', '#DC2626', 'Direct demands for OTP, PIN, or malicious APK');
-  } else {
-    setPsychVector('creds', 'Safe (5%)', 'psych-badge-clean', '5%', '#10B981', 'No requests for secrets or unverified APKs');
-  }
-
-  const pressureScore = document.getElementById('msg-pressure-score');
-  if (pressureScore) {
-    const liveColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#F59E0B' : '#10B981'); const liveText = riskScore >= 70 ? 'Critical Pressure' : (riskScore >= 35 ? 'Moderate Pressure' : 'Clean Communication'); pressureScore.innerHTML = `<span class="msg-live-dot" style="background: ${liveColor};"></span><span>${riskScore}% ${liveText}</span>`;
-  }
-
-  // 9. Sender & TRAI Compliance Analysis
-  const hasPhone = /(?:\+91[\s-]?)?[6-9]\d{9}/.test(text);
-  const senderEl = document.getElementById('msg-val-sender');
-  const smsSenderEl = document.getElementById('msg-sms-sender-header');
-  const senderTypeEl = document.getElementById('msg-sender-type');
-  const waStatusEl = document.getElementById('msg-wa-status-text');
-
-  if (hasPhone) {
-    const phoneMatch = text.match(/(?:\+91[\s-]?)?[6-9]\d{9}/)[0];
-    if (senderEl) senderEl.textContent = phoneMatch;
-    if (smsSenderEl) smsSenderEl.textContent = phoneMatch;
-    if (senderTypeEl) senderTypeEl.textContent = 'Unregistered Private Mobile (Violates TRAI TCCCPR 2018)';
-    if (waStatusEl) {
-      waStatusEl.textContent = '🚨 Unverified Mobile';
-      waStatusEl.style.color = '#DC2626';
-      waStatusEl.style.background = '#FEF2F2';
-      waStatusEl.style.borderColor = '#FECACA';
-    }
-  } else if (riskScore >= 40 && /usps|fedex|ups|dhl|india post|courier|msedcl|sbi|hdfc|icici/i.test(text)) {
-    const brandMatch = text.match(/\b(usps|fedex|ups|dhl|india post|courier|msedcl|sbi|hdfc|icici)\b/i);
-    const brandName = brandMatch ? brandMatch[0].toUpperCase() : 'COURIER';
-    if (senderEl) senderEl.textContent = `Spoofed: ${brandName}`;
-    if (smsSenderEl) smsSenderEl.textContent = `Spoofed: ${brandName}`;
-    if (senderTypeEl) senderTypeEl.textContent = '🚨 Brand Impersonation Smishing Route (Unauthorized)';
-    if (waStatusEl) {
-      waStatusEl.textContent = '🚨 Spoofed Brand';
-      waStatusEl.style.color = '#DC2626';
-      waStatusEl.style.background = '#FEF2F2';
-      waStatusEl.style.borderColor = '#FECACA';
-    }
-  } else if (riskScore < 30 && /swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart|otp/i.test(text)) {
-    const brandMatch = text.match(/\b(swiggy|zomato|sbi|hdfc|icici|axis|fedex|amazon|flipkart)\b/i);
-    const brandName = brandMatch ? brandMatch[0].toUpperCase() : 'ENTERPRISE';
-    if (senderEl) senderEl.textContent = `VM-${brandName.substring(0, 6)}`;
-    if (smsSenderEl) smsSenderEl.textContent = `VM-${brandName.substring(0, 6)}`;
-    if (senderTypeEl) senderTypeEl.textContent = 'TRAI DLT Registered Enterprise Alphanumeric Route';
-    if (waStatusEl) {
-      waStatusEl.textContent = '✓ Verified Sender';
-      waStatusEl.style.color = '#047857';
-      waStatusEl.style.background = '#ECFDF5';
-      waStatusEl.style.borderColor = '#A7F3D0';
-    }
-  } else {
-    if (senderEl) senderEl.textContent = 'Incoming Cellular SMS';
-    if (smsSenderEl) smsSenderEl.textContent = 'AX-NOTIFY';
-    if (senderTypeEl) senderTypeEl.textContent = 'Standard Private Peer-to-Peer SMS';
-    if (waStatusEl) {
-      waStatusEl.textContent = 'Cellular Message';
-      waStatusEl.style.color = '#475569';
-      waStatusEl.style.background = '#F1F5F9';
-      waStatusEl.style.borderColor = '#CBD5E1';
-    }
-  }
-
-  // 10. Extracted Threat Payloads
+  // 10. Extracted Payloads (Shown ONLY if links or phones were found)
   const extractedContainer = document.getElementById('msg-extracted-container');
   if (extractedContainer) {
     const urls = data.embeddedUrls || [];
     const phones = data.embeddedPhones || [];
-    const upis = data.embeddedUpis || [];
-
-    // Fallback regex extraction if empty
-    if (urls.length === 0) {
-      const urlMatches = text.match(/(?:https?:\/\/|www\.)[^\s<>"'{}|\\^`]+|[a-zA-Z0-9][-a-zA-Z0-9]{1,62}\.(?:com|org|net|in|xyz|top|link|live|app|download|online|site)(?:\/[^\s<>"'{}|\\^`]*)?/gi);
-      if (urlMatches) urls.push(...urlMatches);
-    }
-    if (phones.length === 0) {
-      const phoneMatches = text.match(/(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|1800[\s-]?[0-9]{3}[\s-]?[0-9]{3,4}\b/g);
-      if (phoneMatches) phones.push(...phoneMatches);
-    }
-    if (upis.length === 0) {
-      const upiMatches = text.match(/[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}/g);
-      if (upiMatches) upis.push(...upiMatches);
-    }
-
-    if (urls.length === 0 && phones.length === 0 && upis.length === 0) {
-      extractedContainer.innerHTML = `
-        <div style="font-size:0.8125rem; color:var(--ink-500); padding:4px 0;">
-          No embedded web links, phone numbers, or UPI handles detected in message body.
-        </div>
-      `;
+    if (urls.length === 0 && phones.length === 0) {
+      extractedContainer.innerHTML = '';
+      extractedContainer.style.display = 'none';
     } else {
-      let chipsHtml = '<div class="extracted-payloads-wrap">';
+      extractedContainer.style.display = 'block';
+      let chipsHtml = '<div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">';
       urls.forEach(u => {
-        const isApk = /\.apk(\?|$)/i.test(u) || /apk/i.test(u);
         chipsHtml += `
           <div class="extracted-chip">
-            <span style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${isApk ? '⚠️ APK:' : '🔗'} ${escapeHtml(u)}</span>
+            <span>🔗 Embedded Link: <strong>${escapeHtml(u)}</strong> (Do NOT tap this link)</span>
             <a href="result.html?type=url&query=${encodeURIComponent(u)}" class="btn-chip-inspect">Scan Link</a>
           </div>
         `;
@@ -2473,16 +2245,8 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
       phones.forEach(p => {
         chipsHtml += `
           <div class="extracted-chip">
-            <span>📞 ${escapeHtml(p)}</span>
-            <a href="result.html?type=phone&query=${encodeURIComponent(p)}" class="btn-chip-inspect">Inspect Caller</a>
-          </div>
-        `;
-      });
-      upis.forEach(up => {
-        chipsHtml += `
-          <div class="extracted-chip">
-            <span>₹ ${escapeHtml(up)}</span>
-            <a href="result.html?type=upi&query=${encodeURIComponent(up)}" class="btn-chip-inspect">Verify UPI</a>
+            <span>📞 Contact Number: <strong>${escapeHtml(p)}</strong></span>
+            <a href="result.html?type=phone&query=${encodeURIComponent(p)}" class="btn-chip-inspect">Check Number</a>
           </div>
         `;
       });
@@ -2491,7 +2255,19 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // 11. Populate signals & recommendations
+  // 11. Context-Aware Action Buttons
+  const emergBtn = document.querySelector('#view-message .msg-btn-emergency');
+  const reportBtn = document.querySelector('#view-message .msg-btn-report');
+  if (emergBtn) {
+    emergBtn.style.display = riskScore >= 50 ? 'inline-flex' : 'none';
+  }
+  if (reportBtn) {
+    reportBtn.innerHTML = riskScore >= 50 ?
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Report This Scam</span>' :
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span>Report Message</span>';
+  }
+
+  // 12. Render Clean Signals & Recommendations
   renderSignalsList(signals, theme, 'msg-signals-container', 'msg-signals-count');
   renderRecommendationsList(recommendations, theme, 'msg-recommendations-list');
 }

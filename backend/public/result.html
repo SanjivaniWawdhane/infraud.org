@@ -2318,8 +2318,8 @@
       }
 
       
-      /* ── TOOL 4: ENTERPRISE FORENSIC NLP & MESSAGE THREAT ANALYZER ── */
-/* 0. Floating Quick Search Dock */
+      /* ── TOOL 4: USER-FRIENDLY MESSAGE THREAT INSPECTOR ── */
+/* 0. Top Search Dock */
 .msg-dock-strip {
   position: relative;
   z-index: 2;
@@ -2337,15 +2337,15 @@
   gap: 10px;
 }
 .msg-dock-inner:focus-within {
-  border-color: #4F46E5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 .msg-dock-prefix {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #EEF2FF;
-  color: #4338CA;
+  background: #EFF6FF;
+  color: #1D4ED8;
   font-size: 0.75rem;
   font-weight: 700;
   padding: 5px 10px;
@@ -2385,7 +2385,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #4F46E5;
+  background: #2563EB;
   color: #FFFFFF;
   font-weight: 700;
   font-size: 0.875rem;
@@ -2397,9 +2397,9 @@
   white-space: nowrap;
 }
 .msg-dock-btn:hover {
-  background: #4338CA;
+  background: #1D4ED8;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 .msg-dock-btn:disabled {
   opacity: 0.7;
@@ -2432,9 +2432,9 @@
   transition: all 0.15s ease;
 }
 .msg-preset-chip:hover {
-  border-color: #4F46E5;
-  color: #4F46E5;
-  background: #EEF2FF;
+  border-color: #2563EB;
+  color: #2563EB;
+  background: #EFF6FF;
   transform: translateY(-1px);
 }
 .msg-dock-error {
@@ -2445,455 +2445,132 @@
   margin-top: 6px;
 }
 
-/* 1. Master Header Card */
-.msg-header-card {
+/* 1. Main Clean Verdict Card */
+.msg-verdict-card-clean {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 22px 26px;
+  border-radius: 20px;
+  padding: 28px 32px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 2px 14px rgba(15, 23, 42, 0.04);
+}
+.msg-verdict-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   flex-wrap: wrap;
-  gap: 16px;
+  margin-bottom: 18px;
 }
-.msg-header-main {
+.msg-verdict-badge-box {
   display: flex;
   align-items: center;
-  gap: 18px;
-  min-width: 0;
-  flex: 1;
+  gap: 16px;
 }
-.msg-header-icon-box {
-  width: 54px;
-  height: 54px;
+.msg-status-icon-wrap {
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
-  border: 1.5px solid #C7D2FE;
-  color: #4F46E5;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
 }
-.msg-header-meta {
+.msg-status-icon-danger {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1.5px solid #FECACA;
+}
+.msg-status-icon-warning {
+  background: #FFFBEB;
+  color: #D97706;
+  border: 1.5px solid #FDE68A;
+}
+.msg-status-icon-safe {
+  background: #ECFDF5;
+  color: #10B981;
+  border: 1.5px solid #A7F3D0;
+}
+.msg-verdict-titles {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4px;
 }
-.msg-meta-pill {
-  background: #F1F5F9;
-  color: #475569;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.6875rem;
+.msg-verdict-tag {
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-.msg-meta-dot { color: #CBD5E1; }
-.msg-risk-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-.msg-header-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.msg-target-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-  word-break: keep-all;
-  overflow-wrap: normal;
-}
-.msg-btn-copy {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  padding: 4px 10px;
-  border-radius: 7px;
-  color: #64748B;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.15s ease;
-}
-.msg-btn-copy:hover {
-  background: #F1F5F9;
-  color: #0F172A;
-}
-.msg-header-sub {
-  margin: 6px 0 0 0;
-  font-size: 0.8125rem;
-  color: #64748B;
-}
-.msg-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.msg-action-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 15px;
-  border-radius: 9px;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  border: none;
 }
-.msg-btn-primary {
-  background: #EEF2FF;
-  color: #4338CA;
-  border: 1px solid #C7D2FE;
-}
-.msg-btn-primary:hover {
-  background: #4F46E5;
-  color: #FFFFFF;
-}
-.msg-btn-secondary {
-  background: #F8FAFC;
-  color: #475569;
-  border: 1px solid #E2E8F0;
-}
-.msg-btn-secondary:hover {
-  background: #F1F5F9;
-  color: #0F172A;
-}
-.msg-btn-report {
-  background: #FFFBEB;
-  color: #B45309;
-  border: 1px solid #FDE68A;
-}
-.msg-btn-report:hover {
-  background: #F59E0B;
-  color: #FFFFFF;
-}
-.msg-btn-emergency {
-  background: #FEF2F2;
-  color: #DC2626;
-  border: 1px solid #FECACA;
-}
-.msg-btn-emergency:hover {
-  background: #DC2626;
-  color: #FFFFFF;
-}
-
-/* 2. BALANCED 2-COLUMN WORKSPACE */
-.msg-forensic-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
-  align-items: stretch;
-}
-@media (max-width: 960px) {
-  .msg-forensic-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* LEFT COLUMN: EVALUATED MESSAGE DOSSIER */
-.msg-evidence-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.evidence-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #F1F5F9;
-}
-.evidence-card-title {
-  font-size: 0.9375rem;
-  font-weight: 800;
-  color: #0F172A;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-}
-.evidence-protocol-tag {
-  font-family: var(--mono, monospace);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #4F46E5;
-  background: #EEF2FF;
-  padding: 3px 8px;
-  border-radius: 6px;
-}
-
-/* Sender Telemetry Bar */
-.evidence-sender-bar {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.evidence-sender-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #EEF2FF;
-  color: #4F46E5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  flex-shrink: 0;
-  border: 1px solid #C7D2FE;
-}
-.evidence-sender-info {
-  flex: 1;
-  min-width: 0;
-}
-.evidence-sender-name {
-  font-size: 0.9375rem;
+.msg-verdict-tag.danger { color: #DC2626; }
+.msg-verdict-tag.warning { color: #D97706; }
+.msg-verdict-tag.safe { color: #059669; }
+.msg-verdict-h1 {
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0F172A;
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.evidence-sender-sub {
-  font-size: 0.75rem;
-  color: #64748B;
-  margin: 2px 0 0 0;
+  letter-spacing: -0.02em;
 }
 
-/* The Evaluated Message Content Box */
-.msg-body-box {
-  background: #F8FAFC;
-  border: 1.5px solid #E2E8F0;
-  border-left: 4px solid #4F46E5;
-  border-radius: 14px;
-  padding: 18px 20px;
-  font-size: 1.025rem;
-  line-height: 1.65;
-  color: #1E293B;
-  position: relative;
-  word-break: break-word;
-}
-.msg-body-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 14px;
-  padding-top: 10px;
-  border-top: 1px solid #E2E8F0;
-  font-size: 0.72rem;
-  color: #94A3B8;
-  font-weight: 600;
-}
-
-/* Threat Tokens */
-.threat-kw-critical {
-  background: #FEE2E2;
-  color: #991B1B;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  border-bottom: 2px solid #EF4444;
-}
-.threat-kw-warn {
-  background: #FEF3C7;
-  color: #92400E;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  border-bottom: 2px solid #F59E0B;
-}
-.threat-kw-impersonation {
-  background: #EEF2FF;
-  color: #3730A3;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  border-bottom: 2px solid #6366F1;
-}
-
-/* Extracted Payloads */
-.evidence-payloads-box {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 14px 16px;
-}
-.evidence-payloads-title {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.extracted-payloads-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.extracted-chip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #1E293B;
-}
-.btn-chip-inspect {
-  background: #4F46E5;
-  color: #FFFFFF;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: all 0.15s ease;
-}
-.btn-chip-inspect:hover {
-  background: #4338CA;
-}
-
-/* In-Card Interactive Test Bar */
-.evidence-test-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 8px 12px;
-  margin-top: auto;
-}
-.evidence-test-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  font-size: 0.8125rem;
-  color: #0F172A;
-  outline: none;
-}
-.evidence-test-btn {
-  background: #4F46E5;
-  color: #FFFFFF;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  transition: all 0.2s ease;
-}
-.evidence-test-btn:hover {
-  background: #4338CA;
-}
-
-/* RIGHT COLUMN: CYBER FORENSICS INTELLIGENCE SUITE */
-.msg-intel-card {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Score & Verdict Card */
-.msg-verdict-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
-}
-.msg-verdict-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-.msg-verdict-score-group {
+/* Score Pill */
+.msg-score-pill-clean {
   display: flex;
   align-items: baseline;
   gap: 6px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 10px 18px;
 }
-.msg-score-num {
-  font-size: 2.75rem;
+.msg-score-clean-num {
+  font-size: 2rem;
   font-weight: 900;
   line-height: 1;
   font-family: var(--mono, monospace);
-  color: #DC2626;
 }
-.msg-score-max-val {
-  font-size: 1rem;
+.msg-score-clean-num.danger { color: #DC2626; }
+.msg-score-clean-num.warning { color: #D97706; }
+.msg-score-clean-num.safe { color: #10B981; }
+.msg-score-clean-max {
+  font-size: 0.875rem;
   color: #94A3B8;
   font-weight: 700;
 }
-.msg-verdict-text-group {
-  flex: 1;
-  min-width: 200px;
+
+/* Plain English Summary */
+.msg-plain-summary {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #334155;
+  margin: 0 0 20px 0;
+  background: #F8FAFC;
+  border-left: 4px solid #2563EB;
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
 }
-.msg-verdict-headline {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 4px 0;
+.msg-plain-summary.danger {
+  border-left-color: #DC2626;
+  background: #FEF2F2;
+  color: #991B1B;
 }
-.msg-verdict-desc {
-  font-size: 0.875rem;
-  color: #475569;
-  line-height: 1.5;
-  margin: 0;
+.msg-plain-summary.warning {
+  border-left-color: #F59E0B;
+  background: #FFFBEB;
+  color: #92400E;
+}
+.msg-plain-summary.safe {
+  border-left-color: #10B981;
+  background: #ECFDF5;
+  color: #065F46;
 }
 
-/* 4-Stage Segmented Meter Bar */
+/* 4-Stage Risk Meter */
 .msg-risk-meter-wrap {
-  margin-top: 18px;
+  margin-top: 16px;
 }
 .msg-risk-meter-bar {
   display: flex;
@@ -2909,12 +2586,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6875rem;
+  font-size: 0.72rem;
   font-weight: 800;
   color: #64748B;
   border-radius: 6px;
   transition: all 0.25s ease;
-  letter-spacing: 0.02em;
 }
 .msg-risk-seg.seg-safe { background: #ECFDF5; color: #047857; }
 .msg-risk-seg.seg-caution { background: #FFFBEB; color: #B45309; }
@@ -2958,114 +2634,170 @@
   margin-top: 6px;
 }
 
-/* 4-Vector Manipulation Matrix */
-.msg-matrix-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 22px 24px;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
-}
-.msg-card-header-row {
+/* Action Strip */
+.msg-actions-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #F1F5F9;
+  flex-wrap: wrap;
 }
-.msg-card-title {
+.btn-msg-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+}
+.btn-msg-primary {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+.btn-msg-primary:hover {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+}
+.btn-msg-secondary {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+}
+.btn-msg-secondary:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+.btn-msg-danger {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+.btn-msg-danger:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+}
+
+/* 2. Inspected Message Evidence Card */
+.msg-checked-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+}
+.msg-checked-title {
   font-size: 0.9375rem;
   font-weight: 800;
   color: #0F172A;
+  margin: 0 0 14px 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 0;
 }
-.msg-matrix-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-@media (max-width: 640px) {
-  .msg-matrix-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.matrix-tile {
+.msg-bubble-box-clean {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  border-radius: 14px;
+  padding: 18px 20px;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #1E293B;
+  word-break: break-word;
 }
-.matrix-tile-header {
+
+/* Threat Tokens */
+.threat-kw-critical {
+  background: #FEE2E2;
+  color: #991B1B;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  border-bottom: 2px solid #EF4444;
+}
+.threat-kw-warn {
+  background: #FEF3C7;
+  color: #92400E;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  border-bottom: 2px solid #F59E0B;
+}
+.threat-kw-impersonation {
+  background: #EEF2FF;
+  color: #3730A3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  border-bottom: 2px solid #6366F1;
+}
+
+/* Payloads */
+.extracted-chip {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin-top: 8px;
 }
-.matrix-label {
+.btn-chip-inspect {
+  background: #2563EB;
+  color: #FFFFFF;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s ease;
 }
-.psych-badge {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-.psych-badge-critical { background: #FEE2E2; color: #991B1B; }
-.psych-badge-elevated { background: #FEF3C7; color: #92400E; }
-.psych-badge-clean { background: #ECFDF5; color: #047857; }
-.matrix-track {
-  height: 4px;
-  background: #E2E8F0;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.matrix-fill {
-  height: 100%;
-  border-radius: 2px;
-  transition: width 0.5s ease;
-}
-.matrix-desc {
-  font-size: 0.72rem;
-  color: #64748B;
-  line-height: 1.4;
+.btn-chip-inspect:hover {
+  background: #1D4ED8;
 }
 
-/* 3. BOTTOM FULL-WIDTH SPLIT DECK: SIGNALS & GUIDANCE */
-.msg-bottom-deck {
+/* 3. The 2-Column Split: Why It's Risky & What To Do */
+.msg-guidance-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-bottom: 24px;
 }
 @media (max-width: 860px) {
-  .msg-bottom-deck {
+  .msg-guidance-grid {
     grid-template-columns: 1fr;
   }
 }
-.msg-deck-card {
+.msg-column-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 22px 24px;
+  border-radius: 20px;
+  padding: 24px 28px;
   box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
 }
-.msg-deck-title {
-  font-size: 0.9375rem;
+.msg-column-title {
+  font-size: 1rem;
   font-weight: 800;
   color: #0F172A;
+  margin: 0 0 16px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
 }
 
 /* Emergency Helpline Notice */
@@ -3274,6 +3006,71 @@
 
 .tc-chip-warn:hover {
   background: #FEE2E2;
+}
+
+/* ── Phone Overview Card ── */
+.phone-overview-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+}
+.phone-overview-title {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phone-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .phone-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 550px) {
+  .phone-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.phone-tile {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.phone-tile-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748B;
+}
+.phone-tile-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.3;
+}
+.phone-tile-value.font-mono {
+  font-family: var(--mono, monospace);
+  font-size: 1.05rem;
+}
+.phone-tile-sub {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748B;
 }
 
 .tc-chip-caution {
@@ -4800,230 +4597,186 @@
           </div>
         </div>
 
-        <!-- 1. Truecaller-Style Hero Caller Profile Card -->
-        <div class="tc-profile-card" id="tc-caller-card">
-          <div class="tc-card-top">
-            
-            <!-- Avatar Section -->
-            <div class="tc-avatar-wrapper">
-              <div class="tc-avatar tc-avatar-clean" id="tc-avatar">
-                <span class="tc-avatar-initials" id="tc-avatar-initials">RJ</span>
+        <!-- 1. Executive Master Verdict Card -->
+        <div class="msg-verdict-card-clean" id="phone-verdict-card">
+          <div class="msg-verdict-header-row">
+            <div class="msg-verdict-badge-box">
+              <div class="msg-status-icon-wrap" id="phone-status-icon-wrap">
+                <svg id="phone-status-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               </div>
-              <div class="tc-avatar-badge" id="tc-avatar-badge" title="Verified Line">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-              </div>
-            </div>
-
-            <!-- Identity Details -->
-            <div class="tc-info-wrapper">
-              <div class="tc-name-row">
-                <h1 class="tc-caller-name" id="tc-caller-name">Reliance Jio Subscriber</h1>
-                <span class="tc-verified-pill tc-pill-clean" id="tc-verified-pill">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span id="tc-verified-text">Verified Domestic Line</span>
-                </span>
-              </div>
-
-              <div class="tc-number-row">
-                <span class="tc-phone-number" id="phone-target-display">+91 80102 37029</span>
-                <span class="tc-nat-number" id="tc-nat-display">(080102 37029)</span>
-                <button type="button" class="tc-copy-btn" onclick="copyCanonicalPhone()" id="tc-copy-btn" title="Copy Number">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                  <span id="copy-phone-label">Copy</span>
-                </button>
-              </div>
-
-              <div class="tc-meta-row">
-                <span class="tc-meta-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V4"/></svg>
-                  <span id="tc-carrier-text">Reliance Jio Infocomm Ltd</span>
-                </span>
-                <span class="tc-meta-sep">•</span>
-                <span class="tc-meta-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  <span id="tc-circle-text">Maharashtra & Goa Circle [MH]</span>
-                </span>
-                <span class="tc-meta-sep">•</span>
-                <span class="tc-meta-item tc-linetype-item" id="tc-linetype-text">Cellular Mobile (5G/LTE)</span>
+              <div class="msg-verdict-titles">
+                <div class="msg-verdict-tag" id="phone-verdict-tag">PHONE NUMBER AUDIT</div>
+                <h1 class="msg-verdict-h1" id="phone-verdict-title">Analyzing Phone Number...</h1>
               </div>
             </div>
 
-            <!-- Quick Action Buttons -->
-            <div class="tc-action-bar">
-              <button type="button" class="tc-btn tc-btn-block" id="tc-block-btn" onclick="toggleBlockState()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                <span id="tc-block-btn-text">Block Number</span>
-              </button>
-              <a href="reports.html?type=phone" class="tc-btn tc-btn-report" id="tc-report-btn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-                <span>Report Spam</span>
-              </a>
-              <button type="button" class="tc-btn tc-btn-share" onclick="copyResultLink()" title="Share profile">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                <span>Share</span>
-              </button>
+            <!-- Threat Score Pill -->
+            <div class="msg-score-pill-clean">
+              <span class="msg-score-clean-num" id="phone-score-num">--</span>
+              <span class="msg-score-clean-max">/ 100</span>
+              <span id="phone-score-level" style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-left: 6px; padding: 3px 8px; border-radius: 6px; background: #E2E8F0; color: #475569;">EVALUATING</span>
             </div>
-
           </div>
 
-          <!-- Community Activity & Spam Counter Strip -->
-          <div class="tc-stats-strip" id="tc-stats-strip">
-            <div class="tc-stat-col">
-              <span class="tc-stat-num" id="tc-searches-num">-</span>
-              <span class="tc-stat-label">Community Lookups</span>
+          <!-- Plain-Language Human Summary Banner -->
+          <div class="msg-plain-summary" id="phone-plain-summary">
+            Evaluating telephone numbering plan, carrier routing, and national cybercrime databases...
+          </div>
+
+          <!-- 4-Stage Segmented Risk Meter Bar -->
+          <div class="msg-risk-meter-wrap">
+            <div class="msg-risk-meter-bar">
+              <div class="msg-risk-seg seg-safe" id="phone-seg-safe">0 - 25 Low Risk</div>
+              <div class="msg-risk-seg seg-caution" id="phone-seg-caution">26 - 50 Moderate</div>
+              <div class="msg-risk-seg seg-risky" id="phone-seg-risky">51 - 75 Suspicious</div>
+              <div class="msg-risk-seg seg-danger" id="phone-seg-danger">76 - 100 Critical Scam</div>
             </div>
-            <div class="tc-stat-divider"></div>
-            <div class="tc-stat-col">
-              <span class="tc-stat-num tc-stat-clean" id="tc-reports-num">0</span>
-              <span class="tc-stat-label">Spam Reports</span>
+            <div class="msg-gradient-track">
+              <div class="msg-gradient-pointer" id="phone-meter-pointer" style="left: 0%;"></div>
             </div>
-            <div class="tc-stat-divider"></div>
-            <div class="tc-stat-col">
-              <span class="tc-stat-num" id="tc-category-text">Personal Mobile</span>
-              <span class="tc-stat-label">Caller Category</span>
+            <div class="msg-meter-scale">
+              <span>Safe Helpline / Normal Line</span>
+              <span>Telemarketer / Robocall</span>
+              <span>Impersonation / Extortion Scam</span>
             </div>
-            <div class="tc-stat-divider"></div>
-            <div class="tc-stat-col">
-              <span class="tc-stat-num tc-stat-clean" id="tc-risk-status">Low Risk (25%)</span>
-              <span class="tc-stat-label">InFraud Threat Level</span>
+          </div>
+
+          <!-- Action Buttons Strip -->
+          <div class="msg-actions-row">
+            <button type="button" class="btn-msg-action btn-msg-primary" onclick="recheckCurrentTarget()" title="Re-check Number">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+              <span>Re-check Number</span>
+            </button>
+            <button type="button" class="btn-msg-action btn-msg-secondary" onclick="copyCanonicalPhone()" id="phone-btn-copy" title="Copy Number">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="phone-copy-text">Copy Number</span>
+            </button>
+            <a href="reports.html?type=phone" class="btn-msg-action btn-msg-secondary" id="phone-report-btn" title="Report this caller">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+              <span>Report This Number</span>
+            </a>
+            <a href="tel:1930" class="btn-msg-action btn-msg-danger" id="phone-btn-call-1930" style="display: none;" title="Call 1930 Cyber Fraud Helpline">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span>Dial 1930 Helpline</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 2. Clean Caller Information Overview Card -->
+        <div class="phone-overview-card">
+          <div class="phone-overview-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Verified Caller & Network Profile</span>
+          </div>
+          <div class="phone-overview-grid">
+            <div class="phone-tile">
+              <span class="phone-tile-label">Phone Number</span>
+              <span class="phone-tile-value font-mono" id="phone-tile-target">+91 80102 37029</span>
+              <span class="phone-tile-sub" id="phone-tile-nat">(080102 37029)</span>
+            </div>
+            <div class="phone-tile">
+              <span class="phone-tile-label">Caller Category</span>
+              <span class="phone-tile-value" id="phone-tile-category">Personal Mobile SIM</span>
+              <span class="phone-tile-sub" id="phone-tile-category-sub">Standard Consumer Line</span>
+            </div>
+            <div class="phone-tile">
+              <span class="phone-tile-label">Telecom Operator</span>
+              <span class="phone-tile-value" id="phone-tile-carrier">Reliance Jio</span>
+              <span class="phone-tile-sub" id="phone-tile-carrier-sub">Licensed Telecom Provider</span>
+            </div>
+            <div class="phone-tile">
+              <span class="phone-tile-label">Registered Region / Circle</span>
+              <span class="phone-tile-value" id="phone-tile-circle">Maharashtra & Goa</span>
+              <span class="phone-tile-sub" id="phone-tile-circle-sub">Licensed Service Area [MH]</span>
             </div>
           </div>
         </div>
 
-        <!-- 2. Two-Column Structured Telecom Details & Safety Radar -->
-        <div class="tc-details-grid">
-          
-          <!-- Left: Carrier & Number Technical Specifications -->
-          <div class="tc-details-box">
-            <div class="tc-box-header">
-              <div class="tc-icon-wrap tc-icon-blue">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        <!-- 3. The 2-Column Split: Why It's Risky & What You Should Do -->
+        <div class="msg-guidance-grid">
+          <!-- Why This Risk Level -->
+          <div class="msg-column-card">
+            <div class="msg-column-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span>Why This Number Received This Rating</span>
               </div>
-              <div class="tc-box-title-wrap">
-                <h3 class="tc-box-title">Telecom Routing & Network Information</h3>
-                <span class="tc-box-subtitle">DoT National Numbering Plan Verification</span>
-              </div>
+              <span class="tc-badge-count" id="phone-signals-count">Clean Record</span>
             </div>
-            <div class="tc-spec-list">
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">Assigned Carrier (TSP)</span>
-                <span class="tc-spec-val font-semibold" id="tc-spec-operator">Reliance Jio Infocomm Ltd</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">Telecom Circle (LSA)</span>
-                <span class="tc-spec-val" id="tc-spec-circle">Maharashtra & Goa Circle [MH]</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">Number Block Series</span>
-                <span class="tc-spec-val tc-mono" id="tc-spec-series">8010-XXXXXX (Allocated)</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">DoT Numbering Plan (NNP)</span>
-                <span class="tc-spec-val tc-green" id="tc-spec-nnp">✅ Allocated & Validated</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">Standard Format (E.164)</span>
-                <span class="tc-spec-val tc-mono" id="phone-val-formatted">+918010237029</span>
-              </div>
-            </div>
+            <div id="phone-signals-container" class="signals-list"></div>
           </div>
 
-          <!-- Right: Regulatory Compliance & Abuse Cross-Check -->
-          <div class="tc-details-box">
-            <div class="tc-box-header">
-              <div class="tc-icon-wrap tc-icon-green">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </div>
-              <div class="tc-box-title-wrap">
-                <h3 class="tc-box-title">TRAI Regulation & Cyber Registry Match</h3>
-                <span class="tc-box-subtitle">Commercial Series & Cybercrime Database Cross-Check</span>
+          <!-- What You Should Do -->
+          <div class="msg-column-card">
+            <div class="msg-column-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>What You Should Do (Safety Steps)</span>
               </div>
             </div>
-            <div class="tc-spec-list">
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">TRAI UCC Channel</span>
-                <span class="tc-spec-val" id="tc-spec-trai">Non-Commercial Private Line</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">140 Telemarketing Block</span>
-                <span class="tc-spec-val tc-green" id="tc-spec-telemarketer">Passed (Not in 140 commercial pool)</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">Sanchar Saathi (Chakshu)</span>
-                <span class="tc-spec-val tc-green" id="tc-spec-chakshu">Clean (No Suspected Fraud Reports)</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">National Cybercrime (1930)</span>
-                <span class="tc-spec-val tc-green" id="tc-spec-1930">0 Matches Found (Clean)</span>
-              </div>
-              <div class="tc-spec-row">
-                <span class="tc-spec-label">Community Directory Activity</span>
-                <span class="tc-spec-val" id="tc-spec-directory">-</span>
-              </div>
-            </div>
+            <div id="phone-recommendations-list" class="recommendations-list"></div>
           </div>
-
         </div>
 
-        <!-- 3. Forensic Signals & Inspection Flags -->
-        <div class="tc-signals-box">
-          <div class="tc-box-header">
-            <div class="tc-icon-wrap tc-icon-indigo">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            </div>
-            <div class="tc-box-title-wrap">
-              <h3 class="tc-box-title">Verified Intelligence Signals & Observations</h3>
-              <span class="tc-box-subtitle">Heuristic and database cross-match findings</span>
-            </div>
-            <span class="tc-badge-count" id="phone-signals-count">2 Signals</span>
+        <!-- 4. Emergency 1930 / Chakshu Helpline Banner -->
+        <div class="msg-emergency-card">
+          <div class="msg-emergency-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
           </div>
-          <div id="phone-signals-container" class="tc-signals-list"></div>
-        </div>
-
-        <!-- 4. Citizen Safety Playbook & 1930 Hotline -->
-        <div class="tc-safety-row">
-          <div class="tc-safety-box">
-            <div class="tc-box-header">
-              <div class="tc-icon-wrap tc-icon-emerald">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-              </div>
-              <div class="tc-box-title-wrap">
-                <h3 class="tc-box-title">Citizen Call Handling Advisory</h3>
-                <span class="tc-box-subtitle">Precautionary measures for unknown calls</span>
-              </div>
-            </div>
-            <div id="phone-recommendations-list" class="tc-recs-list"></div>
+          <div class="msg-emergency-body">
+            <h4 class="msg-emergency-title">Fell for a phone scam or transferred money to an unknown caller?</h4>
+            <p class="msg-emergency-desc">
+              Call <strong>1930</strong> (National Cyber Crime Helpline) immediately within <strong>2 hours</strong>. Police and bank officers can coordinate to freeze the beneficiary bank account. You can also report fraud SIMs on the government's <strong>Chakshu (Sanchar Saathi)</strong> portal.
+            </p>
           </div>
-
-          <div class="tc-emergency-card">
-            <div class="tc-emer-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            </div>
-            <h4>Threatened with "Digital Arrest" or Fake Police / Customs?</h4>
-            <p>CBI, Police, and Customs NEVER conduct trials or demand money via video calls. Disconnect immediately and report.</p>
-            <div class="tc-emer-actions">
-              <a href="tel:1930" class="tc-btn-hotline">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                <span>Call 1930 Helpline</span>
-              </a>
-              <a href="https://sancharsaathi.gov.in/sfc/" target="_blank" rel="noopener noreferrer" class="tc-btn-chakshu">
-                <span>Report on Chakshu ↗</span>
-              </a>
-            </div>
+          <div style="display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap;">
+            <a href="tel:1930" class="msg-emergency-btn" title="Dial 1930 Free Helpline">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span>Dial 1930</span>
+            </a>
+            <a href="https://sancharsaathi.gov.in/sfc/" target="_blank" rel="noopener noreferrer" class="msg-emergency-btn" style="background: #0F172A; border-color: #334155;" title="Report on Sanchar Saathi Chakshu">
+              <span>Report on Chakshu ↗</span>
+            </a>
           </div>
         </div>
 
         <!-- Hidden Compatibility Anchors so legacy scripts never break -->
+        <div style="display:none;" id="phone-target-display"></div>
+        <div style="display:none;" id="tc-nat-display"></div>
+        <div style="display:none;" id="tc-caller-name"></div>
+        <div style="display:none;" id="tc-verified-pill"></div>
+        <div style="display:none;" id="tc-verified-text"></div>
+        <div style="display:none;" id="tc-avatar"></div>
+        <div style="display:none;" id="tc-avatar-initials"></div>
+        <div style="display:none;" id="tc-avatar-badge"></div>
+        <div style="display:none;" id="tc-carrier-text"></div>
+        <div style="display:none;" id="tc-circle-text"></div>
+        <div style="display:none;" id="tc-linetype-text"></div>
+        <div style="display:none;" id="tc-searches-num"></div>
+        <div style="display:none;" id="tc-reports-num"></div>
+        <div style="display:none;" id="tc-category-text"></div>
+        <div style="display:none;" id="tc-risk-status"></div>
+        <div style="display:none;" id="tc-spec-operator"></div>
+        <div style="display:none;" id="tc-spec-circle"></div>
+        <div style="display:none;" id="tc-spec-series"></div>
+        <div style="display:none;" id="tc-spec-nnp"></div>
+        <div style="display:none;" id="tc-spec-trai"></div>
+        <div style="display:none;" id="tc-spec-telemarketer"></div>
+        <div style="display:none;" id="tc-spec-chakshu"></div>
+        <div style="display:none;" id="tc-spec-1930"></div>
+        <div style="display:none;" id="tc-spec-directory"></div>
+        <div style="display:none;" id="tc-block-btn"></div>
+        <div style="display:none;" id="tc-block-btn-text"></div>
+        <div style="display:none;" id="copy-phone-label"></div>
+        <div style="display:none;" id="phone-val-formatted"></div>
         <div style="display:none;" id="phone-canonical-display"></div>
         <div style="display:none;" id="phone-provider-name"></div>
         <div style="display:none;" id="phone-provider-pill"></div>
         <div style="display:none;" id="phone-line-type-tag"></div>
         <div style="display:none;" id="phone-origin-tag"></div>
         <div style="display:none;" id="phone-header-status-pill"></div>
-        <div style="display:none;" id="phone-score-num"></div>
         <div style="display:none;" id="phone-spam-percent"></div>
         <div style="display:none;" id="phone-tile-line"></div>
-        <div style="display:none;" id="phone-tile-carrier"></div>
         <div style="display:none;" id="phone-tile-origin"></div>
         <div style="display:none;" id="phone-tile-origin-sub"></div>
         <div style="display:none;" id="phone-tile-trai"></div>
@@ -5339,309 +5092,156 @@
       </div>
                   <div id="view-message" class="tool-result-view">
 
-        <!-- 0. Unified Floating Quick Search Dock -->
+        <!-- 0. Clean Search Dock -->
         <div class="msg-dock-strip">
           <form class="msg-dock-inner" onsubmit="handleQuickMsgSubmit(event); return false;">
             <span class="msg-dock-prefix" id="msg-search-proto-badge">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              <span>SMS / CHAT NLP</span>
+              <span>MESSAGE / SMS CHECKER</span>
             </span>
-            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message, SMS, parcel notice, or Telegram task to analyze..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
+            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message, SMS, parcel notice, or job offer to check..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
             <button type="button" class="msg-dock-clear" onclick="clearQuickMsgInput()" title="Clear">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <button type="submit" class="msg-dock-btn" id="msg-quick-btn" onclick="handleQuickMsgSubmit(event)" title="Decode Threat NLP">
+            <button type="submit" class="msg-dock-btn" id="msg-quick-btn" onclick="handleQuickMsgSubmit(event)" title="Check Message">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>Decode NLP</span>
+              <span>Check Message</span>
             </button>
           </form>
           <!-- Quick Preset Chips -->
           <div class="msg-dock-presets">
-            <span class="msg-preset-label">Test Samples:</span>
-            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Claims a parcel (from USPS, FedEx, UPS, or local couriers) is held up, missing a redelivery fee, or requires address updates via a phishing link.')">📦 Courier Redelivery Phishing</button>
-            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Dear consumer your electricity power will be disconnected tonight at 9:30 PM from electricity office. Please call immediately 9876543210 or download http://bijli-update.apk')">⚡ Electricity Cut</button>
+            <span class="msg-preset-label">Test Examples:</span>
+            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Claims a parcel (from USPS, FedEx, UPS, or local couriers) is held up, missing a redelivery fee, or requires address updates via a phishing link.')">📦 Fake Courier Delivery</button>
+            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Dear consumer your electricity power will be disconnected tonight at 9:30 PM from electricity office. Please call immediately 9876543210 or download http://bijli-update.apk')">⚡ Electricity Cut Threat</button>
             <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Dear SBI customer, your netbanking has been blocked due to pending KYC update. Click https://sbi-kyc-verify.com to submit your Aadhaar and OTP immediately.')">🏦 Bank KYC Phishing</button>
-            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('CBI Cyber Cell notice: A digital arrest warrant has been issued against your Aadhaar for illegal narcotics parcel. Do not disconnect call and transfer Rs 50,000 to clearing account.')">🚓 Digital Arrest</button>
-            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Earn Rs 5000 daily working from home liking YouTube videos and rating hotels on Telegram. Contact HR on WhatsApp +91 9123456789.')">💼 Part-Time Task</button>
-            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Hey Rohan, are we still meeting for lunch today at 1 PM? Let me know.')">💬 Everyday Normal Chat</button>
+            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('CBI Cyber Cell notice: A digital arrest warrant has been issued against your Aadhaar for illegal narcotics parcel. Do not disconnect call and transfer Rs 50,000 to clearing account.')">🚓 Digital Arrest Call</button>
+            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Earn Rs 5000 daily working from home liking YouTube videos and rating hotels on Telegram. Contact HR on WhatsApp +91 9123456789.')">💼 Part-Time Job Offer</button>
+            <button type="button" class="msg-preset-chip" onclick="fillQuickMsg('Hey Rohan, are we still meeting for lunch today at 1 PM? Let me know.')">💬 Normal Everyday Message</button>
           </div>
           <div id="msg-quick-error" class="msg-dock-error"></div>
         </div>
 
-        <!-- 1. Executive Master Header Card -->
-        <div class="msg-header-card">
-          <div class="msg-header-main">
-            <div class="msg-header-icon-box">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <!-- 1. Plain-Language Main Verdict Card -->
+        <div class="msg-verdict-card-clean">
+          <div class="msg-verdict-header-row">
+            <div class="msg-verdict-badge-box">
+              <div class="msg-status-icon-wrap msg-status-icon-danger" id="msg-status-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+              <div class="msg-verdict-titles">
+                <span class="msg-verdict-tag danger" id="msg-header-status-pill">🚨 SUSPICIOUS MESSAGE DETECTED</span>
+                <h1 class="msg-verdict-h1 msg-target-title target-display-value" id="msg-gauge-verdict-title">Courier & Parcel Delivery Smishing</h1>
+              </div>
             </div>
-            <div style="flex: 1; min-width: 0;">
-              <div class="msg-header-meta">
-                <span class="msg-meta-pill">ADVANCED FORENSIC NLP</span>
-                <span class="msg-meta-dot">•</span>
-                <span class="msg-meta-pill" style="background: #EEF2FF; color: #4338CA;">BERT & VADER NEURAL ACTIVE</span>
-                <span class="msg-meta-dot">•</span>
-                <span id="msg-header-status-pill" class="msg-risk-pill" style="background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA;">🚨 CRITICAL SCAM DETECTED</span>
-              </div>
-              <div class="msg-header-title-row">
-                <h1 class="msg-target-title target-display-value">Analyzing Suspicious Text...</h1>
-                <button type="button" class="msg-btn-copy" onclick="copyResultLink()" title="Copy shareable report link">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                  <span>Copy</span>
-                </button>
-              </div>
-              <p class="msg-header-sub">
-                Strategy: <strong id="msg-val-strategy" style="color: #0F172A;">Analyzing Linguistic Pattern...</strong> • <span id="msg-char-count">0 chars, 0 words</span> • Lexical Safety Engine
-              </p>
+
+            <!-- Clean Score Display -->
+            <div class="msg-score-pill-clean">
+              <span class="msg-score-clean-num danger" id="msg-gauge-score">50</span>
+              <span class="msg-score-clean-max">/ 100</span>
+              <span id="msg-gauge-pill" style="font-size: 0.75rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: #FEF2F2; color: #991B1B; margin-left: 6px;">HIGH RISK</span>
             </div>
           </div>
-          <div class="msg-header-actions">
-            <button class="msg-action-btn msg-btn-primary" id="btn-header-reparse-nlp" onclick="reparseMessageAction(event)" title="Re-parse text tokens">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>Re-parse NLP</span>
+
+          <!-- Plain-Language Summary for everyday users -->
+          <p class="msg-plain-summary danger" id="msg-gauge-summary">
+            This message looks like a parcel delivery scam. Scammers pretend to be couriers like FedEx or USPS claiming a package is on hold to trick you into clicking a link or paying a fake fee.
+          </p>
+
+          <!-- Clean 4-Stage Risk Meter -->
+          <div class="msg-risk-meter-wrap">
+            <div class="msg-risk-meter-bar" id="msg-meter-bar">
+              <div class="msg-risk-seg seg-safe" id="msg-seg-safe">
+                <span>Safe (0-24%)</span>
+              </div>
+              <div class="msg-risk-seg seg-caution" id="msg-seg-caution">
+                <span>Caution (25-49%)</span>
+              </div>
+              <div class="msg-risk-seg seg-risky active" id="msg-seg-risky">
+                <span>Risky (50-74%)</span>
+              </div>
+              <div class="msg-risk-seg seg-danger" id="msg-seg-danger">
+                <span>Critical Scam (75-100%)</span>
+              </div>
+            </div>
+            <div class="msg-gradient-track">
+              <div class="msg-gradient-pointer" id="msg-gradient-pointer" style="left: 50%;"></div>
+            </div>
+            <div class="msg-meter-scale">
+              <span>0% Safe</span>
+              <span>50% Caution</span>
+              <span>100% Critical Scam</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="msg-actions-row">
+            <button type="button" class="btn-msg-action btn-msg-primary" id="btn-header-reparse-nlp" onclick="reparseMessageAction(event)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Re-check Message</span>
             </button>
-            <button class="msg-action-btn msg-btn-secondary" onclick="copyResultLink()" title="Share forensic report">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-              <span>Share</span>
+            <button type="button" class="btn-msg-action btn-msg-secondary" onclick="copyResultLink()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy Link</span>
             </button>
-            <a href="reports.html" class="msg-action-btn msg-btn-report" title="Report SMS Spammer to Citizen Cyber Registry">
+            <a href="reports.html" class="btn-msg-action btn-msg-danger msg-btn-report">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>Report Spammer (1909)</span>
+              <span>Report This Scam</span>
             </a>
-            <a href="tel:1930" class="msg-action-btn msg-btn-emergency" title="Dial 1930 National Cyber Crime Reporting Portal">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+            <a href="tel:1930" class="btn-msg-action btn-msg-danger msg-btn-emergency" style="background: #DC2626; color: #FFFFFF; border: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               <span>Dial 1930 Helpline</span>
             </a>
           </div>
         </div>
 
-        <!-- 2. Balanced 2-Column Forensic Workspace -->
-        <div class="msg-forensic-grid">
-          
-          <!-- LEFT COLUMN: Evaluated Message Dossier & Payloads -->
-          <div class="msg-evidence-card">
-            <div class="evidence-card-header">
-              <h3 class="evidence-card-title">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                <span>Evaluated Message Body & Evidence</span>
-              </h3>
-              <span class="evidence-protocol-tag">CELLULAR SMS GSM PDU</span>
-            </div>
-
-            <!-- Sender Telemetry Strip -->
-            <div class="evidence-sender-bar">
-              <div class="evidence-sender-avatar" id="msg-avatar-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              </div>
-              <div class="evidence-sender-info">
-                <div class="evidence-sender-name" id="msg-val-sender">AX-NOTIFY</div>
-                <div class="evidence-sender-sub" id="msg-sender-type">Unregistered Private Mobile (Violates TRAI TCCCPR 2018)</div>
-              </div>
-              <span class="phone-channel-pill" id="msg-wa-status-text" style="font-size: 0.6875rem; font-weight: 700; color: #DC2626; background: #FEF2F2; padding: 4px 10px; border-radius: 6px; border: 1px solid #FECACA;">Unverified</span>
-            </div>
-
-            <!-- The Evaluated Message Content Box -->
-            <div class="msg-body-box">
-              <div id="msg-bubble-content">Analyzing suspicious message tokens...</div>
-              <div class="msg-body-meta">
-                <span>Timestamp: <strong id="msg-bubble-time" style="color:#475569;">10:42 AM</strong></span>
-                <span id="msg-bubble-ticks"><span style="color: #2563EB; font-weight: bold;">✓✓ Delivered</span></span>
-              </div>
-            </div>
-
-            <!-- Extracted Interactive Payloads -->
-            <div class="evidence-payloads-box">
-              <div class="evidence-payloads-title">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                <span>Extracted Threat Payloads & Quarantined Links</span>
-              </div>
-              <div id="msg-extracted-container">
-                <div style="font-size:0.8125rem; color:#64748B; padding:4px 0;">
-                  No embedded web links, phone numbers, or UPI handles detected in message body.
-                </div>
-              </div>
-            </div>
-
-            <!-- In-Card Interactive Test Bar -->
-            <form class="evidence-test-bar" onsubmit="handleInPhoneMsgSubmit(event); return false;">
-              <input type="text" id="phone-chat-input" class="evidence-test-input" placeholder="Type or paste any text to test live in simulator..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();handleInPhoneMsgSubmit(event);}" />
-              <button type="submit" id="phone-chat-send-btn" class="evidence-test-btn" onclick="handleInPhoneMsgSubmit(event)" title="Simulate incoming message">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                <span>Inspect Live</span>
-              </button>
-            </form>
-
-            <!-- Compatibility Hidden Anchors for JS -->
-            <div style="display:none;" id="msg-sms-bubble-content"></div>
-            <div style="display:none;" id="msg-sms-time"></div>
-            <div style="display:none;" id="msg-sms-sender-header"></div>
-            <div style="display:none;" id="phone-sms-input"></div>
-            <div style="display:none;" id="phone-sms-send-btn"></div>
+        <!-- 2. The Inspected Message Evidence Card -->
+        <div class="msg-checked-card">
+          <div class="msg-checked-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Inspected Message Text</span>
           </div>
-
-          <!-- RIGHT COLUMN: Threat Risk Assessment & Manipulation Matrix -->
-          <div class="msg-intel-card">
-            
-            <!-- 1. Executive Threat Verdict Card -->
-            <div class="msg-verdict-card">
-              <div class="msg-verdict-top">
-                <div class="msg-verdict-score-group">
-                  <div class="msg-score-num" id="msg-gauge-score">95</div>
-                  <span class="msg-score-max-val">/100</span>
-                  <svg style="display:none;" width="0" height="0"><circle id="msg-gauge-circle"></circle></svg>
-                </div>
-                <div class="msg-verdict-text-group">
-                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                    <span class="msg-risk-pill" id="msg-gauge-pill" style="background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA;">CRITICAL THREAT</span>
-                    <span id="msg-pressure-score" style="font-size: 0.75rem; font-weight: 700; color: #DC2626;">95% Critical Pressure</span>
-                  </div>
-                  <h2 class="msg-verdict-headline" id="msg-gauge-verdict-title">High Coercion Scam</h2>
-                  <p class="msg-verdict-desc" id="msg-gauge-summary">
-                    High danger! Natural language processing detected coercive social engineering, extortion threats, or malicious payload lures designed to manipulate the recipient.
-                  </p>
-                </div>
-              </div>
-
-              <!-- 4-Stage Segmented Meter Bar -->
-              <div class="msg-risk-meter-wrap">
-                <div class="msg-risk-meter-bar" id="msg-meter-bar">
-                  <div class="msg-risk-seg seg-safe" id="msg-seg-safe" title="Low Risk (0–24%)">
-                    <span>Low (0-24%)</span>
-                  </div>
-                  <div class="msg-risk-seg seg-caution" id="msg-seg-caution" title="Caution (25–49%)">
-                    <span>Caution (25-49%)</span>
-                  </div>
-                  <div class="msg-risk-seg seg-risky" id="msg-seg-risky" title="Risky (50–74%)">
-                    <span>Risky (50-74%)</span>
-                  </div>
-                  <div class="msg-risk-seg seg-danger active" id="msg-seg-danger" title="High Danger (75–100%)">
-                    <span>Critical (75-100%)</span>
-                  </div>
-                </div>
-
-                <!-- Gradient Slider -->
-                <div class="msg-gradient-track">
-                  <div class="msg-gradient-pointer" id="msg-gradient-pointer" style="left: 95%;"></div>
-                </div>
-                <div class="msg-meter-scale">
-                  <span>0% Safe</span>
-                  <span>50% Caution</span>
-                  <span>100% Critical Scam</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. Social Engineering Manipulation Matrix (4 Vectors) -->
-            <div class="msg-matrix-card">
-              <div class="msg-card-header-row">
-                <h3 class="msg-card-title">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
-                  <span>Social Engineering Threat Matrix</span>
-                </h3>
-                <span style="font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; color: #4F46E5; background: #EEF2FF; padding: 2px 8px; border-radius: 4px;">4-VECTOR AUDIT</span>
-              </div>
-
-              <div class="msg-matrix-grid">
-                <!-- Vector 1: Urgency -->
-                <div class="matrix-tile">
-                  <div class="matrix-tile-header">
-                    <span class="matrix-label">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                      <span>Artificial Urgency</span>
-                    </span>
-                    <span class="psych-badge psych-badge-critical" id="psych-val-urgency">Critical (90%)</span>
-                  </div>
-                  <div class="matrix-track">
-                    <div class="matrix-fill" id="psych-bar-urgency" style="width: 90%; background: #DC2626;"></div>
-                  </div>
-                  <div class="matrix-desc" id="psych-desc-urgency">Threat of immediate cutoff or arrest</div>
-                </div>
-
-                <!-- Vector 2: Authority Spoofing -->
-                <div class="matrix-tile">
-                  <div class="matrix-tile-header">
-                    <span class="matrix-label">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
-                      <span>Authority Spoofing</span>
-                    </span>
-                    <span class="psych-badge psych-badge-critical" id="psych-val-authority">Severe (85%)</span>
-                  </div>
-                  <div class="matrix-track">
-                    <div class="matrix-fill" id="psych-bar-authority" style="width: 85%; background: #DC2626;"></div>
-                  </div>
-                  <div class="matrix-desc" id="psych-desc-authority">Impersonates official public agency or bank</div>
-                </div>
-
-                <!-- Vector 3: Financial Greed / Task Bait -->
-                <div class="matrix-tile">
-                  <div class="matrix-tile-header">
-                    <span class="matrix-label">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 6v2m0 8v2"></path></svg>
-                      <span>Financial Task Bait</span>
-                    </span>
-                    <span class="psych-badge psych-badge-clean" id="psych-val-greed">Clean (5%)</span>
-                  </div>
-                  <div class="matrix-track">
-                    <div class="matrix-fill" id="psych-bar-greed" style="width: 5%; background: #10B981;"></div>
-                  </div>
-                  <div class="matrix-desc" id="psych-desc-greed">No unearned cash or job lures</div>
-                </div>
-
-                <!-- Vector 4: Credential Harvesting -->
-                <div class="matrix-tile">
-                  <div class="matrix-tile-header">
-                    <span class="matrix-label">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                      <span>Credential Theft</span>
-                    </span>
-                    <span class="psych-badge psych-badge-critical" id="psych-val-creds">Critical (95%)</span>
-                  </div>
-                  <div class="matrix-track">
-                    <div class="matrix-fill" id="psych-bar-creds" style="width: 95%; background: #DC2626;"></div>
-                  </div>
-                  <div class="matrix-desc" id="psych-desc-creds">Demands for PIN, password, or secrecy</div>
-                </div>
-              </div>
-            </div>
-
+          <div class="msg-bubble-box-clean">
+            <div id="msg-bubble-content">Analyzing suspicious message tokens...</div>
           </div>
-
+          <!-- Extracted Payloads (Shown only if links/phones exist) -->
+          <div id="msg-extracted-container"></div>
         </div>
 
-        <!-- 3. Full-Width Bottom Deck: Signals & Guidance -->
-        <div class="msg-bottom-deck">
-          <!-- Heuristic Signals -->
-          <div class="msg-deck-card">
-            <div class="msg-deck-title">
+        <!-- 3. Why It's Dangerous & What You Should Do (2 Columns) -->
+        <div class="msg-guidance-grid">
+          <!-- Why It's Risky -->
+          <div class="msg-column-card">
+            <div class="msg-column-title">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-                <span>Heuristic Threat Signals & Risk Flags</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Why This Message Is Suspicious</span>
               </div>
-              <span class="signals-badge" id="msg-signals-count" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: #FEF2F2; color: #991B1B; font-weight: 700;">0 Signals</span>
+              <span class="signals-badge" id="msg-signals-count" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: #FEF2F2; color: #991B1B; font-weight: 700;">1 Threat Found</span>
             </div>
             <div id="msg-signals-container" class="signals-list"></div>
           </div>
 
-          <!-- Recommended Protocols -->
-          <div class="msg-deck-card">
-            <div class="msg-deck-title">
+          <!-- What You Should Do -->
+          <div class="msg-column-card">
+            <div class="msg-column-title">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                <span>Recommended Safety Protocols & Incident Playbook</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>What You Should Do (Safety Steps)</span>
               </div>
             </div>
             <div id="msg-recommendations-list" class="recommendations-list"></div>
           </div>
         </div>
 
-        <!-- 4. Emergency Golden Hour Helpline Banner -->
+        <!-- 4. Emergency 1930 Helpline Banner -->
         <div class="msg-emergency-card">
           <div class="msg-emergency-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
           </div>
           <div class="msg-emergency-body">
-            <h4 class="msg-emergency-title">Coerced into sharing OTP, money, or downloading an APK?</h4>
+            <h4 class="msg-emergency-title">Already shared an OTP, clicked the link, or sent money?</h4>
             <p class="msg-emergency-desc">
-              Dial <strong>1930</strong> (National Cyber Crime Reporting Portal) immediately within <strong>2 hours</strong> (The Golden Hour). Emergency nodal officers can freeze fraudulent banking transactions and block malicious APK distribution servers.
+              Call <strong>1930</strong> (National Cyber Crime Helpline) immediately within <strong>2 hours</strong>. Police officers can quickly freeze fraudulent transactions and block malicious servers.
             </p>
           </div>
           <a href="tel:1930" class="msg-emergency-btn" title="Dial 1930 Free Helpline">
@@ -5649,6 +5249,36 @@
             <span>Dial 1930 Free Helpline</span>
           </a>
         </div>
+
+        <!-- Compatibility Hidden Anchors for JS -->
+        <div style="display:none;" id="msg-val-strategy"></div>
+        <div style="display:none;" id="msg-char-count"></div>
+        <div style="display:none;" id="msg-val-sender"></div>
+        <div style="display:none;" id="msg-sender-type"></div>
+        <div style="display:none;" id="msg-wa-status-text"></div>
+        <div style="display:none;" id="msg-pressure-score"></div>
+        <div style="display:none;" id="msg-bubble-time"></div>
+        <div style="display:none;" id="msg-bubble-ticks"></div>
+        <div style="display:none;" id="msg-sms-bubble-content"></div>
+        <div style="display:none;" id="msg-sms-time"></div>
+        <div style="display:none;" id="msg-sms-sender-header"></div>
+        <div style="display:none;" id="phone-chat-input"></div>
+        <div style="display:none;" id="phone-chat-send-btn"></div>
+        <div style="display:none;" id="phone-sms-input"></div>
+        <div style="display:none;" id="phone-sms-send-btn"></div>
+        <div style="display:none;" id="psych-val-urgency"></div>
+        <div style="display:none;" id="psych-bar-urgency"></div>
+        <div style="display:none;" id="psych-desc-urgency"></div>
+        <div style="display:none;" id="psych-val-authority"></div>
+        <div style="display:none;" id="psych-bar-authority"></div>
+        <div style="display:none;" id="psych-desc-authority"></div>
+        <div style="display:none;" id="psych-val-greed"></div>
+        <div style="display:none;" id="psych-bar-greed"></div>
+        <div style="display:none;" id="psych-desc-greed"></div>
+        <div style="display:none;" id="psych-val-creds"></div>
+        <div style="display:none;" id="psych-bar-creds"></div>
+        <div style="display:none;" id="psych-desc-creds"></div>
+        <svg style="display:none;" width="0" height="0"><circle id="msg-gauge-circle"></circle></svg>
 
       </div>
     </div>
