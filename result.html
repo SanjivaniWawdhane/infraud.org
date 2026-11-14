@@ -103,8 +103,8 @@
       
       
       /* ═══════════════════════════════════════════════════════════════
-   TOOL 1: ENTERPRISE WEB SECURITY CLEARANCE & DOMAIN FORENSICS
-   Unified Executive Architecture matching Phone, UPI, and Message Tools
+   TOOL 1: MODERN CYBERSECURITY SOC URL & DOMAIN INTELLIGENCE
+   Bespoke Executive Design Language
    ═══════════════════════════════════════════════════════════════ */
 
 /* 0. Floating Quick Search Dock */
@@ -119,14 +119,14 @@
   background: #FFFFFF;
   border: 1.5px solid #E2E8F0;
   border-radius: 14px;
-  padding: 5px 6px 5px 14px;
+  padding: 6px 8px 6px 14px;
   gap: 12px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
   transition: all 0.2s ease;
 }
 .url-dock-inner:focus-within {
   border-color: #2563EB;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12), 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12), 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 .url-dock-proto-badge {
   display: inline-flex;
@@ -203,9 +203,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
   margin-top: 10px;
-  padding-left: 4px;
+  flex-wrap: wrap;
+  padding: 0 2px;
 }
 .url-preset-label {
   font-size: 0.75rem;
@@ -213,11 +213,12 @@
   color: #64748B;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  margin-right: 2px;
 }
 .url-preset-chip {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 20px;
+  border-radius: 100px;
   padding: 5px 12px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -226,13 +227,15 @@
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 .url-preset-chip:hover {
-  background: #F1F5F9;
-  border-color: #CBD5E1;
-  color: #0F172A;
+  border-color: #2563EB;
+  color: #2563EB;
+  background: #EFF6FF;
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
 }
 .url-dock-error {
   display: none;
@@ -247,130 +250,52 @@
 .url-header-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 24px 28px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.url-header-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 14px;
 }
-.url-header-main {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex: 1;
-  min-width: 0;
-}
-.url-header-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: #EFF6FF;
-  border: 1.5px solid #BFDBFE;
-  color: #2563EB;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.url-header-meta {
+.url-header-meta-group {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #64748B;
-  margin-bottom: 6px;
   flex-wrap: wrap;
 }
 .url-meta-pill {
   background: #F1F5F9;
   color: #334155;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 .url-meta-dot { color: #CBD5E1; }
-.url-header-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.url-target-title {
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 1.625rem;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-  word-break: break-all;
-}
-.url-btn-copy {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  padding: 4px 10px;
-  border-radius: 7px;
-  color: #64748B;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
-}
-.url-btn-copy:hover {
-  background: #F1F5F9;
-  color: #0F172A;
-}
-.url-btn-visit {
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  padding: 4px 10px;
-  border-radius: 7px;
-  color: #2563EB;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
-}
-.url-btn-visit:hover {
-  background: #2563EB;
-  color: #FFFFFF;
-}
-.url-header-sub {
-  font-size: 0.8125rem;
-  color: #64748B;
-  margin: 6px 0 0 0;
+.url-header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
-.url-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
 .url-action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 9px 16px;
-  border-radius: 10px;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
   font-size: 0.8125rem;
   font-weight: 700;
   cursor: pointer;
@@ -379,12 +304,14 @@
   border: none;
 }
 .url-btn-primary {
-  background: #2563EB;
-  color: #FFFFFF;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
 }
 .url-btn-primary:hover {
-  background: #1D4ED8;
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #2563EB;
   transform: translateY(-1px);
 }
 .url-btn-secondary {
@@ -403,8 +330,9 @@
   border: 1px solid #FECACA;
 }
 .url-btn-flag:hover {
-  background: #FEE2E2;
-  color: #B91C1C;
+  background: #DC2626;
+  color: #FFFFFF;
+  border-color: #DC2626;
   transform: translateY(-1px);
 }
 .url-btn-report {
@@ -413,109 +341,194 @@
   border: 1px solid #FDE68A;
 }
 .url-btn-report:hover {
-  background: #FEF3C7;
-  color: #92400E;
+  background: #D97706;
+  color: #FFFFFF;
+  border-color: #D97706;
   transform: translateY(-1px);
 }
 
-/* 2. Primary Threat Risk Assessment & Meter Bar Card */
+.url-header-main-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.url-header-icon-box {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 1.5px solid #BFDBFE;
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+}
+.url-header-text-block {
+  flex: 1;
+  min-width: 280px;
+}
+.url-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.url-target-title {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  word-break: break-all;
+}
+.url-btn-copy {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 5px 10px;
+  border-radius: 7px;
+  color: #64748B;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.url-btn-copy:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #CBD5E1;
+}
+.url-btn-visit-link {
+  background: #10B981;
+  color: #FFFFFF;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+  flex-shrink: 0;
+}
+.url-btn-visit-link:hover {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+}
+.btn-url-blocked {
+  background: #EF4444 !important;
+  color: #FFFFFF !important;
+  cursor: not-allowed;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3) !important;
+}
+.url-header-subline {
+  font-size: 0.8125rem;
+  color: #64748B;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 2. Primary Threat Risk Assessment Card */
 .url-risk-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 18px;
-  padding: 28px;
+  border-radius: 20px;
+  padding: 26px 30px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
 }
-.url-risk-grid {
+.url-risk-layout {
   display: grid;
-  grid-template-columns: 200px 1fr 310px;
-  gap: 28px;
+  grid-template-columns: 340px 1fr;
+  gap: 36px;
   align-items: center;
 }
-@media (max-width: 1040px) {
-  .url-risk-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-}
-.url-card-label {
-  display: block;
-  font-size: 0.6875rem;
-  font-weight: 800;
-  color: #94A3B8;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
+@media (max-width: 900px) {
+  .url-risk-layout { grid-template-columns: 1fr; gap: 24px; }
 }
 
-/* Left: Threat Score Ring */
+/* Left Score & Meter Column */
 .url-score-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border-right: 1px solid #F1F5F9;
-  padding-right: 20px;
+  gap: 18px;
 }
-@media (max-width: 1040px) {
-  .url-score-column {
-    border-right: none;
-    padding-right: 0;
-    border-bottom: 1px solid #F1F5F9;
-    padding-bottom: 20px;
-  }
+.url-card-label {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+  text-transform: uppercase;
 }
 .url-score-display-wrap {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 .url-score-gauge-ring {
   position: relative;
-  width: 110px;
-  height: 110px;
-  margin-bottom: 10px;
+  width: 124px;
+  height: 124px;
+  flex-shrink: 0;
 }
-.url-score-gauge-ring svg {
+.url-gauge-progress {
   transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
 }
 .url-score-inner-text {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  pointer-events: none;
 }
 .url-score-value {
   font-size: 2.25rem;
   font-weight: 900;
   line-height: 1;
+  color: #0F172A;
+  font-family: var(--mono, monospace);
   letter-spacing: -0.04em;
-  color: #10B981;
 }
 .url-score-max {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #94A3B8;
+  margin-top: 2px;
 }
 .url-score-status-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 .url-risk-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
-  border-radius: 100px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 .url-pill-green {
@@ -534,18 +547,83 @@
   border: 1px solid #FECACA;
 }
 .url-score-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: 0.75rem;
   color: #64748B;
+  font-weight: 600;
 }
 
-/* Middle: Segmented Risk Bar & Clear Verdict */
-.url-meter-column {
+/* 4-Stage Meter Bar */
+.url-meter-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
-.url-meter-header {
+.url-risk-meter-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.url-risk-seg {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.35;
+}
+.url-risk-seg.seg-safe { background: #10B981; color: #FFFFFF; }
+.url-risk-seg.seg-caution { background: #F59E0B; color: #FFFFFF; }
+.url-risk-seg.seg-risky { background: #EA580C; color: #FFFFFF; }
+.url-risk-seg.seg-danger { background: #EF4444; color: #FFFFFF; }
+.url-risk-seg.active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px currentColor;
+  transform: scaleY(1.08);
+}
+.url-gradient-track {
+  position: relative;
+  height: 6px;
+  background: #E2E8F0;
+  border-radius: 100px;
+  margin: 4px 0 2px 0;
+}
+.url-gradient-bar {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #10B981 0%, #F59E0B 40%, #EA580C 70%, #EF4444 100%);
+}
+.url-gradient-pointer {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0F172A;
+  border: 2.5px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transform: translate(-50%, -50%);
+  transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.url-meter-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+/* Right Verdict & Pillars Column */
+.url-verdict-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.url-verdict-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -553,245 +631,166 @@
   flex-wrap: wrap;
 }
 .url-verdict-title {
-  font-size: 1.1875rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0F172A;
   margin: 0;
-  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
-.url-pressure-tag {
+.url-live-tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 10px;
-  border-radius: 20px;
+  font-family: var(--mono, monospace);
   font-size: 0.75rem;
   font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 .url-live-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: currentColor;
-  animation: pulse 1.5s infinite;
 }
 .url-verdict-desc {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
   color: #475569;
-  line-height: 1.5;
   margin: 0;
 }
-
-/* 4-Stage Segmented Meter Bar */
-.url-risk-meter-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.url-pillars-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   margin-top: 4px;
 }
-.url-risk-meter-bar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  background: #F1F5F9;
-  padding: 4px;
-  border-radius: 10px;
+@media (max-width: 600px) {
+  .url-pillars-row { grid-template-columns: 1fr; }
 }
-.url-risk-seg {
-  padding: 8px 4px;
-  text-align: center;
-  border-radius: 6px;
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  transition: all 0.2s ease;
-  opacity: 0.35;
-  background: #E2E8F0;
-  color: #475569;
-}
-.url-risk-seg.active {
-  opacity: 1;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transform: scale(1.02);
-}
-.url-risk-seg.seg-safe.active {
-  background: #10B981;
-  color: #FFFFFF;
-}
-.url-risk-seg.seg-caution.active {
-  background: #F59E0B;
-  color: #FFFFFF;
-}
-.url-risk-seg.seg-risky.active {
-  background: #F97316;
-  color: #FFFFFF;
-}
-.url-risk-seg.seg-danger.active {
-  background: #DC2626;
-  color: #FFFFFF;
-}
-
-/* Continuous Gradient Progress Slider with Pin */
-.url-gradient-track {
-  position: relative;
-  height: 8px;
-  background: #E2E8F0;
-  border-radius: 100px;
-  margin: 6px 0 2px 0;
-}
-.url-gradient-bar {
-  position: absolute;
-  inset: 0;
-  border-radius: 100px;
-  background: linear-gradient(90deg, #10B981 0%, #F59E0B 40%, #F97316 70%, #DC2626 100%);
-}
-.url-gradient-pointer {
-  position: absolute;
-  top: 50%;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #FFFFFF;
-  border: 3px solid #10B981;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-  transform: translate(-50%, -50%);
-  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2;
-}
-.url-meter-scale {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #94A3B8;
-}
-
-/* Right Column: CERT-In Cyber Safety Advisory */
-.url-advisory-column {
-  display: flex;
-  flex-direction: column;
-}
-.url-advisory-box {
+.url-pillar-item {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 18px;
+  border-radius: 12px;
+  padding: 12px 14px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
-.url-advisory-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #EFF6FF;
-  color: #1D4ED8;
-  border: 1px solid #BFDBFE;
-  font-size: 0.6875rem;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 6px;
-  width: fit-content;
-}
-.url-advisory-text {
-  font-size: 0.75rem;
-  color: #334155;
-  line-height: 1.5;
-  margin: 0;
-}
-.url-advisory-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.6875rem;
-  color: #15803D;
-  font-weight: 700;
-  border-top: 1px solid #E2E8F0;
-  padding-top: 8px;
-}
-
-/* 3. 4 Bento Metric Intelligence Tiles */
-.url-bento-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-@media (max-width: 900px) {
-  .url-bento-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 540px) {
-  .url-bento-grid { grid-template-columns: 1fr; }
-}
-.url-bento-tile {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 18px 20px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.url-bento-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
-}
-.url-bento-tile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.url-bento-icon-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.url-bento-icon {
+.url-pillar-icon {
   width: 32px;
   height: 32px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
-.icon-proto { background: #EFF6FF; color: #2563EB; }
-.icon-host { background: #ECFDF5; color: #059669; }
-.icon-spoof { background: #EEF2FF; color: #4F46E5; }
-.icon-flags { background: #FFFBEB; color: #D97706; }
-.url-bento-label {
+.url-pillar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.url-pillar-label {
   font-size: 0.6875rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #64748B;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-.bento-tile-tag {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-.bento-tile-value {
-  font-size: 1rem;
+.url-pillar-val {
+  font-size: 0.8125rem;
   font-weight: 800;
   color: #0F172A;
-  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 3. 4 Bento Defense Tiles */
+.url-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+@media (max-width: 768px) {
+  .url-bento-grid { grid-template-columns: 1fr; }
+}
+.url-bento-tile {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.url-bento-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+.url-bento-tile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.url-bento-icon-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.url-bento-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.url-bento-icon.icon-proto { background: #ECFDF5; color: #059669; }
+.url-bento-icon.icon-host { background: #EFF6FF; color: #2563EB; }
+.url-bento-icon.icon-spoof { background: #EEF2FF; color: #4F46E5; }
+.url-bento-icon.icon-flags { background: #FFFBEB; color: #D97706; }
+.url-bento-label {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.bento-tile-tag {
+  font-family: var(--mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+.bento-tile-value {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
   line-height: 1.3;
 }
 .bento-tile-sub {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   color: #64748B;
-  line-height: 1.4;
+  margin: 0;
 }
 
-/* 4. Deep Domain RDAP Forensics & Specifications Card */
+/* 4. RDAP Forensics & Tech Specs Card */
 .url-details-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 24px 28px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
 }
 .url-details-header {
   display: flex;
@@ -799,7 +798,7 @@
   justify-content: space-between;
   margin-bottom: 20px;
   border-bottom: 1px solid #F1F5F9;
-  padding-bottom: 16px;
+  padding-bottom: 14px;
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -828,18 +827,35 @@
 .url-details-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 18px 24px;
 }
 @media (max-width: 900px) {
   .url-details-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 480px) {
+@media (max-width: 500px) {
   .url-details-grid { grid-template-columns: 1fr; }
 }
 .url-detail-item {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+.url-detail-item .detail-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.url-detail-item .detail-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0F172A;
+  word-break: break-all;
+}
+.url-detail-item .detail-value.mono {
+  font-family: var(--mono, monospace);
+  color: #1E293B;
 }
 
 /* 5. Signals & Guidance Deck */
@@ -855,9 +871,9 @@
 .url-signals-panel, .url-guidance-panel {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
 }
 .url-panel-title {
   display: flex;
@@ -870,19 +886,81 @@
   border-bottom: 1px solid #F1F5F9;
   padding-bottom: 12px;
 }
+.panel-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.signals-badge {
+  font-family: var(--mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Clean Seal Box */
+.url-clean-seal-box {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.url-clean-seal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #166534;
+  font-weight: 800;
+  font-size: 0.9375rem;
+  margin-bottom: 8px;
+}
+.url-clean-seal-desc {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #15803D;
+  margin: 0 0 10px 0;
+}
+.url-clean-seal-tip {
+  font-size: 0.75rem;
+  color: #166534;
+  border-top: 1px solid #DCFCE7;
+  padding-top: 8px;
+  line-height: 1.4;
+}
 
 /* 6. Emergency 1930 Notice */
 .url-emergency-banner {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 20px 24px;
+  background: #FFFFFF;
+  border: 1.5px solid #FECACA;
+  border-radius: 18px;
+  padding: 20px 26px;
   display: flex;
   align-items: center;
   gap: 20px;
   flex-wrap: wrap;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.05);
 }
-
+.btn-emergency-call {
+  background: #DC2626;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  padding: 10px 18px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+}
+.btn-emergency-call:hover {
+  background: #B91C1C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
 
 /* ═══════════════════════════════════════════════════════════════
    TOOL 2: REFINED & MODERN TELECOM & CALLER INTELLIGENCE
@@ -3660,15 +3738,15 @@
           <form class="url-dock-inner" onsubmit="handleQuickUrlSubmit(event); return false;">
             <span class="url-dock-proto-badge" id="url-search-proto-badge">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              <span>HTTPS / WEB URL</span>
+              <span>HTTPS / DOMAIN</span>
             </span>
-            <input type="text" id="url-quick-input" class="url-dock-input" placeholder="Check another website URL or domain (e.g. google.com, onlinesbi.sbi)..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickUrlSubmit(event);}" />
+            <input type="text" id="url-quick-input" class="url-dock-input" placeholder="Inspect another domain or website link (e.g. google.com, onlinesbi.sbi)..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickUrlSubmit(event);}" />
             <button type="button" class="url-dock-clear" onclick="clearQuickUrlInput()" title="Clear">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
             <button type="submit" class="url-dock-btn" id="url-quick-btn" title="Analyze website link">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>Analyze URL</span>
+              <span>Inspect Threat</span>
             </button>
           </form>
           <!-- Quick Preset Chips -->
@@ -3676,8 +3754,8 @@
             <span class="url-preset-label">Test Samples:</span>
             <button type="button" class="url-preset-chip" onclick="fillQuickUrl('google.com')">🌐 Google (Official)</button>
             <button type="button" class="url-preset-chip" onclick="fillQuickUrl('onlinesbi.sbi')">🏦 SBI NetBanking</button>
-            <button type="button" class="url-preset-chip" onclick="fillQuickUrl('secure-login.paypal.verify-account.tk')">🚨 PayPal Phishing</button>
-            <button type="button" class="url-preset-chip" onclick="fillQuickUrl('http://192.168.1.1/login')">⚠️ IP Host Login</button>
+            <button type="button" class="url-preset-chip" onclick="fillQuickUrl('secure-login.paypal.verify-account.tk')">🚨 PayPal Phishing Trap</button>
+            <button type="button" class="url-preset-chip" onclick="fillQuickUrl('http://192.168.1.1/login')">⚠️ Raw IP Host</button>
             <button type="button" class="url-preset-chip" onclick="fillQuickUrl('https://github.com/infraud/safety')">🛡️ GitHub Repository</button>
           </div>
           <div id="url-quick-error" class="url-dock-error"></div>
@@ -3685,74 +3763,81 @@
 
         <!-- 1. Executive Master Header Card -->
         <div class="url-header-card">
-          <div class="url-header-main">
-            <div class="url-header-icon-box">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <!-- Top Row: Category Meta + Toolbar Actions -->
+          <div class="url-header-top-bar">
+            <div class="url-header-meta-group">
+              <span class="url-meta-pill" style="background: #EFF6FF; color: #1D4ED8;">WORLD WIDE WEB THREAT RADAR</span>
+              <span class="url-meta-dot">•</span>
+              <span class="url-meta-pill" id="spec-domain-badge">ICANN APEX ROOT</span>
+              <span class="url-meta-dot">•</span>
+              <span id="url-header-status-pill" class="url-risk-pill url-pill-green">● SAFE & VERIFIED TO VISIT</span>
+            </div>
+            <div class="url-header-actions">
+              <button class="url-action-btn url-btn-primary" onclick="rescanTarget()" title="Re-check website heuristics">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Re-analyze</span>
+              </button>
+              <button class="url-action-btn url-btn-secondary" onclick="copyResultLink()" title="Copy shareable report link">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                <span>Share</span>
+              </button>
+              <button class="url-action-btn url-btn-flag" id="btn-quick-flag-url" onclick="quickFlagUrlAsScam()" title="Instantly flag this URL as malicious scam">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>🚨 Flag Scam</span>
+              </button>
+              <a href="reports.html" class="url-action-btn url-btn-report" id="btn-report-target" title="Submit detailed citizen report">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Report Abuse</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Main Row: Icon Box + Large Target Title + Buttons + Subline -->
+          <div class="url-header-main-row">
+            <div class="url-header-icon-box" id="url-main-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="2" y1="12" x2="22" y2="12"></line>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
               </svg>
             </div>
-            <div style="flex: 1; min-width: 0;">
-              <div class="url-header-meta">
-                <span class="url-meta-pill">WORLD WIDE WEB SECURITY AUDIT</span>
-                <span class="url-meta-dot">•</span>
-                <span class="url-meta-pill" style="background: #EFF6FF; color: #1D4ED8;">ICANN APEX ROOT REGISTRY</span>
-                <span class="url-meta-dot">•</span>
-                <span id="url-header-status-pill" class="url-risk-pill url-pill-green">● SAFE & VERIFIED</span>
-              </div>
+            <div class="url-header-text-block">
               <div class="url-header-title-row">
                 <h1 class="url-target-title target-display-value" id="target-display">Analyzing URL...</h1>
                 <button type="button" class="url-btn-copy" onclick="copyCanonicalUrl()" title="Copy analyzed URL">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                  <span id="copy-url-label">Copy</span>
+                  <span id="copy-url-label">Copy URL</span>
                 </button>
-                <a href="#" target="_blank" rel="noopener noreferrer" class="url-btn-visit" id="url-hud-visit-btn" title="Open verified website in new tab">
-                  <span>Visit Site</span>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="url-btn-visit-link" id="url-hud-visit-btn" title="Open verified website in new tab">
+                  <span>Visit Authentic Site</span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 </a>
               </div>
-              <div class="url-header-sub">
-                <span>Canonical: <strong id="dossier-canonical" style="color: #0F172A; font-family: var(--mono, monospace);">https://x.com/</strong></span>
+              <div class="url-header-subline">
+                <span>Canonical: <strong id="dossier-canonical" style="color: #0F172A; font-family: var(--mono, monospace);">https://google.com/</strong></span>
                 <span class="url-meta-dot">•</span>
                 <span id="url-proto-tag" class="url-meta-pill" style="background: #ECFDF5; color: #065F46;">HTTPS (TLS 1.3)</span>
                 <span class="url-meta-dot">•</span>
-                <span id="url-tld-tag" class="url-meta-pill" style="background: #EFF6FF; color: #1D4ED8;">🌐 ICANN ROOT DOMAIN</span>
+                <span id="url-tld-tag" class="url-meta-pill" style="background: #EFF6FF; color: #1D4ED8;">.COM DOMAIN</span>
+                <span class="url-meta-dot">•</span>
+                <span style="font-size: 0.75rem; color: #64748B;">DoT & CERT-In Compliant Threat Heuristics</span>
               </div>
             </div>
           </div>
-          <div class="url-header-actions">
-            <button class="url-action-btn url-btn-primary" onclick="rescanTarget()" title="Re-check website heuristics">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>Re-check</span>
-            </button>
-            <button class="url-action-btn url-btn-secondary" onclick="copyResultLink()" title="Copy shareable report link">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-              <span>Share</span>
-            </button>
-            <button class="url-action-btn url-btn-flag" id="btn-quick-flag-url" onclick="quickFlagUrlAsScam()" title="Instantly flag this URL as malicious scam">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>🚨 Flag Scam</span>
-            </button>
-            <a href="reports.html" class="url-action-btn url-btn-report" id="btn-report-target" title="Submit detailed citizen report">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>Report</span>
-            </a>
-          </div>
         </div>
 
-        <!-- 2. Primary Threat Risk Assessment & Meter Bar Card -->
+        <!-- 2. Primary Threat Risk Assessment Card -->
         <div class="url-risk-card">
-          <div class="url-risk-grid">
+          <div class="url-risk-layout">
             
-            <!-- Left Column: Threat Score & Radial Indicator -->
+            <!-- Left Column: Gauge & Segmented Meter -->
             <div class="url-score-column">
-              <span class="url-card-label">THREAT ASSESSMENT</span>
+              <span class="url-card-label">THREAT RISK ASSESSMENT</span>
               <div class="url-score-display-wrap">
                 <div class="url-score-gauge-ring">
-                  <svg width="110" height="110" viewBox="0 0 160 160">
+                  <svg width="124" height="124" viewBox="0 0 160 160">
                     <circle cx="80" cy="80" r="68" fill="none" stroke="#F1F5F9" stroke-width="12"></circle>
-                    <circle class="url-gauge-progress" id="gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2" style="transition: stroke-dashoffset 0.8s ease, stroke 0.3s ease;"></circle>
+                    <circle class="url-gauge-progress" id="gauge-circle" cx="80" cy="80" r="68" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-dasharray="427.2" stroke-dashoffset="427.2"></circle>
                   </svg>
                   <div class="url-score-inner-text">
                     <span class="url-score-value" id="score-display">0</span>
@@ -3760,27 +3845,13 @@
                   </div>
                 </div>
                 <div class="url-score-status-box">
-                  <span class="url-risk-pill url-pill-green" id="risk-badge">✓ LOW RISK</span>
+                  <span class="url-risk-pill url-pill-green" id="risk-badge">✓ LOW RISK • VERIFIED SAFE</span>
                   <span class="url-score-label">Cyber Threat Score</span>
                 </div>
               </div>
-            </div>
-
-            <!-- Middle Column: Segmented Risk Bar & Clear Verdict -->
-            <div class="url-meter-column">
-              <div class="url-meter-header">
-                <h2 class="url-verdict-title" id="url-verdict-title">Safe to Browse</h2>
-                <span class="url-pressure-tag" id="url-cheque-risk-tag" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
-                  <span class="url-live-dot" style="background: #10B981;"></span>
-                  <span>0/100 VERIFIED SAFE</span>
-                </span>
-              </div>
-              <p class="url-verdict-desc" id="risk-summary">
-                This website looks genuine and safe to visit. No deceptive tricks, fake logins, or scam reports found.
-              </p>
 
               <!-- 4-Stage Segmented Meter Bar -->
-              <div class="url-risk-meter-wrap">
+              <div class="url-meter-wrapper">
                 <div class="url-risk-meter-bar" id="url-meter-bar">
                   <div class="url-risk-seg seg-safe active" id="meter-low" title="Low Risk (0–24%)">
                     <span>Low (0-24%)</span>
@@ -3795,8 +3866,6 @@
                     <span>Critical (75-100%)</span>
                   </div>
                 </div>
-
-                <!-- Continuous Gradient Progress Slider with Pin -->
                 <div class="url-gradient-track">
                   <div class="url-gradient-bar"></div>
                   <div class="url-gradient-pointer" id="url-gradient-pointer" style="left: 0%;" title="Threat position"></div>
@@ -3809,19 +3878,47 @@
               </div>
             </div>
 
-            <!-- Right Column: CERT-In Cyber Safety Advisory -->
-            <div class="url-advisory-column">
-              <div class="url-advisory-box">
-                <div class="url-advisory-badge">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                  <span>CERT-In Cyber Safety Advisory</span>
+            <!-- Right Column: Verdict Headline, Description & 3 Core Security Pillars -->
+            <div class="url-verdict-column">
+              <div class="url-verdict-header">
+                <h2 class="url-verdict-title" id="url-verdict-title">Safe to Browse</h2>
+                <span class="url-live-tag" id="url-cheque-risk-tag" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
+                  <span class="url-live-dot" style="background: #10B981;"></span>
+                  <span>VERIFIED SAFE</span>
+                </span>
+              </div>
+              <p class="url-verdict-desc" id="risk-summary">
+                This website looks genuine and safe to visit. No deceptive tricks, fake logins, or scam reports found.
+              </p>
+              
+              <!-- 3 Executive Forensic Pillars -->
+              <div class="url-pillars-row">
+                <div class="url-pillar-item">
+                  <div class="url-pillar-icon" style="background: #ECFDF5; color: #059669;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  </div>
+                  <div class="url-pillar-content">
+                    <span class="url-pillar-label">Transport SSL</span>
+                    <span class="url-pillar-val" id="url-pillar-proto">TLS 1.3 Active</span>
+                  </div>
                 </div>
-                <p class="url-advisory-text">
-                  Always verify the domain name in your browser's address bar before entering passwords or banking credentials. Cybercriminals create deceptive lookalike domains to harvest credentials and distribute malware.
-                </p>
-                <div class="url-advisory-footer">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Official websites use legitimate registered apex domains</span>
+                <div class="url-pillar-item">
+                  <div class="url-pillar-icon" style="background: #EFF6FF; color: #2563EB;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                  </div>
+                  <div class="url-pillar-content">
+                    <span class="url-pillar-label">Registrar</span>
+                    <span class="url-pillar-val" id="url-pillar-reg">MarkMonitor Inc.</span>
+                  </div>
+                </div>
+                <div class="url-pillar-item">
+                  <div class="url-pillar-icon" style="background: #EEF2FF; color: #4F46E5;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                  </div>
+                  <div class="url-pillar-content">
+                    <span class="url-pillar-label">Domain Longevity</span>
+                    <span class="url-pillar-val" id="url-pillar-age">29 Years Old</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3844,7 +3941,7 @@
               <span class="bento-tile-tag" style="background: #EFF6FF; color: #1D4ED8;">TLS 1.3</span>
             </div>
             <div class="bento-tile-value" id="hero-meta-proto">Secure (TLS 1.3 / HTTPS)</div>
-            <div class="bento-tile-sub" id="hero-meta-proto-desc">Encrypted connection with valid security certificate</div>
+            <div class="bento-tile-sub" id="hero-meta-proto-desc">Encrypted connection with a valid security certificate</div>
           </div>
 
           <!-- Tile 2: Domain Authenticity -->
@@ -3884,11 +3981,11 @@
                 <div class="url-bento-icon icon-flags" id="hero-meta-flags-icon">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
                 </div>
-                <span class="url-bento-label">Live Abuse & Scam Radar</span>
+                <span class="url-bento-label">Live Threat Radar</span>
               </div>
               <span class="bento-tile-tag" style="background: #FFFBEB; color: #92400E;">CERT-In / APWG</span>
             </div>
-            <div class="bento-tile-value" id="hero-meta-flags">0 Active Scam Reports</div>
+            <div class="bento-tile-value" id="hero-meta-flags">0 Active Reports</div>
             <div class="bento-tile-sub" id="hero-meta-flags-desc">Clean record across CERT-In, APWG, and global scam logs</div>
           </div>
 
@@ -3909,26 +4006,47 @@
           <div class="url-details-grid">
             <div class="url-detail-item">
               <span class="detail-label">VERIFIED APEX HOSTNAME</span>
-              <strong class="detail-value mono" id="url-hud-display-domain">google.com</strong>
+              <strong class="detail-value mono" id="spec-domain-name">google.com</strong>
             </div>
             <div class="url-detail-item">
-              <span class="detail-label">CANONICAL ADDRESS</span>
-              <strong class="detail-value mono" id="url-browser-omnibox-text">https://google.com/</strong>
+              <span class="detail-label">DOMAIN LONGEVITY / AGE</span>
+              <strong class="detail-value" id="spec-domain-age">29 Years Old</strong>
             </div>
             <div class="url-detail-item">
-              <span class="detail-label">SSL CERTIFICATE ISSUER</span>
-              <strong class="detail-value" id="url-cert-authority-subtitle">Google Trust Services LLC (RSA 2048)</strong>
+              <span class="detail-label">REGISTRATION / CREATED</span>
+              <strong class="detail-value mono" id="spec-domain-created">15 Sep 1997</strong>
             </div>
             <div class="url-detail-item">
-              <span class="detail-label">SECURITY AUDIT CLEARANCE</span>
-              <strong class="detail-value" id="url-cert-status-pill">VALID HTTPS CERTIFICATE</strong>
+              <span class="detail-label">REGISTRY EXPIRATION</span>
+              <strong class="detail-value mono" id="spec-domain-expiry">14 Sep 2028</strong>
+            </div>
+            <div class="url-detail-item">
+              <span class="detail-label">ACCREDITED REGISTRAR</span>
+              <strong class="detail-value" id="spec-domain-registrar">MarkMonitor Inc.</strong>
+            </div>
+            <div class="url-detail-item">
+              <span class="detail-label">PRIMARY NAMESERVERS</span>
+              <strong class="detail-value mono" id="spec-domain-ns">ns1.google.com</strong>
+            </div>
+            <div class="url-detail-item">
+              <span class="detail-label">HOST IP & INFRASTRUCTURE</span>
+              <strong class="detail-value mono" id="spec-domain-ip">142.251.220.110</strong>
+            </div>
+            <div class="url-detail-item">
+              <span class="detail-label">REGISTRY LOCK STATUS</span>
+              <strong class="detail-value" id="spec-domain-status">Active / Protected Registry</strong>
             </div>
           </div>
 
-          <!-- Compatibility Hidden Anchors -->
+          <!-- Compatibility Anchors for Legacy Script Hooks -->
+          <div style="display:none;" id="url-hud-display-domain"></div>
+          <div style="display:none;" id="url-browser-omnibox-text"></div>
+          <div style="display:none;" id="url-cert-authority-subtitle"></div>
+          <div style="display:none;" id="url-cert-status-pill"></div>
           <div style="display:none;" id="url-hud-host-subtitle"></div>
           <div style="display:none;" id="url-hud-avatar-icon"></div>
           <div style="display:none;" id="url-cert-domain-title"></div>
+          <div style="display:none;" id="spec-domain-owner"></div>
         </div>
 
         <!-- 5. Forensic Signals & Recommended Action Guidance Deck -->
@@ -3939,9 +4057,9 @@
             <div class="url-panel-title">
               <div class="panel-title-left">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-                <span>Heuristic Signals & Risk Flags</span>
+                <span>Heuristic Inspection Findings</span>
               </div>
-              <span class="signals-badge" id="signals-count">0 Signals Detected</span>
+              <span class="signals-badge" id="signals-count" style="background: #ECFDF5; color: #065F46;">0 Signals</span>
             </div>
             <div id="signals-container" class="signals-list">
               <!-- Dynamically populated by renderSignalsList -->
@@ -3969,12 +4087,12 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
           </div>
           <div class="emergency-content" style="flex: 1; min-width: 260px;">
-            <h4 style="margin: 0 0 4px 0; font-size: 0.9375rem; font-weight: 800; color: #0F172A;">Entered passwords, OTP, or credit card details on a phishing website?</h4>
+            <h4 style="margin: 0 0 4px 0; font-size: 0.9375rem; font-weight: 800; color: #0F172A;">Entered passwords, OTP, or credit card details on a suspicious website?</h4>
             <p style="margin: 0; font-size: 0.8125rem; color: #475569; line-height: 1.5;">
-              Dial <strong>1930</strong> (National Cyber Crime Reporting Portal) immediately within <strong>2 hours</strong> (The Golden Hour). Emergency nodal officers can coordinate with banks to freeze unauthorized transactions and report the phishing domain for global DNS takedown.
+              Dial <strong>1930</strong> (National Cyber Crime Reporting Portal) immediately within <strong>2 hours</strong> (The Golden Hour). Emergency nodal officers can coordinate with banks to freeze unauthorized transactions and initiate global DNS takedowns.
             </p>
           </div>
-          <a href="tel:1930" class="btn-emergency-call" style="background: #DC2626; color: #FFFFFF; font-weight: 700; font-size: 0.8125rem; padding: 10px 18px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: all 0.2s ease; flex-shrink: 0;">
+          <a href="tel:1930" class="btn-emergency-call">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
             <span>Dial 1930 Free Helpline</span>
           </a>
