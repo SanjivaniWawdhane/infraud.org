@@ -587,7 +587,7 @@
       page: 10,
       title: "Interactive Checklist",
       render: function () {
-        const checkedCount = checklistState.filter(Boolean).length;
+        const checkedCount = upiChecklistState.filter(Boolean).length;
         const progressPct = Math.round((checkedCount / 6) * 100);
 
         return `
@@ -617,8 +617,8 @@
                 { q: "Am I free from artificial rush or secrecy pressure?", a: "If rushed or told to keep quiet, terminate the transaction." },
                 { q: "Has anyone asked me for my PIN or OTP on phone?", a: "Never share PINs or OTPs with anyone, even bank staff." }
               ].map((item, idx) => `
-                <div class="check-item-card ${checklistState[idx] ? 'checked' : ''}" onclick="window.bookReader.toggleCheck(${idx})">
-                  <div class="check-box-visual">${checklistState[idx] ? '✓' : ''}</div>
+                <div class="check-item-card ${upiChecklistState[idx] ? 'checked' : ''}" onclick="window.bookReader.toggleCheck(${idx})">
+                  <div class="check-box-visual">${upiChecklistState[idx] ? '✓' : ''}</div>
                   <div class="check-text-content">
                     <div class="check-question">${item.q}</div>
                     <div class="check-action-guidance">${item.a}</div>
@@ -713,7 +713,7 @@
 
         let correctCount = 0;
         quizData.forEach(q => {
-          if (quizAnswers[q.id] && q.options.find(o => o.key === quizAnswers[q.id])?.correct) {
+          if (upiQuizAnswers[q.id] && q.options.find(o => o.key === upiQuizAnswers[q.id])?.correct) {
             correctCount++;
           }
         });
@@ -739,7 +739,7 @@
 
             <div class="quiz-container-inner" style="display:flex; flex-direction:column; gap:8px;">
               ${quizData.map(q => {
-                const userChoice = quizAnswers[q.id];
+                const userChoice = upiQuizAnswers[q.id];
                 const answered = !!userChoice;
                 return `
                   <div class="quiz-question-block">
@@ -3436,13 +3436,17 @@
 
   // --- 60fps StPageFlip Engine Initialization ---
   function initPageFlipEngine(startPageNum = 1) {
-    const container = document.getElementById('book-container');
-    if (!container) return;
-
     if (pageFlipInstance) {
       try { pageFlipInstance.destroy(); } catch (e) {}
       pageFlipInstance = null;
     }
+
+    const viewport = document.querySelector('.book-stage-viewport');
+    if (!viewport) return;
+
+    viewport.innerHTML = '<div id="book-container" class="st-book-container"></div>';
+    const container = document.getElementById('book-container');
+    if (!container) return;
 
     container.innerHTML = buildBookPagesHtml(currentBookId);
     updateModalHeaderForBook(currentBookId);
@@ -3749,12 +3753,24 @@
     }, 250);
   });
 
-  // Auto-open if URL has hash
-  window.addEventListener('DOMContentLoaded', function () {
-    if (window.location.hash === '#book-kyc') {
-      setTimeout(() => window.openBookReader('kyc', 1), 350);
-    } else if (window.location.hash === '#book' || window.location.hash === '#book-upi') {
-      setTimeout(() => window.openBookReader('upi', 1), 350);
+  // Auto-open if URL has hash or on hashchange
+  function handleHashOpen() {
+    const hash = (window.location.hash || '').toLowerCase();
+    if (hash === '#book-kyc') {
+      setTimeout(() => window.openBookReader('kyc', 1), 150);
+    } else if (hash === '#book-telegram') {
+      setTimeout(() => window.openBookReader('telegram', 1), 150);
+    } else if (hash === '#book-investment') {
+      setTimeout(() => window.openBookReader('investment', 1), 150);
+    } else if (hash === '#book' || hash === '#book-upi') {
+      setTimeout(() => window.openBookReader('upi', 1), 150);
     }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', handleHashOpen);
+  } else {
+    handleHashOpen();
+  }
+  window.addEventListener('hashchange', handleHashOpen);
 })();
