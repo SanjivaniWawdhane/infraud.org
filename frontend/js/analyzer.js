@@ -2051,88 +2051,92 @@ function renderUpiView(data, theme, riskScore, signals, recommendations) {
 function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const text = (data.target || currentTargetQuery).trim();
 
-  // 1. Reset buttons
+  // 1. Reset check buttons
   const headerBtn = document.getElementById('btn-header-reparse-nlp');
   if (headerBtn) {
     headerBtn.disabled = false;
-    headerBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Re-check Message</span>`;
+    headerBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg><span>Re-check Message</span>';
   }
   const dockBtn = document.getElementById('msg-quick-btn');
   if (dockBtn) {
     dockBtn.disabled = false;
-    dockBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Check Message</span>`;
+    dockBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Check Message</span>';
   }
 
   // 2. Pre-fill quick dock input
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = text;
 
-  // 3. Detected Plain-English Strategy
+  // 3. Update character count
+  const charEl = document.getElementById('msg-char-len-display');
+  if (charEl) charEl.textContent = text ? text.length + ' characters' : '';
+
+  // 4. Detected Plain-English Strategy
   let strategy = 'Suspicious Message';
   if (/parcel|package|shipment|courier|fedex|ups|usps|dhl|india post|redelivery|delivery fee|address update/i.test(text)) {
-    strategy = '📦 Fake Courier Delivery Scam';
+    strategy = 'Fake Courier Delivery Scam';
   } else if (/electricity|power|bijli|cut tonight/i.test(text)) {
-    strategy = '⚡ Electricity Disconnection Threat';
+    strategy = 'Electricity Disconnection Threat';
   } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
-    strategy = '🚓 Fake Police / Digital Arrest Call';
+    strategy = 'Fake Police / Digital Arrest Call';
   } else if (/job|part-time|like|youtube|telegram|daily income|hotel review/i.test(text)) {
-    strategy = '💼 Part-Time Job Offer Scam';
+    strategy = 'Part-Time Job Offer Scam';
   } else if (/lottery|prize|winner|reward|kbc|cashback/i.test(text)) {
-    strategy = '💰 Fake Lottery & Cash Prize';
+    strategy = 'Fake Lottery & Cash Prize';
   } else if (/blocked|kyc|pan|aadhaar|deactivated|netbanking/i.test(text)) {
-    strategy = '🏦 Bank Account KYC Phishing';
+    strategy = 'Bank Account KYC Phishing';
   } else if (/apk|sideload|download/i.test(text)) {
-    strategy = '📦 Dangerous App / APK Download';
+    strategy = 'Dangerous App / APK Download';
   } else if (riskScore < 20) {
-    strategy = '✅ Normal Everyday Message';
+    strategy = 'Normal Everyday Message';
   }
 
   const stratEl = document.getElementById('msg-val-strategy');
   if (stratEl) stratEl.textContent = strategy;
 
-  // 4. Update Main Title
+  // 5. Update Main Title
   const verdictTitle = document.getElementById('msg-gauge-verdict-title');
   if (verdictTitle) {
     verdictTitle.textContent = strategy;
   }
 
-  // 5. Status Icon & Header Tag
+  // 6. Status Icon & Header Tag
   const statusIcon = document.getElementById('msg-status-icon-box');
   const headerPill = document.getElementById('msg-header-status-pill');
   if (riskScore >= 70) {
     if (statusIcon) {
       statusIcon.className = 'msg-status-icon-wrap msg-status-icon-danger';
-      statusIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+      statusIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
     }
     if (headerPill) {
       headerPill.className = 'msg-verdict-tag danger';
-      headerPill.textContent = '🚨 CRITICAL SCAM DETECTED';
+      headerPill.innerHTML = '<span>🚨 CRITICAL SCAM DETECTED</span>';
     }
   } else if (riskScore >= 35) {
     if (statusIcon) {
       statusIcon.className = 'msg-status-icon-wrap msg-status-icon-warning';
-      statusIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+      statusIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
     }
     if (headerPill) {
       headerPill.className = 'msg-verdict-tag warning';
-      headerPill.textContent = '⚠️ SUSPICIOUS MESSAGE DETECTED';
+      headerPill.innerHTML = '<span>⚠️ SUSPICIOUS MESSAGE DETECTED</span>';
     }
   } else {
     if (statusIcon) {
       statusIcon.className = 'msg-status-icon-wrap msg-status-icon-safe';
-      statusIcon.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>';
+      statusIcon.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>';
     }
     if (headerPill) {
       headerPill.className = 'msg-verdict-tag safe';
-      headerPill.textContent = '✅ LIKELY SAFE MESSAGE';
+      headerPill.innerHTML = '<span>🟢 LIKELY SAFE MESSAGE</span>';
     }
   }
 
-  // 6. Threat Score Number & Pill
+  // 7. Threat Score Number & Level Pill
   const gaugeScore = document.getElementById('msg-gauge-score');
   if (gaugeScore) {
     gaugeScore.textContent = riskScore;
-    gaugeScore.className = 'msg-score-clean-num ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    gaugeScore.className = 'msg-score-val ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
   }
   const gaugePill = document.getElementById('msg-gauge-pill');
   if (gaugePill) {
@@ -2147,14 +2151,14 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     } else {
       gaugePill.style.background = '#ECFDF5';
       gaugePill.style.color = '#065F46';
-      gaugePill.textContent = 'LOW RISK';
+      gaugePill.textContent = 'SAFE';
     }
   }
 
-  // 7. Plain-English Summary
+  // 8. Plain-English Summary
   const gaugeSummary = document.getElementById('msg-gauge-summary');
   if (gaugeSummary) {
-    gaugeSummary.className = 'msg-plain-summary ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    gaugeSummary.className = 'msg-summary-banner ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
     if (/courier|parcel|delivery/i.test(strategy)) {
       gaugeSummary.textContent = 'This message looks like a parcel delivery scam. Scammers pretend to be couriers like FedEx or USPS claiming a package is on hold to trick you into clicking a link or paying a fake fee.';
     } else if (/electricity|power|bijli/i.test(strategy)) {
@@ -2170,66 +2174,20 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // 8. Meter Bar Segments & Pointer
-  const segSafe = document.getElementById('msg-seg-safe');
-  const segCaution = document.getElementById('msg-seg-caution');
-  const segRisky = document.getElementById('msg-seg-risky');
-  const segDanger = document.getElementById('msg-seg-danger');
-  [segSafe, segCaution, segRisky, segDanger].forEach(s => s && s.classList.remove('active'));
-  if (riskScore >= 75) {
-    if (segDanger) segDanger.classList.add('active');
-  } else if (riskScore >= 50) {
-    if (segRisky) segRisky.classList.add('active');
-  } else if (riskScore >= 25) {
-    if (segCaution) segCaution.classList.add('active');
-  } else {
-    if (segSafe) segSafe.classList.add('active');
-  }
+  // 9. Sleek Minimalist Risk Meter Pointer
   const pointer = document.getElementById('msg-gradient-pointer');
   if (pointer) {
     pointer.style.left = Math.min(100, Math.max(0, riskScore)) + '%';
-    pointer.style.borderColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#F59E0B' : '#10B981');
+    pointer.style.borderColor = riskScore >= 70 ? '#DC2626' : (riskScore >= 35 ? '#D97706' : '#059669');
   }
 
-  // 9. Dynamic Highlighting of Dangerous Words
-  let highlighted = escapeHtml(text);
-  const criticalWords = [
-    'electricity', 'power', 'bijli', 'disconnected?', 'cut tonight', 'account blocked',
-    'immediately', 'urgently?', 'urgent', 'within \\d+ hours?', 'police', 'cbi', 'arrest',
-    'customs', 'narcotics', 'warrant', 'apk', 'deactivated', 'immediate action', 'notice',
-    'final warning', 'cutoff', 'suspended', 'penalty', 'cyber crime', 'court order',
-    'parcel', 'package', 'shipment', 'held up', 'on hold', 'redelivery fee', 'delivery fee',
-    'address updates?', 'phishing link', 'phishing', 'customs fee', 'undelivered', 'consignment'
-  ];
-  criticalWords.forEach(kw => {
-    const re = new RegExp(`\\b(${kw})\\b`, 'gi');
-    highlighted = highlighted.replace(re, '<mark class="threat-kw-critical">$1</mark>');
-  });
-
-  const warnWords = [
-    'otp', 'upi pin', 'mpin', 'pin', 'password', 'cvv', 'share', 'verify',
-    'refund', 'cashback', 'lottery', 'winner', 'prize', 'reward', 'daily income',
-    'part-time job', 'earn rs', 'telegram', 'sideload'
-  ];
-  warnWords.forEach(kw => {
-    const re = new RegExp(`\\b(${kw})\\b`, 'gi');
-    highlighted = highlighted.replace(re, '<mark class="threat-kw-warn">$1</mark>');
-  });
-
-  const authorityWords = [
-    'msedcl', 'bescom', 'tneb', 'dhbvn', 'uppcl', 'sbi', 'hdfc', 'icici', 'axis bank',
-    'punjab national', 'bank of baroda', 'paytm', 'phonepe', 'google pay', 'india post',
-    'fedex', 'dhl', 'rbi', 'trai', 'kbc', 'usps', 'ups', 'bluedart', 'speed post', 'couriers?'
-  ];
-  authorityWords.forEach(kw => {
-    const re = new RegExp(`\\b(${kw})\\b`, 'gi');
-    highlighted = highlighted.replace(re, '<mark class="threat-kw-impersonation">$1</mark>');
-  });
-
+  // 10. Natural, Authentic Message Presentation (No AI candy-pill circus!)
   const msgBubble = document.getElementById('msg-bubble-content');
-  if (msgBubble) msgBubble.innerHTML = highlighted;
+  if (msgBubble) {
+    msgBubble.textContent = text;
+  }
 
-  // 10. Extracted Payloads (Shown ONLY if links or phones were found)
+  // 11. Extracted Payloads (Shown ONLY if links or phones were found)
   const extractedContainer = document.getElementById('msg-extracted-container');
   if (extractedContainer) {
     const urls = data.embeddedUrls || [];
@@ -2261,7 +2219,7 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
     }
   }
 
-  // 11. Context-Aware Action Buttons
+  // 12. Context-Aware Action Buttons
   const emergBtn = document.querySelector('#view-message .msg-btn-emergency');
   const reportBtn = document.querySelector('#view-message .msg-btn-report');
   if (emergBtn) {
@@ -2269,22 +2227,29 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   }
   if (reportBtn) {
     reportBtn.innerHTML = riskScore >= 50 ?
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Report This Scam</span>' :
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span>Report Message</span>';
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Report Scam</span>' :
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span>Report Message</span>';
   }
 
-  // 12. Render Clean Signals & Recommendations
+  // 13. Render Clean Signals & Recommendations
   renderSignalsList(signals, theme, 'msg-signals-container', 'msg-signals-count');
   renderRecommendationsList(recommendations, theme, 'msg-recommendations-list');
 }
 
-/**
- * 4. Dedicated Renderer for Web URLs (Cyber Domain Sandbox)
- */
-/**
- * Production-Grade Dynamic 8-Vector Heuristic Radar & URL Forensic Decomposition
- */
 
+window.copyCurrentMessageText = function() {
+  const el = document.getElementById('msg-quick-input') || document.getElementById('msg-bubble-content');
+  const txt = el ? (el.value || el.textContent || '').trim() : '';
+  if (!txt) return;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.getElementById('msg-copy-text');
+    if (btn) btn.textContent = 'Copied!';
+    setTimeout(() => { if (btn) btn.textContent = 'Copy Text'; }, 2000);
+    if (typeof showResultToast === 'function') {
+      showResultToast('Message text copied to clipboard');
+    }
+  }).catch(() => {});
+};
 
 function renderUrlView(data, theme, riskScore, signals, recommendations, target) {
   // 1. Sync Minimalist Quick Input Field
