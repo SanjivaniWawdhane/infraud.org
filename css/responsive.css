@@ -1183,12 +1183,12 @@ pre, code {
   }
   .nav-link-item:hover {
     color: #1d4ed8 !important;
-    background: rgba(37, 99, 235, 0.06) !important;
+    background: transparent !important;
   }
   .nav-link-item.active {
     color: #1d4ed8 !important;
     font-weight: 600 !important;
-    background: rgba(37, 99, 235, 0.08) !important;
+    background: transparent !important;
   }
   .nav-link-left {
     display: inline-flex !important;
