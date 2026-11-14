@@ -1682,3 +1682,68 @@
   border-left: 4px solid #7C3AED !important;
   color: #5B21B6 !important;
 }
+
+
+/* ─── Multi-Book: Investment Fraud Theme Additions ─── */
+.book-pill-ribbon.ribbon-green {
+  background: #ECFDF5 !important;
+  color: #059669 !important;
+  border: 1px solid #A7F3D0 !important;
+}
+
+.book-read-cta-btn.btn-green {
+  background: #059669 !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25) !important;
+}
+
+.book-read-cta-btn.btn-green:hover {
+  background: #047857 !important;
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.35) !important;
+}
+
+.book-cover-page.theme-investment {
+  box-shadow: inset 0 0 100px rgba(5, 150, 105, 0.15) !important;
+}
+
+.book-cover-page.theme-investment::before {
+  background: radial-gradient(circle, rgba(5, 150, 105, 0.25) 0%, transparent 65%) !important;
+}
+
+.cover-brand-pill.pill-investment {
+  background: rgba(5, 150, 105, 0.25) !important;
+  border-color: rgba(52, 211, 153, 0.4) !important;
+  color: #A7F3D0 !important;
+}
+
+.cover-hero-tag.tag-investment {
+  color: #34D399 !important;
+}
+
+.cover-golden-rule-box.rule-investment {
+  border-left-color: #059669 !important;
+  background: rgba(5, 150, 105, 0.08) !important;
+}
+
+.cover-golden-rule-title.rule-title-investment {
+  color: #6EE7B7 !important;
+}
+
+.book-nav-btn.btn-investment-accent {
+  background: #059669 !important;
+}
+
+.book-nav-btn.btn-investment-accent:hover:not(:disabled) {
+  background: #047857 !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
+}
+
+.book-chapter-tag.tag-green {
+  background: #ECFDF5 !important;
+  color: #059669 !important;
+}
+
+.book-banner-rule.rule-green {
+  background: #F0FDF4 !important;
+  border-left: 4px solid #059669 !important;
+  color: #065F46 !important;
+}

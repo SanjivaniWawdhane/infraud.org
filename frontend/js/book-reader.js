@@ -2353,6 +2353,762 @@
   ];
 
 
+
+  // State for Investment Fraud Book
+  let investmentChecklistState = [false, false, false, false, false, false, false, false];
+  let investmentQuizAnswers = {};
+
+  const investmentQuizQuestions = [
+    {
+      id: 'inv_q1',
+      text: "1. A WhatsApp admin shares a SEBI registration certificate image. What should you do next?",
+      options: [
+        { key: 'A', text: "Trust it immediately as proof of legitimacy" },
+        { key: 'B', text: "Verify exact entity, number, category, and status on SEBI's official site", correct: true },
+        { key: 'C', text: "Pay a test amount to see if trades work" }
+      ],
+      explanation: "Certificate images are easily fabricated. Always independently verify the entity, registration number, category, and current status directly on sebi.gov.in."
+    },
+    {
+      id: 'inv_q2',
+      text: "2. A group promises 15% monthly guaranteed returns in securities trading:",
+      options: [
+        { key: 'A', text: "Low-risk opportunity to compound savings" },
+        { key: 'B', text: "Major red flag; SEBI prohibits assured returns in stock markets", correct: true },
+        { key: 'C', text: "Join if group members post daily profit screenshots" }
+      ],
+      explanation: "SEBI investor advisories explicitly warn that guaranteed, assured, or fixed returns in securities markets are illegal and a primary hallmark of fraud."
+    },
+    {
+      id: 'inv_q3',
+      text: "3. An app shows ₹3,00,000 profit but demands a 20% tax deposit before you can withdraw:",
+      options: [
+        { key: 'A', text: "Pay the fee to unlock the full balance" },
+        { key: 'B', text: "Treat balance as unverified screen data; stop all payments immediately", correct: true },
+        { key: 'C', text: "Borrow money to unlock the withdrawal" }
+      ],
+      explanation: "A displayed balance is merely an unverified screen value created by scammers. Demanding fees or taxes to release money is a classic exit trap."
+    },
+    {
+      id: 'inv_q4',
+      text: "4. A registered broker's logo and name appear on a Telegram channel. Is it genuine?",
+      options: [
+        { key: 'A', text: "Yes, registered brokers use Telegram for VIP client communications" },
+        { key: 'B', text: "Not proven; genuine firms are frequently impersonated—contact via official website", correct: true },
+        { key: 'C', text: "Yes, if the admin uses professional market jargon and candlestick charts" }
+      ],
+      explanation: "Fraud syndicates frequently copy registered broker branding. Never trade through social channels without independently confirming with the broker."
+    },
+    {
+      id: 'inv_q5',
+      text: "5. What is the safest way to verify an investment/trading app before depositing funds?",
+      options: [
+        { key: 'A', text: "Install the APK link shared directly by the group mentor" },
+        { key: 'B', text: "Check official SEBI Investor Support and NSE/BSE exchange authorised app lists", correct: true },
+        { key: 'C', text: "Trust app store review counts and user ratings" }
+      ],
+      explanation: "Always cross-check trading applications against official SEBI and stock exchange (NSE/BSE) registered intermediary app directories."
+    },
+    {
+      id: 'inv_q6',
+      text: "6. A self-described market expert asks for your broker password and OTP to execute institutional trades:",
+      options: [
+        { key: 'A', text: "Share both to participate in institutional block deals" },
+        { key: 'B', text: "Refuse immediately; never share trading credentials, OTPs, or API keys", correct: true },
+        { key: 'C', text: "Share password only, not the OTP" }
+      ],
+      explanation: "Never share credentials or OTPs. Authorised intermediaries never ask for your login passwords or OTPs to trade on your behalf."
+    },
+    {
+      id: 'inv_q7',
+      text: "7. You transferred funds to an unverified trading app and suspect fraud. Immediate next step?",
+      options: [
+        { key: 'A', text: "Pay a fee to an online recovery specialist" },
+        { key: 'B', text: "Contact bank immediately, call 1930, report at cybercrime.gov.in, and preserve all evidence", correct: true },
+        { key: 'C', text: "Delete the group chat to protect privacy" }
+      ],
+      explanation: "Immediately halt further transfers, alert your bank's fraud desk, dial 1930 within the golden hour, and file a formal cybercrime complaint."
+    },
+    {
+      id: 'inv_q8',
+      text: "8. A complaint against a genuine SEBI-registered intermediary remains unresolved:",
+      options: [
+        { key: 'A', text: "Approach the entity first, then escalate to SEBI SCORES (scores.gov.in)", correct: true },
+        { key: 'B', text: "Pay the group admin to settle the grievance" },
+        { key: 'C', text: "Post your credentials publicly on social media" }
+      ],
+      explanation: "Eligible investor complaints against SEBI-registered intermediaries should first be taken up with the firm, and if unresolved, escalated via SEBI SCORES."
+    }
+  ];
+
+  function getInvestmentPrefaceHtml() {
+    return `
+      <div class="book-page-leaf book-page-left" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #F0FDF4;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(5, 150, 105, 0.1); display:flex; align-items:center; justify-content:center; margin-bottom: 24px; border: 2px solid rgba(5, 150, 105, 0.2);">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div style="font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.12em; color: #059669; text-transform: uppercase; margin-bottom: 12px;">INFRAUD ACADEMY • ADVANCED</div>
+        <h2 style="font-size: 1.75rem; font-weight: 800; color: #0F172A; margin: 0 0 16px 0; line-height: 1.25;">Investment Fraud Rings Handbook</h2>
+        <p style="font-size: 0.9375rem; line-height: 1.6; color: #475569; max-width: 380px; margin: 0 0 28px 0;">
+          An advanced, India-focused guide to WhatsApp trading groups, fake broker apps, impersonation, guaranteed-return traps, SEBI verification, and investor protection.
+        </p>
+        <div style="padding: 6px 16px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 999px; font-size: 0.8125rem; font-weight: 700; color: #059669;">
+          Edition 2026 • 6 Lessons &amp; Quiz
+        </div>
+      </div>
+    `;
+  }
+
+  function getInvestmentCertificateHtml() {
+    return `
+      <div class="book-page-leaf book-page-right" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #F0FDF4;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(5, 150, 105, 0.1); display:flex; align-items:center; justify-content:center; margin-bottom: 24px; border: 2px solid #059669;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <span class="book-chapter-tag" style="background:#ECFDF5; color:#059669;">CURRICULUM COMPLETE</span>
+        <h2 style="font-size: 1.625rem; font-weight: 800; color: #0F172A; margin: 12px 0 12px 0;">Advanced Investor Certified!</h2>
+        <p style="font-size: 0.9375rem; line-height: 1.6; color: #475569; max-width: 380px; margin: 0 0 24px 0;">
+          You have mastered the architecture of investment fraud syndicates, learned SEBI intermediary due diligence, and acquired the skills to spot fake trading platforms.
+        </p>
+        <div style="padding: 16px 24px; background: #ffffff; border-radius: 12px; border: 1px solid #E2E8F0; width: 100%; max-width: 360px; text-align: left; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+          <div style="font-size: 0.75rem; text-transform:uppercase; color:#94A3B8; font-weight:700;">Accreditation</div>
+          <div style="font-size: 0.875rem; font-weight:700; color:#0F172A; margin-top:2px;">INFRAUD Advanced Investment Defense</div>
+          <div style="font-size: 0.8125rem; color:#64748B; margin-top:6px;">National Cyber Helpline: <strong>1930</strong> • SEBI SCORES: <strong>scores.gov.in</strong></div>
+        </div>
+        <button class="book-control-btn book-control-btn-primary" style="background:#059669; border-color:#059669; padding: 10px 24px;" onclick="window.bookReader.close();">
+          Return to Academy
+        </button>
+      </div>
+    `;
+  }
+
+  const investmentPagesData = [
+    // Page 1: Cover Page
+    {
+      page: 1,
+      title: "Cover",
+      render: function () {
+        return `
+          <div class="book-cover-page book-page-leaf theme-investment">
+            <div class="cover-top-emblem">
+              <div class="cover-brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                INFRAUD
+              </div>
+              <span class="cover-brand-pill pill-investment">Advanced Masterclass</span>
+            </div>
+
+            <div class="cover-body-hero">
+              <div class="cover-hero-tag tag-investment">Official Curriculum Guide</div>
+              <h1 class="cover-hero-title">Investment Fraud Rings</h1>
+              <p class="cover-hero-desc">
+                An advanced, India-focused guide to WhatsApp trading groups, fake broker apps, impersonation, guaranteed-return traps, SEBI verification, and investor protection.
+              </p>
+
+              <div class="cover-pills-row">
+                <div class="cover-meta-pill">
+                  <span>LEVEL</span>
+                  <strong>Advanced</strong>
+                </div>
+                <div class="cover-meta-pill">
+                  <span>CURRICULUM</span>
+                  <strong>6 Lessons</strong>
+                </div>
+                <div class="cover-meta-pill">
+                  <span>TOPIC</span>
+                  <strong>Investment Fraud</strong>
+                </div>
+              </div>
+
+              <div class="cover-golden-rule-box rule-investment">
+                <div class="cover-golden-rule-title rule-title-investment">★ THE CENTRAL RULE</div>
+                <div class="cover-golden-rule-text">
+                  Never transfer money because a social-media group, unknown adviser, or app promises guaranteed profits. Independently verify the exact entity and platform through official SEBI and exchange sources.
+                </div>
+              </div>
+            </div>
+
+            <div class="cover-footer-meta">
+              INFRAUD Security Education Series Edition 2026 • 12 Pages
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 2: Contents & Four-Question Filter
+    {
+      page: 2,
+      title: "Contents & Decision Rule",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>INFRAUD.ORG • SAFETY ACADEMY</span>
+              <span>PAGE 02</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">OVERVIEW</span>
+            <h2 class="book-page-title">Table of Contents</h2>
+            <p class="book-page-subtitle">Six-lesson advanced masterclass roadmap</p>
+
+            <table style="width:100%; border-collapse:collapse; margin-bottom: 20px; font-size: 0.8125rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid #E8EBF3; text-align: left; color: #4B5570;">
+                  <th style="padding: 7px 0; font-weight: 700;">SECTION</th>
+                  <th style="padding: 7px 0; font-weight: 700;">FOCUS AREA</th>
+                  <th style="padding: 7px 0; text-align: right; font-weight: 700;">PAGE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(3)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Lesson 1</td>
+                  <td style="padding: 7px 0;">Fraud-Ring Structure: How Investment Rings Operate</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">03</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(4)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Lesson 2</td>
+                  <td style="padding: 7px 0;">Social Engineering: WhatsApp &amp; Telegram Group Manipulation</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">04</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(5)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Lesson 3</td>
+                  <td style="padding: 7px 0;">Platform Impersonation: Fake Broker Apps &amp; Clone Portals</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">05</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(6)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Lesson 4</td>
+                  <td style="padding: 7px 0;">Regulatory Due Diligence: SEBI Directory &amp; App Checks</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">06</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(7)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Lesson 5</td>
+                  <td style="padding: 7px 0;">Advanced Red Flags: Guaranteed Returns &amp; Dabba Trading</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">07</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(8)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Lesson 6</td>
+                  <td style="padding: 7px 0;">Incident Response: 1930 Helpline &amp; SEBI SCORES</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">08</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(9)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Quick Reference</td>
+                  <td style="padding: 7px 0;">Due-Diligence Checklist &amp; Case Study Breakdown</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">09</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(10)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Knowledge Check</td>
+                  <td style="padding: 7px 0;">Interactive 8-Question Advanced Quiz with Instant Feedback</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">10–11</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(12)">
+                  <td style="padding: 7px 0; font-weight: 700; color: #059669;">Glossary &amp; Sources</td>
+                  <td style="padding: 7px 0;">Official SEBI, NSE &amp; Regulatory Advisories</td>
+                  <td style="padding: 7px 0; text-align: right; font-weight: 600; color: #9AA3B8;">12</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="book-banner-rule rule-green" style="margin-top: 14px;">
+              <strong>★ THE FOUR-QUESTION FILTER</strong><br>
+              1. Who is offering this? • 2. Are they authorized for this specific activity? • 3. Is the app/route officially linked? • 4. Can I verify every claim without using the promoter's links or numbers?
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD SAFETY ACADEMY</span>
+              <span class="page-num-badge">02</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 3: Lesson 1 - Fraud-Ring Structure
+    {
+      page: 3,
+      title: "Lesson 1: Fraud-Ring Structure",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>LESSON 1 | FRAUD-RING STRUCTURE</span>
+              <span>PAGE 03</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">LESSON 1</span>
+            <h2 class="book-page-title">How Investment Rings Operate</h2>
+            <p class="book-page-subtitle">A coordinated syndicate operating across specialized roles</p>
+
+            <p style="font-size: 0.875rem; line-height: 1.5; color: #334155;">
+              Investment fraud is rarely a solo criminal operation. It operates as a coordinated syndicate involving distinct roles for lead generation, authority theater, cloned technology, money laundering, and withdrawal extortion.
+            </p>
+
+            <h3 class="book-sec-title" style="margin-top: 12px;">Common Syndicate Roles</h3>
+
+            <div class="book-banner-rule" style="margin-bottom: 8px;">
+              <strong>Lead Generator:</strong> Uses targeted social media ads, fake financial influencer reels, and unsolicited WhatsApp/SMS messages to attract victims.
+            </div>
+
+            <div class="book-banner-rule" style="margin-bottom: 8px;">
+              <strong>Fake Analysts &amp; Admins:</strong> Adopt prestigious titles ("Chief Global Strategist", "Institutional Desk Head") to broadcast market commentary and fabricated trading calls.
+            </div>
+
+            <div class="book-banner-warning" style="margin-bottom: 8px;">
+              <strong>Shills &amp; Coordinated Bots:</strong> Accounts in the group that post enthusiastic profit slips, praise the mentor, and claim massive daily earnings.
+            </div>
+
+            <div class="book-banner-danger" style="margin-bottom: 10px;">
+              <strong>Platform Operators &amp; Money Collectors:</strong> Run cloned APK apps showing fictitious portfolio gains while funnelling deposited money through layers of mule accounts.
+            </div>
+
+            <div class="book-banner-rule rule-green">
+              <strong>MULTIPLE IDENTITIES ILLUSION:</strong> Having 20 people in a WhatsApp group praise an analyst is not social proof. Fraud rings control all 20 accounts simultaneously.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 1 • SYNDICATE STRUCTURE</span>
+              <span class="page-num-badge">03</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 4: Lesson 2 - Social Engineering
+    {
+      page: 4,
+      title: "Lesson 2: Social Engineering",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>LESSON 2 | SOCIAL ENGINEERING</span>
+              <span>PAGE 04</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">LESSON 2</span>
+            <h2 class="book-page-title">Group Manipulation Tactics</h2>
+            <p class="book-page-subtitle">Psychological traps used in WhatsApp and Telegram trading rooms</p>
+
+            <div style="font-size: 0.8125rem; line-height: 1.45; color: #334155;">
+              <p style="margin: 0 0 8px 0;"><strong>Authority Theatre:</strong> Admins brandish fake SEBI certificates, fabricated institutional letterheads, and high-sounding corporate jargon to intimidate critical scrutiny.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>Selective Performance &amp; Survivorship Bias:</strong> Winning trades are celebrated with fanfare, while bad calls, losses, and critical questions are quietly deleted and dissenters blocked.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>Manufactured Scarcity (FOMO):</strong> "Only 5 VIP institutional slots remain", "Act before market opening bell", or "Exclusive FPI allocation" pressure victims into bypassing due diligence.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>Psychological Isolation:</strong> Promoters tell victims: "Keep this allocation secret from your broker, bank, or family, or your institutional quota will be cancelled."</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>Fictitious "Special Access":</strong> Claims of discounted pre-IPO allotments, guaranteed upper-circuit stock access, or institutional block deals are standard scam pretexts.</p>
+            </div>
+
+            <div class="book-banner-danger" style="margin-top: 10px;">
+              <strong>EXCHANGE WARNING:</strong> NSE and BSE have repeatedly clarified that institutional FPI/FII quotas cannot be offered to retail investors via private social media groups.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 2 • SOCIAL ENGINEERING</span>
+              <span class="page-num-badge">04</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 5: Lesson 3 - Platform Impersonation
+    {
+      page: 5,
+      title: "Lesson 3: Platform Impersonation",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>LESSON 3 | PLATFORM IMPERSONATION</span>
+              <span>PAGE 05</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">LESSON 3</span>
+            <h2 class="book-page-title">Fake Apps &amp; Payment Traps</h2>
+            <p class="book-page-subtitle">How cloned trading platforms manufacture the illusion of real wealth</p>
+
+            <h3 class="book-sec-title">How Fake Trading Apps Operate</h3>
+            <p style="font-size: 0.8125rem; line-height: 1.45; color: #334155; margin: 4px 0 8px 0;">
+              Cloned trading apps closely copy genuine broker logos, UI themes, live stock charts, and order books. When you "buy" a stock, no order goes to NSE/BSE—the app simply increments a fictitious database number.
+            </p>
+
+            <div class="book-banner-warning" style="margin-bottom: 8px;">
+              <strong>Technical Red Flags:</strong> APK files shared on WhatsApp/Telegram • Lookalike typosquat domains (e.g., <code>broker-login.vip</code>) • App publisher doesn't match the legal broker entity.
+            </div>
+
+            <h3 class="book-sec-title">A Screen Balance Proves Nothing</h3>
+            <p style="font-size: 0.8125rem; line-height: 1.45; color: #334155; margin: 4px 0 8px 0;">
+              Real securities purchases generate independent trade confirmations: direct SMS/emails from NSE/BSE and depository holding updates (CDSL/NSDL). If you only see numbers in an app, you own nothing.
+            </p>
+
+            <div class="book-banner-danger" style="margin-bottom: 10px;">
+              <strong>Payment Route Trap:</strong> You are instructed to transfer money to personal savings accounts, private enterprise UPI handles, or crypto wallets instead of the broker's designated client bank account.
+            </div>
+
+            <div class="book-banner-rule rule-green">
+              <strong>SEBI VALIDATED UPI:</strong> SEBI requires stock brokers to use validated UPI IDs matching their registered corporate name. Always verify the beneficiary name before approving UPI mandates.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 3 • FAKE APPS &amp; TRAPS</span>
+              <span class="page-num-badge">05</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 6: Lesson 4 - Regulatory Due Diligence
+    {
+      page: 6,
+      title: "Lesson 4: Regulatory Due Diligence",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>LESSON 4 | REGULATORY DUE DILIGENCE</span>
+              <span>PAGE 06</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">LESSON 4</span>
+            <h2 class="book-page-title">Verifying SEBI Registration</h2>
+            <p class="book-page-subtitle">The four-step rigorous verification protocol for all intermediaries</p>
+
+            <div style="font-size: 0.8125rem; line-height: 1.45; color: #334155;">
+              <p style="margin: 0 0 8px 0;"><strong>1. Obtain Full Legal Corporate Name:</strong> Never accept nicknames, app names, or mentor brands. Demand the exact legal registered entity name and SEBI Registration Number.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>2. Check Official Directory (sebi.gov.in):</strong> Navigate independently to SEBI's Intermediaries Directory. Check exact legal name, address, valid status, and expiry.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>3. Verify the Specific Registration Category:</strong> Stock Broker, Investment Adviser (IA), Research Analyst (RA), and Portfolio Manager (PMS) are separate licenses. A Stock Broker cannot offer PMS without an explicit PMS license.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>4. Verify Authorised Mobile App on NSE/BSE:</strong> Stock exchanges publish lists of approved trading applications. Verify that the app's publisher and package ID match the official broker listing.</p>
+            </div>
+
+            <div class="book-banner-danger" style="margin-top: 10px;">
+              <strong>IMPERSONATION ALERT:</strong> Scammers often paste the real SEBI registration number of a legitimate MNC broker. You must verify that the social media account or website actually belongs to that firm!
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 4 • DUE DILIGENCE</span>
+              <span class="page-num-badge">06</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 7: Lesson 5 - Advanced Red Flags
+    {
+      page: 7,
+      title: "Lesson 5: Advanced Red Flags",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>LESSON 5 | ADVANCED RED FLAGS</span>
+              <span>PAGE 07</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">LESSON 5</span>
+            <h2 class="book-page-title">Market Manipulation &amp; Traps</h2>
+            <p class="book-page-subtitle">Recognising illegal operations, pump-and-dump runs, and dabba trading</p>
+
+            <div class="book-banner-danger" style="margin-bottom: 8px;">
+              <strong>Guaranteed / Assured Returns:</strong> Any promise of "zero loss", "fixed 20% monthly ROI", or "guaranteed upper circuit" is an immediate disqualifier.
+            </div>
+
+            <div class="book-banner-warning" style="margin-bottom: 8px;">
+              <strong>Pump-and-Dump Stock Promotion:</strong> Fraud rings acquire illiquid penny stocks, hype them in closed Telegram channels with fake institutional target prices, and dump their holdings when victims buy.
+            </div>
+
+            <div class="book-banner-danger" style="margin-bottom: 8px;">
+              <strong>Unauthorised Dabba Trading:</strong> Off-exchange bucket shop trading where orders are never routed to stock exchanges. NSE cautions that dabba transactions have zero regulatory protection.
+            </div>
+
+            <div class="book-banner-warning" style="margin-bottom: 8px;">
+              <strong>Trading Account Takeover:</strong> Never surrender your broker login credentials, OTPs, or API trading tokens to someone offering "automated algorithmic profit-sharing".
+            </div>
+
+            <div class="book-banner-rule rule-green" style="margin-top: 10px;">
+              <strong>RECOVERY SCAM WARNING:</strong> After losing funds, beware of fake "cyber advocates" or "recovery agents" claiming they can unfreeze your money for a fee.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 5 • RED FLAGS &amp; DABBA</span>
+              <span class="page-num-badge">07</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 8: Lesson 6 - Incident Response
+    {
+      page: 8,
+      title: "Lesson 6: Incident Response & SCORES",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>LESSON 6 | INCIDENT RESPONSE</span>
+              <span>PAGE 08</span>
+            </div>
+
+            <span class="book-chapter-tag" style="background:#FEE2E2; color:#DC2626;">EMERGENCY PROTOCOL</span>
+            <h2 class="book-page-title">Incident Response &amp; SCORES</h2>
+            <p class="book-page-subtitle">Emergency action paths for cyber fraud vs. registered intermediary grievances</p>
+
+            <div class="book-banner-danger" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+              <div>
+                <strong style="font-size:0.875rem;">FINANCIAL CYBER FRAUD HELPLINE</strong><br>
+                <span style="font-size:0.75rem;">Call immediately within the golden hour</span>
+              </div>
+              <a href="tel:1930" class="book-control-btn" style="background:#DC2626; color:#fff; font-weight:800; text-decoration:none; padding:8px 16px; border-radius:8px;">
+                📞 Call 1930
+              </a>
+            </div>
+
+            <h3 class="book-sec-title">Two Distinct Reporting Paths</h3>
+
+            <div class="book-banner-rule" style="margin-bottom: 8px;">
+              <strong>Path A: Cyber Fraud Syndicate (Fake App/Mule Account)</strong><br>
+              1. Immediately call your bank fraud desk to freeze transactions.<br>
+              2. Dial 1930 and lodge formal complaint at <code>cybercrime.gov.in</code>.<br>
+              3. Preserve complete chat exports, APK files, UPI handles, and bank UTRs.
+            </div>
+
+            <div class="book-banner-rule rule-green" style="margin-bottom: 10px;">
+              <strong>Path B: Grievance Against Registered Intermediary</strong><br>
+              1. First lodge a formal grievance with the registered firm's compliance officer.<br>
+              2. If unresolved within 30 days, escalate through <strong>SEBI SCORES</strong> (<code>scores.gov.in</code>).
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 6 • EMERGENCY PROTOCOL</span>
+              <span class="page-num-badge">08</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 9: Quick Reference - Checklist & Case Study
+    {
+      page: 9,
+      title: "Quick Reference: Verification Checklist",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>QUICK REFERENCE | CHECKLIST</span>
+              <span>PAGE 09</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">INTERACTIVE TOOL</span>
+            <h2 class="book-page-title">Due-Diligence Checklist</h2>
+            <p class="book-page-subtitle">Verify every safety pillar before transferring any investment funds</p>
+
+            <div class="checklist-items-grid">
+              ${[
+                { q: "Who is the legal corporate entity?", a: "Verify full legal name—not just group, brand, or mentor nickname." },
+                { q: "What specific activity is offered?", a: "Match service against registered category (Broker, IA, RA, or PMS)." },
+                { q: "Is registration verified on sebi.gov.in?", a: "Check registration status directly on official SEBI directory." },
+                { q: "Is the mobile app officially authorised?", a: "Match exact app name and publisher against NSE/BSE app lists." },
+                { q: "Does the domain match official sources?", a: "Navigate independently from official records, not chat links." },
+                { q: "Who receives the money?", a: "Beneficiary must match registered client account; never pay private UPIs." },
+                { q: "Are returns guaranteed or assured?", a: "Guaranteed returns in securities are strictly illegal—reject immediately." },
+                { q: "Am I being pressured or isolated?", a: "Reject VIP allocation countdowns, secret groups, or borrowing demands." }
+              ].map((item, idx) => `
+                <div class="check-item-card ${investmentChecklistState[idx] ? 'checked' : ''}" id="investment-chk-item-${idx}" onclick="window.bookReader.toggleInvestmentCheck(${idx})">
+                  <div class="check-box-visual">${investmentChecklistState[idx] ? '✓' : ''}</div>
+                  <div class="check-text-content">
+                    <div class="check-question">${item.q}</div>
+                    <div class="check-action-guidance">${item.a}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>QUICK REFERENCE • CHECKLIST</span>
+              <span class="page-num-badge">09</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 10: Knowledge Check Quiz Part 1
+    {
+      page: 10,
+      title: "Knowledge Check: Scenarios 1–4",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>KNOWLEDGE CHECK | QUIZ</span>
+              <span>PAGE 10</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">INTERACTIVE QUIZ</span>
+            <h2 class="book-page-title">Safety Scenarios (1–4)</h2>
+            <p class="book-page-subtitle">Choose the safest response. Instant feedback provided.</p>
+
+            <div class="quiz-container">
+              ${investmentQuizQuestions.slice(0, 4).map(q => {
+                const userChoice = investmentQuizAnswers[q.id];
+                const answered = !!userChoice;
+                return `
+                  <div class="quiz-question-block" id="investment-quiz-block-${q.id}">
+                    <div class="quiz-q-title">${q.text}</div>
+                    <div class="quiz-options-list">
+                      ${q.options.map(opt => {
+                        let btnClass = '';
+                        if (answered) {
+                          if (opt.correct) btnClass = 'correct';
+                          else if (opt.key === userChoice) btnClass = 'wrong';
+                        }
+                        return `
+                          <button class="quiz-opt-btn ${btnClass}" 
+                                  onclick="window.bookReader.answerInvestmentQuiz('${q.id}', '${opt.key}')"
+                                  ${answered ? 'disabled' : ''}>
+                            <strong>${opt.key}.</strong> ${opt.text}
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>
+                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}">
+                      💡 <strong>Rationale:</strong> ${q.explanation}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>KNOWLEDGE CHECK • PART 1</span>
+              <span class="page-num-badge">10</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 11: Knowledge Check Quiz Part 2
+    {
+      page: 11,
+      title: "Knowledge Check: Scenarios 5–8",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>KNOWLEDGE CHECK | QUIZ</span>
+              <span>PAGE 11</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">INTERACTIVE QUIZ</span>
+            <h2 class="book-page-title">Safety Scenarios (5–8)</h2>
+            <p class="book-page-subtitle">Test regulatory verification &amp; crisis mitigation</p>
+
+            <div class="quiz-container">
+              ${investmentQuizQuestions.slice(4).map(q => {
+                const userChoice = investmentQuizAnswers[q.id];
+                const answered = !!userChoice;
+                return `
+                  <div class="quiz-question-block" id="investment-quiz-block-${q.id}">
+                    <div class="quiz-q-title">${q.text}</div>
+                    <div class="quiz-options-list">
+                      ${q.options.map(opt => {
+                        let btnClass = '';
+                        if (answered) {
+                          if (opt.correct) btnClass = 'correct';
+                          else if (opt.key === userChoice) btnClass = 'wrong';
+                        }
+                        return `
+                          <button class="quiz-opt-btn ${btnClass}" 
+                                  onclick="window.bookReader.answerInvestmentQuiz('${q.id}', '${opt.key}')"
+                                  ${answered ? 'disabled' : ''}>
+                            <strong>${opt.key}.</strong> ${opt.text}
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>
+                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}">
+                      💡 <strong>Rationale:</strong> ${q.explanation}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>KNOWLEDGE CHECK • PART 2</span>
+              <span class="page-num-badge">11</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 12: Glossary & Official Sources
+    {
+      page: 12,
+      title: "Glossary & Sources",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>GLOSSARY &amp; SOURCES</span>
+              <span>PAGE 12</span>
+            </div>
+
+            <span class="book-chapter-tag tag-green">REFERENCE</span>
+            <h2 class="book-page-title">Key Terms &amp; Primary Sources</h2>
+            <p class="book-page-subtitle">Official regulatory definitions and authoritative URLs</p>
+
+            <div class="glossary-items-list" style="margin-bottom: 12px;">
+              <div class="glossary-item">
+                <div class="glossary-term">SEBI (Securities &amp; Exchange Board of India)</div>
+                <div class="glossary-def">Statutory regulatory body protecting investor interests in India's securities markets.</div>
+              </div>
+              <div class="glossary-item">
+                <div class="glossary-term">SEBI SCORES (scores.gov.in)</div>
+                <div class="glossary-def">Online centralized grievance redress system for complaints against registered entities.</div>
+              </div>
+              <div class="glossary-item">
+                <div class="glossary-term">Dabba Trading</div>
+                <div class="glossary-def">Illegal, off-exchange bucketing of trades outside stock exchange purview.</div>
+              </div>
+              <div class="glossary-item">
+                <div class="glossary-term">Intermediary Directory</div>
+                <div class="glossary-def">Official SEBI portal cataloging authorised Brokers, Advisers, and PMS entities.</div>
+              </div>
+            </div>
+
+            <h3 class="book-sec-title">Official Government &amp; Regulatory Links</h3>
+            <div style="font-size: 0.75rem; line-height: 1.45; color: #475569;">
+              <p style="margin: 0 0 4px 0;">• <strong>SEBI Investor Education:</strong> investor.sebi.gov.in/spot-any-scam.html</p>
+              <p style="margin: 0 0 4px 0;">• <strong>SEBI Intermediaries Directory:</strong> sebi.gov.in/intermediaries.html</p>
+              <p style="margin: 0 0 4px 0;">• <strong>NSE Investor Advisories:</strong> nseindia.com/static/invest/advisory-for-investors</p>
+              <p style="margin: 0 0 4px 0;">• <strong>SEBI SCORES Grievance:</strong> scores.gov.in</p>
+              <p style="margin: 0 0 4px 0;">• <strong>National Cyber Helpline:</strong> 1930 &amp; cybercrime.gov.in</p>
+            </div>
+
+            <div class="page-running-foot">
+              <span>GLOSSARY &amp; SOURCES</span>
+              <span class="page-num-badge">12</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+  ];
+
+
   // --- Books Registry ---
   const booksRegistry = {
     upi: {
@@ -2380,6 +3136,31 @@
       ]
     },
 
+
+    investment: {
+      id: 'investment',
+      title: 'Investment Fraud Rings — Advanced Safety Guide',
+      seriesTag: 'INFRAUD Academy • Advanced Curriculum',
+      pdfUrl: '/books/INFRAUD_Investment_Fraud_Rings_Advanced_Guide.pdf',
+      pdfName: 'INFRAUD_Investment_Fraud_Rings_Advanced_Guide.pdf',
+      pages: investmentPagesData,
+      getPreface: getInvestmentPrefaceHtml,
+      getCertificate: getInvestmentCertificateHtml,
+      toc: [
+        { page: 1, label: 'Page 1: Cover' },
+        { page: 2, label: 'Page 2: Contents & Decision Rule' },
+        { page: 3, label: 'Page 3: Lesson 1 - Fraud-Ring Structure' },
+        { page: 4, label: 'Page 4: Lesson 2 - Social Engineering' },
+        { page: 5, label: 'Page 5: Lesson 3 - Platform Impersonation' },
+        { page: 6, label: 'Page 6: Lesson 4 - Regulatory Due Diligence' },
+        { page: 7, label: 'Page 7: Lesson 5 - Advanced Red Flags' },
+        { page: 8, label: 'Page 8: Lesson 6 - Incident Response & SCORES' },
+        { page: 9, label: 'Page 9: Quick Reference - Checklist' },
+        { page: 10, label: 'Page 10: Knowledge Check (Scenarios 1–4)' },
+        { page: 11, label: 'Page 11: Knowledge Check (Scenarios 5–8)' },
+        { page: 12, label: 'Page 12: Glossary & Sources' }
+      ]
+    },
     telegram: {
       id: 'telegram',
       title: 'Telegram Job Scams — Practical Safety Guide',
@@ -2511,11 +3292,12 @@
       tocSelect.innerHTML = book.toc.map(item => `<option value="${item.page}">${item.label}</option>`).join('');
     }
 
-    // Toggle red accent on Next/Prev buttons if KYC
+    // Toggle red accent on Next/Prev buttons if KYC, purple if Telegram, green if Investment
     const btnNext = document.getElementById('dock-btn-next');
     if (btnNext) {
       btnNext.classList.toggle('btn-kyc-accent', bookId === 'kyc');
       btnNext.classList.toggle('btn-telegram-accent', bookId === 'telegram');
+      btnNext.classList.toggle('btn-investment-accent', bookId === 'investment');
     }
   }
 
@@ -2704,7 +3486,7 @@
       let bookId = 'upi';
       let page = 1;
 
-      if (typeof bookIdOrPage === 'string' && (bookIdOrPage === 'upi' || bookIdOrPage === 'kyc' || bookIdOrPage === 'telegram' || booksRegistry[bookIdOrPage])) {
+      if (typeof bookIdOrPage === 'string' && (bookIdOrPage === 'upi' || bookIdOrPage === 'kyc' || bookIdOrPage === 'telegram' || bookIdOrPage === 'investment' || booksRegistry[bookIdOrPage])) {
         bookId = bookIdOrPage;
         page = pageToOpen || 1;
       } else if (typeof bookIdOrPage === 'number') {
@@ -2819,6 +3601,43 @@
     },
 
     // --- KYC Interactive Actions (Pure In-DOM Updates) ---
+    toggleInvestmentCheck: function (index) {
+      investmentChecklistState[index] = !investmentChecklistState[index];
+      playPageTurnSound();
+      const el = document.getElementById('investment-chk-item-' + index);
+      if (el) {
+        el.classList.toggle('checked', investmentChecklistState[index]);
+        const box = el.querySelector('.check-box-visual');
+        if (box) box.innerText = investmentChecklistState[index] ? '✓' : '';
+      }
+    },
+
+    answerInvestmentQuiz: function (questionId, optionKey) {
+      if (investmentQuizAnswers[questionId]) return;
+      investmentQuizAnswers[questionId] = optionKey;
+      playPageTurnSound();
+
+      const q = investmentQuizQuestions.find(x => x.id === questionId);
+      if (!q) return;
+
+      const correctOpt = q.options.find(o => o.correct);
+      const isCorrect = optionKey === correctOpt.key;
+
+      const block = document.getElementById('investment-quiz-block-' + questionId);
+      if (block) {
+        const btns = block.querySelectorAll('.quiz-opt-btn');
+        btns.forEach(b => {
+          b.disabled = true;
+          const optLetter = b.querySelector('strong') ? b.querySelector('strong').innerText.replace('.', '').trim() : '';
+          if (optLetter === correctOpt.key) b.classList.add('correct');
+          else if (optLetter === optionKey && !isCorrect) b.classList.add('wrong');
+        });
+
+        const expBox = block.querySelector('.quiz-explanation-box');
+        if (expBox) expBox.classList.add('visible');
+      }
+    },
+
     toggleTelegramCheck: function (index) {
       telegramChecklistState[index] = !telegramChecklistState[index];
       playPageTurnSound();
