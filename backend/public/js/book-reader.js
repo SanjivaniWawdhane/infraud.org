@@ -1590,6 +1590,769 @@
   ];
 
 
+
+  // State for Telegram Book
+  let telegramChecklistState = [false, false, false, false, false, false, false];
+  let telegramQuizAnswers = {};
+
+  const telegramQuizQuestions = [
+    {
+      id: 'tel_q1',
+      text: "1. A Telegram recruiter offers ₹5,000 per day for liking videos. What should you do first?",
+      options: [
+        { key: 'A', text: "Send your bank details immediately" },
+        { key: 'B', text: "Verify employer independently & be sceptical of unrealistic pay", correct: true },
+        { key: 'C', text: "Pay a registration fee" }
+      ],
+      explanation: "Verify the employer independently. Unrealistic pay for trivial tasks is the #1 warning sign of task fraud."
+    },
+    {
+      id: 'tel_q2',
+      text: "2. You complete a few free tasks and receive ₹100. Does this prove the job is genuine?",
+      options: [
+        { key: 'A', text: "Yes, always" },
+        { key: 'B', text: "No; small early payouts build false trust before deposit demands", correct: true },
+        { key: 'C', text: "It proves the platform is government approved" }
+      ],
+      explanation: "Fraudsters deliberately use small initial payouts as a victim acquisition cost to lower skepticism before demanding larger deposits."
+    },
+    {
+      id: 'tel_q3',
+      text: "3. The recruiter says you must recharge ₹2,000 to unlock a premium high-commission task:",
+      options: [
+        { key: 'A', text: "Pay quickly to earn the commission" },
+        { key: 'B', text: "Borrow money and pay" },
+        { key: 'C', text: "Stop; do not pay to receive tasks or wages", correct: true }
+      ],
+      explanation: "Genuine employers never ask employees or freelancers to deposit money in order to unlock tasks or receive wages."
+    },
+    {
+      id: 'tel_q4',
+      text: "4. Your app shows ₹25,000 earnings but asks for ₹5,000 tax before withdrawal:",
+      options: [
+        { key: 'A', text: "Pay the tax to unlock the balance" },
+        { key: 'B', text: "Do not pay; the displayed balance may be fake", correct: true },
+        { key: 'C', text: "Ask the recruiter for a discount" }
+      ],
+      explanation: "The displayed balance is an unverified screen value controlled by scammers. Demanding fees or taxes to release money is an exit trap."
+    },
+    {
+      id: 'tel_q5',
+      text: "5. The group asks you to buy cryptocurrency (USDT) and transfer to a wallet address:",
+      options: [
+        { key: 'A', text: "Send a small test amount" },
+        { key: 'B', text: "Refuse and verify independently; never transfer crypto to unknown wallets", correct: true },
+        { key: 'C', text: "Share your exchange password" }
+      ],
+      explanation: "Cryptocurrency transactions bypass banking reversal channels and cannot be charged back once sent to criminal wallets."
+    },
+    {
+      id: 'tel_q6',
+      text: "6. You already transferred money to the task platform. What should you do?",
+      options: [
+        { key: 'A', text: "Pay one more fee to recover it" },
+        { key: 'B', text: "Stop payments, alert bank immediately, call 1930, and report online", correct: true },
+        { key: 'C', text: "Delete the chat and wait" }
+      ],
+      explanation: "Immediately halt all payments, alert your bank's fraud department, call 1930 within the golden hour, and file a formal report."
+    },
+    {
+      id: 'tel_q7',
+      text: "7. Telegram group members post profit screenshots. What do they prove?",
+      options: [
+        { key: 'A', text: "The scheme is safe and verified" },
+        { key: 'B', text: "Screenshots may be fabricated, bot-generated, or posted by shills", correct: true },
+        { key: 'C', text: "The group is government regulated" }
+      ],
+      explanation: "Social proof in closed messaging channels is easily manufactured by coordinated accounts, shills, and automated bots."
+    }
+  ];
+
+  function getTelegramPrefaceHtml() {
+    return `
+      <div class="book-page-leaf book-page-left" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #FAF5FF;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(124, 58, 237, 0.1); display:flex; align-items:center; justify-content:center; margin-bottom: 24px; border: 2px solid rgba(124, 58, 237, 0.2);">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div style="font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.12em; color: #7C3AED; text-transform: uppercase; margin-bottom: 12px;">INFRAUD ACADEMY • BEGINNER</div>
+        <h2 style="font-size: 1.75rem; font-weight: 800; color: #0F172A; margin: 0 0 16px 0; line-height: 1.25;">Telegram Job Scams Handbook</h2>
+        <p style="font-size: 0.9375rem; line-height: 1.6; color: #475569; max-width: 380px; margin: 0 0 28px 0;">
+          A beginner-friendly guide to task-based job fraud, fake online earning offers, crypto payment traps, and the psychology scammers use to make victims keep paying.
+        </p>
+        <div style="padding: 6px 16px; background: #F3E8FF; border: 1px solid #DDD6FE; border-radius: 999px; font-size: 0.8125rem; font-weight: 700; color: #7C3AED;">
+          Edition 2026 • 3 Lessons &amp; Quiz
+        </div>
+      </div>
+    `;
+  }
+
+  function getTelegramCertificateHtml() {
+    return `
+      <div class="book-page-leaf book-page-right" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 48px; background: #FAF5FF;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(124, 58, 237, 0.1); display:flex; align-items:center; justify-content:center; margin-bottom: 24px; border: 2px solid #7C3AED;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <span class="book-chapter-tag" style="background:#F3E8FF; color:#7C3AED;">CURRICULUM COMPLETE</span>
+        <h2 style="font-size: 1.625rem; font-weight: 800; color: #0F172A; margin: 12px 0 12px 0;">You're Task-Fraud Protected!</h2>
+        <p style="font-size: 0.9375rem; line-height: 1.6; color: #475569; max-width: 380px; margin: 0 0 24px 0;">
+          You have mastered the mechanics of the task-job funnel, recognized psychological escalation triggers, and learned how to verify employers independently.
+        </p>
+        <div style="padding: 16px 24px; background: #ffffff; border-radius: 12px; border: 1px solid #E2E8F0; width: 100%; max-width: 360px; text-align: left; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+          <div style="font-size: 0.75rem; text-transform:uppercase; color:#94A3B8; font-weight:700;">Learner Standard</div>
+          <div style="font-size: 0.875rem; font-weight:700; color:#0F172A; margin-top:2px;">INFRAUD Task Safety Certified</div>
+          <div style="font-size: 0.8125rem; color:#64748B; margin-top:6px;">National Cyber Helpline: <strong>1930</strong> • <strong>cybercrime.gov.in</strong></div>
+        </div>
+        <button class="book-control-btn book-control-btn-primary" style="background:#7C3AED; border-color:#7C3AED; padding: 10px 24px;" onclick="window.bookReader.close();">
+          Return to Academy
+        </button>
+      </div>
+    `;
+  }
+
+  const telegramPagesData = [
+    // Page 1: Cover Page
+    {
+      page: 1,
+      title: "Cover",
+      render: function () {
+        return `
+          <div class="book-cover-page book-page-leaf theme-telegram">
+            <div class="cover-top-emblem">
+              <div class="cover-brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                INFRAUD
+              </div>
+              <span class="cover-brand-pill pill-telegram">Job Safety Guide</span>
+            </div>
+
+            <div class="cover-body-hero">
+              <div class="cover-hero-tag tag-telegram">Official Curriculum Guide</div>
+              <h1 class="cover-hero-title">Telegram Job Scams</h1>
+              <p class="cover-hero-desc">
+                A beginner-friendly guide to task-based job fraud, fake online earning offers, crypto payment traps, and the psychology scammers use to make victims keep paying.
+              </p>
+
+              <div class="cover-pills-row">
+                <div class="cover-meta-pill">
+                  <span>LEVEL</span>
+                  <strong>Beginner</strong>
+                </div>
+                <div class="cover-meta-pill">
+                  <span>CURRICULUM</span>
+                  <strong>3 Lessons</strong>
+                </div>
+                <div class="cover-meta-pill">
+                  <span>TOPIC</span>
+                  <strong>Task Fraud</strong>
+                </div>
+              </div>
+
+              <div class="cover-golden-rule-box rule-telegram">
+                <div class="cover-golden-rule-title rule-title-telegram">★ THE CORE RULE</div>
+                <div class="cover-golden-rule-text">
+                  A genuine job should pay you for legitimate work. Be extremely cautious if an unknown recruiter asks you to deposit, recharge, buy crypto, pay a fee, or transfer money to unlock tasks or withdraw supposed earnings.
+                </div>
+              </div>
+            </div>
+
+            <div class="cover-footer-meta">
+              INFRAUD Security Education Series Edition 2026 • 12 Pages
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 2: Contents & A Simple Test
+    {
+      page: 2,
+      title: "Contents & A Simple Test",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>INFRAUD.ORG • SAFETY ACADEMY</span>
+              <span>PAGE 02</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">OVERVIEW</span>
+            <h2 class="book-page-title">Table of Contents</h2>
+            <p class="book-page-subtitle">Three-lesson structured learning roadmap</p>
+
+            <table style="width:100%; border-collapse:collapse; margin-bottom: 22px; font-size: 0.8125rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid #E8EBF3; text-align: left; color: #4B5570;">
+                  <th style="padding: 8px 0; font-weight: 700;">SECTION</th>
+                  <th style="padding: 8px 0; font-weight: 700;">FOCUS AREA</th>
+                  <th style="padding: 8px 0; text-align: right; font-weight: 700;">PAGE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(3)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Lesson 1</td>
+                  <td style="padding: 8px 0;">The Fake Task-Job Funnel: How the Scam Begins</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">03</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(4)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Lesson 1 Cont.</td>
+                  <td style="padding: 8px 0;">Funnel Escalation to Exit &amp; Job Comparison</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">04</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(5)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Lesson 2</td>
+                  <td style="padding: 8px 0;">The Psychology: Trust-Building, Pressure &amp; Crypto Traps</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">05</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(6)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Lesson 3</td>
+                  <td style="padding: 8px 0;">Verify, Protect, Respond: Defense Protocols</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">06</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(7)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Lesson 3 Cont.</td>
+                  <td style="padding: 8px 0;">Incident Protocol: The Golden Hour &amp; 1930</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">07</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(8)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Quick Reference</td>
+                  <td style="padding: 8px 0;">Interactive Task-Job Red-Flag Checklist</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">08</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(9)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Knowledge Check</td>
+                  <td style="padding: 8px 0;">Interactive 7-Question Beginner Quiz with Instant Feedback</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">09–10</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F4F5FA; cursor: pointer;" onclick="window.bookReader.goToPage(11)">
+                  <td style="padding: 8px 0; font-weight: 700; color: #7C3AED;">Glossary &amp; Sources</td>
+                  <td style="padding: 8px 0;">Official Government Sources, Advisories &amp; Summary</td>
+                  <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #9AA3B8;">11–12</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="book-banner-rule rule-purple" style="margin-top: 24px;">
+              <strong>★ A SIMPLE TEST</strong><br>
+              If the "employer" asks you to send money first to earn money later, stop. Do not pay to unlock tasks, withdraw a balance, improve a rating, or receive a promised salary.
+            </div>
+
+            <div class="page-running-foot">
+              <span>INFRAUD SAFETY ACADEMY</span>
+              <span class="page-num-badge">02</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 3: Lesson 1 - The Task-Job Funnel
+    {
+      page: 3,
+      title: "Lesson 1: The Task-Job Funnel",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>LESSON 1 | THE TASK-JOB FUNNEL</span>
+              <span>PAGE 03</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">LESSON 1</span>
+            <h2 class="book-page-title">How the Scam Begins</h2>
+            <p class="book-page-subtitle">Understanding the deceptive online task onboarding funnel</p>
+
+            <p style="font-size: 0.875rem; line-height: 1.5; color: #334155;">
+              Task-based job scams often begin with a simple offer: earn money from home by liking YouTube videos, subscribing to channels, rating products, reviewing places, or completing small online activities. The offer arrives through unsolicited Telegram messages, WhatsApp, social-media ads, or unknown recruiters.
+            </p>
+
+            <h3 class="book-sec-title" style="margin-top: 14px;">1.1 The Common Step-by-Step Pattern</h3>
+
+            <div class="book-banner-warning" style="margin-bottom: 10px;">
+              <strong>Stage 1 — The Hook:</strong> A recruiter promises easy work, flexible hours, and unusually high daily earnings (₹2,000–₹5,000/day) requiring zero prior experience.
+            </div>
+
+            <div class="book-banner-rule" style="margin-bottom: 10px;">
+              <strong>Stage 2 — Moving to Private Chat/Group:</strong> You are guided to Telegram or WhatsApp. The group contains accounts posting payment screenshots and praising the opportunity.
+            </div>
+
+            <div class="book-banner-rule" style="margin-bottom: 10px;">
+              <strong>Stage 3 — Small Starter Task:</strong> You are asked to like a video, subscribe to a channel, or rate a place—designed to feel completely harmless and easy.
+            </div>
+
+            <div class="book-banner-rule" style="margin-bottom: 10px;">
+              <strong>Stage 4 — A Small Initial Payout:</strong> Some victims receive ₹150–₹500. This is a calculated trust-building tactic: early payouts make the offer feel genuine.
+            </div>
+
+            <div class="book-banner-danger" style="margin-bottom: 12px;">
+              <strong>Stage 5 — The Prepaid Task:</strong> The recruiter introduces "VIP" tasks. You are told you must deposit/recharge money first as a refundable security or merchant order.
+            </div>
+
+            <div class="book-banner-warning" style="background:#FFFBEB; border-left-color:#F59E0B;">
+              <strong>WHY THE FIRST PAYMENT IS NOT PROOF:</strong> A small early payout is simply a planned scammer acquisition cost. It never proves the company or task is genuine.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 1 • THE TASK-JOB FUNNEL</span>
+              <span class="page-num-badge">03</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 4: Lesson 1 Cont. - Escalation & Normal Job Comparison
+    {
+      page: 4,
+      title: "Lesson 1: Funnel Escalation & Contrast",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>LESSON 1 | THE TASK-JOB FUNNEL</span>
+              <span>PAGE 04</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">LESSON 1 CONT.</span>
+            <h2 class="book-page-title">Funnel Escalation to Exit</h2>
+            <p class="book-page-subtitle">Recognising the trap tightening and comparing with authentic employment</p>
+
+            <div class="book-banner-danger" style="margin-bottom: 10px;">
+              <strong>Stage 6 — Increasing Deposits:</strong> After the first deposit, new demands appear: finish a bundle, correct a supposed "task error", pay tax, or upgrade to release funds.
+            </div>
+
+            <div class="book-banner-danger" style="margin-bottom: 10px;">
+              <strong>Stage 7 — Withdrawal Blocked:</strong> The platform shows an inflated balance, but withdrawals are frozen. The victim is pressured to pay yet another fee.
+            </div>
+
+            <div class="book-banner-danger" style="margin-bottom: 12px;">
+              <strong>Stage 8 — Disappearance:</strong> Once substantial money is extracted, the recruiter, website, or Telegram channel stops responding and vanishes.
+            </div>
+
+            <h3 class="book-sec-title" style="margin-top: 14px;">1.3 What Makes This Different from a Normal Job?</h3>
+            <ul style="font-size: 0.8125rem; line-height: 1.5; color: #334155; padding-left: 18px; margin: 8px 0 14px 0;">
+              <li><strong>Disconnected Work &amp; Pay:</strong> Enormous earnings promised for trivial clicks.</li>
+              <li><strong>Paying the Employer:</strong> You are asked to pay before you can receive earnings.</li>
+              <li><strong>Morphing Scheme:</strong> The "job" turns into a deposit, trading, or crypto scheme.</li>
+              <li><strong>Fake Platform Control:</strong> Displayed balances are numbers created by the fraudster.</li>
+              <li><strong>Ransom Withdrawals:</strong> You cannot withdraw without sending even more money.</li>
+            </ul>
+
+            <div class="book-banner-rule rule-purple">
+              <strong>GOLDEN RULE:</strong> A genuine employer pays you for legitimate work. Never pay money to receive a salary, commission, or job assignment.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 1 • CONTRAST &amp; TRAP</span>
+              <span class="page-num-badge">04</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 5: Lesson 2 - The Psychology of the Scam
+    {
+      page: 5,
+      title: "Lesson 2: The Psychology of the Scam",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>LESSON 2 | PSYCHOLOGY OF SCAMS</span>
+              <span>PAGE 05</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">LESSON 2</span>
+            <h2 class="book-page-title">Why People Keep Paying</h2>
+            <p class="book-page-subtitle">Scammers weaponize cognitive biases and social pressure over technology</p>
+
+            <div style="font-size: 0.8125rem; line-height: 1.45; color: #334155;">
+              <p style="margin: 0 0 8px 0;"><strong>2.1 Trust-Building Through Small Rewards:</strong> The initial ₹200 payout tricks your brain into feeling safe. In reality, it is a calculated fraudster bait.</p>
+              
+              <p style="margin: 0 0 8px 0;"><strong>2.2 Social Proof &amp; Fake Group Activity:</strong> Telegram channels with dozens of members posting profit slips are coordinated bots, shills, or accomplices manufacturing herd trust.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>2.3 Sunk-Cost Pressure:</strong> After depositing ₹5,000, victims fear losing it. Scammers exploit this by promising that "just one more deposit of ₹10,000" will recover everything.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>2.4 Urgency &amp; Artificial Deadlines:</strong> "Pay in 10 minutes or your account expires" prevents logical evaluation or consulting family.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>2.5 The Fake Balance Trap:</strong> Screen numbers are meaningless numbers on scammer-controlled web pages. They are not real withdrawable money.</p>
+
+              <p style="margin: 0 0 8px 0;"><strong>2.6 Crypto &amp; USDT Escalation:</strong> Directing victims to buy cryptocurrency ensures funds leave banking jurisdiction without chargeback recourse.</p>
+            </div>
+
+            <div class="book-banner-danger" style="margin-top: 10px;">
+              <strong>RED-FLAG PHRASES TO WATCH:</strong><br>
+              • "Complete recharge task, then withdraw full salary"<br>
+              • "Account frozen due to task error—pay to correct it"<br>
+              • "Upgrade to VIP to access higher commissions"<br>
+              • "Pay GST/tax first; balance will be released immediately"
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 2 • PSYCHOLOGY &amp; TRAPS</span>
+              <span class="page-num-badge">05</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 6: Lesson 3 - Verify, Protect, Respond
+    {
+      page: 6,
+      title: "Lesson 3: Verify, Protect, Respond",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>LESSON 3 | VERIFY, PROTECT, RESPOND</span>
+              <span>PAGE 06</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">LESSON 3</span>
+            <h2 class="book-page-title">Verification &amp; Defense Protocol</h2>
+            <p class="book-page-subtitle">Actionable routines before engaging with any online employer</p>
+
+            <h3 class="book-sec-title">3.1 Verify the Employer</h3>
+            <ul style="font-size: 0.8125rem; line-height: 1.45; color: #334155; padding-left: 18px; margin: 4px 0 10px 0;">
+              <li>Search for the company independently; never rely solely on a Telegram profile or group.</li>
+              <li>Check official corporate website, MCA registry, physical contact info, and genuine careers page.</li>
+              <li>Be suspicious if the recruiter uses a free Gmail/Outlook address while claiming to represent a global MNC.</li>
+            </ul>
+
+            <h3 class="book-sec-title">3.2 Verify the Payment Model</h3>
+            <ul style="font-size: 0.8125rem; line-height: 1.45; color: #334155; padding-left: 18px; margin: 4px 0 10px 0;">
+              <li>Legitimate companies never ask employees to pay registration, security, or recharge fees.</li>
+              <li>Never transfer money to personal savings accounts, unfamiliar UPI handles, or crypto wallets.</li>
+              <li>Check SEBI regulatory databases before taking any securities or trading assignments.</li>
+            </ul>
+
+            <h3 class="book-sec-title">3.3 Protect Your Devices &amp; Credentials</h3>
+            <ul style="font-size: 0.8125rem; line-height: 1.45; color: #334155; padding-left: 18px; margin: 4px 0 10px 0;">
+              <li>Never share OTPs, netbanking passwords, UPI PINs, or debit card CVV numbers.</li>
+              <li>Never install APK files, remote-support tools (AnyDesk, TeamViewer), or grant screen sharing.</li>
+            </ul>
+
+            <div class="book-banner-rule rule-purple" style="margin-top: 8px;">
+              <strong>IF NO MONEY HAS BEEN PAID:</strong> Immediately stop responding, preserve chat screenshots and recruiter phone numbers, report the channel in Telegram, and block the user.
+            </div>
+
+            <div class="page-running-foot">
+              <span>LESSON 3 • VERIFICATION PROTOCOLS</span>
+              <span class="page-num-badge">06</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 7: Lesson 3 Cont. - Incident Response & 1930
+    {
+      page: 7,
+      title: "Lesson 3: Incident Response & 1930",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>LESSON 3 | INCIDENT RESPONSE</span>
+              <span>PAGE 07</span>
+            </div>
+
+            <span class="book-chapter-tag" style="background:#FEE2E2; color:#DC2626;">EMERGENCY PROTOCOL</span>
+            <h2 class="book-page-title">Incident Protocol &amp; 1930</h2>
+            <p class="book-page-subtitle">The Golden Hour Action Plan if you already transferred funds</p>
+
+            <p style="font-size: 0.875rem; line-height: 1.5; color: #334155; margin-bottom: 12px;">
+              If you deposited funds, paid a prepaid task, or sent cryptocurrency, acting within the <strong>first 1 to 2 hours</strong> maximizes the probability of freezing illicit mule accounts.
+            </p>
+
+            <div class="book-banner-danger" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+              <div>
+                <strong style="font-size:0.875rem;">NATIONAL CYBER CRIME HELPLINE</strong><br>
+                <span style="font-size:0.75rem;">Call immediately for financial fraud across India</span>
+              </div>
+              <a href="tel:1930" class="book-control-btn" style="background:#DC2626; color:#fff; font-weight:800; text-decoration:none; padding:8px 16px; border-radius:8px;">
+                📞 Call 1930
+              </a>
+            </div>
+
+            <h3 class="book-sec-title">Immediate Action Steps</h3>
+            <ol style="font-size: 0.8125rem; line-height: 1.5; color: #334155; padding-left: 18px; margin: 6px 0 12px 0;">
+              <li><strong>Halt All Further Transfers:</strong> Stop paying immediately. Never trust "recovery agents" claiming they can unfreeze your balance for a fee.</li>
+              <li><strong>Call Bank Fraud Desk:</strong> Request an immediate freeze on outgoing transactions and secure a formal fraud complaint acknowledgement number.</li>
+              <li><strong>File at cybercrime.gov.in:</strong> Log a formal grievance with transaction IDs/UTRs, bank accounts, and chat exports.</li>
+              <li><strong>Preserve Crypto Records:</strong> Document wallet addresses, transaction hashes (TXIDs), exchange account IDs, and exact timestamps.</li>
+              <li><strong>Secure Accounts:</strong> Change passwords for email and banking from an uncompromised device.</li>
+            </ol>
+
+            <div class="page-running-foot">
+              <span>LESSON 3 • EMERGENCY PROTOCOL</span>
+              <span class="page-num-badge">07</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 8: Quick Reference - Checklist
+    {
+      page: 8,
+      title: "Quick Reference: Verification Checklist",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>QUICK REFERENCE | CHECKLIST</span>
+              <span>PAGE 08</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">INTERACTIVE TOOL</span>
+            <h2 class="book-page-title">Task-Job Scam Red-Flag Checklist</h2>
+            <p class="book-page-subtitle">Verify every safety barrier before engaging with an online job recruiter</p>
+
+            <div class="checklist-items-grid">
+              ${[
+                { q: "Unsolicited contact on Telegram/WhatsApp?", a: "Verify the employer independently before replying." },
+                { q: "Very high pay for simple clicks or likes?", a: "Unrealistic pay for trivial tasks is the #1 sign of job fraud." },
+                { q: "Small initial payout received?", a: "Deliberate trust-building tactic; not proof of legitimacy." },
+                { q: "Asked to deposit or recharge to unlock tasks?", a: "Stop immediately. Never pay money to receive wages." },
+                { q: "Group members posting profit screenshots?", a: "Social proof is easily fabricated using bots and shills." },
+                { q: "Asked to buy crypto or send to wallet?", a: "Crypto transfers are virtually irreversible; reject the offer." },
+                { q: "Withdrawals blocked with fee or tax demands?", a: "Exit trap: never pay additional money to recover earlier deposits." }
+              ].map((item, idx) => `
+                <div class="check-item-card ${telegramChecklistState[idx] ? 'checked' : ''}" id="telegram-chk-item-${idx}" onclick="window.bookReader.toggleTelegramCheck(${idx})">
+                  <div class="check-box-visual">${telegramChecklistState[idx] ? '✓' : ''}</div>
+                  <div class="check-text-content">
+                    <div class="check-question">${item.q}</div>
+                    <div class="check-action-guidance">${item.a}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>QUICK REFERENCE • CHECKLIST</span>
+              <span class="page-num-badge">08</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 9: Knowledge Check Quiz Part 1
+    {
+      page: 9,
+      title: "Knowledge Check: Scenarios 1–4",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>KNOWLEDGE CHECK | QUIZ</span>
+              <span>PAGE 09</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">INTERACTIVE QUIZ</span>
+            <h2 class="book-page-title">Safety Scenarios (1–4)</h2>
+            <p class="book-page-subtitle">Choose the safest response. Instant feedback provided.</p>
+
+            <div class="quiz-container">
+              ${telegramQuizQuestions.slice(0, 4).map(q => {
+                const userChoice = telegramQuizAnswers[q.id];
+                const answered = !!userChoice;
+                return `
+                  <div class="quiz-question-block" id="telegram-quiz-block-${q.id}">
+                    <div class="quiz-q-title">${q.text}</div>
+                    <div class="quiz-options-list">
+                      ${q.options.map(opt => {
+                        let btnClass = '';
+                        if (answered) {
+                          if (opt.correct) btnClass = 'correct';
+                          else if (opt.key === userChoice) btnClass = 'wrong';
+                        }
+                        return `
+                          <button class="quiz-opt-btn ${btnClass}" 
+                                  onclick="window.bookReader.answerTelegramQuiz('${q.id}', '${opt.key}')"
+                                  ${answered ? 'disabled' : ''}>
+                            <strong>${opt.key}.</strong> ${opt.text}
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>
+                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}">
+                      💡 <strong>Rationale:</strong> ${q.explanation}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>KNOWLEDGE CHECK • PART 1</span>
+              <span class="page-num-badge">09</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 10: Knowledge Check Quiz Part 2
+    {
+      page: 10,
+      title: "Knowledge Check: Scenarios 5–7",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>KNOWLEDGE CHECK | QUIZ</span>
+              <span>PAGE 10</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">INTERACTIVE QUIZ</span>
+            <h2 class="book-page-title">Safety Scenarios (5–7)</h2>
+            <p class="book-page-subtitle">Test technical inspection &amp; emergency response</p>
+
+            <div class="quiz-container">
+              ${telegramQuizQuestions.slice(4).map(q => {
+                const userChoice = telegramQuizAnswers[q.id];
+                const answered = !!userChoice;
+                return `
+                  <div class="quiz-question-block" id="telegram-quiz-block-${q.id}">
+                    <div class="quiz-q-title">${q.text}</div>
+                    <div class="quiz-options-list">
+                      ${q.options.map(opt => {
+                        let btnClass = '';
+                        if (answered) {
+                          if (opt.correct) btnClass = 'correct';
+                          else if (opt.key === userChoice) btnClass = 'wrong';
+                        }
+                        return `
+                          <button class="quiz-opt-btn ${btnClass}" 
+                                  onclick="window.bookReader.answerTelegramQuiz('${q.id}', '${opt.key}')"
+                                  ${answered ? 'disabled' : ''}>
+                            <strong>${opt.key}.</strong> ${opt.text}
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>
+                    <div class="quiz-explanation-box ${answered ? 'visible' : ''}">
+                      💡 <strong>Rationale:</strong> ${q.explanation}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="page-running-foot">
+              <span>KNOWLEDGE CHECK • PART 2</span>
+              <span class="page-num-badge">10</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 11: Glossary & Official Sources
+    {
+      page: 11,
+      title: "Glossary & Sources",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-right">
+            <div class="page-running-head">
+              <span>GLOSSARY &amp; SOURCES</span>
+              <span>PAGE 11</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">REFERENCE</span>
+            <h2 class="book-page-title">Key Terms &amp; Official Advisories</h2>
+            <p class="book-page-subtitle">Authoritative vocabulary and government sources</p>
+
+            <div class="glossary-items-list" style="margin-bottom: 16px;">
+              <div class="glossary-item">
+                <div class="glossary-term">Task-Based Job Scam</div>
+                <div class="glossary-def">A fraud beginning with simple online tasks and escalating to deposit demands for higher-paid tasks or withdrawals.</div>
+              </div>
+              <div class="glossary-item">
+                <div class="glossary-term">Prepaid Task</div>
+                <div class="glossary-def">A fraudulent requirement where victims must deposit money before receiving task payouts.</div>
+              </div>
+              <div class="glossary-item">
+                <div class="glossary-term">Mule Account</div>
+                <div class="glossary-def">A bank or payment account used to receive or funnel illicit funds to conceal criminal proceeds.</div>
+              </div>
+              <div class="glossary-item">
+                <div class="glossary-term">Sunk-Cost Pressure</div>
+                <div class="glossary-def">Exploiting victim psychology to extract successive deposits under the false hope of recovering earlier funds.</div>
+              </div>
+            </div>
+
+            <h3 class="book-sec-title">Official Government References</h3>
+            <div style="font-size: 0.75rem; line-height: 1.5; color: #475569;">
+              <p style="margin: 0 0 4px 0;">• <strong>MHA / PIB Advisory:</strong> Task-based part-time job frauds (pib.gov.in/PressReleasePage.aspx?PRID=1982936)</p>
+              <p style="margin: 0 0 4px 0;">• <strong>UCO Bank Advisory:</strong> Security Advisory on Task Based Job Scams (uco.bank.in)</p>
+              <p style="margin: 0 0 4px 0;">• <strong>National Cyber Crime Portal:</strong> cybercrime.gov.in &amp; National Helpline 1930</p>
+              <p style="margin: 0 0 4px 0;">• <strong>SEBI Investor Portal:</strong> investor.sebi.gov.in/spot-any-scam.html</p>
+            </div>
+
+            <div class="page-running-foot">
+              <span>GLOSSARY &amp; SOURCES</span>
+              <span class="page-num-badge">11</span>
+            </div>
+          </div>
+        `;
+      }
+    },
+
+    // Page 12: Defense Summary & Protocol
+    {
+      page: 12,
+      title: "Defense Summary",
+      render: function () {
+        return `
+          <div class="book-page-leaf book-page-left">
+            <div class="page-running-head">
+              <span>INFRAUD.ORG • SAFETY ACADEMY</span>
+              <span>PAGE 12</span>
+            </div>
+
+            <span class="book-chapter-tag tag-purple">DEFENSE SUMMARY</span>
+            <h2 class="book-page-title">Check Before You Trust</h2>
+            <p class="book-page-subtitle">The four pillars of task &amp; job fraud immunity</p>
+
+            <div style="display:flex; flex-direction:column; gap: 12px; margin: 16px 0 20px 0;">
+              <div style="padding: 12px 16px; background:#FAF5FF; border-left: 4px solid #7C3AED; border-radius: 6px;">
+                <strong style="color:#7C3AED; font-size:0.875rem;">1. Never Pay to Work</strong><br>
+                <span style="font-size:0.8125rem; color:#475569;">Genuine employers pay you for your work. Never transfer money, buy crypto, or recharge to unlock tasks.</span>
+              </div>
+              <div style="padding: 12px 16px; background:#F8FAFC; border-left: 4px solid #0284C7; border-radius: 6px;">
+                <strong style="color:#0284C7; font-size:0.875rem;">2. Independent Verification</strong><br>
+                <span style="font-size:0.8125rem; color:#475569;">Locate company contact info yourself. Never trust Telegram profiles, screenshots, or links provided by recruiters.</span>
+              </div>
+              <div style="padding: 12px 16px; background:#FEF2F2; border-left: 4px solid #DC2626; border-radius: 6px;">
+                <strong style="color:#DC2626; font-size:0.875rem;">3. Reject High-Yield Trivial Tasks</strong><br>
+                <span style="font-size:0.8125rem; color:#475569;">Promises of ₹5,000/day for liking videos or rating hotels are mathematically unsustainable scam baits.</span>
+              </div>
+              <div style="padding: 12px 16px; background:#ECFDF5; border-left: 4px solid #059669; border-radius: 6px;">
+                <strong style="color:#059669; font-size:0.875rem;">4. Immediate Incident Response</strong><br>
+                <span style="font-size:0.8125rem; color:#475569;">If money was sent, call 1930 immediately within the golden hour to freeze illicit mule accounts.</span>
+              </div>
+            </div>
+
+            <div style="margin-top: auto; padding: 12px 16px; background:#F1F5F9; border-radius: 8px; text-align:center; font-size:0.8125rem; color:#64748B;">
+              INFRAUD Security Education Series • Protecting Digital Lives Across India
+            </div>
+
+            <div class="page-running-foot">
+              <span>DEFENSE SUMMARY</span>
+              <span class="page-num-badge">12</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+  ];
+
+
   // --- Books Registry ---
   const booksRegistry = {
     upi: {
@@ -1614,6 +2377,31 @@
         { page: 10, label: 'Page 10: Interactive Checklist' },
         { page: 11, label: 'Page 11: Knowledge Check Quiz' },
         { page: 12, label: 'Page 12: Glossary & Helplines' }
+      ]
+    },
+
+    telegram: {
+      id: 'telegram',
+      title: 'Telegram Job Scams — Practical Safety Guide',
+      seriesTag: 'INFRAUD Academy • Beginner Curriculum',
+      pdfUrl: '/books/INFRAUD_Telegram_Job_Scams_Safety_Guide.pdf',
+      pdfName: 'INFRAUD_Telegram_Job_Scams_Safety_Guide.pdf',
+      pages: telegramPagesData,
+      getPreface: getTelegramPrefaceHtml,
+      getCertificate: getTelegramCertificateHtml,
+      toc: [
+        { page: 1, label: 'Page 1: Cover' },
+        { page: 2, label: 'Page 2: Contents & A Simple Test' },
+        { page: 3, label: 'Page 3: Lesson 1 - The Task-Job Funnel' },
+        { page: 4, label: 'Page 4: Lesson 1 - Funnel Escalation' },
+        { page: 5, label: 'Page 5: Lesson 2 - Psychology of Scams' },
+        { page: 6, label: 'Page 6: Lesson 3 - Verify & Protect' },
+        { page: 7, label: 'Page 7: Lesson 3 - Emergency Protocol' },
+        { page: 8, label: 'Page 8: Quick Reference - Checklist' },
+        { page: 9, label: 'Page 9: Knowledge Check (Scenarios 1–4)' },
+        { page: 10, label: 'Page 10: Knowledge Check (Scenarios 5–7)' },
+        { page: 11, label: 'Page 11: Glossary & Sources' },
+        { page: 12, label: 'Page 12: Defense Summary' }
       ]
     },
     kyc: {
@@ -1727,6 +2515,7 @@
     const btnNext = document.getElementById('dock-btn-next');
     if (btnNext) {
       btnNext.classList.toggle('btn-kyc-accent', bookId === 'kyc');
+      btnNext.classList.toggle('btn-telegram-accent', bookId === 'telegram');
     }
   }
 
@@ -1915,7 +2704,7 @@
       let bookId = 'upi';
       let page = 1;
 
-      if (typeof bookIdOrPage === 'string' && (bookIdOrPage === 'upi' || bookIdOrPage === 'kyc')) {
+      if (typeof bookIdOrPage === 'string' && (bookIdOrPage === 'upi' || bookIdOrPage === 'kyc' || bookIdOrPage === 'telegram' || booksRegistry[bookIdOrPage])) {
         bookId = bookIdOrPage;
         page = pageToOpen || 1;
       } else if (typeof bookIdOrPage === 'number') {
@@ -2030,6 +2819,43 @@
     },
 
     // --- KYC Interactive Actions (Pure In-DOM Updates) ---
+    toggleTelegramCheck: function (index) {
+      telegramChecklistState[index] = !telegramChecklistState[index];
+      playPageTurnSound();
+      const el = document.getElementById('telegram-chk-item-' + index);
+      if (el) {
+        el.classList.toggle('checked', telegramChecklistState[index]);
+        const box = el.querySelector('.check-box-visual');
+        if (box) box.innerText = telegramChecklistState[index] ? '✓' : '';
+      }
+    },
+
+    answerTelegramQuiz: function (questionId, optionKey) {
+      if (telegramQuizAnswers[questionId]) return;
+      telegramQuizAnswers[questionId] = optionKey;
+      playPageTurnSound();
+
+      const q = telegramQuizQuestions.find(x => x.id === questionId);
+      if (!q) return;
+
+      const correctOpt = q.options.find(o => o.correct);
+      const isCorrect = optionKey === correctOpt.key;
+
+      const block = document.getElementById('telegram-quiz-block-' + questionId);
+      if (block) {
+        const btns = block.querySelectorAll('.quiz-opt-btn');
+        btns.forEach(b => {
+          b.disabled = true;
+          const optLetter = b.querySelector('strong') ? b.querySelector('strong').innerText.replace('.', '').trim() : '';
+          if (optLetter === correctOpt.key) b.classList.add('correct');
+          else if (optLetter === optionKey && !isCorrect) b.classList.add('wrong');
+        });
+
+        const expBox = block.querySelector('.quiz-explanation-box');
+        if (expBox) expBox.classList.add('visible');
+      }
+    },
+
     toggleKycCheck: function (index) {
       kycChecklistState[index] = !kycChecklistState[index];
       playPageTurnSound();

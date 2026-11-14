@@ -1617,3 +1617,68 @@
   background: #B91C1C !important;
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
 }
+
+
+/* ─── Multi-Book: Telegram Theme Additions ─── */
+.book-pill-ribbon.ribbon-purple {
+  background: #F3E8FF !important;
+  color: #7C3AED !important;
+  border: 1px solid #DDD6FE !important;
+}
+
+.book-read-cta-btn.btn-purple {
+  background: #7C3AED !important;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25) !important;
+}
+
+.book-read-cta-btn.btn-purple:hover {
+  background: #6D28D9 !important;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35) !important;
+}
+
+.book-cover-page.theme-telegram {
+  box-shadow: inset 0 0 100px rgba(124, 58, 237, 0.15) !important;
+}
+
+.book-cover-page.theme-telegram::before {
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 65%) !important;
+}
+
+.cover-brand-pill.pill-telegram {
+  background: rgba(124, 58, 237, 0.25) !important;
+  border-color: rgba(167, 139, 250, 0.4) !important;
+  color: #DDD6FE !important;
+}
+
+.cover-hero-tag.tag-telegram {
+  color: #A78BFA !important;
+}
+
+.cover-golden-rule-box.rule-telegram {
+  border-left-color: #7C3AED !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+}
+
+.cover-golden-rule-title.rule-title-telegram {
+  color: #C4B5FD !important;
+}
+
+.book-nav-btn.btn-telegram-accent {
+  background: #7C3AED !important;
+}
+
+.book-nav-btn.btn-telegram-accent:hover:not(:disabled) {
+  background: #6D28D9 !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+}
+
+.book-chapter-tag.tag-purple {
+  background: #F3E8FF !important;
+  color: #7C3AED !important;
+}
+
+.book-banner-rule.rule-purple {
+  background: #FAF5FF !important;
+  border-left: 4px solid #7C3AED !important;
+  color: #5B21B6 !important;
+}
