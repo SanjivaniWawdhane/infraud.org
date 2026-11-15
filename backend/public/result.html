@@ -1082,7 +1082,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 84px;
 }
 .pclean-header-left {
   display: flex;
@@ -1218,7 +1218,7 @@
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 84px;
 }
 @media (max-width: 900px) {
   .pclean-hero-grid {
@@ -1830,7 +1830,7 @@
           border-right: none;
           padding-right: 0;
           border-bottom: 1px solid #F1F5F9;
-          padding-bottom: 20px;
+          padding-bottom: 84px;
         }
       }
       .upi-score-display-wrap {
@@ -2156,7 +2156,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
+        margin-bottom: 84px;
         border-bottom: 1px solid #F1F5F9;
         padding-bottom: 16px;
         flex-wrap: wrap;
@@ -3091,7 +3091,7 @@
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 84px;
 }
 .phone-caller-info {
   display: flex;
@@ -3231,7 +3231,7 @@
   line-height: 1.6;
   border-radius: 12px;
   padding: 14px 18px;
-  margin-bottom: 20px;
+  margin-bottom: 84px;
 }
 .phone-summary-banner.summary-safe {
   background: #F0FDF4;
@@ -3339,7 +3339,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 84px;
 }
 .phone-header-icon {
   width: 40px;
@@ -4074,6 +4074,57 @@
     grid-template-columns: 1fr;
   }
 }
+
+      /* ── Floating Toast Notification (Centered & Responsive) ── */
+      #result-toast {
+        position: fixed !important;
+        bottom: 28px !important;
+        left: 50% !important;
+        transform: translateX(-50%) translateY(30px) !important;
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        border: 1px solid #E2E8F0 !important;
+        box-shadow: 0 16px 40px -4px rgba(15, 23, 42, 0.16), 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+        border-radius: 9999px !important;
+        padding: 12px 24px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        z-index: 999999 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        font-weight: 600 !important;
+        font-size: 0.9375rem !important;
+        letter-spacing: -0.01em !important;
+        max-width: 90vw !important;
+        box-sizing: border-box !important;
+        white-space: nowrap !important;
+      }
+      #result-toast.visible,
+      #result-toast.show {
+        transform: translateX(-50%) translateY(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+      }
+      #result-toast svg {
+        flex-shrink: 0 !important;
+      }
+      @media (max-width: 640px) {
+        #result-toast {
+          bottom: 84px !important;
+          width: calc(100% - 32px) !important;
+          max-width: 380px !important;
+          padding: 12px 18px !important;
+          font-size: 0.875rem !important;
+          border-radius: 14px !important;
+          text-align: center !important;
+          white-space: normal !important;
+        }
+      }
     </style>
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
