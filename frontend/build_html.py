@@ -65,7 +65,7 @@ BASE_HTML = """<!DOCTYPE html>
                 </div>
                 <div>
                     <h4 class="footer-heading">Community</h4>
-                    <a href="https://github.com/infraud" class="footer-link">GitHub</a>
+                    <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
                     <a href="#" class="footer-link">Contribute</a>
                     <a href="/reports.html" class="footer-link">Report a Scam</a>
                 </div>
@@ -341,7 +341,7 @@ pages = {
                     <h3 class="mb-4">Built in the Open.</h3>
                     <p class="text-sm mb-6">INFRAUD is designed to be transparent and community-driven. Our heuristics and threat models are verifiable by everyone.</p>
                     <div class="flex gap-4">
-                        <a href="https://github.com/infraud" class="btn btn-secondary">View on GitHub</a>
+                        <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
                         <a href="#" class="btn btn-ghost">Contribute</a>
                     </div>
                 </div>
@@ -699,7 +699,7 @@ pages = {
                 <div style="text-align: left;" class="card">
                     <h3 class="mb-4">Our Mission</h3>
                     <p class="mb-6">The digital landscape has become increasingly hostile. Scammers are sophisticated, utilizing psychological manipulation and perfect visual replicas of trusted brands. Our mission is to provide a technical counter-measure that requires zero technical expertise to use.</p>
-                    <a href="https://github.com/infraud" class="btn btn-secondary">View our Open Source Manifesto</a>
+                    <a href="https://github.com/SanjivaniWawdhane/infraud.org" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View our Open Source Manifesto</a>
                 </div>
             </div>
         </section>
