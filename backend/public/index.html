@@ -1765,23 +1765,140 @@
             font-size: 0.75rem;
           }
 
-          .hero-console-bar {
-            flex-direction: column;
-            align-items: stretch;
-            padding: 12px;
-            border-radius: 16px;
-            gap: 10px;
-          }
+            /* ── REDESIGNED HERO SCANNER CONSOLE (MOBILE CAPSULE ARCHITECTURE) ── */
+  .hero-console-bar {
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    grid-template-rows: 50px auto !important;
+    gap: 14px 10px !important;
+    align-items: center !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 20px !important;
+    padding: 16px !important;
+    box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+    position: relative !important;
+  }
 
-          .console-kbd-hint {
-            display: none;
-          }
+  /* Inner Input Capsule Frame for Row 1 */
+  .hero-console-bar::before {
+    content: '' !important;
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    height: 50px !important;
+    background: #F8FAFC !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 13px !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    transition: all 0.2s ease !important;
+  }
+  .hero-console-bar:focus-within::before {
+    background: #FFFFFF !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+  }
+  #hero-panel-phone .hero-console-bar:focus-within::before {
+    border-color: #059669 !important;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1) !important;
+  }
+  #hero-panel-upi .hero-console-bar:focus-within::before {
+    border-color: #7C3AED !important;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1) !important;
+  }
 
-          .console-scan-btn {
-            width: 100%;
-            justify-content: center;
-            height: 46px;
-          }
+  /* Prefix badge on Row 1, Col 1 */
+  .console-prefix-pill {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 6px 10px !important;
+    border-radius: 8px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    height: 34px !important;
+    margin-left: 8px !important;
+    z-index: 1 !important;
+    box-sizing: border-box !important;
+  }
+
+  .console-select-country {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    height: 36px !important;
+    font-size: 0.78125rem !important;
+    padding: 0 8px !important;
+    border-radius: 8px !important;
+    margin-left: 8px !important;
+    z-index: 1 !important;
+  }
+
+  /* Input on Row 1, Col 2 */
+  .console-input {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    height: 48px !important;
+    font-size: 0.9375rem !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    color: #0F172A !important;
+    padding: 0 10px 0 2px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    z-index: 1 !important;
+  }
+  .console-input::placeholder {
+    color: #94A3B8 !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Keyboard hint hidden on mobile */
+  .console-kbd-hint {
+    display: none !important;
+  }
+
+  /* Scan Button on Row 2 (Full Width Span) */
+  .console-scan-btn {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    height: 50px !important;
+    border-radius: 13px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    border: none !important;
+    z-index: 1 !important;
+  }
+  .console-scan-btn:active {
+    transform: scale(0.98) !important;
+  }
+
+  .btn-url {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+    color: #FFFFFF !important;
+  }
+  .btn-phone {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28) !important;
+  }
+  .btn-upi {
+    background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.28) !important;
+  }
 
           .chat-frame-footer {
             flex-direction: column;
