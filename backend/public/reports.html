@@ -263,6 +263,356 @@
       70% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
       100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
     }
+
+    /* ── Live Threat Radar & Geospatial Surveillance Map ── */
+    #live-map {
+      margin-bottom: 36px;
+      scroll-margin-top: 100px;
+    }
+    .radar-card {
+      background: linear-gradient(180deg, #0A0F1F 0%, #060913 100%);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(6, 9, 19, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      overflow: hidden;
+      color: #fff;
+      position: relative;
+      transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+    .radar-card.radar-highlight {
+      border-color: #3B82F6;
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.45);
+    }
+    .radar-header-bar {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .radar-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .radar-beacon {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EF4444;
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
+      animation: beaconPing 1.8s infinite;
+    }
+    @keyframes beaconPing {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+      70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .radar-title-group h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 6px 0 2px;
+      letter-spacing: -0.02em;
+    }
+    .radar-title-group p {
+      font-size: 0.85rem;
+      color: #94A3B8;
+      margin: 0;
+    }
+    .radar-stats-pills {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .radar-stat-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #E2E8F0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .radar-stat-chip strong {
+      color: #60A5FA;
+    }
+    .radar-body-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      min-height: 480px;
+    }
+    @media (max-width: 900px) {
+      .radar-body-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .radar-map-pane {
+      position: relative;
+      background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .radar-svg-map {
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+      filter: drop-shadow(0 10px 25px rgba(0,0,0,0.5));
+    }
+    .radar-grid-line {
+      stroke: rgba(59, 130, 246, 0.12);
+      stroke-width: 1;
+    }
+    .radar-ring {
+      fill: none;
+      stroke: rgba(59, 130, 246, 0.15);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .radar-sweep-cone {
+      transform-origin: 260px 290px;
+      animation: sweepRotate 8s linear infinite;
+    }
+    @keyframes sweepRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .india-land-outline {
+      fill: rgba(15, 23, 42, 0.85);
+      stroke: #3B82F6;
+      stroke-width: 1.5;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.35));
+    }
+    .threat-arc-path {
+      fill: none;
+      stroke: rgba(248, 113, 113, 0.4);
+      stroke-width: 1.5;
+      stroke-dasharray: 5 4;
+      animation: arcPulse 2s linear infinite;
+    }
+    @keyframes arcPulse {
+      to { stroke-dashoffset: -18; }
+    }
+    .hotspot-node {
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hotspot-node:hover {
+      transform: scale(1.25);
+    }
+    .hotspot-node.active-hub circle.node-core {
+      stroke: #fff;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 12px #EF4444);
+    }
+    .node-pulse-ring {
+      animation: ringExpand 2s infinite ease-out;
+      transform-origin: center;
+    }
+    @keyframes ringExpand {
+      0% { r: 6; opacity: 0.9; }
+      100% { r: 24; opacity: 0; }
+    }
+    .radar-dossier-pane {
+      background: rgba(11, 17, 32, 0.95);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @media (max-width: 900px) {
+      .radar-dossier-pane {
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+    }
+    .dossier-tag {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #60A5FA;
+      margin-bottom: 6px;
+    }
+    .dossier-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+    .dossier-region {
+      font-size: 0.8125rem;
+      color: #94A3B8;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dossier-metrics-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .dossier-metric-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+    .dossier-metric-card .label {
+      font-size: 0.6875rem;
+      color: #94A3B8;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .dossier-metric-card .val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #EF4444;
+      margin-top: 2px;
+    }
+    .dossier-desc-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #CBD5E1;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .dossier-desc {
+      font-size: 0.8125rem;
+      color: #94A3B8;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .dossier-sample-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(59, 130, 246, 0.3);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-family: var(--mono, monospace);
+      font-size: 0.8125rem;
+      color: #38BDF8;
+      word-break: break-all;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .dossier-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-dossier-scan {
+      background: #2563EB;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-dossier-scan:hover {
+      background: #1D4ED8;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    .btn-dossier-filter {
+      background: rgba(255, 255, 255, 0.06);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-dossier-filter:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .radar-bottom-ticker {
+      background: rgba(5, 7, 15, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      overflow: hidden;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+    .ticker-label {
+      font-weight: 800;
+      color: #EF4444;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .ticker-scroll-content {
+      display: flex;
+      gap: 24px;
+      animation: tickerSlide 25s linear infinite;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #CBD5E1;
+    }
+    .ticker-item .tag {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+    .tag-crit { background: rgba(239,68,68,0.2); color: #F87171; border: 1px solid rgba(239,68,68,0.4); }
+    .tag-high { background: rgba(245,158,11,0.2); color: #FBBF24; border: 1px solid rgba(245,158,11,0.4); }
+    .tag-med { background: rgba(59,130,246,0.2); color: #60A5FA; border: 1px solid rgba(59,130,246,0.4); }
+    @keyframes tickerSlide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    /* ── End Live Threat Radar ── */
+  
   </style>
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
@@ -808,6 +1158,238 @@
         </a>
       </div>
 
+      
+      <!-- ═══════════════════════════════════════════
+           LIVE THREAT RADAR MAP (Community Intel)
+      ════════════════════════════════════════════ -->
+      <section id="live-map" class="radar-card" aria-label="National Cyber Threat Intelligence Map">
+        <div class="radar-header-bar">
+          <div class="radar-title-group">
+            <div class="radar-badge-pill">
+              <span class="radar-beacon"></span>
+              Live Threat Radar &bull; Active Surveillance
+            </div>
+            <h2>National Cyber Threat Intelligence Map</h2>
+            <p>Geospatial telemetry tracking real-time crowdsourced phishing, smishing, and digital extortion syndicates across India.</p>
+          </div>
+          <div class="radar-stats-pills">
+            <div class="radar-stat-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span><strong>8</strong> Critical Hubs</span>
+            </div>
+            <div class="radar-stat-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span><strong>1,429</strong> Intercepts (24h)</span>
+            </div>
+            <div class="radar-stat-chip" style="background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); color: #34D399;">
+              <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10B981;"></span>
+              Stream Active
+            </div>
+          </div>
+        </div>
+
+        <div class="radar-body-grid">
+          <!-- Left: Tactical Vector Map of India -->
+          <div class="radar-map-pane">
+            <svg class="radar-svg-map" viewBox="0 0 520 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive India Threat Map">
+              <defs>
+                <radialGradient id="radarSweepGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="beamGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#EF4444"/>
+                  <stop offset="100%" stop-color="#3B82F6"/>
+                </linearGradient>
+                <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="glow"/>
+                  <feMerge>
+                    <feMergeNode in="glow"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Grid Background & Coordinate Axes -->
+              <g opacity="0.4">
+                <line x1="20" y1="90" x2="500" y2="90" class="radar-grid-line" />
+                <line x1="20" y1="190" x2="500" y2="190" class="radar-grid-line" />
+                <line x1="20" y1="290" x2="500" y2="290" class="radar-grid-line" />
+                <line x1="20" y1="390" x2="500" y2="390" class="radar-grid-line" />
+                <line x1="20" y1="490" x2="500" y2="490" class="radar-grid-line" />
+
+                <line x1="100" y1="20" x2="100" y2="520" class="radar-grid-line" />
+                <line x1="180" y1="20" x2="180" y2="520" class="radar-grid-line" />
+                <line x1="260" y1="20" x2="260" y2="520" class="radar-grid-line" />
+                <line x1="340" y1="20" x2="340" y2="520" class="radar-grid-line" />
+                <line x1="420" y1="20" x2="420" y2="520" class="radar-grid-line" />
+
+                <!-- Range rings centered on central India (260, 290) -->
+                <circle cx="260" cy="290" r="80" class="radar-ring" />
+                <circle cx="260" cy="290" r="160" class="radar-ring" />
+                <circle cx="260" cy="290" r="230" class="radar-ring" />
+              </g>
+
+              <!-- Radar sweep sweep-cone -->
+              <g class="radar-sweep-cone">
+                <path d="M 260 290 L 460 240 A 210 210 0 0 0 380 120 Z" fill="url(#radarSweepGrad)" />
+                <line x1="260" y1="290" x2="460" y2="240" stroke="#60A5FA" stroke-width="1.5" opacity="0.8" />
+              </g>
+
+              <!-- Stylized Vector Silhouette of India -->
+              <path class="india-land-outline" d="
+                M 190 65 
+                L 230 45 L 260 55 L 275 80 L 260 110 L 290 135 L 340 145 L 380 150 
+                L 440 140 L 475 165 L 490 200 L 460 215 L 430 205 L 395 220 
+                L 390 270 L 360 295 L 330 330 L 305 380 L 275 435 L 250 495 
+                L 240 515 L 230 495 L 210 450 L 195 400 L 175 350 L 155 315 
+                L 145 285 L 115 270 L 105 240 L 140 225 L 170 210 L 180 160 
+                L 170 120 Z
+              " />
+
+              <!-- Cyber Attack Trajectory Arcs -->
+              <g opacity="0.85">
+                <!-- Jamtara -> Delhi -->
+                <path d="M 355 245 Q 280 180 215 175" class="threat-arc-path" stroke="#EF4444" />
+                <!-- Mewat -> Mumbai -->
+                <path d="M 205 195 Q 165 250 160 325" class="threat-arc-path" stroke="#F59E0B" />
+                <!-- Kolkata -> Delhi -->
+                <path d="M 385 265 Q 310 190 215 175" class="threat-arc-path" stroke="#EF4444" />
+                <!-- Jamtara -> Bengaluru -->
+                <path d="M 355 245 Q 310 360 210 435" class="threat-arc-path" stroke="#3B82F6" />
+              </g>
+
+              <!-- Hotspot Nodes -->
+              <!-- 1. Delhi NCR -->
+              <g class="hotspot-node" id="hub-delhi" onclick="selectThreatHub('delhi')" role="button" tabindex="0" aria-label="Delhi NCR Hotspot">
+                <circle cx="215" cy="175" r="16" fill="#EF4444" opacity="0.2" class="node-pulse-ring" />
+                <circle cx="215" cy="175" r="7" fill="#EF4444" class="node-core" filter="url(#glowFilter)" />
+                <text x="227" y="172" fill="#F87171" font-size="11" font-weight="800" font-family="system-ui, sans-serif">DELHI NCR</text>
+                <text x="227" y="184" fill="#94A3B8" font-size="8.5" font-family="system-ui, sans-serif">Extortion/Arrest</text>
+              </g>
+
+              <!-- 2. Jamtara & Deoghar (Default Active) -->
+              <g class="hotspot-node active-hub" id="hub-jamtara" onclick="selectThreatHub('jamtara')" role="button" tabindex="0" aria-label="Jamtara Hotspot">
+                <circle cx="355" cy="245" r="18" fill="#EF4444" opacity="0.25" class="node-pulse-ring" />
+                <circle cx="355" cy="245" r="8" fill="#EF4444" class="node-core" filter="url(#glowFilter)" />
+                <text x="370" y="242" fill="#F87171" font-size="11" font-weight="800" font-family="system-ui, sans-serif">JAMTARA</text>
+                <text x="370" y="254" fill="#94A3B8" font-size="8.5" font-family="system-ui, sans-serif">KYC & Bill Phish</text>
+              </g>
+
+              <!-- 3. Mewat & Nuh -->
+              <g class="hotspot-node" id="hub-mewat" onclick="selectThreatHub('mewat')" role="button" tabindex="0" aria-label="Mewat Hotspot">
+                <circle cx="205" cy="195" r="15" fill="#EF4444" opacity="0.2" class="node-pulse-ring" />
+                <circle cx="205" cy="195" r="6.5" fill="#EF4444" class="node-core" filter="url(#glowFilter)" />
+                <text x="135" y="198" fill="#F87171" font-size="11" font-weight="800" font-family="system-ui, sans-serif">MEWAT</text>
+              </g>
+
+              <!-- 4. Mumbai (MMR) -->
+              <g class="hotspot-node" id="hub-mumbai" onclick="selectThreatHub('mumbai')" role="button" tabindex="0" aria-label="Mumbai Hotspot">
+                <circle cx="160" cy="325" r="15" fill="#EF4444" opacity="0.2" class="node-pulse-ring" />
+                <circle cx="160" cy="325" r="7" fill="#EF4444" class="node-core" filter="url(#glowFilter)" />
+                <text x="95" y="328" fill="#F87171" font-size="11" font-weight="800" font-family="system-ui, sans-serif">MUMBAI</text>
+              </g>
+
+              <!-- 5. Pune -->
+              <g class="hotspot-node" id="hub-pune" onclick="selectThreatHub('pune')" role="button" tabindex="0" aria-label="Pune Hotspot">
+                <circle cx="175" cy="345" r="13" fill="#F59E0B" opacity="0.2" class="node-pulse-ring" />
+                <circle cx="175" cy="345" r="6" fill="#F59E0B" class="node-core" />
+                <text x="115" y="354" fill="#FBBF24" font-size="10" font-weight="700" font-family="system-ui, sans-serif">PUNE</text>
+              </g>
+
+              <!-- 6. Kolkata -->
+              <g class="hotspot-node" id="hub-kolkata" onclick="selectThreatHub('kolkata')" role="button" tabindex="0" aria-label="Kolkata Hotspot">
+                <circle cx="385" cy="265" r="15" fill="#EF4444" opacity="0.2" class="node-pulse-ring" />
+                <circle cx="385" cy="265" r="6.5" fill="#EF4444" class="node-core" filter="url(#glowFilter)" />
+                <text x="398" y="270" fill="#F87171" font-size="11" font-weight="800" font-family="system-ui, sans-serif">KOLKATA</text>
+              </g>
+
+              <!-- 7. Hyderabad -->
+              <g class="hotspot-node" id="hub-hyderabad" onclick="selectThreatHub('hyderabad')" role="button" tabindex="0" aria-label="Hyderabad Hotspot">
+                <circle cx="235" cy="355" r="14" fill="#F59E0B" opacity="0.2" class="node-pulse-ring" />
+                <circle cx="235" cy="355" r="6.5" fill="#F59E0B" class="node-core" />
+                <text x="247" y="358" fill="#FBBF24" font-size="11" font-weight="800" font-family="system-ui, sans-serif">HYDERABAD</text>
+              </g>
+
+              <!-- 8. Bengaluru -->
+              <g class="hotspot-node" id="hub-bengaluru" onclick="selectThreatHub('bengaluru')" role="button" tabindex="0" aria-label="Bengaluru Hotspot">
+                <circle cx="210" cy="435" r="15" fill="#3B82F6" opacity="0.25" class="node-pulse-ring" />
+                <circle cx="210" cy="435" r="7" fill="#3B82F6" class="node-core" filter="url(#glowFilter)" />
+                <text x="224" y="438" fill="#60A5FA" font-size="11" font-weight="800" font-family="system-ui, sans-serif">BENGALURU</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Right: Dynamic Threat Intel Dossier -->
+          <div class="radar-dossier-pane" id="radar-dossier-pane">
+            <div>
+              <div class="dossier-tag">Threat Intel Dossier</div>
+              <h3 class="dossier-title" id="dossier-hub-title">Jamtara &amp; Deoghar Hub</h3>
+              <div class="dossier-region" id="dossier-hub-region">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>Jharkhand Cybercrime Corridor</span>
+              </div>
+
+              <div class="dossier-metrics-box">
+                <div class="dossier-metric-card">
+                  <div class="label">Threat Score</div>
+                  <div class="val" id="dossier-risk-val">98/100</div>
+                </div>
+                <div class="dossier-metric-card">
+                  <div class="label">24h Intercepts</div>
+                  <div class="val" id="dossier-count-val" style="color: #60A5FA;">518</div>
+                </div>
+              </div>
+
+              <div class="dossier-desc-label">Primary Attack Vectors</div>
+              <div class="dossier-desc" id="dossier-vectors-desc">
+                Electricity disconnection urgent SMS, bank KYC panic links, and deceptive remote access APK payloads.
+              </div>
+
+              <div class="dossier-desc-label">Recent Intercepted Target</div>
+              <div class="dossier-sample-box">
+                <span id="dossier-sample-target">http://urgent-bill-desk.in</span>
+                <span class="tag-crit" id="dossier-sample-badge" style="padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 800;">CRITICAL</span>
+              </div>
+            </div>
+
+            <div class="dossier-actions">
+              <a id="dossier-scan-btn" href="check.html?q=http%3A%2F%2Furgent-bill-desk.in" class="btn-dossier-scan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Inspect in Scanner &rarr;
+              </a>
+              <button type="button" id="dossier-filter-btn" class="btn-dossier-filter" onclick="filterReportsByCurrentHub()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Filter Database Below
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Telemetry Ticker -->
+        <div class="radar-bottom-ticker">
+          <div class="ticker-label">
+            <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#EF4444;"></span>
+            Live Intercepts
+          </div>
+          <div class="ticker-scroll-content">
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> +91 98765 43210 &bull; Electricity Bill Extortion (Jamtara Corridor)</div>
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> support@paytm-kyc.com &bull; UPI Impersonation Harvester</div>
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> amazon-support.in &bull; Credential Theft Portal</div>
+            <div class="ticker-item"><span class="tag tag-high">HIGH</span> hdfc-rewards-claim.co &bull; Fake Credit Points Clone</div>
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> +91 99887 76655 &bull; Digital Arrest / FedEx Contraband Scam</div>
+            <div class="ticker-item"><span class="tag tag-med">MED</span> telegram-review-task.vip &bull; Work-from-Home Rating Scam</div>
+            <!-- Duplicated for continuous loop -->
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> +91 98765 43210 &bull; Electricity Bill Extortion (Jamtara Corridor)</div>
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> support@paytm-kyc.com &bull; UPI Impersonation Harvester</div>
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> amazon-support.in &bull; Credential Theft Portal</div>
+            <div class="ticker-item"><span class="tag tag-high">HIGH</span> hdfc-rewards-claim.co &bull; Fake Credit Points Clone</div>
+            <div class="ticker-item"><span class="tag tag-crit">CRIT</span> +91 99887 76655 &bull; Digital Arrest / FedEx Contraband Scam</div>
+            <div class="ticker-item"><span class="tag tag-med">MED</span> telegram-review-task.vip &bull; Work-from-Home Rating Scam</div>
+          </div>
+        </div>
+      </section>
+  
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
         <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 600; color: var(--ink-500, #4B5570); background: #FFFFFF; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--ink-100, #E8EBF3);">
           <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.2);"></span>
@@ -1852,5 +2434,152 @@
       });
     })();
   </script>
+
+  <script>
+    // ── LIVE THREAT RADAR DATA & CONTROLLER ──
+    const THREAT_HUBS = {
+      jamtara: {
+        title: "Jamtara & Deoghar Hub",
+        region: "Jharkhand Cybercrime Corridor",
+        risk: "98/100",
+        count: "518",
+        vectors: "Electricity disconnection urgent SMS, bank KYC panic links, and deceptive remote access APK payloads.",
+        sample: "http://urgent-bill-desk.in",
+        badge: "CRITICAL",
+        filterKeyword: "Electricity"
+      },
+      delhi: {
+        title: "Delhi NCR Command Hub",
+        region: "National Capital Region & Haryana Border",
+        risk: "96/100",
+        count: "412",
+        vectors: "Fake CBI/Customs digital arrest calls, FedEx contraband parcel traps, and high-pressure extortions.",
+        sample: "+91 99887 76655",
+        badge: "CRITICAL",
+        filterKeyword: "Contraband"
+      },
+      mewat: {
+        title: "Mewat & Nuh / Bharatpur Hub",
+        region: "Haryana / Rajasthan Tri-junction",
+        risk: "94/100",
+        count: "389",
+        vectors: "Fake OLX army vehicle listings, WhatsApp video call sextortion, and advance fee scams.",
+        sample: "support@army-canteen-deal.in",
+        badge: "CRITICAL",
+        filterKeyword: "Vehicle"
+      },
+      mumbai: {
+        title: "Mumbai Financial Ring",
+        region: "MMR / Western Maharashtra",
+        risk: "92/100",
+        count: "345",
+        vectors: "Bogus institutional stock IPOs, WhatsApp VIP forex groups, and multi-lakh crypto recovery frauds.",
+        sample: "http://vip-stock-signals.live",
+        badge: "CRITICAL",
+        filterKeyword: "Stock"
+      },
+      kolkata: {
+        title: "Kolkata / Salt Lake Rings",
+        region: "West Bengal IT Parks",
+        risk: "90/100",
+        count: "238",
+        vectors: "Bogus Windows tech support popups, PayPal refund call centres, and remote desktop takeover scams.",
+        sample: "https://support-security-alert.net",
+        badge: "CRITICAL",
+        filterKeyword: "Support"
+      },
+      hyderabad: {
+        title: "Hyderabad Cyberabad Hub",
+        region: "Telangana / Andhra Corridor",
+        risk: "88/100",
+        count: "194",
+        vectors: "Illegal Chinese instant loan apps, contact list harvest spyware, and morphed photo extortion.",
+        sample: "instant-cash-speedloan.apk",
+        badge: "HIGH RISK",
+        filterKeyword: "Loan"
+      },
+      bengaluru: {
+        title: "Bengaluru Tech Corridor",
+        region: "Karnataka Southern Ring",
+        risk: "86/100",
+        count: "267",
+        vectors: "Part-time YouTube review tasks, hotel rating schemes, and Telegram merchant prepaid traps.",
+        sample: "telegram-review-task.vip",
+        badge: "HIGH RISK",
+        filterKeyword: "Task"
+      },
+      pune: {
+        title: "Pune Cyber Hub",
+        region: "Western Maharashtra Corridor",
+        risk: "84/100",
+        count: "156",
+        vectors: "Credit card reward points expiry links, fake e-challan notices, and electricity meter bill APKs.",
+        sample: "http://sbi-reward-points.site",
+        badge: "HIGH RISK",
+        filterKeyword: "Reward"
+      }
+    };
+
+    let currentSelectedHubKey = 'jamtara';
+
+    function selectThreatHub(hubKey) {
+      const data = THREAT_HUBS[hubKey];
+      if (!data) return;
+      currentSelectedHubKey = hubKey;
+
+      // Update active hub styling on SVG
+      document.querySelectorAll('.hotspot-node').forEach(node => {
+        node.classList.remove('active-hub');
+      });
+      const activeEl = document.getElementById('hub-' + hubKey);
+      if (activeEl) activeEl.classList.add('active-hub');
+
+      // Update Dossier content
+      document.getElementById('dossier-hub-title').textContent = data.title;
+      document.getElementById('dossier-hub-region').innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>${data.region}</span>
+      `;
+      document.getElementById('dossier-risk-val').textContent = data.risk;
+      document.getElementById('dossier-count-val').textContent = data.count;
+      document.getElementById('dossier-vectors-desc').textContent = data.vectors;
+      document.getElementById('dossier-sample-target').textContent = data.sample;
+
+      const badgeEl = document.getElementById('dossier-sample-badge');
+      badgeEl.textContent = data.badge;
+      badgeEl.className = data.badge.includes('CRITICAL') ? 'tag-crit' : 'tag-high';
+
+      // Update Scan button link
+      const scanBtn = document.getElementById('dossier-scan-btn');
+      scanBtn.href = 'check.html?q=' + encodeURIComponent(data.sample);
+    }
+
+    function filterReportsByCurrentHub() {
+      const data = THREAT_HUBS[currentSelectedHubKey];
+      if (!data) return;
+      const searchInput = document.getElementById('reports-search');
+      if (searchInput) {
+        searchInput.value = data.filterKeyword || '';
+        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+        searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        searchInput.focus();
+      }
+    }
+
+    // Hash navigation scroll support (e.g. reports.html#live-map)
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.location.hash === '#live-map') {
+        const mapEl = document.getElementById('live-map');
+        if (mapEl) {
+          setTimeout(() => {
+            mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            mapEl.classList.add('radar-highlight');
+            setTimeout(() => mapEl.classList.remove('radar-highlight'), 2200);
+          }, 250);
+        }
+      }
+    });
+  </script>
+  
 </body>
 </html>
