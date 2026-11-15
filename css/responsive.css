@@ -110,7 +110,7 @@ pre, code {
 }
 
 /* Navbar breakpoint <= 992px */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .nav-edge .container {
     padding-left: 16px !important;
     padding-right: 16px !important;
@@ -1135,7 +1135,7 @@ pre, code {
 }
 
 /* Base Desktop rules for mobile drawer elements (min-width: 993px) */
-@media (min-width: 993px) {
+@media (min-width: 1025px) {
   .nav-edge {
     height: 72px !important;
   }
@@ -1211,7 +1211,7 @@ pre, code {
 }
 
 /* Compact Desktop Navigation Adjustment (993px - 1180px) */
-@media (min-width: 993px) and (max-width: 1180px) {
+@media (min-width: 1025px) and (max-width: 1180px) {
   .nav-edge .container {
     padding-left: 10px !important;
     padding-right: 10px !important;
@@ -1255,7 +1255,7 @@ pre, code {
 }
 
 /* Mobile & Tablet Navigation System (<= 992px) */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .nav-edge {
     height: 58px !important;
     position: sticky !important;
@@ -1873,5 +1873,133 @@ pre, code {
       width: 40px !important;
       height: 40px !important;
     }
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FAIL-PROOF UNIVERSAL HAMBURGER MENU & DRAWER SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+.nav-edge-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10001;
+}
+.nav-edge-hamburger:hover {
+  background: rgba(15, 23, 42, 0.08);
+}
+.nav-edge-hamburger .hamb-line {
+  display: block !important;
+  width: 20px !important;
+  height: 2px !important;
+  background: #0A0F1E !important;
+  border-radius: 2px !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, background 0.2s ease !important;
+  transform-origin: center !important;
+}
+
+/* Close button inside Drawer Header */
+.drawer-close-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  background: #FFFFFF !important;
+  color: #1E293B !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  transition: all 0.15s ease !important;
+}
+.drawer-close-btn:hover {
+  background: #F1F5F9 !important;
+  color: #DC2626 !important;
+  border-color: rgba(220, 38, 38, 0.3) !important;
+}
+
+/* Backdrop */
+.nav-mobile-backdrop {
+  display: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(10, 15, 30, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  z-index: 9998 !important;
+  opacity: 0;
+  transition: opacity 0.25s ease !important;
+}
+.nav-mobile-backdrop.active {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 1024px) {
+  .nav-edge-hamburger {
+    display: flex !important;
+  }
+  .nav-edge-actions .nav-edge-login,
+  .nav-edge-actions .nav-edge-signup {
+    display: none !important;
+  }
+  .nav-edge.mobile-open .nav-edge-hamburger {
+    background: #EFF6FF !important;
+    border-color: #BFDBFE !important;
+  }
+  .nav-edge.mobile-open .nav-edge-hamburger .hamb-line-1 {
+    transform: translateY(7px) rotate(45deg) !important;
+    background: #2563EB !important;
+  }
+  .nav-edge.mobile-open .nav-edge-hamburger .hamb-line-2 {
+    opacity: 0 !important;
+    transform: scaleX(0) !important;
+  }
+  .nav-edge.mobile-open .nav-edge-hamburger .hamb-line-3 {
+    transform: translateY(-7px) rotate(-45deg) !important;
+    background: #2563EB !important;
+  }
+
+  /* Full Screen Slide-in Drawer Sheet */
+  .nav-edge-menu {
+    display: none !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    position: fixed !important;
+    top: 58px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 58px) !important;
+    max-height: calc(100vh - 58px) !important;
+    background: #FFFFFF !important;
+    padding: 16px 16px 120px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 9999 !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+  .nav-edge.mobile-open .nav-edge-menu {
+    display: flex !important;
+    animation: drawerSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   }
 }

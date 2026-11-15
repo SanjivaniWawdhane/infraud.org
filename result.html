@@ -4106,6 +4106,9 @@
             </div>
           </div>
           <span class="drawer-badge-pill">Protected</span>
+          <button type="button" class="drawer-close-btn" onclick="window.closeMobileNav && window.closeMobileNav()" aria-label="Close menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
         </div>
 
         <!-- Quick Scanner Bento Hub (Mobile 2x2 Grid) -->
@@ -4450,6 +4453,7 @@
       .nav-edge-signup:hover svg { transform: translateX(2px); }
       
       /* Hamburger (Mobile) */
+      .nav-edge-hamburger .hamb-line { display: block; width: 20px; height: 2px; background: #0A0F1E; border-radius: 2px; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, background 0.2s ease; transform-origin: center; }
       .nav-edge-hamburger {
         display: none;
         background: none;
@@ -4460,7 +4464,7 @@
         border-radius: 6px;
       }
       
-      @media (max-width: 992px) {
+      @media (max-width: 1024px) {
         .nav-edge-menu {
           display: none;
           flex-direction: column;
