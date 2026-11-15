@@ -1443,7 +1443,7 @@
               // Auto-activate tab from URL query parameter (e.g. check.html?type=phone&query=...)
               document.addEventListener('DOMContentLoaded', () => {
                 const params = new URLSearchParams(window.location.search);
-                const typeParam = params.get('type');
+                const typeParam = params.get('type') || params.get('tool');
                 const queryParam = params.get('query') || params.get('q');
 
                 if (typeParam && ['url', 'phone', 'upi', 'message'].includes(typeParam.toLowerCase())) {

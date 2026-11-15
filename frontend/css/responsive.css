@@ -609,14 +609,17 @@ pre, code {
   .phone-dock-country,
   .url-dock-proto-badge,
   .url-quick-prefix,
-  .upi-dock-prefix {
+  .upi-dock-prefix,
+  .msg-dock-prefix {
     align-self: flex-start !important;
   }
 
   .phone-dock-input,
   .url-dock-input,
   .url-quick-input,
-  .upi-dock-input {
+  .upi-dock-input,
+  .msg-dock-input-wrap,
+  .msg-dock-input {
     width: 100% !important;
     height: 42px !important;
     font-size: 0.9375rem !important;
@@ -625,7 +628,8 @@ pre, code {
   .phone-dock-btn,
   .url-dock-btn,
   .url-quick-btn,
-  .upi-dock-btn {
+  .upi-dock-btn,
+  .msg-dock-btn {
     width: 100% !important;
     height: 44px !important;
     justify-content: center !important;

@@ -17,21 +17,21 @@ window.analyzeTarget = function(targetQuery, targetType) {
     window.history.pushState({ path: newUrl }, '', newUrl);
   }
 
-  // Pre-fill quick inputs immediately so user sees their input active
+  // Pre-fill quick inputs immediately so user sees their input active in the correct tool only
   const urlInput = document.getElementById('url-quick-input');
-  if (urlInput) {
+  if (urlInput && t === 'url') {
     urlInput.value = q.replace(/^https?:\/\//i, '');
   }
   const phoneInput = document.getElementById('phone-quick-input');
-  if (phoneInput && (t === 'phone' || /^\+?\d[\d\s-]{7,}/.test(q))) {
+  if (phoneInput && t === 'phone') {
     phoneInput.value = q;
   }
   const upiInput = document.getElementById('upi-quick-input');
-  if (upiInput && (t === 'upi' || q.includes('@'))) {
+  if (upiInput && t === 'upi') {
     upiInput.value = q;
   }
   const msgInput = document.getElementById('msg-quick-input');
-  if (msgInput && (t === 'message' || q.length > 50)) {
+  if (msgInput && t === 'message') {
     msgInput.value = q;
   }
   // In-phone smartphone mockup inputs are typing fields and should stay clear for user typing
@@ -509,7 +509,7 @@ window.copyCanonicalUpi = function() {
 // Global analysis state
 let currentAnalysisData = null;
 let currentTargetQuery = '';
-let currentTargetType = 'url';
+let currentTargetType = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   initAnalysis();
@@ -525,14 +525,23 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function detectTargetType(rawQuery, explicitType) {
   const query = (rawQuery || '').trim();
-  if (!query) return explicitType || 'url';
+  const exp = (explicitType || '').toLowerCase().trim();
 
-  // 1. UPI check: contains '@' without slashes or spaces and doesn't start with http
+  // 1. CRITICAL: If caller or user explicitly specified 'message', 'phone', or 'upi', RESPECT IT!
+  // A smishing message very often contains a URL (e.g. http://...) or phone number.
+  // It is STILL an SMS/Message, so NEVER crossbreed or convert an explicit 'message' into 'url'!
+  if (exp && ['message', 'phone', 'upi'].includes(exp)) {
+    return exp;
+  }
+
+  if (!query) return exp || 'url';
+
+  // 2. UPI check: contains '@' without slashes or spaces and doesn't start with http
   if (query.includes('@') && !query.includes('/') && !query.includes(' ') && !query.startsWith('http')) {
     return 'upi';
   }
 
-  // 2. Phone check:
+  // 3. Phone check:
   // e.g. 9876543210, +919876543210, +91 98765 43210, 1800112233, 022-26590000
   const cleanDigits = query.replace(/[\s\-\+\(\)]/g, '');
   const isAllPhoneChars = /^[\+\d\s\-\(\)]+$/.test(query);
@@ -540,7 +549,7 @@ function detectTargetType(rawQuery, explicitType) {
     return 'phone';
   }
 
-  // 3. Message check:
+  // 4. Message check:
   // Multiple words with spaces, known Indian scam trigger phrases, or long messages
   const words = query.split(/\s+/).filter(Boolean);
   const scamKeywords = /\b(dear|consumer|electricity|power|bill|cut|tonight|police|arrest|cbi|customs|parcel|narcotics|lottery|winner|kyc|otp|deactivated|blocked|urgent|immediately|part-time|job|telegram)\b/i;
@@ -550,23 +559,17 @@ function detectTargetType(rawQuery, explicitType) {
     }
   }
 
-  // 4. If explicitType is valid and not generic 'url'
-  if (explicitType && ['phone', 'upi', 'message'].includes(explicitType)) {
-    return explicitType;
-  }
-
-  // 5. Default to URL
   return 'url';
 }
 
 async function initAnalysis(overrideQuery, overrideType) {
   const urlParams = new URLSearchParams(window.location.search);
-  const rawQuery = overrideQuery || currentTargetQuery || urlParams.get('query') || urlParams.get('q') || urlParams.get('url');
-  const rawType = (overrideType || currentTargetType || urlParams.get('type') || '').toLowerCase().trim();
+  const rawQuery = overrideQuery || urlParams.get('query') || urlParams.get('q') || urlParams.get('url') || currentTargetQuery || '';
+  const rawType = (overrideType || urlParams.get('type') || urlParams.get('tool') || currentTargetType || '').toLowerCase().trim();
 
-  // If no query parameter provided, show prompt
+  // If no query parameter provided, show prompt with requested tool
   if (!rawQuery || !rawQuery.trim()) {
-    showNoTargetState();
+    showNoTargetState(rawType || 'url');
     return;
   }
 
@@ -578,17 +581,17 @@ async function initAnalysis(overrideQuery, overrideType) {
   const type = detectTargetType(query, rawType);
   currentTargetType = type;
 
-  // Immediately populate quick inputs so user sees active query
+  // Immediately populate quick inputs so user sees active query in the matching tool only
   const qUrlEl = document.getElementById('url-quick-input');
-  if (qUrlEl) {
+  if (qUrlEl && type === 'url') {
     qUrlEl.value = query.replace(/^https?:\/\//i, '');
   }
   const qPhoneEl = document.getElementById('phone-quick-input');
-  if (qPhoneEl && (type === 'phone' || /^\+?\d[\d\s-]{7,}/.test(query))) {
+  if (qPhoneEl && type === 'phone') {
     qPhoneEl.value = query;
   }
   const qUpiEl = document.getElementById('upi-quick-input');
-  if (qUpiEl && (type === 'upi' || query.includes('@'))) {
+  if (qUpiEl && type === 'upi') {
     qUpiEl.value = query;
   }
   const qMsgEl = document.getElementById('msg-quick-input');
@@ -2062,52 +2065,56 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const qInput = document.getElementById('msg-quick-input');
   if (qInput) qInput.value = text;
 
-  // 3. Detected Strategy & Sender Identity
-  let strategy = 'Suspicious Message';
-  let senderName = 'Unknown Sender';
-  let senderType = 'SMS • Unverified Mobile';
-  let bannerDesc = 'This message contains patterns commonly used in financial and credential scams.';
+  const isScam = riskScore >= 35 || (Array.isArray(signals) && signals.some(s => s.severity === 'critical' || s.severity === 'high'));
 
-  if (/parcel|package|shipment|courier|fedex|ups|usps|dhl|india post|redelivery|delivery fee|address update/i.test(text)) {
-    strategy = 'Fake Courier Delivery Scam';
-    senderName = 'Courier Notice';
-    senderType = 'SMS • Impersonating Delivery';
-    bannerDesc = 'Real couriers like FedEx or USPS will never demand payment or address updates via SMS links.';
-  } else if (/electricity|power|bijli|cut tonight/i.test(text)) {
-    strategy = 'Electricity Disconnection Threat';
-    senderName = 'Electricity Alert';
-    senderType = 'SMS • Impersonating Utility';
-    bannerDesc = 'Electricity departments follow regular billing cycles and never threaten cutoff tonight via SMS.';
-  } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
-    strategy = 'Digital Arrest / Police Extortion';
-    senderName = 'Cyber Cell Notice';
-    senderType = 'SMS • Impersonating Police';
-    bannerDesc = 'Law enforcement agencies never issue arrest warrants or demand money transfers via SMS or video calls.';
-  } else if (/job|part-time|like|youtube|telegram|daily income|hotel review/i.test(text)) {
-    strategy = 'Part-Time Job Offer Scam';
-    senderName = 'Telegram HR Offer';
-    senderType = 'SMS • Task Scam Lure';
-    bannerDesc = 'Legitimate employers never offer daily cash for liking YouTube videos or joining Telegram groups.';
-  } else if (/lottery|prize|winner|reward|kbc|cashback/i.test(text)) {
-    strategy = 'Fake Lottery & Cash Prize';
-    senderName = 'Prize Department';
-    senderType = 'SMS • Lottery Fraud';
-    bannerDesc = 'You cannot win a lottery you never entered. Never pay advance processing fees.';
-  } else if (/blocked|kyc|pan|aadhaar|deactivated|netbanking/i.test(text)) {
-    strategy = 'Bank Account KYC Trap';
-    senderName = 'Bank Alert';
-    senderType = 'SMS • Banking Phishing';
-    bannerDesc = 'Banks will never ask you to update KYC, submit passwords, or click links via SMS.';
-  } else if (/apk|sideload|download/i.test(text)) {
-    strategy = 'Dangerous App / APK Download';
-    senderName = 'System Update';
-    senderType = 'SMS • Malware Download Trap';
-    bannerDesc = 'Never download or install APK files from links in text messages.';
-  } else if (riskScore < 20) {
-    strategy = 'Normal Everyday Message';
-    senderName = 'Personal Chat';
-    senderType = 'SMS • Regular Contact';
-    bannerDesc = 'No suspicious phishing lures, payment demands, or fake claims detected.';
+  // 3. Detected Strategy & Sender Identity
+  let strategy = 'Normal Everyday Message';
+  let senderName = 'Personal Chat';
+  let senderType = 'SMS • Regular Contact';
+  let bannerDesc = 'No suspicious phishing lures, payment demands, or fake claims detected.';
+
+  if (isScam) {
+    strategy = 'Suspicious Message';
+    senderName = 'Unknown Sender';
+    senderType = 'SMS • Unverified Mobile';
+    bannerDesc = 'This message contains patterns commonly used in financial and credential scams.';
+
+    if (/parcel|package|shipment|courier|fedex|ups|usps|dhl|india post|redelivery|delivery fee|address update/i.test(text)) {
+      strategy = 'Fake Courier Delivery Scam';
+      senderName = 'Courier Notice';
+      senderType = 'SMS • Impersonating Delivery';
+      bannerDesc = 'Real couriers like FedEx or USPS will never demand payment or address updates via SMS links.';
+    } else if (/electricity|power|bijli|cut tonight/i.test(text)) {
+      strategy = 'Electricity Disconnection Threat';
+      senderName = 'Electricity Alert';
+      senderType = 'SMS • Impersonating Utility';
+      bannerDesc = 'Electricity departments follow regular billing cycles and never threaten cutoff tonight via SMS.';
+    } else if (/police|cbi|arrest|customs|warrant|narcotics/i.test(text)) {
+      strategy = 'Digital Arrest / Police Extortion';
+      senderName = 'Cyber Cell Notice';
+      senderType = 'SMS • Impersonating Police';
+      bannerDesc = 'Law enforcement agencies never issue arrest warrants or demand money transfers via SMS or video calls.';
+    } else if (/job|part-time|like|youtube|telegram|daily income|hotel review/i.test(text)) {
+      strategy = 'Part-Time Job Offer Scam';
+      senderName = 'Telegram HR Offer';
+      senderType = 'SMS • Task Scam Lure';
+      bannerDesc = 'Legitimate employers never offer daily cash for liking YouTube videos or joining Telegram groups.';
+    } else if (/lottery|prize|winner|reward|kbc|cashback/i.test(text)) {
+      strategy = 'Fake Lottery & Cash Prize';
+      senderName = 'Prize Department';
+      senderType = 'SMS • Lottery Fraud';
+      bannerDesc = 'You cannot win a lottery you never entered. Never pay advance processing fees.';
+    } else if (/blocked|kyc|pan|aadhaar|deactivated|netbanking/i.test(text)) {
+      strategy = 'Bank Account KYC Trap';
+      senderName = 'Bank Alert';
+      senderType = 'SMS • Banking Phishing';
+      bannerDesc = 'Banks will never ask you to update KYC, submit passwords, or click links via SMS.';
+    } else if (/apk|sideload|download/i.test(text)) {
+      strategy = 'Dangerous App / APK Download';
+      senderName = 'System Update';
+      senderType = 'SMS • Malware Download Trap';
+      bannerDesc = 'Never download or install APK files from links in text messages.';
+    }
   }
 
   // Update Left Phone Header
@@ -2115,8 +2122,6 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   if (senderEl) senderEl.textContent = senderName;
   const senderTypeEl = document.getElementById('msg-sender-type');
   if (senderTypeEl) senderTypeEl.textContent = senderType;
-
-  const isScam = riskScore >= 35;
 
   const avatarBox = document.getElementById('msg-status-icon-box');
   if (avatarBox) {
@@ -2136,19 +2141,22 @@ function renderMessageView(data, theme, riskScore, signals, recommendations) {
   const verdictTitle = document.getElementById('msg-gauge-verdict-title');
   const explanationEl = document.getElementById('msg-gauge-summary');
 
+  const isCritical = riskScore >= 70;
+  const isSuspicious = isScam || riskScore >= 30;
+
   if (deskIcon) {
-    deskIcon.className = 'msg-desk-icon ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
-    deskIcon.textContent = riskScore >= 70 ? '🚨' : (riskScore >= 35 ? '⚠️' : '🟢');
+    deskIcon.className = 'msg-desk-icon ' + (isCritical ? 'danger' : (isSuspicious ? 'warning' : 'safe'));
+    deskIcon.textContent = isCritical ? '🚨' : (isSuspicious ? '⚠️' : '🟢');
   }
   if (deskTag) {
-    deskTag.className = 'msg-desk-tag ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
-    deskTag.textContent = riskScore >= 70 ? '🚨 CRITICAL SCAM' : (riskScore >= 35 ? '⚠️ SUSPICIOUS MESSAGE' : '🟢 LIKELY SAFE MESSAGE');
+    deskTag.className = 'msg-desk-tag ' + (isCritical ? 'danger' : (isSuspicious ? 'warning' : 'safe'));
+    deskTag.textContent = isCritical ? '🚨 CRITICAL SCAM' : (isSuspicious ? '⚠️ SUSPICIOUS MESSAGE' : '🟢 LIKELY SAFE MESSAGE');
   }
   if (verdictTitle) {
     verdictTitle.textContent = strategy;
   }
   if (explanationEl) {
-    explanationEl.className = 'msg-desk-explanation ' + (riskScore >= 70 ? 'danger' : (riskScore >= 35 ? 'warning' : 'safe'));
+    explanationEl.className = 'msg-desk-explanation ' + (isCritical ? 'danger' : (isSuspicious ? 'warning' : 'safe'));
     explanationEl.textContent = bannerDesc;
   }
 
@@ -3443,7 +3451,19 @@ function evaluateMessageLocally(rawMessage) {
     });
   }
 
-  // Threat Category 8: Shortener or Suspicious Domain embedded
+    // Threat Category 8: Courier / Parcel Delivery Smishing Pattern
+  const courierRegex = /(?:parcel|package|shipment|courier|delivery|consignment).{0,60}(?:held\s*up|on\s*hold|pending|failed|undelivered|address\s*update|redelivery|delivery\s*fee|customs|custom\s*fee|tracking\s*link|postage)|(?:usps|fedex|ups|dhl|india\s*post|bluedart|speed\s*post).{0,60}(?:parcel|package|shipment|held|delivery|fee|update|link|phishing)|(?:missing|pay).{0,35}(?:redelivery\s*fee|delivery\s*fee|customs\s*duty|address\s*update)|(?:phishing\s*link|phishing\s*site|phishing\s*form)/i;
+  if (courierRegex.test(text)) {
+    score += 50;
+    signals.push({
+      id: 'COURIER_PARCEL_PHISHING',
+      title: 'Courier / Parcel Delivery Smishing Pattern',
+      description: 'Matches widespread postal and parcel delivery phishing scams (impersonating USPS, FedEx, UPS, India Post, or local couriers). Scammers falsely claim a parcel is held up, missing a fee, or requires address updates.',
+      severity: 'critical'
+    });
+  }
+
+  // Threat Category 9: Shortener or Suspicious Domain embedded
   const shortenerRegex = /\b(?:bit\.ly|tinyurl\.com|t\.co|goo\.gl|is\.gd|cutt\.ly|rb\.gy)\b/i;
   if (shortenerRegex.test(text)) {
     score += 25;
@@ -3614,9 +3634,9 @@ function showToast(msg) {
   }, 3200);
 }
 
-function showNoTargetState(targetType = 'url') {
+function showNoTargetState(targetType) {
   const urlParams = new URLSearchParams(window.location.search);
-  const type = targetType || (urlParams.get('type') || 'url').toLowerCase();
+  const type = (targetType || urlParams.get('type') || urlParams.get('tool') || currentTargetType || 'url').toLowerCase();
   currentTargetType = type;
 
   document.querySelectorAll('.tool-result-view').forEach(v => {
@@ -3629,8 +3649,21 @@ function showNoTargetState(targetType = 'url') {
     activeView.style.display = 'block';
   }
 
+  const breadcrumbTag = document.getElementById('audit-breadcrumb-tag');
+  if (breadcrumbTag) {
+    if (type === 'message') breadcrumbTag.textContent = 'NLP Social Engineering Threat Lab';
+    else if (type === 'phone') breadcrumbTag.textContent = 'Phone Number Safety Report';
+    else if (type === 'upi') breadcrumbTag.textContent = 'NPCI Payment Safety Radar & VPA Audit';
+    else breadcrumbTag.textContent = 'URL Analyzer';
+  }
+
   const targetDisplay = document.getElementById('target-display');
-  if (targetDisplay) targetDisplay.textContent = 'Enter Website URL to Analyze';
+  if (targetDisplay) {
+    if (type === 'message') targetDisplay.textContent = 'Enter Suspicious SMS / Message to Inspect';
+    else if (type === 'phone') targetDisplay.textContent = 'Enter Caller Number to Inspect';
+    else if (type === 'upi') targetDisplay.textContent = 'Enter UPI VPA to Inspect';
+    else targetDisplay.textContent = 'Enter Website URL to Analyze';
+  }
 
   const phoneTargetDisplay = document.getElementById('phone-target-display');
   if (phoneTargetDisplay) phoneTargetDisplay.textContent = 'Enter Caller Number to Inspect';
@@ -3648,11 +3681,17 @@ function showNoTargetState(targetType = 'url') {
     scanMetaEl.innerHTML = `<span class="pulse-dot"></span> Scan ID: ${scanId} • ${scanDate} IST`;
   }
 
-  // Auto-focus quick input
+  // Auto-focus quick input for the active tool
   setTimeout(() => {
     if (type === 'phone') {
       const pInput = document.getElementById('phone-quick-input');
       if (pInput) pInput.focus();
+    } else if (type === 'upi') {
+      const upiInput = document.getElementById('upi-quick-input');
+      if (upiInput) upiInput.focus();
+    } else if (type === 'message') {
+      const msgInput = document.getElementById('msg-quick-input');
+      if (msgInput) msgInput.focus();
     } else {
       const uInput = document.getElementById('url-quick-input');
       if (uInput) uInput.focus();

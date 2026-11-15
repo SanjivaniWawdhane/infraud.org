@@ -28,6 +28,14 @@
         padding: 36px 24px 80px;
       }
 
+      /* Tool Views Display Control */
+      .tool-result-view {
+        display: none;
+      }
+      .tool-result-view.active {
+        display: block;
+      }
+
       /* Breadcrumbs & Top Meta */
       .result-header-bar {
         display: flex;
@@ -2350,21 +2358,32 @@
   border-radius: 8px;
   white-space: nowrap;
 }
-.msg-dock-input {
+.msg-dock-input-wrap {
   flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: 0;
+}
+.msg-dock-input {
+  width: 100%;
   border: none;
   outline: none;
   font-size: 0.9375rem;
   color: #0F172A;
   font-weight: 500;
   background: transparent;
-  padding: 6px 4px;
+  padding: 6px 32px 6px 4px;
 }
 .msg-dock-input::placeholder {
   color: #94A3B8;
   font-weight: 400;
 }
 .msg-dock-clear {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
   background: transparent;
   border: none;
   color: #94A3B8;
@@ -5591,10 +5610,12 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               <span>SMS CHECKER</span>
             </span>
-            <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message or SMS to check..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
-            <button type="button" class="msg-dock-clear" onclick="clearQuickMsgInput()" title="Clear">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+            <div class="msg-dock-input-wrap">
+              <input type="text" id="msg-quick-input" class="msg-dock-input" placeholder="Paste or type suspicious message or SMS to check..." spellcheck="false" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();handleQuickMsgSubmit(event);}" />
+              <button type="button" class="msg-dock-clear" onclick="clearQuickMsgInput()" title="Clear">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
             <button type="submit" class="msg-dock-btn" id="msg-quick-btn" onclick="handleQuickMsgSubmit(event)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               <span>Check</span>
